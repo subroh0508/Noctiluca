@@ -1,27 +1,23 @@
 plugins {
-    alias(libs.plugins.compose)
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("org.jetbrains.compose")
+    id("com.android.application")
+    kotlin("android")
 }
 
 group "net.subroh0508"
 version "1.0-SNAPSHOT"
 
-repositories {
-    jcenter()
-}
-
 dependencies {
     implementation(project(":common"))
-    implementation("androidx.activity:activity-compose:1.5.0")
+    implementation(libs.androidx.activity.compose)
 }
 
 android {
-    compileSdkVersion(33)
+    compileSdk = 33
     defaultConfig {
         applicationId = "net.subroh0508.android"
-        minSdkVersion(24)
-        targetSdkVersion(33)
+        minSdk = 24
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0-SNAPSHOT"
     }

@@ -1,7 +1,7 @@
 plugins {
-    id("org.jetbrains.compose")
-    id("com.android.application")
-    kotlin("android")
+    alias(libs.plugins.compose)
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
 }
 
 group "net.subroh0508"
@@ -15,7 +15,7 @@ dependencies {
 android {
     compileSdk = 33
     defaultConfig {
-        applicationId = "net.subroh0508.android"
+        applicationId = "net.subroh0508.noctiluca"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

@@ -1,9 +1,9 @@
 import org.jetbrains.compose.compose
 
 plugins {
-    kotlin("multiplatform")
-    id("org.jetbrains.compose")
-    id("com.android.library")
+    alias(libs.plugins.kotlin.mpp)
+    alias(libs.plugins.compose)
+    alias(libs.plugins.android.library)
 }
 
 group = "net.subroh0508"

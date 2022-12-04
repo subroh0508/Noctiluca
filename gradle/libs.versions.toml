@@ -17,8 +17,21 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 
 [libraries]
+android-gradle-build-tools = { module = "com.android.tools.build:gradle", version.ref = "agp" }
+android-gradle-build-tools-builder = { module = "com.android.tools.build:builder", version.ref = "agp" }
+android-gradle-build-tools-builder-model = { module = "com.android.tools.build:builder-model", version.ref = "agp" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
+
+[bundles]
+plugins = [
+    "android-gradle-build-tools",
+    "android-gradle-build-tools-builder",
+    "android-gradle-build-tools-builder-model",
+    "kotlin-gradle-plugin",
+]

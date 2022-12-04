@@ -4,6 +4,7 @@ pluginManagement {
         gradlePluginPortal()
         mavenCentral()
         maven("https://maven.pkg.jetbrains.space/public/p/compose/dev")
+        includeBuild("plugins")
     }
 
     resolutionStrategy {
@@ -38,4 +39,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "noctiluca"
 
-include(":android", ":desktop", ":common")
+include(":android", ":desktop", ":common:data:status:model")

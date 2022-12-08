@@ -23,6 +23,7 @@ android-gradle-build-tools = { module = "com.android.tools.build:gradle", versio
 android-gradle-build-tools-builder = { module = "com.android.tools.build:builder", version.ref = "agp" }
 android-gradle-build-tools-builder-model = { module = "com.android.tools.build:builder-model", version.ref = "agp" }
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -38,4 +39,5 @@ plugins = [
     "android-gradle-build-tools-builder",
     "android-gradle-build-tools-builder-model",
     "kotlin-gradle-plugin",
+    "compose-gradle-plugin",
 ]

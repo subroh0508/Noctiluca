@@ -1,5 +1,7 @@
 import extension.androidConfig
 import extension.proguardConfig
+import extension.Target
+import extension.targets
 
 plugins {
     kotlin("multiplatform")
@@ -7,12 +9,7 @@ plugins {
 }
 
 kotlin {
-    android()
-    jvm("desktop") {
-        compilations.all {
-            kotlinOptions.jvmTarget = "11"
-        }
-    }
+    targets(Target.ANDROID, Target.DESKTOP)
 
     sourceSets {
         val commonMain by getting

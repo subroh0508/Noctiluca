@@ -19,13 +19,17 @@ kotlin {
         withJava()
     }
     sourceSets {
-        val jvmMain by getting {
+        named("jvmMain") {
             dependencies {
-                implementation(project(":common"))
+                implementation(project(":features:timeline"))
+
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material)
                 implementation(compose.desktop.currentOs)
             }
         }
-        val jvmTest by getting
+        named("jvmTest")
     }
 }
 

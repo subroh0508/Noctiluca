@@ -1,3 +1,3 @@
-package net.subroh0508.common
+package noctiluca.features.timeline
 
 expect fun getPlatformName(): String

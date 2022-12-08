@@ -8,14 +8,22 @@ group "net.subroh0508"
 version "1.0-SNAPSHOT"
 
 dependencies {
-    implementation(project(":common"))
+    implementation(project(":features:timeline"))
+
+    implementation(compose.runtime)
+    implementation(compose.foundation)
+    implementation(compose.material)
+    implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.core)
     implementation(libs.androidx.activity.compose)
+
+    testImplementation(libs.junit)
 }
 
 android {
     compileSdk = 33
     defaultConfig {
-        applicationId = "net.subroh0508.noctiluca"
+        applicationId = "app.noctiluca"
         minSdk = 24
         targetSdk = 33
         versionCode = 1

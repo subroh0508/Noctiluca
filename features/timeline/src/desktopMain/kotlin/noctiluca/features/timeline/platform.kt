@@ -1,4 +1,4 @@
-package net.subroh0508.common
+package noctiluca.features.timeline
 
 actual fun getPlatformName(): String {
     return "Desktop"

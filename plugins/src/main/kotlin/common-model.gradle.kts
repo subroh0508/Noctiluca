@@ -12,12 +12,12 @@ kotlin {
     targets(Target.ANDROID, Target.DESKTOP)
 
     sourceSets {
-        val commonMain by getting
-        val commonTest by getting
-        val androidMain by getting
-        val androidTest by getting
-        val desktopMain by getting
-        val desktopTest by getting
+        named("commonMain")
+        named("commonTest")
+        named("androidMain")
+        named("androidTest")
+        named("desktopMain")
+        named("desktopTest")
     }
 }
 

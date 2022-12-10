@@ -12,6 +12,8 @@ kotlinx-coroutines = "1.6.4"
 
 ktor = "2.2.1"
 
+okhttp3 = "4.10.0"
+
 junit = "4.13.2"
 
 [plugins]
@@ -44,6 +46,8 @@ ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 
+okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp3" }
+
 junit = { module = "junit:junit", version.ref = "junit" }
 
 [bundles]
@@ -55,8 +59,13 @@ plugins = [
     "compose-gradle-plugin",
 ]
 
-ktor-client = [
+ktor-client-common = [
     "ktor-client-core",
     "ktor-client-content-negotiation",
     "ktor-serialization-kotlinx-json",
+]
+
+ktor-client-jvm = [
+    "ktor-client-okhttp",
+    "okhttp3-logging-interceptor",
 ]

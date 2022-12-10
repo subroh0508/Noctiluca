@@ -6,8 +6,8 @@ data class Account(
     val id: AccountId,
     val username: String,
     val displayName: String,
-    val hostName: String,
+    val hostname: String,
     val avatar: String,
 ) {
-    val screen get() = "$username@${hostName}"
+    val screen get() = "$username@${hostname}"
 }

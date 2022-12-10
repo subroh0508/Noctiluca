@@ -7,17 +7,17 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(libs.bundles.ktor.client)
+                implementation(libs.bundles.ktor.client.common)
             }
         }
         androidMain {
             dependencies {
-                implementation(libs.ktor.client.okhttp)
+                implementation(libs.bundles.ktor.client.jvm)
             }
         }
         desktopMain {
             dependencies {
-                implementation(libs.ktor.client.cio)
+                implementation(libs.bundles.ktor.client.jvm)
             }
         }
     }

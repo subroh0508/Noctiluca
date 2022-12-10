@@ -42,6 +42,7 @@ rootProject.name = "noctiluca"
 include(
     ":android",
     ":desktop",
+    ":common:data:api",
     ":common:data:shared",
     ":common:data:account:model",
     ":common:data:status:model",

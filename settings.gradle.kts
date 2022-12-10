@@ -12,6 +12,7 @@ pluginManagement {
             when (requested.id.id) {
                 "org.jetbrains.kotlin.multiplatform",
                 "org.jetbrains.kotlin.android" -> useModule("org.jetbrains.kotlin:kotlin-gradle-plugin:${requested.version}")
+                "org.jetbrains.plugin.serialization" -> ("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
                 "com.android.application",
                 "com.android.library" -> useModule("com.android.tools.build:gradle:${requested.version}")
                 "org.jetbrains.compose" -> useModule("org.jetbrains.compose:compose-gradle-plugin:${requested.version}")
@@ -42,7 +43,8 @@ rootProject.name = "noctiluca"
 include(
     ":android",
     ":desktop",
-    ":common:data:api",
+    ":common:data:api:authentication",
+    ":common:data:api:mastodon",
     ":common:data:shared",
     ":common:data:account:model",
     ":common:data:status:model",

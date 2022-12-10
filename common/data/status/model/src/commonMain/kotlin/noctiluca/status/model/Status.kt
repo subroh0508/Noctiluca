@@ -1,9 +1,10 @@
 package noctiluca.status.model
 
 import kotlinx.datetime.LocalDateTime
+import noctiluca.model.StatusId
 
 data class Status(
-    val id: String,
+    val id: StatusId,
     val content: String,
     val warningText: String?,
     val createdAt: LocalDateTime,

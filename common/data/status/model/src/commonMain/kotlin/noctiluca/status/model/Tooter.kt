@@ -1,7 +1,9 @@
 package noctiluca.status.model
 
+import noctiluca.model.AccountId
+
 data class Tooter(
-    val id: String,
+    val id: AccountId,
     val username: String,
     val displayName: String,
     val url: String,

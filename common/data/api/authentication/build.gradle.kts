@@ -8,11 +8,13 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.bundles.ktor.client.common)
+                implementation(libs.koin.core)
             }
         }
         androidMain {
             dependencies {
                 implementation(libs.bundles.ktor.client.jvm)
+                implementation(libs.koin.android)
             }
         }
         desktopMain {

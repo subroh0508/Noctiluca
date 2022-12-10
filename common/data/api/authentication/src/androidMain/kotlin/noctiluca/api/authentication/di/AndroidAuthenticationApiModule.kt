@@ -9,7 +9,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import okhttp3.logging.HttpLoggingInterceptor
 
-actual val httpClient: HttpClient get() = HttpClient(OkHttp) {
+internal actual val httpClient: HttpClient get() = HttpClient(OkHttp) {
     engine {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY

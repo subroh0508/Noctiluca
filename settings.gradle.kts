@@ -43,6 +43,7 @@ include(
     ":android",
     ":desktop",
     ":common:data:shared",
+    ":common:data:account:model",
     ":common:data:status:model",
     ":features:timeline",
 )

@@ -15,7 +15,7 @@ data class Status(
     val favourited: Boolean,
     val reblogged: Boolean,
     val tooter: Tooter,
-    val rebloggedBy: Tooter?
+    val rebloggedBy: Tooter?,
 ) {
     enum class Visibility { PUBLIC, UNLISTED, PRIVATE, DIRECT }
 

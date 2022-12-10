@@ -1,28 +1,13 @@
-import extension.androidConfig
-import extension.proguardConfig
-import extension.Target
-import extension.targets
-
 plugins {
-    kotlin("multiplatform")
-    id("com.android.library")
+    id("multiplatform-library")
 }
 
 kotlin {
-    targets(Target.ANDROID, Target.DESKTOP)
-
     sourceSets {
-        named("commonMain")
-        named("commonTest")
-        named("androidMain")
-        named("androidTest")
-        named("desktopMain")
-        named("desktopTest")
+        named("commonMain") {
+            dependencies {
+                implementation(project(":common:data:shared"))
+            }
+        }
     }
 }
-
-android {
-    androidConfig()
-    proguardConfig()
-}
-

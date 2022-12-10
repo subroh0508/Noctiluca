@@ -4,9 +4,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
 }
 
-group "net.subroh0508"
-version "1.0-SNAPSHOT"
-
 dependencies {
     implementation(project(":features:timeline"))
 

@@ -1,15 +1,9 @@
-import org.jetbrains.compose.compose
 import org.jetbrains.compose.desktop.application.dsl.TargetFormat
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     alias(libs.plugins.kotlin.mpp)
     alias(libs.plugins.compose)
 }
-
-group = "net.subroh0508"
-version = "1.0-SNAPSHOT"
-
 
 kotlin {
     jvm {

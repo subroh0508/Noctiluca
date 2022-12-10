@@ -1,6 +1,3 @@
-group "net.subroh0508"
-version "1.0-SNAPSHOT"
-
 plugins {
     alias(libs.plugins.kotlin.mpp) apply false
     alias(libs.plugins.kotlin.android) apply false

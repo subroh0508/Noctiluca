@@ -47,6 +47,8 @@ include(
     ":common:data:api:mastodon",
     ":common:data:shared",
     ":common:data:account:model",
+    ":common:data:authentication:model",
+    ":common:data:authentication:infra",
     ":common:data:status:model",
     ":features:timeline",
 )

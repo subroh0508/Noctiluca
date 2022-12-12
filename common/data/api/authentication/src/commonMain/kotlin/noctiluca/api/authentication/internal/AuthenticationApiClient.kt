@@ -6,12 +6,11 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.http.HttpHeaders.Authorization
 import noctiluca.api.authentication.AuthenticationApi
-import noctiluca.api.authentication.json.AppCredential
-import noctiluca.api.authentication.json.Token
+import noctiluca.api.authentication.json.AppCredentialJson
+import noctiluca.api.authentication.json.TokenJson
 import noctiluca.api.authentication.params.GetAccountsVerifyCredential
 import noctiluca.api.authentication.params.PostApps
 import noctiluca.api.authentication.params.PostApps.Companion.ESCAPED_SCOPE
-import noctiluca.api.authentication.params.PostApps.Companion.SCOPE
 import noctiluca.api.authentication.params.PostApps.Companion.WEBSITE
 import noctiluca.api.authentication.params.PostOauthToken
 
@@ -38,7 +37,7 @@ internal class AuthenticationApiClient(
     ) = client.post(ENDPOINT_POST_APPS) {
         host = hostname
         setBody(PostApps.Request(clientName, redirectUri, SCOPE, WEBSITE))
-    }.body<AppCredential>().let { credential ->
+    }.body<AppCredentialJson>().let { credential ->
         credential to buildAuthorizeUrl(hostname, credential, redirectUri)
     }
 
@@ -48,7 +47,7 @@ internal class AuthenticationApiClient(
         clientSecret: String,
         redirectUri: String,
         code: String
-    ): Token {
+    ): TokenJson {
         return client.post(ENDPOINT_POST_OAUTH_TOKEN) {
             host = hostname
             setBody(PostOauthToken.Request(clientId, clientSecret, redirectUri, code))
@@ -65,7 +64,7 @@ internal class AuthenticationApiClient(
 
     private fun buildAuthorizeUrl(
         hostname: String,
-        credential: AppCredential,
+        credential: AppCredentialJson,
         redirectUri: String,
     ) = buildString {
         append("${URLProtocol.HTTPS.name}://$hostname$GET_OAUTH_AUTHORIZE")

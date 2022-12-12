@@ -1,7 +1,7 @@
 package noctiluca.api.authentication
 
-import noctiluca.api.authentication.json.AppCredential
-import noctiluca.api.authentication.json.Token
+import noctiluca.api.authentication.json.AppCredentialJson
+import noctiluca.api.authentication.json.TokenJson
 import noctiluca.api.authentication.params.GetAccountsVerifyCredential
 
 interface AuthenticationApi {
@@ -9,7 +9,7 @@ interface AuthenticationApi {
         hostname: String,
         clientName: String,
         redirectUri: String,
-    ): Pair<AppCredential, String>
+    ): Pair<AppCredentialJson, String>
 
     suspend fun postOAuthToken(
         hostname: String,
@@ -17,7 +17,7 @@ interface AuthenticationApi {
         clientSecret: String,
         redirectUri: String,
         code: String,
-    ): Token
+    ): TokenJson
 
     suspend fun getVerifyAccountsCredentials(
         hostname: String,

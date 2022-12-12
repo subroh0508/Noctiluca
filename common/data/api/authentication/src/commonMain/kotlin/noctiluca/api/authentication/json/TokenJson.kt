@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Token(
+data class TokenJson(
     @SerialName("access_token")
     val accessToken: String,
     @SerialName("token_type")

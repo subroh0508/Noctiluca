@@ -17,8 +17,8 @@ private val Context.tokenDataStore by dataStore(
     serializer = CachedTokenSerializer,
 )
 
-actual object AuthenticationRepositories {
-    actual val Module get() = module {
+actual object AuthenticationRepositoriesModule {
+    actual operator fun invoke() = module {
         single { AppCredentialCache(get<Application>().appCredentialDataStore) }
         single { TokenCache(get<Application>().tokenDataStore) }
         single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }

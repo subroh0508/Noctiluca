@@ -1,3 +1,5 @@
 package noctiluca.authentication.domain.usecase
 
-interface SearchMastodonInstancesUseCase : suspend (String) -> List<String>
+interface SearchMastodonInstancesUseCase {
+    suspend fun execute(query: String): List<String>
+}

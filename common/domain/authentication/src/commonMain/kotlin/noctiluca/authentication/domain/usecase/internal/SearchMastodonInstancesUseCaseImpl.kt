@@ -5,7 +5,7 @@ import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 internal class SearchMastodonInstancesUseCaseImpl(
 
 ) : SearchMastodonInstancesUseCase {
-    override suspend fun invoke(query: String): List<String> {
+    override suspend fun execute(query: String): List<String> {
         return listOf()
     }
 }

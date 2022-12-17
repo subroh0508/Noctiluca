@@ -1,5 +1,6 @@
 package noctiluca.features.authentication
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import noctiluca.authentication.domain.di.AuthenticationDomainModule
@@ -23,8 +24,12 @@ fun SignInCompose() {
     useCase ?: return
 
     LaunchedEffect(useCase) {
-        result = useCase?.execute("imastodon.net") ?: listOf()
+        result = useCase?.execute(".net") ?: listOf()
     }
 
-    result.forEach { Text(it) }
+    Column {
+        result.forEach {
+            Text(it)
+        }
+    }
 }

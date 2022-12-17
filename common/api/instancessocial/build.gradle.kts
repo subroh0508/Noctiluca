@@ -10,6 +10,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(libs.kotlinx.datetime)
                 implementation(libs.bundles.ktor.client.common)
                 implementation(libs.koin.core)
             }

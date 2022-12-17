@@ -6,6 +6,7 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
+import kotlinx.serialization.json.Json
 import okhttp3.logging.HttpLoggingInterceptor
 
 internal actual val httpClient: HttpClient
@@ -22,6 +23,9 @@ internal actual val httpClient: HttpClient
     }
 
     install(ContentNegotiation) {
-        json()
+        json(json = Json {
+            explicitNulls = false
+            ignoreUnknownKeys = true
+        })
     }
 }

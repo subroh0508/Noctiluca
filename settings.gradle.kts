@@ -51,6 +51,7 @@ include(
     ":common:data:authentication:model",
     ":common:data:authentication:infra",
     ":common:data:status:model",
+    ":common:domain:authentication",
     ":features:timeline",
     ":features:authentication",
 )

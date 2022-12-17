@@ -6,6 +6,7 @@ import io.ktor.client.statement.*
 import noctiluca.api.authentication.InstancesSocialApi
 
 internal class InstancesSocialApiClient(
+    private val token: String,
     private val client: HttpClient,
 ) : InstancesSocialApi {
     companion object {
@@ -15,5 +16,7 @@ internal class InstancesSocialApiClient(
     override suspend fun search(
         query: String,
         count: Int,
-    ) = client.get(ENDPOINT_SEARCH).bodyAsText()
+    ) = client.get(ENDPOINT_SEARCH) {
+        bearerAuth(token)
+    }.bodyAsText()
 }

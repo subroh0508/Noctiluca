@@ -16,6 +16,7 @@ pluginManagement {
                 "com.android.application",
                 "com.android.library" -> useModule("com.android.tools.build:gradle:${requested.version}")
                 "org.jetbrains.compose" -> useModule("org.jetbrains.compose:compose-gradle-plugin:${requested.version}")
+                "com.github.gmazzo.buildconfig" -> useModule("com.github.gmazzo:gradle-buildconfig-plugin:${requested.version}")
             }
         }
     }

@@ -5,6 +5,13 @@ plugins {
 }
 
 dependencies {
+    implementation(project(":common:api:authentication"))
+    implementation(project(":common:api:instancessocial"))
+    implementation(project(":common:api:mastodon"))
+    implementation(project(":common:data:authentication:infra"))
+    implementation(project(":common:data:instance:infra"))
+
+    implementation(project(":features:authentication"))
     implementation(project(":features:timeline"))
 
     implementation(compose.runtime)
@@ -13,6 +20,11 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core)
     implementation(libs.androidx.activity.compose)
+
+    implementation(libs.bundles.ktor.client.jvm)
+
+    implementation(libs.koin.core)
+    implementation(libs.koin.android)
 
     testImplementation(libs.junit)
 }

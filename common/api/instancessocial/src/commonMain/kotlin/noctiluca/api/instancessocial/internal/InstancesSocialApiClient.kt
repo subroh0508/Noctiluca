@@ -10,7 +10,7 @@ internal class InstancesSocialApiClient(
     private val client: HttpClient,
 ) : InstancesSocialApi {
     companion object {
-        private const val ENDPOINT_SEARCH = "/search"
+        private const val ENDPOINT_SEARCH = "/api/1.0/instances/search"
     }
 
     override suspend fun search(
@@ -18,5 +18,6 @@ internal class InstancesSocialApiClient(
         count: Int,
     ) = client.get(ENDPOINT_SEARCH) {
         bearerAuth(token)
+        url { parameters["q"] = query }
     }.bodyAsText()
 }

@@ -83,3 +83,9 @@ ktor-client-jvm = [
     "ktor-client-okhttp",
     "okhttp3-logging-interceptor",
 ]
+
+androidx-activities = [
+    "androidx-core",
+    "androidx-appcompat",
+    "androidx-activity-compose",
+]

@@ -17,7 +17,7 @@ internal actual val httpClient: HttpClient
     }
 
     defaultRequest {
-        url(BASE_URL_INSTANCES_SOCIAL)
+        url(URLProtocol.HTTPS.name, HOST_INSTANCES_SOCIAL)
         contentType(ContentType.Application.Json)
     }
 

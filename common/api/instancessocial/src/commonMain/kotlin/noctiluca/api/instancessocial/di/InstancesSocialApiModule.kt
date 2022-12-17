@@ -1,14 +1,14 @@
 package noctiluca.api.instancessocial.di
 
 import io.ktor.client.*
-import noctiluca.common.data.api.instancessocial.BuildConfig
+import noctiluca.common.api.instancessocial.BuildConfig
 import noctiluca.api.instancessocial.InstancesSocialApi
 import noctiluca.api.instancessocial.internal.InstancesSocialApiClient
 import org.koin.dsl.module
 
 internal expect val httpClient: HttpClient
 
-internal const val BASE_URL_INSTANCES_SOCIAL = "https://instances.social/api/1.0/instances"
+internal const val HOST_INSTANCES_SOCIAL = "instances.social"
 
 object InstancesSocialApiModule {
     operator fun invoke(

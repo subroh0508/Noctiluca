@@ -1,6 +1,9 @@
+import extension.localProperties
+
 plugins {
     id("multiplatform-library")
     kotlin("plugin.serialization")
+    alias(libs.plugins.buildconfig)
 }
 
 kotlin {
@@ -23,4 +26,12 @@ kotlin {
             }
         }
     }
+}
+
+buildConfig {
+    useKotlinOutput()
+
+    val apiToken = localProperties().getProperty("instances.social.token")
+
+    buildConfigField("String", "SOCIAL_INSTANCES_API_TOKEN", "\"$apiToken\"")
 }

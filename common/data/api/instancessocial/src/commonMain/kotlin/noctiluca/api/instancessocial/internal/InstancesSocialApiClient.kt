@@ -1,9 +1,9 @@
-package noctiluca.api.authentication.internal
+package noctiluca.api.instancessocial.internal
 
 import io.ktor.client.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
-import noctiluca.api.authentication.InstancesSocialApi
+import noctiluca.api.instancessocial.InstancesSocialApi
 
 internal class InstancesSocialApiClient(
     private val token: String,

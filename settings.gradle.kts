@@ -44,6 +44,7 @@ rootProject.name = "noctiluca"
 include(
     ":android",
     ":desktop",
+    ":common:data:api:instancessocial",
     ":common:data:api:authentication",
     ":common:data:api:mastodon",
     ":common:data:shared",

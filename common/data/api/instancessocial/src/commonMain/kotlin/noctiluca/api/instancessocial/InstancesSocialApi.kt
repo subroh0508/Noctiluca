@@ -1,4 +1,4 @@
-package noctiluca.api.authentication
+package noctiluca.api.instancessocial
 
 interface InstancesSocialApi {
     suspend fun search(

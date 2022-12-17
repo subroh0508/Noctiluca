@@ -1,4 +1,4 @@
-package noctiluca.api.authentication.di
+package noctiluca.api.instancessocial.di
 
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
@@ -8,7 +8,7 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import okhttp3.logging.HttpLoggingInterceptor
 
-internal actual val instancesSocialHttpClient: HttpClient get() = HttpClient(OkHttp) {
+internal actual val httpClient: HttpClient get() = HttpClient(OkHttp) {
     engine {
         val loggingInterceptor = HttpLoggingInterceptor()
         loggingInterceptor.level = HttpLoggingInterceptor.Level.BODY

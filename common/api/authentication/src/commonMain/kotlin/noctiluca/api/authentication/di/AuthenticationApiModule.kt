@@ -9,7 +9,7 @@ import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import noctiluca.api.authentication.AuthenticationApi
 import noctiluca.api.authentication.internal.AuthenticationApiClient
-import org.koin.dsl.module
+import org.koin.core.module.Module
 
 fun buildHttpClient(
     json: Json,
@@ -24,8 +24,7 @@ fun buildHttpClient(
     }
 }
 
-object AuthenticationApiModule {
-    operator fun invoke(client: HttpClient) = module {
-        single<AuthenticationApi> { AuthenticationApiClient(client) }
-    }
+@Suppress("FunctionName")
+fun Module.AuthenticationApiModule(client: HttpClient) {
+    single<AuthenticationApi> { AuthenticationApiClient(client) }
 }

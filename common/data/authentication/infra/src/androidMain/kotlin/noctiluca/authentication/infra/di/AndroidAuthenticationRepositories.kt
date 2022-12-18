@@ -9,6 +9,7 @@ import noctiluca.authentication.infra.repository.TokenRepository
 import noctiluca.authentication.infra.repository.impl.TokenRepositoryImpl
 import noctiluca.authentication.infra.repository.local.AppCredentialCache
 import noctiluca.authentication.infra.repository.local.TokenCache
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
 private val Context.appCredentialDataStore by preferencesDataStore(name = AppCredentialCache::class.simpleName ?: "")
@@ -17,10 +18,9 @@ private val Context.tokenDataStore by dataStore(
     serializer = CachedTokenSerializer,
 )
 
-actual object AuthenticationRepositoriesModule {
-    actual operator fun invoke() = module {
-        single { AppCredentialCache(get<Application>().appCredentialDataStore) }
-        single { TokenCache(get<Application>().tokenDataStore) }
-        single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
-    }
+@Suppress("FunctionName")
+actual fun Module.AuthenticationRepositoriesModule() {
+    single { AppCredentialCache(get<Application>().appCredentialDataStore) }
+    single { TokenCache(get<Application>().tokenDataStore) }
+    single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
 }

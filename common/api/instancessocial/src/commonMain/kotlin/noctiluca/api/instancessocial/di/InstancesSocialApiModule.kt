@@ -10,6 +10,7 @@ import kotlinx.serialization.json.Json
 import noctiluca.common.api.instancessocial.BuildConfig
 import noctiluca.api.instancessocial.InstancesSocialApi
 import noctiluca.api.instancessocial.internal.InstancesSocialApiClient
+import org.koin.core.module.Module
 import org.koin.dsl.module
 
 private const val HOST_INSTANCES_SOCIAL = "instances.social"
@@ -28,11 +29,10 @@ fun buildHttpClient(
     }
 }
 
-object InstancesSocialApiModule {
-    operator fun invoke(
-        client: HttpClient,
-        token: String = BuildConfig.SOCIAL_INSTANCES_API_TOKEN,
-    ) = module {
-        single<InstancesSocialApi> { InstancesSocialApiClient(token, client) }
-    }
+@Suppress("FunctionName")
+fun Module.InstancesSocialApiModule(
+    client: HttpClient,
+    token: String = BuildConfig.SOCIAL_INSTANCES_API_TOKEN
+) {
+    single<InstancesSocialApi> { InstancesSocialApiClient(token, client) }
 }

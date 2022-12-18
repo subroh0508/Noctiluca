@@ -14,6 +14,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import org.koin.dsl.module
 
 class NoctilucaApplication : Application() {
     private val json by lazy {
@@ -41,12 +42,13 @@ class NoctilucaApplication : Application() {
         }
     }
 
-    private fun buildApiModules() = InstancesSocialApiModule(
-        client = buildHttpClientForInstancesSocial(json, httpClientEngine),
-    ) + AuthenticationApiModule(
-        client = buildHttpClientForAuthentication(json, httpClientEngine),
-    )
+    private fun buildApiModules() = module {
+        InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
+        AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
+    }
 
-    private fun buildRepositoriesModules() = AuthenticationRepositoriesModule() +
-            InstanceRepositoriesModule()
+    private fun buildRepositoriesModules() = module {
+        AuthenticationRepositoriesModule()
+        InstanceRepositoriesModule()
+    }
 }

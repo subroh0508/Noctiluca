@@ -11,7 +11,9 @@ import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
+import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
+import org.koin.core.logger.Level
 
 class NoctilucaApplication : Application() {
     private val json by lazy {
@@ -33,6 +35,7 @@ class NoctilucaApplication : Application() {
         super.onCreate()
 
         startKoin {
+            // androidLogger(Level.DEBUG)
             androidContext(this@NoctilucaApplication)
             modules(buildApiModules() + buildRepositoriesModules())
         }

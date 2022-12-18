@@ -22,6 +22,7 @@ dependencies {
     implementation(libs.androidx.activity.compose)
 
     implementation(libs.bundles.ktor.client.jvm)
+    implementation(libs.kotlinx.serialization)
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)

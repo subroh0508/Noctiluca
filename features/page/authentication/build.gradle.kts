@@ -1,5 +1,5 @@
 plugins {
-    id("features")
+    id("features-page")
 }
 
 kotlin {

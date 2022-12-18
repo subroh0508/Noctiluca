@@ -11,8 +11,8 @@ dependencies {
     implementation(project(":common:data:authentication:infra"))
     implementation(project(":common:data:instance:infra"))
 
-    implementation(project(":features:authentication"))
-    implementation(project(":features:timeline"))
+    implementation(project(":features:page:authentication"))
+    implementation(project(":features:page:timeline"))
 
     implementation(compose.runtime)
     implementation(compose.foundation)

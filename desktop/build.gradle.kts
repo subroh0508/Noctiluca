@@ -15,7 +15,7 @@ kotlin {
     sourceSets {
         named("jvmMain") {
             dependencies {
-                implementation(project(":features:timeline"))
+                implementation(project(":features:page:timeline"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)

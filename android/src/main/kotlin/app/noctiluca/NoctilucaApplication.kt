@@ -8,6 +8,7 @@ import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForIns
 import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
+import noctiluca.features.authentication.di.SignInModule
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -38,7 +39,7 @@ class NoctilucaApplication : Application() {
         startKoin {
             // androidLogger(Level.DEBUG)
             androidContext(this@NoctilucaApplication)
-            modules(buildApiModules() + buildRepositoriesModules())
+            modules(buildApiModules() + buildRepositoriesModules() + buildFeaturesModules())
         }
     }
 
@@ -51,4 +52,6 @@ class NoctilucaApplication : Application() {
         AuthenticationRepositoriesModule()
         InstanceRepositoriesModule()
     }
+
+    private fun buildFeaturesModules() = SignInModule()
 }

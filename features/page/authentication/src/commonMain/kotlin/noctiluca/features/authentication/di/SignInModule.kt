@@ -10,11 +10,9 @@ import org.koin.dsl.module
 object SignInModule : KoinScopeComponent {
     override val scope: Scope by newScope()
 
-    init {
-        loadKoinModules(module {
-            scope(scope.scopeQualifier) {
-                AuthenticationDomainModule()
-            }
-        })
+    operator fun invoke() = module {
+        scope(scope.scopeQualifier) {
+            AuthenticationDomainModule()
+        }
     }
 }

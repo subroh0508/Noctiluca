@@ -1,7 +1,4 @@
-import extension.androidxActivities
-import extension.koinAndroid
-import extension.koinCore
-import extension.libs
+import extension.*
 
 plugins {
     id("multiplatform-library")
@@ -17,6 +14,8 @@ kotlin {
                 implementation(compose.runtime)
                 implementation(compose.foundation)
                 implementation(compose.material)
+
+                implementation(libs.coroutinesCore)
 
                 implementation(libs.koinCore)
             }

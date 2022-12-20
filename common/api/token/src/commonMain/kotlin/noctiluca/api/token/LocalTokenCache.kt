@@ -1,10 +1,9 @@
-package noctiluca.authentication.infra.repository.local
+package noctiluca.api.token
 
-import noctiluca.authentication.infra.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 
-internal expect class TokenCache {
+expect class LocalTokenCache : Token.Cache {
     suspend fun getAll(): List<AuthorizedUser>
 
     suspend fun getCurrent(): AuthorizedUser?

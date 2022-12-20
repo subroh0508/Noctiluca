@@ -3,10 +3,10 @@ package noctiluca.authentication.infra.repository.impl
 import noctiluca.api.authentication.AuthenticationApi
 import noctiluca.api.authentication.json.AppCredentialJson
 import noctiluca.api.authentication.params.GetAccountsVerifyCredential
-import noctiluca.authentication.infra.internal.Token
+import noctiluca.api.token.LocalTokenCache
+import noctiluca.api.token.Token
 import noctiluca.authentication.infra.repository.TokenRepository
 import noctiluca.authentication.infra.repository.local.AppCredentialCache
-import noctiluca.authentication.infra.repository.local.TokenCache
 import noctiluca.authentication.model.AppCredential
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
@@ -16,7 +16,7 @@ import noctiluca.model.Uri
 internal class TokenRepositoryImpl(
     private val api: AuthenticationApi,
     private val appCredentialCache: AppCredentialCache,
-    private val tokenCache: TokenCache,
+    private val tokenCache: LocalTokenCache,
 ) : TokenRepository {
     override suspend fun fetchAppCredential(
         hostname: Hostname,

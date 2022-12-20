@@ -7,6 +7,7 @@ import noctiluca.api.authentication.di.buildHttpClient as buildHttpClientForAuth
 import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
 import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
+import noctiluca.api.token.di.TokenApiModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.features.authentication.di.SignInModule
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
@@ -44,8 +45,9 @@ class NoctilucaApplication : Application() {
     }
 
     private fun buildApiModules() = module {
-        InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
         AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
+        InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
+        TokenApiModule()
     }
 
     private fun buildRepositoriesModules() = module {

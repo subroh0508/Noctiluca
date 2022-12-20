@@ -8,7 +8,6 @@ internal const val KEY_CLIENT_SECRET = "CLIENT_SECRET"
 internal const val KEY_HOSTNAME = "HOSTNAME"
 
 internal expect class AppCredentialCache {
-
     suspend fun getCurrent(): Pair<Hostname, AppCredentialJson>?
     suspend fun save(hostname: Hostname, credential: AppCredentialJson)
     suspend fun clear()

@@ -1,33 +1,33 @@
-package noctiluca.authentication.infra.repository.local
+package noctiluca.api.token
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import noctiluca.authentication.infra.internal.CachedToken
-import noctiluca.authentication.infra.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import java.util.prefs.Preferences
 
 @Suppress("UNCHECKED_CAST")
-internal actual class TokenCache(
+actual class LocalTokenCache internal constructor(
     private val prefs: Preferences,
-) {
+) : Token.Cache {
     companion object {
         private const val TOKEN_LIST = "TOKEN_LIST"
     }
 
+    override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
+
     actual suspend fun getAll(): List<AuthorizedUser> = withContext(Dispatchers.IO) {
-        getCachedTokens().map(::Token)
+        getTokensJson().map(::Token)
     }
 
     actual suspend fun getCurrent(): AuthorizedUser? = withContext(Dispatchers.IO) {
-        getCachedTokens().find(CachedToken::current)?.let(::Token)
+        getTokensJson().find(Token.Json::current)?.let(::Token)
     }
     actual suspend fun setCurrent(id: AccountId): AuthorizedUser = withContext(Dispatchers.IO) {
-        val prevTokens = getCachedTokens()
+        val prevTokens = getTokensJson()
 
         val token = prevTokens.find { it.accountId == id.value }
         val nextTokens = listOfNotNull(token?.copy(current = true)) + prevTokens.mapNotNull {
@@ -38,30 +38,30 @@ internal actual class TokenCache(
             it.copy(current = false)
         }
 
-        saveCachedTokens(nextTokens)
+        saveTokensJson(nextTokens)
 
-        Token(getCachedTokens().first(CachedToken::current))
+        Token(getTokensJson().first(Token.Json::current))
     }
 
     actual suspend fun add(token: Token) = withContext(Dispatchers.IO) {
-        val nextTokens = getCachedTokens() + listOf(CachedToken(token))
-        saveCachedTokens(nextTokens)
+        val nextTokens = getTokensJson() + listOf(Token.Json(token))
+        saveTokensJson(nextTokens)
 
         nextTokens as List<AuthorizedUser>
     }
 
     actual suspend fun delete(id: AccountId) = withContext(Dispatchers.IO) {
-        val nextTokens = getCachedTokens().filterNot { it.accountId == id.value }
-        saveCachedTokens(nextTokens)
+        val nextTokens = getTokensJson().filterNot { it.accountId == id.value }
+        saveTokensJson(nextTokens)
 
         nextTokens as List<AuthorizedUser>
     }
 
-    private fun getCachedTokens() = prefs[TOKEN_LIST, null]?.let {
-        Json.decodeFromString<Array<CachedToken>>(it)
+    private fun getTokensJson() = prefs[TOKEN_LIST, null]?.let {
+        Json.decodeFromString<Array<Token.Json>>(it)
     }?.toList() ?: listOf()
 
-    private fun saveCachedTokens(tokens: List<CachedToken>) {
+    private fun saveTokensJson(tokens: List<Token.Json>) {
         prefs.put(TOKEN_LIST, Json.encodeToString(tokens.toTypedArray()))
     }
 }

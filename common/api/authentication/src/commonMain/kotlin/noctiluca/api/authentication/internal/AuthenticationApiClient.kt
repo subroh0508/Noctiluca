@@ -56,10 +56,10 @@ internal class AuthenticationApiClient(
 
     override suspend fun getVerifyAccountsCredentials(
         hostname: String,
-        accessToken: String
+        accessToken: String,
     ): GetAccountsVerifyCredential.Response = client.get(ENDPOINT_GET_ACCOUNTS_VERIFY_CREDENTIALS) {
         host = hostname
-        header(Authorization, "Bearer $accessToken")
+        bearerAuth(accessToken)
     }.body()
 
     private fun buildAuthorizeUrl(

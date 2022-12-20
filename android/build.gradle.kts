@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":common:api:authentication"))
     implementation(project(":common:api:instancessocial"))
     implementation(project(":common:api:mastodon"))
+    implementation(project(":common:api:token"))
     implementation(project(":common:data:authentication:infra"))
     implementation(project(":common:data:instance:infra"))
 

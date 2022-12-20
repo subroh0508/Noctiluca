@@ -47,6 +47,7 @@ include(
     ":common:api:authentication",
     ":common:api:instancessocial",
     ":common:api:mastodon",
+    ":common:api:token",
     ":common:data:shared",
     ":common:data:account:model",
     ":common:data:authentication:model",

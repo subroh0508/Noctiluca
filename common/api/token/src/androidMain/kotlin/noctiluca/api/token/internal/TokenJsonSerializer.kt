@@ -1,4 +1,4 @@
-package noctiluca.authentication.infra.internal
+package noctiluca.api.token.internal
 
 import androidx.datastore.core.Serializer
 import kotlinx.coroutines.Dispatchers
@@ -7,21 +7,22 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import noctiluca.api.token.Token
 import java.io.InputStream
 import java.io.OutputStream
 
-internal object CachedTokenSerializer : Serializer<List<CachedToken>> {
-    override val defaultValue: List<CachedToken> = listOf()
+internal object TokenJsonSerializer : Serializer<List<Token.Json>> {
+    override val defaultValue: List<Token.Json> = listOf()
 
     override suspend fun readFrom(input: InputStream) = try {
         val bytes = input.readBytes()
 
-        Json.decodeFromString<Array<CachedToken>>(bytes.decodeToString()).toList()
+        Json.decodeFromString<Array<Token.Json>>(bytes.decodeToString()).toList()
     } catch (e: SerializationException) {
         defaultValue
     }
 
-    override suspend fun writeTo(t: List<CachedToken>, output: OutputStream) {
+    override suspend fun writeTo(t: List<Token.Json>, output: OutputStream) {
         val json = Json.encodeToString(t.toTypedArray())
 
         withContext(Dispatchers.IO) {

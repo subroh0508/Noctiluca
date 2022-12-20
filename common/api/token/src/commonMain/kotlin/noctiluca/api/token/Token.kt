@@ -19,6 +19,7 @@ data class Token(
 
     interface Cache {
         suspend fun getCurrentAccessToken(): String?
+        suspend fun getCurrentDomain(): String?
     }
 
     @Serializable

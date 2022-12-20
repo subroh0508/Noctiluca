@@ -7,5 +7,5 @@ import org.koin.dsl.module
 
 @Suppress("FunctionName")
 fun Module.InstanceRepositoriesModule() {
-    single<InstanceRepository> { InstanceRepositoryImpl(get()) }
+    single<InstanceRepository> { InstanceRepositoryImpl(get(), get()) }
 }

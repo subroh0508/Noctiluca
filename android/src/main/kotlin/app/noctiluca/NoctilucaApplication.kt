@@ -5,8 +5,11 @@ import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
 import noctiluca.api.authentication.di.buildHttpClient as buildHttpClientForAuthentication
 import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
+import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForMastodon
 import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
+import noctiluca.api.mastodon.MastodonApi
+import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.token.di.TokenApiModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.features.authentication.di.SignInModule
@@ -47,6 +50,7 @@ class NoctilucaApplication : Application() {
     private fun buildApiModules() = module {
         AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
         InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
+        MastodonApiModule(buildHttpClientForMastodon(json, httpClientEngine))
         TokenApiModule()
     }
 

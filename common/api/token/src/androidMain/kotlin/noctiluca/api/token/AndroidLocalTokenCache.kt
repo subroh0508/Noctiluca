@@ -10,6 +10,8 @@ actual class LocalTokenCache internal constructor(
 ) : Token.Cache {
     override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
 
+    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.hostname?.value
+
     actual suspend fun getAll(): List<AuthorizedUser> = dataStore.data.first().map(::Token)
 
     actual suspend fun getCurrent(): AuthorizedUser? = dataStore.data.first().find(Token.Json::current)?.let(::Token)

@@ -8,6 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":common:api:instancessocial"))
+                implementation(project(":common:api:mastodon"))
                 implementation(project(":common:data:instance:model"))
 
                 implementation(libs.kotlinx.coroutines.core)

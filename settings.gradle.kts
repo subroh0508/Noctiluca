@@ -57,6 +57,7 @@ include(
     ":common:data:status:model",
     ":common:domain:authentication",
     ":features:components",
+    ":features:theme",
     ":features:page:timeline",
     ":features:page:authentication",
 )

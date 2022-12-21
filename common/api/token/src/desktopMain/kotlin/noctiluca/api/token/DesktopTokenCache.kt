@@ -19,7 +19,7 @@ actual class LocalTokenCache internal constructor(
 
     override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
 
-    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.hostname
+    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.hostname?.value
 
     actual suspend fun getAll(): List<AuthorizedUser> = withContext(Dispatchers.IO) {
         getTokensJson().map(::Token)

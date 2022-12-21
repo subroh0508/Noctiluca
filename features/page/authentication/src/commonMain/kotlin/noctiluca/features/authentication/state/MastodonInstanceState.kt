@@ -20,6 +20,11 @@ fun rememberMastodonInstances(
         listOf(),
         query,
     ) {
+        if (query.isBlank()) {
+            value = listOf()
+            return@produceState
+        }
+
         runCatching { useCase.execute(query) }
             .onSuccess { value = it }
             .onFailure { value = listOf() }

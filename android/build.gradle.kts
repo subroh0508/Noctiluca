@@ -12,12 +12,14 @@ dependencies {
     implementation(project(":common:data:authentication:infra"))
     implementation(project(":common:data:instance:infra"))
 
+    implementation(project(":features:theme"))
     implementation(project(":features:page:authentication"))
     implementation(project(":features:page:timeline"))
 
     implementation(compose.runtime)
     implementation(compose.foundation)
-    implementation(compose.material)
+    @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
+    implementation(compose.material3)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core)
     implementation(libs.androidx.activity.compose)

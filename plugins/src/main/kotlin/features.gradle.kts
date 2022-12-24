@@ -15,6 +15,7 @@ kotlin {
                 implementation(compose.foundation)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.material3)
+                implementation(compose.preview)
 
                 implementation(libs.coroutinesCore)
 
@@ -34,11 +35,7 @@ kotlin {
             }
         }
         named("androidTest")
-        named("desktopMain") {
-            dependencies {
-                implementation(compose.preview)
-            }
-        }
+        named("desktopMain")
         named("desktopTest")
     }
 }

@@ -4,13 +4,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import noctiluca.components.atoms.DebouncedTextForm
+import noctiluca.components.atoms.image.AsyncImage
+import noctiluca.components.atoms.list.ListItem
+import noctiluca.components.atoms.textfield.DebouncedTextForm
+import noctiluca.components.utils.ImageLoader
 import noctiluca.features.authentication.state.rememberMastodonInstances
 import noctiluca.instance.model.Instance
+import noctiluca.model.Uri
 
 private const val DEBOUNCE_TIME_MILLIS = 500L
+private const val PATH_FALLBACK_ICON = "${ImageLoader.RESOURCES_DIRECTORY}/icon_mastodon.png"
 
 @Composable
 fun SearchInstanceList() {
@@ -24,7 +28,7 @@ fun SearchInstanceList() {
 }
 
 @Composable
-private fun InstanceDomain(
+internal fun InstanceDomain(
     query: String,
     onChangeQuery: (String) -> Unit,
 ) = DebouncedTextForm(
@@ -39,13 +43,19 @@ private fun InstanceDomain(
 }
 
 @Composable
-private fun InstanceList(
+internal fun InstanceList(
     instances: List<Instance>,
 ) = LazyColumn {
     items(instances) {
-        Column {
-            Text(it.domain)
-            Text(it.description ?: "")
-        }
+        ListItem(
+            it.domain,
+            supportingText = it.description,
+            leadingContent = {
+                AsyncImage(
+                    null, //it.thumbnail,
+                    fallbackUri = Uri(PATH_FALLBACK_ICON),
+                )
+            },
+        )
     }
 }

@@ -12,6 +12,7 @@ import noctiluca.api.mastodon.MastodonApi
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.token.di.TokenApiModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
+import noctiluca.components.di.ImageLoaderModule
 import noctiluca.features.authentication.di.SignInModule
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
 import okhttp3.logging.HttpLoggingInterceptor
@@ -59,5 +60,6 @@ class NoctilucaApplication : Application() {
         InstanceRepositoriesModule()
     }
 
-    private fun buildFeaturesModules() = SignInModule()
+    private fun buildFeaturesModules() = ImageLoaderModule(httpClientEngine) +
+            SignInModule()
 }

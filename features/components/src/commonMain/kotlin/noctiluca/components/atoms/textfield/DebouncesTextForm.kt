@@ -1,4 +1,4 @@
-package noctiluca.components.atoms
+package noctiluca.components.atoms.textfield
 
 import androidx.compose.runtime.*
 import kotlinx.coroutines.flow.debounce

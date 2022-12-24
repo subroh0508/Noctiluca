@@ -2,9 +2,7 @@ package noctiluca.authentication.infra.repository.impl
 
 import noctiluca.api.authentication.AuthenticationApi
 import noctiluca.api.authentication.json.AppCredentialJson
-import noctiluca.api.authentication.params.GetAccountsVerifyCredential
 import noctiluca.api.token.LocalTokenCache
-import noctiluca.api.token.Token
 import noctiluca.authentication.infra.repository.TokenRepository
 import noctiluca.authentication.infra.repository.local.AppCredentialCache
 import noctiluca.authentication.model.AppCredential
@@ -48,11 +46,11 @@ internal class TokenRepositoryImpl(
             code,
         ).accessToken
 
-        val token = api.getVerifyAccountsCredentials(hostname.value, accessToken).buildToken(accessToken)
+        val id = AccountId(api.getVerifyAccountsCredentials(hostname.value, accessToken).id)
 
-        tokenCache.add(token)
+        tokenCache.add(id, hostname, accessToken)
 
-        return tokenCache.setCurrent(token.id)
+        return tokenCache.setCurrent(id)
     }
 
     override suspend fun getAuthorizedUser() = tokenCache.getAll()
@@ -60,8 +58,4 @@ internal class TokenRepositoryImpl(
     override suspend fun getCurrent() = tokenCache.getCurrent()
 
     override suspend fun switch(id: AccountId) = tokenCache.setCurrent(id)
-
-    private fun GetAccountsVerifyCredential.Response.buildToken(
-        accessToken: String,
-    ) = Token(AccountId(id), Hostname(hostname), accessToken)
 }

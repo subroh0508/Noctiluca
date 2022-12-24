@@ -5,14 +5,17 @@ import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import noctiluca.api.token.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
+import noctiluca.model.Hostname
+import noctiluca.repository.TokenCache
 import java.util.prefs.Preferences
 
 @Suppress("UNCHECKED_CAST")
 actual class LocalTokenCache internal constructor(
     private val prefs: Preferences,
-) : Token.Cache {
+) : TokenCache {
     companion object {
         private const val TOKEN_LIST = "TOKEN_LIST"
     }
@@ -45,8 +48,12 @@ actual class LocalTokenCache internal constructor(
         Token(getTokensJson().first(Token.Json::current))
     }
 
-    actual suspend fun add(token: Token) = withContext(Dispatchers.IO) {
-        val nextTokens = getTokensJson() + listOf(Token.Json(token))
+    actual suspend fun add(
+        id: AccountId,
+        hostname: Hostname,
+        accessToken: String,
+    ) = withContext(Dispatchers.IO) {
+        val nextTokens = getTokensJson() + listOf(Token.Json(id, hostname, accessToken))
         saveTokensJson(nextTokens)
 
         nextTokens as List<AuthorizedUser>

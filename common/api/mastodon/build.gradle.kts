@@ -7,7 +7,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":common:api:token"))
+                implementation(project(":common:data:shared"))
 
                 implementation(libs.bundles.ktor.client.common)
                 implementation(libs.koin.core)

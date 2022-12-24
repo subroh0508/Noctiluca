@@ -5,10 +5,10 @@ import io.ktor.client.call.*
 import io.ktor.client.request.*
 import noctiluca.api.mastodon.MastodonApi
 import noctiluca.api.mastodon.params.GetInstance
-import noctiluca.api.token.Token
+import noctiluca.repository.TokenCache
 
 internal class MastodonApiClient(
-    private val token: Token.Cache,
+    private val token: TokenCache,
     private val client: HttpClient,
 ) : MastodonApi {
     override suspend fun getInstance(

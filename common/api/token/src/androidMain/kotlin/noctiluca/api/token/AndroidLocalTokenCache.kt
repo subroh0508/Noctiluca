@@ -2,12 +2,15 @@ package noctiluca.api.token
 
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
+import noctiluca.api.token.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
+import noctiluca.model.Hostname
+import noctiluca.repository.TokenCache
 
 actual class LocalTokenCache internal constructor(
     private val dataStore: DataStore<List<Token.Json>>,
-) : Token.Cache {
+) : TokenCache {
     override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
 
     override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.hostname?.value
@@ -32,8 +35,12 @@ actual class LocalTokenCache internal constructor(
         return Token(dataStore.data.first().first(Token.Json::current))
     }
 
-    actual suspend fun add(token: Token): List<AuthorizedUser> = dataStore.updateData {
-        it + Token.Json(token)
+    actual suspend fun add(
+        id: AccountId,
+        hostname: Hostname,
+        accessToken: String,
+    ): List<AuthorizedUser> = dataStore.updateData {
+        it + Token.Json(id, hostname, accessToken)
     }.map(::Token)
 
     actual suspend fun delete(id: AccountId): List<AuthorizedUser> = dataStore.updateData {

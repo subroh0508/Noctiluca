@@ -1,3 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
+    <string name="sign_in_page_title">ようこそ</string>
+    <string name="sign_in_search_instance">インスタンスを検索</string>
+    <string name="sign_in_search_instance_hint">ドメイン名を入力</string>
 </resources>

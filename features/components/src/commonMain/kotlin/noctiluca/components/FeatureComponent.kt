@@ -18,9 +18,5 @@ fun FeatureComponent(
         onDispose { component.closeScope() }
     }
 
-    component.getScopeOrNull()?.let {
-        Surface(modifier = Modifier.fillMaxSize().then(modifier)) {
-            content(it)
-        }
-    }
+    component.getScopeOrNull()?.let { content(it) }
 }

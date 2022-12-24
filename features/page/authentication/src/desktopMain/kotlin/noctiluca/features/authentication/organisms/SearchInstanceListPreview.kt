@@ -1,13 +1,17 @@
 package noctiluca.features.authentication.organisms
 
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import noctiluca.components.atoms.text.HeadlineSmall
+import noctiluca.features.authentication.getString
 import noctiluca.instance.model.Instance
 import noctiluca.theme.NoctilucaTheme
 
@@ -29,6 +33,9 @@ internal fun InstanceListPreview() {
     NoctilucaTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
             Column(modifier = Modifier.padding(16.dp)) {
+                HeadlineSmall(getString().sign_in_search_instance)
+                Spacer(Modifier.height(32.dp))
+
                 InstanceDomain("mastodon.net", onChangeQuery = {})
                 InstanceList(instances)
             }

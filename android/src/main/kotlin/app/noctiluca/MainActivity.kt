@@ -3,7 +3,7 @@ package app.noctiluca
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import noctiluca.features.authentication.SignInCompose
+import noctiluca.features.authentication.SignIn
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {
@@ -11,7 +11,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             NoctilucaTheme {
-                SignInCompose()
+                SignIn()
             }
         }
     }

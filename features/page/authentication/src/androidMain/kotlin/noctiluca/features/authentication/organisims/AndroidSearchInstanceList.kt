@@ -9,7 +9,6 @@ import noctiluca.theme.NoctilucaTheme
 @Preview
 @Composable
 fun InstanceList_Preview() {
-
     NoctilucaTheme {
         InstanceList(
             listOf(

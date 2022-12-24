@@ -6,9 +6,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.*
 import noctiluca.components.atoms.image.AsyncImage
+import noctiluca.components.atoms.image.imageResources
 import noctiluca.components.atoms.list.ListItem
 import noctiluca.components.atoms.textfield.DebouncedTextForm
 import noctiluca.components.utils.ImageLoader
+import noctiluca.features.authentication.getDrawables
 import noctiluca.features.authentication.state.rememberMastodonInstances
 import noctiluca.instance.model.Instance
 import noctiluca.model.Uri
@@ -53,7 +55,7 @@ internal fun InstanceList(
             leadingContent = {
                 AsyncImage(
                     null, //it.thumbnail,
-                    fallbackUri = Uri(PATH_FALLBACK_ICON),
+                    fallback = imageResources(getDrawables().icon_mastodon),
                 )
             },
         )

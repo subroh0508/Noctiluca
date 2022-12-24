@@ -18,7 +18,10 @@ internal class InstanceRepositoryImpl(
     ): List<Instance> = try {
         listOf(mastodonApi.getInstance(query).toValueObject())
     } catch (e: UnknownHostException) {
-        instancesSocialApi.search(query).instances.map { it.toValueObject() }
+        instancesSocialApi.search(query)
+            .instances
+            .filterNot(InstanceJson::dead)
+            .map { it.toValueObject() }
     }
 
     private fun InstanceJson.toValueObject() = Instance(

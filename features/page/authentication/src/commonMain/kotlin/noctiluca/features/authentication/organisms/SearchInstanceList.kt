@@ -78,7 +78,11 @@ internal fun InstanceDomain(
         ),
         onValueChange = { textState.value = it },
         modifier = Modifier.fillMaxWidth()
-            .padding(horizontal = horizontalPadding),
+            .padding(
+                bottom = 8.dp,
+                start = horizontalPadding,
+                end = horizontalPadding,
+            ),
     )
 }
 

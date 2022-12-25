@@ -10,6 +10,7 @@ abstract class GetInstance {
 
     @Serializable
     data class Response(
+        val title: String,
         val uri: String,
         val version: String,
         @SerialName("short_description")

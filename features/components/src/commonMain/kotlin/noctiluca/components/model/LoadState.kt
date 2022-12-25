@@ -9,6 +9,7 @@ sealed class LoadState {
     class Loading(val job: Job) : LoadState()
 
     val loading get() = this is Loading
+    val loaded get() = this !is Initial && this !is Loading
 
     @Suppress("UNCHECKED_CAST")
     fun <T> getValueOrNull(): T? = if (this is Loaded<*>) value as T else null

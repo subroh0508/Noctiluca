@@ -3,6 +3,7 @@ package noctiluca.instance.model
 import noctiluca.model.Uri
 
 data class Instance(
+    val name: String,
     val domain: String,
     val description: String?,
     val thumbnail: Uri?,
@@ -11,6 +12,13 @@ data class Instance(
     val statuses: Int,
     val version: Version?,
 ) {
+    data class Suggest(
+        val domain: String,
+        val description: String?,
+        val thumbnail: Uri?,
+        val version: Version?,
+    )
+
     data class Version(
         val major: Int,
         val minor: Int,

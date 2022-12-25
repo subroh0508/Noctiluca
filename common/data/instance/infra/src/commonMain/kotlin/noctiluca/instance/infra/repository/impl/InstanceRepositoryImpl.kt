@@ -15,26 +15,33 @@ internal class InstanceRepositoryImpl(
 ): InstanceRepository {
     override suspend fun search(
         query: String,
-    ): List<Instance> = try {
-        listOf(mastodonApi.getInstance(query).toValueObject())
+    ): List<Instance.Suggest> = try {
+        listOf(mastodonApi.getInstance(query).toSuggest())
     } catch (e: UnknownHostException) {
         instancesSocialApi.search(query)
             .instances
             .filterNot(InstanceJson::dead)
-            .map { it.toValueObject() }
+            .map { it.toSuggest() }
     }
 
-    private fun InstanceJson.toValueObject() = Instance(
+    override suspend fun show(domain: String) = mastodonApi.getInstance(domain).toValueObject()
+
+    private fun InstanceJson.toSuggest() = Instance.Suggest(
         name,
         info?.shortDescription,
         thumbnail?.let(::Uri),
-        info?.languages ?: listOf(),
-        users,
-        statuses,
         version?.let { Instance.Version(it) },
     )
 
+    private fun GetInstance.Response.toSuggest() = Instance.Suggest(
+        uri,
+        shortDescription,
+        thumbnail?.let(::Uri),
+        Instance.Version(version),
+    )
+
     private fun GetInstance.Response.toValueObject() = Instance(
+        title,
         uri,
         shortDescription,
         thumbnail?.let(::Uri),

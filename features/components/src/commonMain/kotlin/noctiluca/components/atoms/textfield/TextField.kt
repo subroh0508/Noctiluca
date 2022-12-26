@@ -11,14 +11,16 @@ fun SingleLineTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     placeholder: @Composable (() -> Unit)? = null,
     keyboardType: KeyboardType = KeyboardType.Text,
 ) = OutlinedTextField(
     value,
     onValueChange,
+    modifier,
+    enabled = enabled,
     placeholder = placeholder,
     singleLine = true,
     maxLines = 1,
     keyboardOptions = KeyboardOptions.Default.copy(keyboardType = keyboardType),
-    modifier = modifier,
 )

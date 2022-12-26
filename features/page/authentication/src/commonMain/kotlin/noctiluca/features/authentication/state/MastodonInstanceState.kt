@@ -50,6 +50,11 @@ fun rememberMastodonInstance(
         LoadState.Initial,
         domain,
     ) {
+        if (domain.isBlank()) {
+            value = LoadState.Initial
+            return@produceState
+        }
+
         val job = launch(start = CoroutineStart.LAZY) {
             runCatching { useCase.execute(domain) }
                 .onSuccess { value = LoadState.Loaded(it) }

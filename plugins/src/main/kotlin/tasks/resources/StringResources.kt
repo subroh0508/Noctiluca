@@ -11,9 +11,14 @@ class StringResources(packageName: String) : Resources {
     private val readOnlyComposableAnnotation = ClassName("androidx.compose.runtime", "ReadOnlyComposable")
     private val stringResourceClass = ClassName(packageName, "StringResources")
     private val stringSets = mutableMapOf<String, Map<String, String>>()
+    private val commonStringSets = mutableMapOf<String, String>()
 
     fun setStrings(language: String, strings: Map<String, String>) {
         stringSets[language] = strings
+    }
+
+    fun setCommonStrings(strings: Map<String, String>) {
+        commonStringSets += strings
     }
 
     override fun addToWrapper(wrapper: TypeSpec.Builder) = with(wrapper) {
@@ -26,16 +31,20 @@ class StringResources(packageName: String) : Resources {
         addFunction(createGetStringHelper())
     }
 
-    private fun createLanguageClass() = stringSets.map { createLanguageClass(it) }
+    private fun createLanguageClass() = stringSets.map { (key, strings) ->
+        createLanguageClass(key, strings + commonStringSets)
+    }
 
-    private fun createLanguageClass(language: Map.Entry<String, Map<String, String>>): TypeSpec {
-        println(language.key)
-        val languageCode = language.key.toUpperCase()
-        val languagesProperties = if (language.key == BASE_LANGUAGE_CODE) {
-            emptyList<PropertySpec>()
-        } else {
-            language.value.toMap().map { it.createLanguageProperty() }
-        }
+    private fun createLanguageClass(
+        key: String,
+        language: Map<String, String>,
+    ): TypeSpec {
+        val languageCode = key.toUpperCase()
+        val languagesProperties: List<PropertySpec> =
+            if (key == BASE_LANGUAGE_CODE)
+                emptyList()
+            else
+                language.map { it.createLanguageProperty() }
 
         return TypeSpec.objectBuilder(languageCode)
             .superclass(stringResourceClass)
@@ -49,7 +58,7 @@ class StringResources(packageName: String) : Resources {
         PropertySpec.builder(
             key.toLowerCase(),
             String::class,
-            KModifier.OVERRIDE
+            KModifier.OVERRIDE,
         ).initializer("%S", value)
             .build()
 
@@ -91,7 +100,7 @@ class StringResources(packageName: String) : Resources {
         val prop = PropertySpec.builder(
             language.key.toLowerCase(),
             String::class,
-            KModifier.OPEN
+            KModifier.OPEN,
         ).initializer("%S", language.value).build()
         addProperty(prop)
     }

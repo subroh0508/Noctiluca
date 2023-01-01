@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
+    <string name="sign_in_client_name" translatable="false">app.noctiluca</string>
+    <string name="sign_in_oauth_scheme" translatable="false">oauth2redirect</string>
+
     <string name="sign_in_page_title">ようこそ</string>
     <string name="sign_in_search_instance">インスタンスを検索</string>
     <string name="sign_in_search_instance_hint">ドメイン名を入力</string>

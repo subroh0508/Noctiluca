@@ -46,8 +46,8 @@ abstract class ResourceGeneratorTask : DefaultTask() {
                             .substringAfterLast("-")
                             .takeIf(String::isNotBlank) ?: StringResources.BASE_LANGUAGE_CODE
 
-                        val elements = readXml("string", it)
-                        stringResources.setStrings(language, elements)
+                        stringResources.setCommonStrings(readXml("string", it, translatable = false))
+                        stringResources.setStrings(language, readXml("string", it))
                     }
                     directoryName == "drawable" -> {
                         drawableResource.setDrawable(readFileName(it))
@@ -58,12 +58,20 @@ abstract class ResourceGeneratorTask : DefaultTask() {
             }
         }
 
-    private fun readXml(type: String, file: File): MutableMap<String, String> {
+    private fun readXml(
+        type: String,
+        file: File,
+        translatable: Boolean? = null,
+    ): MutableMap<String, String> {
         val document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file)
         val elements = document.getElementsByTagName(type)
         val parsedElements = mutableMapOf<String, String>()
         for (elementIndex in 0 until elements.length) {
             val lineContent = elements.item(elementIndex)
+
+            if (lineContent.attributes.getNamedItem("translatable")?.textContent == translatable.toString()) {
+                continue
+            }
             val name = lineContent.attributes.getNamedItem("name").textContent
             val value = lineContent.textContent.replace("\\", "")
             parsedElements[name] = value

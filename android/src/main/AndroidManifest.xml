@@ -11,6 +11,10 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <data
+                    android:host="@string/sign_in_client_name"
+                    android:scheme="@string/sign_in_oauth_scheme"/>
             </intent-filter>
         </activity>
     </application>

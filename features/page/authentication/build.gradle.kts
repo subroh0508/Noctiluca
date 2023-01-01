@@ -9,5 +9,11 @@ kotlin {
                 implementation(project(":common:domain:authentication"))
             }
         }
+
+        androidMain {
+            dependencies {
+                implementation(libs.androidx.navigation.compose)
+            }
+        }
     }
 }

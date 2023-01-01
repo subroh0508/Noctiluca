@@ -26,6 +26,7 @@ class NoctilucaApplication : Application() {
     private val json by lazy {
         Json {
             explicitNulls = false
+            encodeDefaults = true
             ignoreUnknownKeys = true
         }
     }

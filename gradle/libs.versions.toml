@@ -7,6 +7,7 @@ buildconfig = "3.1.0"
 androidx-core = "1.9.0"
 androidx-appcompat = "1.5.1"
 androidx-activity = "1.6.1"
+androidx-navigation = "2.5.3"
 androidx-datastore = "1.0.0"
 
 kotlinx-datetime = "0.4.0"
@@ -44,6 +45,7 @@ buildconfig-plugin = { module = "com.github.gmazzo:gradle-buildconfig-plugin", v
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-datastore-core = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
 

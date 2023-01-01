@@ -9,8 +9,7 @@ internal class RequestAccessTokenUseCaseImpl(
     private val repository: TokenRepository,
 ) : RequestAccessTokenUseCase {
     override suspend fun execute(
-        hostname: Hostname,
+        code: String,
         redirectUri: Uri,
-        code: String
     ) = repository.fetchToken(code, redirectUri)
 }

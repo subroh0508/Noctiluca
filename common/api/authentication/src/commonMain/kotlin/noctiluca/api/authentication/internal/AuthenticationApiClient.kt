@@ -4,14 +4,12 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.http.HttpHeaders.Authorization
 import noctiluca.api.authentication.AuthenticationApi
 import noctiluca.api.authentication.json.AppCredentialJson
 import noctiluca.api.authentication.json.TokenJson
 import noctiluca.api.authentication.params.GetAccountsVerifyCredential
 import noctiluca.api.authentication.params.PostApps
 import noctiluca.api.authentication.params.PostApps.Companion.ESCAPED_SCOPE
-import noctiluca.api.authentication.params.PostApps.Companion.WEBSITE
 import noctiluca.api.authentication.params.PostOauthToken
 
 internal class AuthenticationApiClient(
@@ -36,7 +34,7 @@ internal class AuthenticationApiClient(
         redirectUri: String
     ) = client.post(ENDPOINT_POST_APPS) {
         host = hostname
-        setBody(PostApps.Request(clientName, redirectUri, SCOPE, WEBSITE))
+        setBody(PostApps.Request(clientName, redirectUri))
     }.body<AppCredentialJson>().let { credential ->
         credential to buildAuthorizeUrl(hostname, credential, redirectUri)
     }
@@ -67,11 +65,11 @@ internal class AuthenticationApiClient(
         credential: AppCredentialJson,
         redirectUri: String,
     ) = buildString {
-        append("${URLProtocol.HTTPS.name}://$hostname$GET_OAUTH_AUTHORIZE")
+        append("${URLProtocol.HTTPS.name}://$hostname$GET_OAUTH_AUTHORIZE?")
         val query = mapOf(
             RESPONSE_TYPE to "code",
             CLIENT_ID to credential.clientId,
-            CLIENT_SECRET to credential.clientSecret,
+            //CLIENT_SECRET to credential.clientSecret,
             REDIRECT_URI to redirectUri,
             SCOPE to ESCAPED_SCOPE,
         ).map { (k, v) -> "$k=$v" }.joinToString("&")

@@ -6,9 +6,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.features.authentication.CurrentScope
-import noctiluca.features.authentication.getString
 import noctiluca.model.AuthorizedUser
-import noctiluca.model.Uri
 import org.koin.core.scope.Scope
 
 @Composable

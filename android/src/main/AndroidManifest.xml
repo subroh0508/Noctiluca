@@ -5,12 +5,19 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application android:name=".NoctilucaApplication"
-        android:allowBackup="false" android:supportsRtl="true"
+        android:allowBackup="false"
+
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
-        <activity android:name=".MainActivity" android:exported="true">
+        <activity android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
                     android:host="@string/sign_in_client_name"

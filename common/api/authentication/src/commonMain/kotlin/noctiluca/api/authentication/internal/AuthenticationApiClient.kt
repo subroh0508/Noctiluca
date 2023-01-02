@@ -69,8 +69,8 @@ internal class AuthenticationApiClient(
         val query = mapOf(
             RESPONSE_TYPE to "code",
             CLIENT_ID to credential.clientId,
-            //CLIENT_SECRET to credential.clientSecret,
-            REDIRECT_URI to redirectUri,
+            // CLIENT_SECRET to credential.clientSecret,
+            REDIRECT_URI to redirectUri.encode(),
             SCOPE to ESCAPED_SCOPE,
         ).map { (k, v) -> "$k=$v" }.joinToString("&")
 

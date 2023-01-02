@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import noctiluca.components.atoms.image.AsyncImage
 import noctiluca.components.atoms.image.imageResources
@@ -67,22 +68,29 @@ private fun InstanceSuggestsList(
     instances: List<Instance.Suggest>,
     onSelect: (Instance.Suggest) -> Unit,
     modifier: Modifier = Modifier,
-) = LazyColumn(
-    state = rememberLazyListState(),
-    modifier = modifier,
 ) {
-    items(instances) {
-        ThreeLineListItem(
-            it.domain,
-            supportingText = it.description ?: "",
-            leadingContent = {
-                AsyncImage(
-                    it.thumbnail,
-                    fallback = imageResources(getDrawables().icon_mastodon),
-                    modifier = Modifier.size(LeadingAvatarContainerSize),
-                )
-            },
-            modifier = Modifier.clickable { onSelect(it) },
-        )
+    val focusManager = LocalFocusManager.current
+
+    LazyColumn(
+        state = rememberLazyListState(),
+        modifier = modifier,
+    ) {
+        items(instances) {
+            ThreeLineListItem(
+                it.domain,
+                supportingText = it.description ?: "",
+                leadingContent = {
+                    AsyncImage(
+                        it.thumbnail,
+                        fallback = imageResources(getDrawables().icon_mastodon),
+                        modifier = Modifier.size(LeadingAvatarContainerSize),
+                    )
+                },
+                modifier = Modifier.clickable {
+                    focusManager.clearFocus()
+                    onSelect(it)
+                },
+            )
+        }
     }
 }

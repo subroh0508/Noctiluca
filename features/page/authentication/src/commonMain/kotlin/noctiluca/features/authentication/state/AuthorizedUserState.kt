@@ -11,7 +11,7 @@ import noctiluca.model.AuthorizedUser
 import org.koin.core.scope.Scope
 
 @Composable
-fun rememberAuthorizedUser(
+internal fun rememberAuthorizedUser(
     code: String?,
     scope: Scope = LocalScope.current,
 ): State<AuthorizedUser?> {

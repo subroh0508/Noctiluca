@@ -9,11 +9,12 @@ import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 import noctiluca.authentication.domain.usecase.ShowMastodonInstanceUseCase
 import noctiluca.components.model.LoadState
 import noctiluca.features.authentication.LocalScope
+import noctiluca.features.authentication.model.QueryText
 import org.koin.core.scope.Scope
 
 @Composable
-fun rememberMastodonInstanceSuggests(
-    query: String,
+internal fun rememberMastodonInstanceSuggests(
+    query: QueryText,
     scope: Scope = LocalScope.current,
 ): State<LoadState> {
     val useCase: SearchMastodonInstancesUseCase = remember { scope.get() }
@@ -22,13 +23,13 @@ fun rememberMastodonInstanceSuggests(
         LoadState.Initial,
         query,
     ) {
-        if (query.isBlank()) {
+        if (query !is QueryText.Editable) {
             value = LoadState.Initial
             return@produceState
         }
 
         val job = launch(start = CoroutineStart.LAZY) {
-            runCatching { useCase.execute(query) }
+            runCatching { useCase.execute(query.text) }
                 .onSuccess { value = LoadState.Loaded(it) }
                 .onFailure { value = LoadState.Error(it) }
         }

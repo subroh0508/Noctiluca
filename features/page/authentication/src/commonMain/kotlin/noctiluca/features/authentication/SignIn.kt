@@ -15,6 +15,7 @@ import org.koin.core.component.KoinScopeComponent
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 internal val LocalScope = compositionLocalOf { getKoin().getScope("_root_") }
+internal val LocalAuthorizeCode = compositionLocalOf<AuthorizeCode?> { null }
 
 @Composable
 fun SignIn(
@@ -24,20 +25,16 @@ fun SignIn(
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalScope provides koinComponent.scope,
-    ) { SignInScaffold(authorizeState) }
+        LocalAuthorizeCode provides authorizeState.value,
+    ) { SignInScaffold() }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun SignInScaffold(
-    authorizeState: State<AuthorizeCode?>,
-) = Scaffold(
+private fun SignInScaffold() = Scaffold(
     topBar = {
         TopAppBar(getString().sign_in_page_title)
     },
 ) { paddingValues ->
-    SelectInstanceForm(
-        authorizeState,
-        modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
-    )
+    SelectInstanceForm(Modifier.padding(top = paddingValues.calculateTopPadding()))
 }

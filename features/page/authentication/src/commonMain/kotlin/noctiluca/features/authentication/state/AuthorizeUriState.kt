@@ -14,13 +14,14 @@ import noctiluca.model.Hostname
 import noctiluca.model.Uri
 import org.koin.core.scope.Scope
 
-class AuthorizeUriState(
+internal class AuthorizeUriState(
     private val clientName: String,
     private val redirectUri: Uri,
     private val useCase: RequestAppCredentialUseCase,
     private val scope: CoroutineScope,
     private val state: MutableState<LoadState> = mutableStateOf(LoadState.Initial),
 ) : State<LoadState> by state {
+    val loading get() = state.value.loading
     fun getValueOrNull() = state.value.getValueOrNull<Uri>()
 
     fun request(instance: Instance) {
@@ -36,7 +37,7 @@ class AuthorizeUriState(
 }
 
 @Composable
-fun rememberAuthorizeUri(
+internal fun rememberAuthorizeUri(
     scope: Scope = LocalScope.current,
 ): AuthorizeUriState {
     val coroutineScope = rememberCoroutineScope()

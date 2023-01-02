@@ -13,11 +13,9 @@ import noctiluca.components.atoms.card.CardHeader
 import noctiluca.components.atoms.card.CardSubhead
 import noctiluca.components.atoms.card.CardSupporting
 import noctiluca.components.atoms.card.FilledCard
-import noctiluca.components.utils.openBrowser
-import noctiluca.features.authentication.LocalAuthorizeCode
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.QueryText
-import noctiluca.features.authentication.state.rememberAuthorizeUri
+import noctiluca.features.authentication.state.rememberAuthorization
 import noctiluca.features.authentication.state.rememberMastodonInstance
 import noctiluca.instance.model.Instance
 
@@ -28,15 +26,10 @@ internal fun InstanceCard(
     modifier: Modifier = Modifier,
 ) {
     val instance by rememberMastodonInstance(query)
-    val authorizeUri = rememberAuthorizeUri()
+    val (authorizeUri, code, authorizedUser) = rememberAuthorization()
 
-    LaunchedEffect(instance.loading, authorizeUri.loading) {
-        onLoading(instance.loading || authorizeUri.loading)
-    }
-
-    val authorizeCode = LocalAuthorizeCode.current
-    if (authorizeCode == null) {
-        authorizeUri.getValueOrNull()?.let { openBrowser(it) }
+    LaunchedEffect(instance.loading, authorizeUri.loading, authorizedUser.loading) {
+        onLoading(instance.loading || authorizeUri.loading || authorizedUser.loading)
     }
 
     instance.getValueOrNull<Instance>()?.let {
@@ -47,7 +40,7 @@ internal fun InstanceCard(
                 supporting = { CardSupporting(it.description ?: "") },
                 actions = {
                     AuthenticationButton(
-                        authorizeCode == null,
+                        code == null,
                         onClick = { authorizeUri.request(it) },
                     )
                 },

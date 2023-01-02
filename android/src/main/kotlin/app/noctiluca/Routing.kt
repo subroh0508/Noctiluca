@@ -14,6 +14,7 @@ import androidx.navigation.navDeepLink
 import app.noctiluca.extensions.uri
 import noctiluca.features.authentication.RequestAccessToken
 import noctiluca.features.authentication.SignIn
+import noctiluca.features.authentication.di.SignInModule
 
 @Composable
 fun Routing(
@@ -23,18 +24,19 @@ fun Routing(
     val deepLinkOfFetchAccessToken = buildDeepLinkOfFetchAccessToken()
 
     NavHost(navController, startDestination = startDestination, Modifier) {
-        composable("signin") { SignIn() }
+        composable("signin") { SignIn(SignInModule()) }
         composable(
             "fetch_access_token?code={code}",
-            arguments = listOf(navArgument("code") {
-                nullable = true
-                defaultValue = null
-            }),
             deepLinks = listOf(navDeepLink {
                 action = Intent.ACTION_VIEW
                 uriPattern = deepLinkOfFetchAccessToken
             }),
-        ) { RequestAccessToken(it.uri?.getQueryParameter("code")) }
+        ) {
+            RequestAccessToken(
+                it.uri?.getQueryParameter("code"),
+                SignInModule(),
+            )
+        }
     }
 }
 

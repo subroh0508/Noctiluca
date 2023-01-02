@@ -61,6 +61,5 @@ class NoctilucaApplication : Application() {
         InstanceRepositoriesModule()
     }
 
-    private fun buildFeaturesModules() = ImageLoaderModule(httpClientEngine) +
-            SignInModule()
+    private fun buildFeaturesModules() = ImageLoaderModule(httpClientEngine)
 }

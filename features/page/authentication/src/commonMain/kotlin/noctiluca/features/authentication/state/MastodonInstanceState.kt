@@ -9,13 +9,13 @@ import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 import noctiluca.authentication.domain.usecase.ShowMastodonInstanceUseCase
 import noctiluca.components.model.LoadState
-import noctiluca.features.authentication.CurrentScope
+import noctiluca.features.authentication.LocalScope
 import org.koin.core.scope.Scope
 
 @Composable
 fun rememberMastodonInstanceSuggests(
     query: String,
-    scope: Scope = CurrentScope,
+    scope: Scope = LocalScope.current,
 ): State<LoadState> {
     val useCase: SearchMastodonInstancesUseCase = remember { scope.get() }
 
@@ -42,7 +42,7 @@ fun rememberMastodonInstanceSuggests(
 @Composable
 fun rememberMastodonInstance(
     domain: String,
-    scope: Scope = CurrentScope,
+    scope: Scope = LocalScope.current,
 ): State<LoadState> {
     val useCase: ShowMastodonInstanceUseCase = remember { scope.get() }
 

@@ -8,16 +8,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
 import noctiluca.components.FeatureComponent
 import noctiluca.components.atoms.appbar.TopAppBar
-import noctiluca.features.authentication.di.SignInModule
+import noctiluca.components.di.getKoin
 import noctiluca.features.authentication.templates.SelectInstanceForm
+import org.koin.core.component.KoinScopeComponent
 
-internal val CurrentScope get() = SignInModule.scope
 internal val LocalResources = compositionLocalOf { Resources("JA") }
+internal val LocalScope = compositionLocalOf { getKoin().getScope("_root_") }
 
 @Composable
-fun SignIn() = FeatureComponent(SignInModule) {
+fun SignIn(koinComponent: KoinScopeComponent) = FeatureComponent(koinComponent) {
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
+        LocalScope provides koinComponent.scope,
     ) {
         SignInScaffold()
     }

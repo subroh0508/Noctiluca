@@ -1,4 +1,4 @@
-package noctiluca.features.authentication.state
+package noctiluca.features.authentication.model
 
 import androidx.compose.runtime.Composable
 import noctiluca.features.authentication.getString

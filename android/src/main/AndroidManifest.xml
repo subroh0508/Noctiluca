@@ -6,9 +6,9 @@
 
     <application android:name=".NoctilucaApplication"
         android:allowBackup="false"
-
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity android:name=".MainActivity"
+            android:launchMode="singleTask"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,7 +21,7 @@
 
                 <data
                     android:host="@string/sign_in_client_name"
-                    android:scheme="@string/sign_in_oauth_scheme"/>
+                    android:scheme="@string/sign_in_oauth_scheme" />
             </intent-filter>
         </activity>
     </application>

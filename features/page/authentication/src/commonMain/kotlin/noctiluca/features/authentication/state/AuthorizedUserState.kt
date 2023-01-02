@@ -6,6 +6,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.features.authentication.LocalScope
+import noctiluca.features.authentication.model.buildRedirectUri
 import noctiluca.model.AuthorizedUser
 import org.koin.core.scope.Scope
 

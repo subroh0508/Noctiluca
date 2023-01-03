@@ -6,10 +6,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
-import noctiluca.components.FeatureComponent
+import noctiluca.components.FeatureComposable
 import noctiluca.components.atoms.appbar.TopAppBar
 import noctiluca.components.di.getKoin
+import noctiluca.components.utils.openBrowser
 import noctiluca.features.authentication.model.AuthorizeCode
+import noctiluca.features.authentication.model.LocalNavController
+import noctiluca.features.authentication.model.NavController
 import noctiluca.features.authentication.templates.SelectInstanceForm
 import org.koin.core.component.KoinScopeComponent
 
@@ -18,14 +21,19 @@ internal val LocalScope = compositionLocalOf { getKoin().getScope("_root_") }
 internal val LocalAuthorizeCode = compositionLocalOf<AuthorizeCode?> { null }
 
 @Composable
-fun SignIn(
+fun SignInScreen(
     authorizeState: State<AuthorizeCode?>,
     koinComponent: KoinScopeComponent,
-) = FeatureComponent(koinComponent) {
+    onNavigateToTimeline: () -> Unit,
+) = FeatureComposable(koinComponent) {
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalScope provides koinComponent.scope,
         LocalAuthorizeCode provides authorizeState.value,
+        LocalNavController provides NavController(
+            onNavigateToTimeline = onNavigateToTimeline,
+            onOpenBrowser = { openBrowser(it) },
+        ),
     ) { SignInScaffold() }
 }
 

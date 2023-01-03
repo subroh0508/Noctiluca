@@ -9,4 +9,6 @@ interface TokenProvider {
     suspend fun getAuthorizedUser(): List<AuthorizedUser>
 
     suspend fun switch(id: AccountId): AuthorizedUser
+
+    suspend fun expireCurrent()
 }

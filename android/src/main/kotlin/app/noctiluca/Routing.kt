@@ -5,11 +5,11 @@ import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import noctiluca.features.authentication.SignIn
+import app.noctiluca.navigation.*
 import noctiluca.features.authentication.di.SignInModule
 import noctiluca.features.authentication.model.AuthorizeCode
+import noctiluca.features.timeline.di.TimelineModule
 
 @Composable
 fun Routing(
@@ -18,6 +18,16 @@ fun Routing(
     startDestination: String = "signin",
 ) {
     NavHost(navController, startDestination = startDestination, Modifier) {
-        composable("signin") { SignIn(authorizeState, SignInModule()) }
+        signIn(
+            authorizeState,
+            SignInModule(),
+            onNavigateToTimeline = { navController.navigateToTimeline() },
+        )
+
+        timeline(
+            TimelineModule(),
+            onReload = { navController.reload() },
+            onBackToSignIn = { navController.backToSignIn() },
+        )
     }
 }

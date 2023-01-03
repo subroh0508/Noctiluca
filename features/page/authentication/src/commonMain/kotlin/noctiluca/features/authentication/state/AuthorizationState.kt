@@ -7,14 +7,15 @@ import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
 import noctiluca.components.model.LoadState
-import noctiluca.components.utils.openBrowser
 import noctiluca.features.authentication.LocalAuthorizeCode
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.AuthorizeCode
+import noctiluca.features.authentication.model.LocalNavController
 import noctiluca.features.authentication.model.UnknownException
 import noctiluca.features.authentication.model.buildRedirectUri
 import noctiluca.instance.model.Instance
+import noctiluca.model.AuthorizedUser
 import noctiluca.model.Hostname
 import noctiluca.model.Uri
 import org.koin.core.scope.Scope
@@ -54,8 +55,7 @@ internal fun rememberAuthorization(
 
     val authorizedUserState = produceAuthorizedUserState(authorizeCode, redirectUri, scope).value
 
-    openAuthorizePage(authorizeCode, authorizeUriState)
-    transitTimeline(authorizedUserState)
+    navigateTo(authorizeUriState, authorizeCode, authorizedUserState)
 
     return Triple(
         authorizeUriState,
@@ -97,16 +97,22 @@ private fun produceAuthorizedUserState(
 }
 
 @Composable
-private fun openAuthorizePage(
-    authorizeCode: AuthorizeCode?,
+private fun navigateTo(
     authorizeUriState: AuthorizeUriState,
+    authorizeCode: AuthorizeCode?,
+    authorizedUserState: LoadState,
 ) {
-    if (authorizeCode != null) {
+    val navController = LocalNavController.current
+
+    val authorizeUri = authorizeUriState.getValueOrNull()
+    if (authorizeCode == null && authorizeUri != null) {
+        navController.openBrowser(authorizeUri)
         return
     }
 
-    openBrowser(authorizeUriState.getValueOrNull() ?: return)
-}
+    if (authorizedUserState.getValueOrNull<AuthorizedUser>() == null) {
+        return
+    }
 
-@Composable
-internal expect fun transitTimeline(authorizedUserState: LoadState)
+    navController.navigateToTimeline()
+}

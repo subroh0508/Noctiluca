@@ -30,9 +30,4 @@ class MainActivity : AppCompatActivity() {
         super.onNewIntent(intent)
         authorizeState.value = AuthorizeCode(intent?.data)
     }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        println("onDestroy")
-    }
 }

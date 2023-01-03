@@ -58,4 +58,9 @@ internal class TokenRepositoryImpl(
     override suspend fun getCurrent() = tokenCache.getCurrent()
 
     override suspend fun switch(id: AccountId) = tokenCache.setCurrent(id)
+
+    override suspend fun expireCurrent() {
+        getCurrent()?.let { tokenCache.delete(it.id) }
+        getCurrent()?.let { switch(it.id) }
+    }
 }

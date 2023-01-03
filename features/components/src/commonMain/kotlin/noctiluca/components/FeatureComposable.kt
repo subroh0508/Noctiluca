@@ -14,5 +14,5 @@ fun FeatureComposable(
         onDispose { component.closeScope() }
     }
 
-    component.getScopeOrNull()?.let { content(it) }
+    content(component.scope)
 }

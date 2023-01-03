@@ -8,12 +8,10 @@ import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForIns
 import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForMastodon
 import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
-import noctiluca.api.mastodon.MastodonApi
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.token.di.TokenApiModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.components.di.ImageLoaderModule
-import noctiluca.features.authentication.di.SignInModule
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -43,7 +41,7 @@ class NoctilucaApplication : Application() {
         super.onCreate()
 
         startKoin {
-            // androidLogger(Level.DEBUG)
+            androidLogger(Level.DEBUG)
             androidContext(this@NoctilucaApplication)
             modules(buildApiModules() + buildRepositoriesModules() + buildFeaturesModules())
         }

@@ -1,6 +1,5 @@
 package app.noctiluca.navigation
 
-import androidx.compose.runtime.State
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
@@ -21,7 +20,7 @@ fun NavGraphBuilder.signIn(
 }
 
 fun NavController.navigateToTimeline() {
-    navigate(RouteTimeline) /*{
-        //popUpTo(RouteSignIn) { inclusive = true }
-    }*/
+    navigate(RouteTimeline) {
+        popUpTo(RouteSignIn) { inclusive = true }
+    }
 }

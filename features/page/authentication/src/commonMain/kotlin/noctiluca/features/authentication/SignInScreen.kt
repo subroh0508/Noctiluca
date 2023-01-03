@@ -9,7 +9,6 @@ import androidx.compose.ui.text.intl.Locale
 import noctiluca.components.FeatureComposable
 import noctiluca.components.atoms.appbar.TopAppBar
 import noctiluca.components.di.getKoin
-import noctiluca.components.utils.openBrowser
 import noctiluca.features.authentication.model.AuthorizeCode
 import noctiluca.features.authentication.model.LocalNavController
 import noctiluca.features.authentication.model.NavController
@@ -25,14 +24,14 @@ fun SignInScreen(
     authorizeCode: AuthorizeCode?,
     koinComponent: KoinScopeComponent,
     onNavigateToTimeline: () -> Unit,
-) = FeatureComposable(koinComponent) {
+) = FeatureComposable(koinComponent) { scope ->
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
-        LocalScope provides koinComponent.scope,
+        LocalScope provides scope,
         LocalAuthorizeCode provides authorizeCode,
         LocalNavController provides NavController(
             onNavigateToTimeline = onNavigateToTimeline,
-            onOpenBrowser = { openBrowser(it) },
+            browser = scope.get(),
         ),
     ) { SignInScaffold() }
 }

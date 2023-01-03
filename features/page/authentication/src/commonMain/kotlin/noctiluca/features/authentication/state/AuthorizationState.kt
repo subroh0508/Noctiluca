@@ -107,9 +107,10 @@ private fun navigateTo(
     val authorizeUri = authorizeUriState.getValueOrNull()
     val authorizedUser = authorizedUserState.getValueOrNull<AuthorizedUser>()
 
-    if (authorizeCode == null && authorizeUri != null) {
-        navController.openBrowser(authorizeUri)
-        return
+    LaunchedEffect(authorizeCode, authorizeUri) {
+        if (authorizeCode == null && authorizeUri != null) {
+            navController.openBrowser(authorizeUri)
+        }
     }
 
     LaunchedEffect(authorizedUser) {

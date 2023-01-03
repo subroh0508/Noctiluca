@@ -1,17 +1,15 @@
 package noctiluca.features.authentication.model
 
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.compositionLocalOf
+import noctiluca.components.utils.Browser
 import noctiluca.model.Uri
 
 internal val LocalNavController = compositionLocalOf { NavController() }
 
 internal class NavController(
     private val onNavigateToTimeline: () -> Unit = {},
-    private val onOpenBrowser: @Composable (Uri) -> Unit = {},
+    private val browser: Browser? = null,
 ) {
     fun navigateToTimeline() = onNavigateToTimeline()
-
-    @Composable
-    fun openBrowser(uri: Uri) = onOpenBrowser(uri)
+    fun openBrowser(uri: Uri) { browser?.open(uri) }
 }

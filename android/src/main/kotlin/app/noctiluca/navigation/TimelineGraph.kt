@@ -26,6 +26,6 @@ fun NavController.reload() {
 
 fun NavController.backToSignIn() {
     navigate(RouteSignIn) {
-        popUpTo(RouteTimeline)
+        popUpTo(RouteTimeline) { inclusive = true }
     }
 }

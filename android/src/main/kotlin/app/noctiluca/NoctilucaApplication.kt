@@ -3,6 +3,7 @@ package app.noctiluca
 import android.app.Application
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
+import noctiluca.account.infra.di.AccountRepositoriesModule
 import noctiluca.api.authentication.di.buildHttpClient as buildHttpClientForAuthentication
 import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
 import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForMastodon
@@ -55,6 +56,7 @@ class NoctilucaApplication : Application() {
     }
 
     private fun buildRepositoriesModules() = module {
+        AccountRepositoriesModule()
         AuthenticationRepositoriesModule()
         InstanceRepositoriesModule()
     }

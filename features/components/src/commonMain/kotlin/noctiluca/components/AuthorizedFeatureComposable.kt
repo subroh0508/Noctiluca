@@ -5,6 +5,7 @@ import io.ktor.client.plugins.*
 import io.ktor.http.*
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.runBlocking
+import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.repository.TokenProvider
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.scope.Scope
@@ -35,14 +36,21 @@ private class UnauthorizedExceptionHandler(
     private val navigateToSignIn: () -> Unit = {},
 ) : AbstractCoroutineContextElement(CoroutineExceptionHandler), CoroutineExceptionHandler {
     override fun handleException(context: CoroutineContext, exception: Throwable) {
-        if (exception !is ResponseException) {
+        when (exception) {
+            is AuthorizedTokenNotFoundException -> tryOtherToken()
+            is ResponseException -> tryOtherToken(exception.response.status)
+        }
+    }
+
+    private fun tryOtherToken(code: HttpStatusCode) {
+        if (code != HttpStatusCode.Unauthorized) {
             return
         }
 
-        if (exception.response.status != HttpStatusCode.Unauthorized) {
-            return
-        }
+        tryOtherToken()
+    }
 
+    private fun tryOtherToken() {
         val nextAuthorizedUser = runBlocking {
             tokenProvider?.expireCurrent()
             tokenProvider?.getCurrent()

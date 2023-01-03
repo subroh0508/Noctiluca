@@ -53,7 +53,7 @@ internal class TokenRepositoryImpl(
         return tokenCache.setCurrent(id)
     }
 
-    override suspend fun getAuthorizedUser() = tokenCache.getAll()
+    override suspend fun getAuthorizedUsers() = tokenCache.getAll()
 
     override suspend fun getCurrent() = tokenCache.getCurrent()
 
@@ -61,6 +61,6 @@ internal class TokenRepositoryImpl(
 
     override suspend fun expireCurrent() {
         getCurrent()?.let { tokenCache.delete(it.id) }
-        getCurrent()?.let { switch(it.id) }
+        tokenCache.getAll().firstOrNull()?.let { switch(it.id) }
     }
 }

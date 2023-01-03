@@ -8,7 +8,7 @@ kotlin {
             dependencies {
                 api(project(":common:data:account:model"))
                 api(project(":common:data:status:model"))
-                // implementation(project(":common:data:account:infra"))
+                implementation(project(":common:data:account:infra"))
                 // implementation(project(":common:data:status:infra"))
             }
         }

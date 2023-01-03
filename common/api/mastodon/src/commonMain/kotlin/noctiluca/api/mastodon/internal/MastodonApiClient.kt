@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import noctiluca.api.mastodon.MastodonApi
+import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.params.GetInstance
 import noctiluca.repository.TokenCache
 
@@ -14,9 +15,16 @@ internal class MastodonApiClient(
     override suspend fun getInstance(
         hostname: String,
     ) = client.get<GetInstance.Response>(
-        GetInstance.ENDPOINT,
+        Api.V1.Instance,
         hostname = hostname,
         skipAuthorization = true,
+    )
+
+    override suspend fun getVerifyAccountsCredentials(
+        hostname: String,
+    ) = client.get<AccountCredentialJson>(
+        Api.V1.Accounts.VerifyCredentials,
+        hostname = hostname,
     )
 
     private suspend inline fun <reified T: Any> HttpClient.get(

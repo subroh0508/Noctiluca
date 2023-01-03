@@ -3,18 +3,18 @@ package noctiluca.api.mastodon.internal
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import noctiluca.api.mastodon.MastodonApi
+import noctiluca.api.mastodon.MastodonV1Api
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
-import noctiluca.api.mastodon.params.GetInstance
+import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.repository.TokenCache
 
-internal class MastodonApiClient(
+internal class MastodonV1ApiClient(
     private val token: TokenCache,
     private val client: HttpClient,
-) : MastodonApi {
+) : MastodonV1Api {
     override suspend fun getInstance(
         hostname: String,
-    ) = client.get<GetInstance.Response>(
+    ) = client.get<V1InstanceJson>(
         Api.V1.Instance,
         hostname = hostname,
         skipAuthorization = true,

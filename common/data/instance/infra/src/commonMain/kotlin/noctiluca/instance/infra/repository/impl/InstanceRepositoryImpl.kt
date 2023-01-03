@@ -2,8 +2,8 @@ package noctiluca.instance.infra.repository.impl
 
 import noctiluca.api.instancessocial.InstancesSocialApi
 import noctiluca.api.instancessocial.json.InstanceJson
-import noctiluca.api.mastodon.MastodonApi
-import noctiluca.api.mastodon.params.GetInstance
+import noctiluca.api.mastodon.MastodonV1Api
+import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.instance.infra.repository.InstanceRepository
 import noctiluca.instance.model.Instance
 import noctiluca.model.Uri
@@ -11,12 +11,12 @@ import java.net.UnknownHostException
 
 internal class InstanceRepositoryImpl(
     private val instancesSocialApi: InstancesSocialApi,
-    private val mastodonApi: MastodonApi,
+    private val v1: MastodonV1Api,
 ): InstanceRepository {
     override suspend fun search(
         query: String,
     ): List<Instance.Suggest> = try {
-        listOf(mastodonApi.getInstance(query).toSuggest())
+        listOf(v1.getInstance(query).toSuggest())
     } catch (e: UnknownHostException) {
         instancesSocialApi.search(query)
             .instances
@@ -24,7 +24,7 @@ internal class InstanceRepositoryImpl(
             .map { it.toSuggest() }
     }
 
-    override suspend fun show(domain: String) = mastodonApi.getInstance(domain).toValueObject()
+    override suspend fun show(domain: String) = v1.getInstance(domain).toValueObject()
 
     private fun InstanceJson.toSuggest() = Instance.Suggest(
         name,
@@ -33,21 +33,21 @@ internal class InstanceRepositoryImpl(
         version?.let { Instance.Version(it) },
     )
 
-    private fun GetInstance.Response.toSuggest() = Instance.Suggest(
+    private fun V1InstanceJson.toSuggest() = Instance.Suggest(
         uri,
         shortDescription,
         thumbnail?.let(::Uri),
         Instance.Version(version),
     )
 
-    private fun GetInstance.Response.toValueObject() = Instance(
+    private fun V1InstanceJson.toValueObject() = Instance(
         title,
         uri,
         shortDescription,
         thumbnail?.let(::Uri),
         languages,
-        stats.userCount,
-        stats.statusCount,
+        stats.userCount ?: 0,
+        stats.statusCount ?: 0,
         Instance.Version(version),
     )
 }

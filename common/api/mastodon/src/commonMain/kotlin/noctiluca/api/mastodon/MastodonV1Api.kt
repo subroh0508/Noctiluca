@@ -1,12 +1,12 @@
 package noctiluca.api.mastodon
 
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
-import noctiluca.api.mastodon.params.GetInstance
+import noctiluca.api.mastodon.json.instance.V1InstanceJson
 
-interface MastodonApi {
+interface MastodonV1Api {
     suspend fun getInstance(
         hostname: String,
-    ): GetInstance.Response
+    ): V1InstanceJson
 
     suspend fun getVerifyAccountsCredentials(
         hostname: String,

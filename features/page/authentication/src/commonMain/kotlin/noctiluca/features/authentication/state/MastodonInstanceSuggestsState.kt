@@ -1,13 +1,10 @@
 package noctiluca.features.authentication.state
 
 import androidx.compose.runtime.*
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.rememberSaveable
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
-import noctiluca.authentication.domain.usecase.ShowMastodonInstanceUseCase
 import noctiluca.components.model.LoadState
+import noctiluca.components.state.loadLazy
+import noctiluca.components.state.produceLoadState
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.model.QueryText
 import org.koin.core.scope.Scope
@@ -19,22 +16,12 @@ internal fun rememberMastodonInstanceSuggests(
 ): State<LoadState> {
     val useCase: SearchMastodonInstancesUseCase = remember { scope.get() }
 
-    return produceState<LoadState>(
-        LoadState.Initial,
-        query,
-    ) {
+    return produceLoadState(query) {
         if (query !is QueryText.Editable) {
             value = LoadState.Initial
-            return@produceState
+            return@produceLoadState
         }
 
-        val job = launch(start = CoroutineStart.LAZY) {
-            runCatching { useCase.execute(query.text) }
-                .onSuccess { value = LoadState.Loaded(it) }
-                .onFailure { value = LoadState.Error(it) }
-        }
-
-        value = LoadState.Loading(job)
-        job.start()
+        loadLazy { useCase.execute(query.text) }
     }
 }

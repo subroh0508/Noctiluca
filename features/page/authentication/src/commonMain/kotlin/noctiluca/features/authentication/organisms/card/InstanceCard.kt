@@ -40,7 +40,7 @@ internal fun InstanceCard(
                 supporting = { CardSupporting(it.description ?: "") },
                 actions = {
                     AuthenticationButton(
-                        code == null,
+                        code?.getCodeOrNull() == null,
                         onClick = { authorizeUri.request(it) },
                     )
                 },

@@ -38,8 +38,8 @@ fun produceAuthorizedLoadState(
     producer = producer,
 )
 
-fun ProduceAuthorizedLoadStateScope.loadLazy(
-    block: suspend CoroutineScope.() -> Unit,
+fun <T: Any> ProduceAuthorizedLoadStateScope.loadLazy(
+    block: suspend CoroutineScope.() -> T,
 ) {
     val job = launchWithAuth(start = CoroutineStart.LAZY) {
         runCatching { block() }

@@ -7,6 +7,9 @@ import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
 import noctiluca.components.model.LoadState
+import noctiluca.components.state.LoadStateComposeState
+import noctiluca.components.state.loadLazy
+import noctiluca.components.state.produceLoadState
 import noctiluca.features.authentication.LocalAuthorizeCode
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.getString
@@ -26,20 +29,12 @@ internal class AuthorizeUriState(
     private val useCase: RequestAppCredentialUseCase,
     private val scope: CoroutineScope,
     private val state: MutableState<LoadState> = mutableStateOf(LoadState.Initial),
-) : State<LoadState> by state {
-    val loading get() = state.value.loading
-    fun getValueOrNull() = state.value.getValueOrNull<Uri>()
-
-    fun request(instance: Instance) {
-        val job = scope.launch(start = CoroutineStart.LAZY) {
-            runCatching { useCase.execute(Hostname(instance.domain), clientName, redirectUri) }
-                .onSuccess { state.value = LoadState.Loaded(it) }
-                .onFailure { state.value = LoadState.Error(it) }
-        }
-
-        state.value = LoadState.Loading(job)
-        job.start()
+) : LoadStateComposeState<Uri> by LoadStateComposeState(state) {
+    fun request(instance: Instance) = scope.loadLazy {
+        useCase.execute(Hostname(instance.domain), clientName, redirectUri)
     }
+
+    fun clear() { state.value = LoadState.Initial }
 }
 
 @Composable
@@ -72,15 +67,12 @@ private fun produceAuthorizedUserState(
 ): State<LoadState> {
     val useCase: RequestAccessTokenUseCase = remember { scope.get() }
 
-    return produceState<LoadState>(
-        initialValue = LoadState.Initial,
-        authorizeCode,
-    ) {
+    return produceLoadState(authorizeCode) {
         val code = authorizeCode?.getCodeOrNull()
         val error = authorizeCode?.getErrorOrNull()
         if (code.isNullOrBlank()) {
             value = error?.let { LoadState.Error(it) } ?: LoadState.Initial
-            return@produceState
+            return@produceLoadState
         }
 
         val job = launch(start = CoroutineStart.LAZY) {
@@ -108,7 +100,8 @@ private fun navigateTo(
     val authorizedUser = authorizedUserState.getValueOrNull<AuthorizedUser>()
 
     LaunchedEffect(authorizeCode, authorizeUri) {
-        if (authorizeCode == null && authorizeUri != null) {
+        if (authorizeCode?.getCodeOrNull() == null && authorizeUri != null) {
+            authorizeUriState.clear()
             navController.openBrowser(authorizeUri)
         }
     }

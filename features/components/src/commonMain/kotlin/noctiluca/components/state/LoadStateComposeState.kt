@@ -1,24 +1,32 @@
 package noctiluca.components.state
 
 import androidx.compose.runtime.MutableState
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
 import noctiluca.components.model.LoadState
+import noctiluca.components.utils.loadLazy
 
-sealed interface LoadStateComposeState : MutableState<LoadState> {
+interface LoadStateComposeState<T: Any> : MutableState<LoadState> {
     companion object {
-        operator fun invoke(
+        operator fun <T: Any> invoke(
             state: MutableState<LoadState>,
-        ) : LoadStateComposeState = Impl(state)
+        ) : LoadStateComposeState<T> = Impl(state)
     }
 
     val loading get() = value is LoadState.Loading
     val loaded get() = value !is LoadState.Initial && value !is LoadState.Loading
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getValueOrNull(): T? = value.getValueOrNull()
+    fun getValueOrNull(): T? = value.getValueOrNull()
     fun getErrorOrNull() = value.getErrorOrNull()
     fun cancel() = value.cancel()
 
-    private class Impl(
+    fun CoroutineScope.loadLazy(
+        block: suspend CoroutineScope.() -> T,
+    ) = loadLazy(this@LoadStateComposeState, block)
+
+    private class Impl<T: Any>(
         private val state: MutableState<LoadState>
-    ) : LoadStateComposeState, MutableState<LoadState> by state
+    ) : LoadStateComposeState<T>, MutableState<LoadState> by state
 }

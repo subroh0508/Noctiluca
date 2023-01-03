@@ -56,6 +56,7 @@ include(
     ":common:data:instance:infra",
     ":common:data:status:model",
     ":common:domain:authentication",
+    ":common:domain:timeline",
     ":features:components",
     ":features:theme",
     ":features:page:timeline",

@@ -11,17 +11,17 @@ import org.koin.core.component.KoinScopeComponent
 const val RouteSignIn = "signIn"
 
 fun NavGraphBuilder.signIn(
-    authorizeState: State<AuthorizeCode?>,
+    authorizeCode: AuthorizeCode?,
     koinComponent: KoinScopeComponent,
     onNavigateToTimeline: () -> Unit,
 ) {
     composable(RouteSignIn) {
-        SignInScreen(authorizeState, koinComponent, onNavigateToTimeline)
+        SignInScreen(authorizeCode, koinComponent, onNavigateToTimeline)
     }
 }
 
 fun NavController.navigateToTimeline() {
-    navigate(RouteTimeline) {
-        popUpTo(RouteSignIn) { inclusive = true }
-    }
+    navigate(RouteTimeline) /*{
+        //popUpTo(RouteSignIn) { inclusive = true }
+    }*/
 }

@@ -21,7 +21,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             NoctilucaTheme {
-                Routing(authorizeState)
+                Routing(authorizeState.value)
             }
         }
     }

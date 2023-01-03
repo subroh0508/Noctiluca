@@ -105,14 +105,18 @@ private fun navigateTo(
     val navController = LocalNavController.current
 
     val authorizeUri = authorizeUriState.getValueOrNull()
+    val authorizedUser = authorizedUserState.getValueOrNull<AuthorizedUser>()
+
     if (authorizeCode == null && authorizeUri != null) {
         navController.openBrowser(authorizeUri)
         return
     }
 
-    if (authorizedUserState.getValueOrNull<AuthorizedUser>() == null) {
-        return
-    }
+    LaunchedEffect(authorizedUser) {
+        if (authorizedUser == null) {
+            return@LaunchedEffect
+        }
 
-    navController.navigateToTimeline()
+        navController.navigateToTimeline()
+    }
 }

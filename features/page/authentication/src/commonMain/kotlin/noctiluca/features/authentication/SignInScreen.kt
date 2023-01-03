@@ -22,14 +22,14 @@ internal val LocalAuthorizeCode = compositionLocalOf<AuthorizeCode?> { null }
 
 @Composable
 fun SignInScreen(
-    authorizeState: State<AuthorizeCode?>,
+    authorizeCode: AuthorizeCode?,
     koinComponent: KoinScopeComponent,
     onNavigateToTimeline: () -> Unit,
 ) = FeatureComposable(koinComponent) {
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalScope provides koinComponent.scope,
-        LocalAuthorizeCode provides authorizeState.value,
+        LocalAuthorizeCode provides authorizeCode,
         LocalNavController provides NavController(
             onNavigateToTimeline = onNavigateToTimeline,
             onOpenBrowser = { openBrowser(it) },

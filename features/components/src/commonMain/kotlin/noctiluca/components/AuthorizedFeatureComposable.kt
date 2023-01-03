@@ -12,7 +12,7 @@ import org.koin.core.scope.Scope
 import kotlin.coroutines.AbstractCoroutineContextElement
 import kotlin.coroutines.CoroutineContext
 
-internal val LocalCoroutineExceptionHandler = compositionLocalOf<CoroutineExceptionHandler> { UnauthorizedExceptionHandler() }
+internal val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedExceptionHandler() }
 
 @Composable
 fun AuthorizedFeatureComposable(
@@ -30,12 +30,12 @@ fun AuthorizedFeatureComposable(
     ) { content(it) }
 }
 
-private class UnauthorizedExceptionHandler(
+class UnauthorizedExceptionHandler(
     private val tokenProvider: TokenProvider? = null,
     private val navigateToTimeline: () -> Unit = {},
     private val navigateToSignIn: () -> Unit = {},
-) : AbstractCoroutineContextElement(CoroutineExceptionHandler), CoroutineExceptionHandler {
-    override fun handleException(context: CoroutineContext, exception: Throwable) {
+) {
+    fun handleException(exception: Throwable) {
         exception.printStackTrace()
 
         when (exception) {

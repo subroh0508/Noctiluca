@@ -6,6 +6,7 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import kotlinx.coroutines.*
 import noctiluca.components.LocalCoroutineExceptionHandler
+import noctiluca.components.UnauthorizedExceptionHandler
 import noctiluca.components.model.LoadState
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
@@ -42,8 +43,8 @@ fun produceAuthorizedLoadState(
 fun <T: Any> ProduceAuthorizedLoadStateScope.loadLazy(
     block: suspend CoroutineScope.() -> T,
 ) {
-    val job = launchWithAuth(start = CoroutineStart.LAZY) {
-        runCatching { block() }
+    val job = launch(start = CoroutineStart.LAZY) {
+        runCatchingWithAuth { block() }
             .onSuccess { value = LoadState.Loaded(it) }
             .onFailure { value = LoadState.Error(it) }
     }
@@ -54,17 +55,11 @@ fun <T: Any> ProduceAuthorizedLoadStateScope.loadLazy(
 
 class ProduceAuthorizedStateScope<T>(
     scope: ProduceStateScope<T>,
-    private val coroutineExceptionHandler: CoroutineExceptionHandler,
+    val exceptionHandler: UnauthorizedExceptionHandler,
 ) : ProduceStateScope<T> by scope {
-    fun CoroutineScope.launchWithAuth(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend CoroutineScope.() -> Unit
-    )= launch(context + coroutineExceptionHandler, start, block)
-
-    fun <E> CoroutineScope.asyncWithAuth(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend CoroutineScope.() -> E
-    ) = async(context + coroutineExceptionHandler, start, block)
+    inline fun <R> runCatchingWithAuth(
+        block: ProduceStateScope<T>.() -> R,
+    ) = runCatching(block).apply {
+        exceptionOrNull()?.let(exceptionHandler::handleException)
+    }
 }

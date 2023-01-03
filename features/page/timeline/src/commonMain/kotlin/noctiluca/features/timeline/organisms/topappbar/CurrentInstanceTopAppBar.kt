@@ -18,7 +18,6 @@ import noctiluca.features.timeline.state.rememberCurrentStatus
 fun CurrentInstanceTopAppBar() {
     val account by rememberCurrentStatus()
 
-    println(account.current?.avatar)
     TopAppBar(
         account.hostname?.value ?: getString().timeline_page_title,
         navigationIcon = {

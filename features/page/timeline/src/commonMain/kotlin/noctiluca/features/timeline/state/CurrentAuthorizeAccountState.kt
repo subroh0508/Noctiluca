@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import noctiluca.account.model.Account
 import noctiluca.components.model.LoadState
@@ -50,8 +51,8 @@ internal fun rememberCurrentStatus(
 private fun ProduceAuthorizedStateScope<CurrentAuthorizedAccount>.loadAccount(
     useCase: FetchCurrentAuthorizedAccountUseCase,
 ) {
-    val job = launchWithAuth(start = CoroutineStart.LAZY) {
-        runCatching { useCase.execute() }
+    val job = launch(start = CoroutineStart.LAZY) {
+        runCatchingWithAuth { useCase.execute() }
             .onSuccess { value = value.copy(currentLoadState = LoadState.Loaded(it)) }
             .onFailure { value = value.copy(currentLoadState = LoadState.Error(it)) }
     }
@@ -63,8 +64,8 @@ private fun ProduceAuthorizedStateScope<CurrentAuthorizedAccount>.loadAccount(
 private fun ProduceAuthorizedStateScope<CurrentAuthorizedAccount>.loadAllAccounts(
     useCase: FetchAllAuthorizedAccountsUseCase,
 ) {
-    val job = launchWithAuth(start = CoroutineStart.LAZY) {
-        runCatching { useCase.execute() }
+    val job = launch(start = CoroutineStart.LAZY) {
+        runCatchingWithAuth { useCase.execute() }
             .onSuccess { value = value.copy(allLoadState = LoadState.Loaded(it)) }
             .onFailure { value = value.copy(allLoadState = LoadState.Error(it)) }
     }

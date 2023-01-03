@@ -1,46 +1,32 @@
 package noctiluca.components.state
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ProduceStateScope
 import kotlinx.coroutines.*
 import noctiluca.components.LocalCoroutineExceptionHandler
+import noctiluca.components.UnauthorizedExceptionHandler
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 interface AuthorizedComposeState<T> {
+    val exceptionHandler: UnauthorizedExceptionHandler
+
     companion object {
         operator fun <T> invoke(
-            handler: CoroutineExceptionHandler,
+            handler: UnauthorizedExceptionHandler,
         ): AuthorizedComposeState<T> = Impl(handler)
 
         @Composable
         operator fun <T> invoke() = invoke<T>(LocalCoroutineExceptionHandler.current)
     }
 
-    fun CoroutineScope.launchWithAuth(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend CoroutineScope.() -> Unit
-    ): Job
-
-    fun <E> CoroutineScope.asyncWithAuth(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend CoroutineScope.() -> E
-    ): Deferred<E>
-
     private class Impl<T>(
-        private val coroutineExceptionHandler: CoroutineExceptionHandler,
-    ) : AuthorizedComposeState<T> {
-        override fun CoroutineScope.launchWithAuth(
-            context: CoroutineContext,
-            start: CoroutineStart,
-            block: suspend CoroutineScope.() -> Unit
-        ) = launch(context + coroutineExceptionHandler, start, block)
+        override val exceptionHandler: UnauthorizedExceptionHandler,
+    ) : AuthorizedComposeState<T>
+}
 
-        override fun <E> CoroutineScope.asyncWithAuth(
-            context: CoroutineContext,
-            start: CoroutineStart,
-            block: suspend CoroutineScope.() -> E
-        ) = async(context + coroutineExceptionHandler, start, block)
-    }
+inline fun <T, R> AuthorizedComposeState<T>.runCatchingWithAuth(
+    block: AuthorizedComposeState<T>.() -> R,
+) = runCatching(block).apply {
+    exceptionOrNull()?.let(exceptionHandler::handleException)
 }

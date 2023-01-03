@@ -8,14 +8,14 @@ import app.noctiluca.navigation.*
 import noctiluca.components.utils.Browser
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeCode
-import noctiluca.features.timeline.di.TimelineModule
+import noctiluca.features.timeline.di.TimelineComponent
 
 @Composable
 fun Routing(
     authorizeCode: AuthorizeCode?,
     browser: Browser,
     navController: NavHostController = rememberNavController(),
-    startDestination: String = RouteSignIn,
+    startDestination: String = RouteTimeline,
 ) {
     NavHost(navController, startDestination = startDestination) {
         signIn(
@@ -25,7 +25,7 @@ fun Routing(
         )
 
         timeline(
-            TimelineModule(),
+            TimelineComponent(),
             onReload = { navController.reload() },
             onBackToSignIn = { navController.backToSignIn() },
         )

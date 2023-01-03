@@ -52,7 +52,7 @@ data class AccountCredentialJson(
         val privacy: String,
         val note: String,
         val sensitive: Boolean,
-        val language: String,
+        val language: String?,
         @SerialName("follow_requests_count")
         val followRequestsCount: Int,
         val fields: List<FieldJson>,

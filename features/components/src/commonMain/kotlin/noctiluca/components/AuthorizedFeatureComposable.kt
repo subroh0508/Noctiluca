@@ -36,6 +36,8 @@ private class UnauthorizedExceptionHandler(
     private val navigateToSignIn: () -> Unit = {},
 ) : AbstractCoroutineContextElement(CoroutineExceptionHandler), CoroutineExceptionHandler {
     override fun handleException(context: CoroutineContext, exception: Throwable) {
+        exception.printStackTrace()
+
         when (exception) {
             is AuthorizedTokenNotFoundException -> tryOtherToken()
             is ResponseException -> tryOtherToken(exception.response.status)

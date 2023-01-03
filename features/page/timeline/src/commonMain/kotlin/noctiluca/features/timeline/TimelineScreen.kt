@@ -11,6 +11,7 @@ import androidx.compose.ui.text.intl.Locale
 import noctiluca.components.AuthorizedFeatureComposable
 import noctiluca.components.atoms.appbar.TopAppBar
 import noctiluca.components.di.getKoinRootScope
+import noctiluca.features.timeline.organisms.topappbar.CurrentInstanceTopAppBar
 import org.koin.core.component.KoinScopeComponent
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
@@ -32,7 +33,7 @@ fun TimelineScreen(
 @Composable
 private fun TimelineScaffold() = Scaffold(
     topBar = {
-        //TopAppBar()
+        CurrentInstanceTopAppBar()
     }
 ) {
 

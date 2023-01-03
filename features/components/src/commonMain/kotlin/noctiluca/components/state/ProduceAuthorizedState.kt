@@ -2,6 +2,7 @@ package noctiluca.components.state
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProduceStateScope
+import androidx.compose.runtime.State
 import androidx.compose.runtime.produceState
 import kotlinx.coroutines.*
 import noctiluca.components.LocalCoroutineExceptionHandler
@@ -16,10 +17,10 @@ fun <T> produceAuthorizedState(
     initialValue: T,
     vararg keys: Any?,
     @BuilderInference producer: ProduceAuthorizedStateScope<T>.() -> Unit,
-) {
+): State<T> {
     val handler = LocalCoroutineExceptionHandler.current
 
-    produceState(
+    return produceState(
         initialValue,
         keys = keys,
     ) { ProduceAuthorizedStateScope(this, handler).producer() }

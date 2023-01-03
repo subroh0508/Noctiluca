@@ -1,10 +1,14 @@
 package noctiluca.timeline.domain.di
 
+import noctiluca.timeline.domain.usecase.FetchAllAuthorizedAccountsUseCase
 import noctiluca.timeline.domain.usecase.FetchCurrentAuthorizedAccountUseCase
+import noctiluca.timeline.domain.usecase.internal.FetchAllAuthorizedAccountsUseCaseImpl
 import noctiluca.timeline.domain.usecase.internal.FetchCurrentAuthorizedAccountUseCaseImpl
 import org.koin.core.module.Module
+import org.koin.dsl.ScopeDSL
 
 @Suppress("FunctionName")
-fun Module.TimelineDomainModule() {
-    single<FetchCurrentAuthorizedAccountUseCase> { FetchCurrentAuthorizedAccountUseCaseImpl(get()) }
+fun ScopeDSL.TimelineDomainModule() {
+    scoped<FetchCurrentAuthorizedAccountUseCase> { FetchCurrentAuthorizedAccountUseCaseImpl(get()) }
+    scoped<FetchAllAuthorizedAccountsUseCase> { FetchAllAuthorizedAccountsUseCaseImpl(get()) }
 }

@@ -6,7 +6,7 @@ import noctiluca.components.LocalCoroutineExceptionHandler
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-sealed interface AuthorizedComposeState<T> {
+interface AuthorizedComposeState<T> {
     companion object {
         operator fun <T> invoke(
             handler: CoroutineExceptionHandler,

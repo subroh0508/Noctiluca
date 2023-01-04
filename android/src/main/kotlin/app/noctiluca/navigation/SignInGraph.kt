@@ -1,21 +1,24 @@
 package app.noctiluca.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
+import android.net.Uri
+import androidx.navigation.*
 import androidx.navigation.compose.composable
+import noctiluca.components.utils.Browser
 import noctiluca.features.authentication.SignInScreen
+import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
-import org.koin.core.component.KoinScopeComponent
+import noctiluca.features.authentication.model.invoke
 
-const val RouteSignIn = "signIn"
+const val RouteSignIn = "SignIn"
 
 fun NavGraphBuilder.signIn(
-    authorizeResult: AuthorizeResult?,
-    koinComponent: KoinScopeComponent,
+    browser: Browser,
     onNavigateToTimeline: () -> Unit,
 ) {
-    composable(RouteSignIn) {
-        SignInScreen(authorizeResult, koinComponent, onNavigateToTimeline)
+    composable("$RouteSignIn?${AuthorizeResult.Query}") { navBackStackEntry ->
+        val result = navBackStackEntry.arguments?.let { AuthorizeResult(it) }
+
+        SignInScreen(result, SignInComponent(browser), onNavigateToTimeline)
     }
 }
 
@@ -23,4 +26,10 @@ fun NavController.navigateToTimeline() {
     navigate(RouteTimeline) {
         popUpTo(RouteSignIn) { inclusive = true }
     }
+}
+
+fun NavController.redirectToSignIn(uri: Uri?) {
+    uri ?: return
+
+    navigate("$RouteSignIn?${uri.query}") { launchSingleTop = true }
 }

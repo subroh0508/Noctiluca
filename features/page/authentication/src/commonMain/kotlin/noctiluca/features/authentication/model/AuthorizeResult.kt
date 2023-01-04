@@ -10,5 +10,12 @@ sealed class AuthorizeResult {
     companion object {
         internal const val QUERY_CODE = "code"
         internal const val QUERY_ERROR = "error"
+        internal const val QUERY_ERROR_DESCRIPTION = "error_description"
+
+        val Query = listOf(
+            "$QUERY_CODE={$QUERY_CODE}",
+            "$QUERY_ERROR={$QUERY_ERROR}",
+            "$QUERY_ERROR_DESCRIPTION={$QUERY_ERROR_DESCRIPTION}"
+        ).joinToString("&")
     }
 }

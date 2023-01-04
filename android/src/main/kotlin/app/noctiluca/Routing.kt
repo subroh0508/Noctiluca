@@ -8,24 +8,24 @@ import app.noctiluca.navigation.*
 import noctiluca.components.utils.Browser
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
+import noctiluca.features.authentication.model.buildRedirectUri
 import noctiluca.features.timeline.di.TimelineComponent
 
 @Composable
 fun Routing(
-    authorizeResult: AuthorizeResult?,
     browser: Browser,
     navController: NavHostController = rememberNavController(),
     startDestination: String = RouteTimeline,
 ) {
+    val redirectUri = buildRedirectUri()
+
     NavHost(navController, startDestination = startDestination) {
         signIn(
-            authorizeResult,
-            SignInComponent(browser),
+            browser,
             onNavigateToTimeline = { navController.navigateToTimeline() },
         )
 
         timeline(
-            TimelineComponent(),
             onReload = { navController.reload() },
             onBackToSignIn = { navController.backToSignIn() },
         )

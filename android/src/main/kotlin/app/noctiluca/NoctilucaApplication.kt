@@ -42,7 +42,7 @@ class NoctilucaApplication : Application() {
         super.onCreate()
 
         startKoin {
-            androidLogger(Level.DEBUG)
+            // androidLogger(Level.DEBUG)
             androidContext(this@NoctilucaApplication)
             modules(buildApiModules() + buildRepositoriesModules() + buildFeaturesModules())
         }

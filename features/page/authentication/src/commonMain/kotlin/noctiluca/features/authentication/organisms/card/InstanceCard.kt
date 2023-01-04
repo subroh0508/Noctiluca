@@ -24,9 +24,7 @@ internal fun InstanceCard(
 ) {
     val (instance, authorizedUser) = rememberInstanceAndAuthorization(query)
 
-    LaunchedEffect(authorizedUser.loading) {
-        onLoading(authorizedUser.loading)
-    }
+    LaunchedEffect(authorizedUser.loading) { onLoading(authorizedUser.loading) }
 
     instance?.let {
         Box(modifier) {

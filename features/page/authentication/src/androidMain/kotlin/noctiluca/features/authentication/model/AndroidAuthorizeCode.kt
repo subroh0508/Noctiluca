@@ -2,17 +2,17 @@ package noctiluca.features.authentication.model
 
 import android.net.Uri
 
-operator fun AuthorizeCode.Companion.invoke(uri: Uri?): AuthorizeCode {
+operator fun AuthorizeResult.Companion.invoke(uri: Uri?): AuthorizeResult {
     val code = uri?.getQueryParameter(QUERY_CODE)
     val error = uri?.getQueryParameter(QUERY_ERROR)
 
     if (code != null) {
-        return AuthorizeCode.Success(code)
+        return AuthorizeResult.Success(code)
     }
 
     return when (error) {
-        "access_denied" -> AuthorizeCode.Failure(AccessDeniedException)
-        null -> AuthorizeCode.Failure(UnknownException)
-        else -> AuthorizeCode.Failure(AuthorizedFailedException(error))
+        "access_denied" -> AuthorizeResult.Failure(AccessDeniedException)
+        null -> AuthorizeResult.Failure(UnknownException)
+        else -> AuthorizeResult.Failure(AuthorizedFailedException(error))
     }
 }

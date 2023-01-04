@@ -4,18 +4,18 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import noctiluca.features.authentication.SignInScreen
-import noctiluca.features.authentication.model.AuthorizeCode
+import noctiluca.features.authentication.model.AuthorizeResult
 import org.koin.core.component.KoinScopeComponent
 
 const val RouteSignIn = "signIn"
 
 fun NavGraphBuilder.signIn(
-    authorizeCode: AuthorizeCode?,
+    authorizeResult: AuthorizeResult?,
     koinComponent: KoinScopeComponent,
     onNavigateToTimeline: () -> Unit,
 ) {
     composable(RouteSignIn) {
-        SignInScreen(authorizeCode, koinComponent, onNavigateToTimeline)
+        SignInScreen(authorizeResult, koinComponent, onNavigateToTimeline)
     }
 }
 

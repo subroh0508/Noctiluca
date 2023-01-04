@@ -7,19 +7,19 @@ import androidx.navigation.compose.rememberNavController
 import app.noctiluca.navigation.*
 import noctiluca.components.utils.Browser
 import noctiluca.features.authentication.di.SignInComponent
-import noctiluca.features.authentication.model.AuthorizeCode
+import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.timeline.di.TimelineComponent
 
 @Composable
 fun Routing(
-    authorizeCode: AuthorizeCode?,
+    authorizeResult: AuthorizeResult?,
     browser: Browser,
     navController: NavHostController = rememberNavController(),
     startDestination: String = RouteTimeline,
 ) {
     NavHost(navController, startDestination = startDestination) {
         signIn(
-            authorizeCode,
+            authorizeResult,
             SignInComponent(browser),
             onNavigateToTimeline = { navController.navigateToTimeline() },
         )

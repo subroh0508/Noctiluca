@@ -6,7 +6,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.components.atoms.card.CardHeader
@@ -15,9 +14,7 @@ import noctiluca.components.atoms.card.CardSupporting
 import noctiluca.components.atoms.card.FilledCard
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.QueryText
-import noctiluca.features.authentication.state.rememberAuthorization
-import noctiluca.features.authentication.state.rememberMastodonInstance
-import noctiluca.instance.model.Instance
+import noctiluca.features.authentication.state.rememberInstanceAndAuthorization
 
 @Composable
 internal fun InstanceCard(
@@ -25,14 +22,13 @@ internal fun InstanceCard(
     onLoading: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val instance by rememberMastodonInstance(query)
-    val (authorizeUri, code, authorizedUser) = rememberAuthorization()
+    val (instance, authorizedUser) = rememberInstanceAndAuthorization(query)
 
-    LaunchedEffect(instance.loading, authorizeUri.loading, authorizedUser.loading) {
-        onLoading(instance.loading || authorizeUri.loading || authorizedUser.loading)
+    LaunchedEffect(authorizedUser.loading) {
+        onLoading(authorizedUser.loading)
     }
 
-    instance.getValueOrNull<Instance>()?.let {
+    instance?.let {
         Box(modifier) {
             FilledCard(
                 headline = { CardHeader(it.name) },
@@ -40,8 +36,8 @@ internal fun InstanceCard(
                 supporting = { CardSupporting(it.description ?: "") },
                 actions = {
                     AuthenticationButton(
-                        code?.getCodeOrNull() == null,
-                        onClick = { authorizeUri.request(it) },
+                        !authorizedUser.loading,
+                        onClick = { authorizedUser.requestAuthorize() },
                     )
                 },
                 modifier = Modifier.padding(vertical = 16.dp),

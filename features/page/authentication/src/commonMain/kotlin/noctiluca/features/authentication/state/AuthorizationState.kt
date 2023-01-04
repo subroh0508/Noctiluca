@@ -6,79 +6,88 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
+import noctiluca.authentication.domain.usecase.ShowMastodonInstanceUseCase
 import noctiluca.components.model.LoadState
 import noctiluca.components.state.LoadStateComposeState
 import noctiluca.components.state.loadLazy
 import noctiluca.components.state.produceLoadState
-import noctiluca.features.authentication.LocalAuthorizeCode
+import noctiluca.features.authentication.LocalAuthorizeResult
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.model.AuthorizeCode
-import noctiluca.features.authentication.model.LocalNavController
-import noctiluca.features.authentication.model.UnknownException
-import noctiluca.features.authentication.model.buildRedirectUri
+import noctiluca.features.authentication.model.*
 import noctiluca.instance.model.Instance
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Hostname
 import noctiluca.model.Uri
 import org.koin.core.scope.Scope
 
-internal class AuthorizeUriState(
+internal class AuthorizedUserState(
+    private val instanceLoadState: LoadState,
     private val clientName: String,
     private val redirectUri: Uri,
-    private val useCase: RequestAppCredentialUseCase,
+    private val navController: NavController,
+    private val requestAppCredentialUseCase: RequestAppCredentialUseCase,
+    private val requestRequestAccessTokenUseCase :RequestAccessTokenUseCase,
     private val scope: CoroutineScope,
     private val state: MutableState<LoadState> = mutableStateOf(LoadState.Initial),
-) : LoadStateComposeState<Uri> by LoadStateComposeState(state) {
-    fun request(instance: Instance) = scope.loadLazy {
-        useCase.execute(Hostname(instance.domain), clientName, redirectUri)
-    }
-
-    fun clear() { state.value = LoadState.Initial }
-}
-
-@Composable
-internal fun rememberAuthorization(
-    scope: Scope = LocalScope.current,
-): Triple<AuthorizeUriState, AuthorizeCode?, LoadState> {
-    val coroutineScope = rememberCoroutineScope()
-    val clientName = getString().sign_in_client_name
-    val redirectUri = buildRedirectUri()
-
-    val authorizeCode = LocalAuthorizeCode.current
-    val authorizeUriState = remember { AuthorizeUriState(clientName, redirectUri, scope.get(), coroutineScope) }
-
-    val authorizedUserState = produceAuthorizedUserState(authorizeCode, redirectUri, scope).value
-
-    navigateTo(authorizeUriState, authorizeCode, authorizedUserState)
-
-    return Triple(
-        authorizeUriState,
-        authorizeCode,
-        authorizedUserState,
+) : LoadStateComposeState<AuthorizedUser> by LoadStateComposeState(state) {
+    constructor(
+        instanceLoadState: LoadState,
+        clientName: String,
+        redirectUri: Uri,
+        navController: NavController,
+        koinScope: Scope,
+        coroutineScope: CoroutineScope,
+    ) : this(
+        instanceLoadState,
+        clientName,
+        redirectUri,
+        navController,
+        koinScope.get(),
+        koinScope.get(),
+        coroutineScope,
+        mutableStateOf(if (instanceLoadState.loading) instanceLoadState else LoadState.Initial),
     )
-}
 
-@Composable
-private fun produceAuthorizedUserState(
-    authorizeCode: AuthorizeCode?,
-    redirectUri: Uri,
-    scope: Scope,
-): State<LoadState> {
-    val useCase: RequestAccessTokenUseCase = remember { scope.get() }
+    override val loading get() = instanceLoadState.loading || value.loading
+    override fun getErrorOrNull() = instanceLoadState.getErrorOrNull() ?: value.getErrorOrNull()
 
-    return produceLoadState(authorizeCode) {
-        val code = authorizeCode?.getCodeOrNull()
-        val error = authorizeCode?.getErrorOrNull()
-        if (code.isNullOrBlank()) {
-            value = error?.let { LoadState.Error(it) } ?: LoadState.Initial
-            return@produceLoadState
+    fun requestAuthorize() {
+        val instance: Instance = instanceLoadState.getValueOrNull() ?: return
+        val hostname = Hostname(instance.domain)
+
+        val job = scope.launch(start = CoroutineStart.LAZY) {
+            runCatching { requestAppCredentialUseCase.execute(hostname, clientName, redirectUri) }
+                .onSuccess { navController.openBrowser(it) }
+                .onFailure { value = LoadState.Error(it) }
         }
 
-        val job = launch(start = CoroutineStart.LAZY) {
-            runCatching { useCase.execute(code, redirectUri) }
-                .onSuccess { user ->
-                    value = user?.let { LoadState.Loaded(it) } ?: LoadState.Error(UnknownException)
+        value = LoadState.Loading(job)
+        job.start()
+    }
+
+    fun fetch(result: AuthorizeResult?) {
+        val code = result?.getCodeOrNull()
+        val error = result?.getErrorOrNull()
+
+        if (value !is LoadState.Loading) {
+            return
+        }
+
+        if (code == null) {
+            value = error?.let(LoadState::Error) ?: LoadState.Initial
+            return
+        }
+
+        val job = scope.launch(start = CoroutineStart.LAZY) {
+            runCatching { requestRequestAccessTokenUseCase.execute(code, redirectUri) }
+                .onSuccess {
+                    if (it != null) {
+                        navController.navigateToTimeline()
+                        return@onSuccess
+                    }
+
+                    value = LoadState.Error(UnknownException)
                 }
                 .onFailure { value = LoadState.Error(it) }
         }
@@ -89,28 +98,47 @@ private fun produceAuthorizedUserState(
 }
 
 @Composable
-private fun navigateTo(
-    authorizeUriState: AuthorizeUriState,
-    authorizeCode: AuthorizeCode?,
-    authorizedUserState: LoadState,
-) {
-    val navController = LocalNavController.current
+internal fun rememberInstanceAndAuthorization(
+    query: QueryText,
+    result: AuthorizeResult? = LocalAuthorizeResult.current,
+    navController: NavController = LocalNavController.current,
+    scope: Scope = LocalScope.current,
+): Pair<Instance?, AuthorizedUserState> {
+    val coroutineScope = rememberCoroutineScope()
+    val clientName = getString().sign_in_client_name
+    val redirectUri = buildRedirectUri()
 
-    val authorizeUri = authorizeUriState.getValueOrNull()
-    val authorizedUser = authorizedUserState.getValueOrNull<AuthorizedUser>()
+    val instance by rememberMastodonInstance(query)
 
-    LaunchedEffect(authorizeCode, authorizeUri) {
-        if (authorizeCode?.getCodeOrNull() == null && authorizeUri != null) {
-            authorizeUriState.clear()
-            navController.openBrowser(authorizeUri)
-        }
+    val authorizedUser = remember(instance) {
+        AuthorizedUserState(
+            instance,
+            clientName,
+            redirectUri,
+            navController,
+            scope,
+            coroutineScope,
+        )
     }
 
-    LaunchedEffect(authorizedUser) {
-        if (authorizedUser == null) {
-            return@LaunchedEffect
+    LaunchedEffect(result) { authorizedUser.fetch(result) }
+
+    return instance.getValueOrNull<Instance>() to authorizedUser
+}
+
+@Composable
+private fun rememberMastodonInstance(
+    query: QueryText,
+    scope: Scope = LocalScope.current,
+): State<LoadState> {
+    val useCase: ShowMastodonInstanceUseCase = remember { scope.get() }
+
+    return produceLoadState(query.text) {
+        if (query !is QueryText.Static) {
+            value = LoadState.Initial
+            return@produceLoadState
         }
 
-        navController.navigateToTimeline()
+        loadLazy { useCase.execute(query.text)  }
     }
 }

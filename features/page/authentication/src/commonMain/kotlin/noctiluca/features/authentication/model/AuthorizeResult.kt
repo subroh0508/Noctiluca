@@ -1,8 +1,8 @@
 package noctiluca.features.authentication.model
 
-sealed class AuthorizeCode {
-    internal data class Success(val code: String) : AuthorizeCode()
-    internal data class Failure(val cause: Throwable) : AuthorizeCode()
+sealed class AuthorizeResult {
+    internal data class Success(val code: String) : AuthorizeResult()
+    internal data class Failure(val cause: Throwable) : AuthorizeResult()
 
     fun getCodeOrNull() = if (this is Success) code else null
     fun getErrorOrNull() = if (this is Failure) cause else null

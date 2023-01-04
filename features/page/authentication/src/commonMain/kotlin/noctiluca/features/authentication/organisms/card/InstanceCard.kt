@@ -12,9 +12,12 @@ import noctiluca.components.atoms.card.CardHeader
 import noctiluca.components.atoms.card.CardSubhead
 import noctiluca.components.atoms.card.CardSupporting
 import noctiluca.components.atoms.card.FilledCard
+import noctiluca.components.atoms.snackbar.showSnackbar
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.QueryText
+import noctiluca.features.authentication.state.AuthorizedUserState
 import noctiluca.features.authentication.state.rememberInstanceAndAuthorization
+import noctiluca.instance.model.Instance
 
 @Composable
 internal fun InstanceCard(
@@ -26,22 +29,28 @@ internal fun InstanceCard(
 
     LaunchedEffect(authorizedUser.loading) { onLoading(authorizedUser.loading) }
 
-    instance?.let {
-        Box(modifier) {
-            FilledCard(
-                headline = { CardHeader(it.name) },
-                subhead = { CardSubhead(it.domain) },
-                supporting = { CardSupporting(it.description ?: "") },
-                actions = {
-                    AuthenticationButton(
-                        !authorizedUser.loading,
-                        onClick = { authorizedUser.requestAuthorize() },
-                    )
-                },
-                modifier = Modifier.padding(vertical = 16.dp),
+    MastodonInstanceCard(instance ?: return, authorizedUser, modifier)
+    SnackbarForError(authorizedUser.getErrorOrNull() ?: return)
+}
+
+@Composable
+private fun MastodonInstanceCard(
+    instance: Instance,
+    authorizedUserState: AuthorizedUserState,
+    modifier: Modifier = Modifier,
+) = Box(modifier) {
+    FilledCard(
+        headline = { CardHeader(instance.name) },
+        subhead = { CardSubhead(instance.domain) },
+        supporting = { CardSupporting(instance.description ?: "") },
+        actions = {
+            AuthenticationButton(
+                !authorizedUserState.loading,
+                onClick = { authorizedUserState.requestAuthorize() },
             )
-        }
-    }
+        },
+        modifier = Modifier.padding(vertical = 16.dp),
+    )
 }
 
 @Composable
@@ -52,3 +61,12 @@ private fun AuthenticationButton(
     enabled = enabled,
     onClick = onClick,
 ) { Text(getString().sign_in_request_authentication) }
+
+@Composable
+private fun SnackbarForError(
+    error: Throwable,
+) {
+    val message = getString().sign_in_request_authentication_error + (error.message ?: "Unknown Error")
+
+    showSnackbar(message)
+}

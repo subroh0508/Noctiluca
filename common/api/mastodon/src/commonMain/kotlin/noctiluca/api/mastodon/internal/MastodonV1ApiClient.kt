@@ -2,6 +2,7 @@ package noctiluca.api.mastodon.internal
 
 import io.ktor.client.*
 import io.ktor.client.call.*
+import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*
 import noctiluca.api.mastodon.MastodonV1Api
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
@@ -15,7 +16,7 @@ internal class MastodonV1ApiClient(
     override suspend fun getInstance(
         hostname: String,
     ) = client.get<V1InstanceJson>(
-        Api.V1.Instance,
+        Api.V1.Instance(),
         hostname = hostname,
         skipAuthorization = true,
     )
@@ -23,24 +24,26 @@ internal class MastodonV1ApiClient(
     override suspend fun getVerifyAccountsCredentials(
         hostname: String,
     ) = client.get<AccountCredentialJson>(
-        Api.V1.Accounts.VerifyCredentials,
+        Api.V1.Accounts.VerifyCredentials(),
         hostname = hostname,
     )
 
+    override suspend fun getTimelinesPublic() = client.get<List<Unit>>(Api.V1.Timelines.Public())
+
     private suspend inline fun <reified T: Any> HttpClient.get(
-        endpoint: String,
+        resource: Any,
         hostname: String? = null,
         skipAuthorization: Boolean = false,
-    ): T = get(endpoint) {
+    ): T = get(resource) {
         setAccessTokenAndHost(hostname, skipAuthorization)
     }.body()
 
     private suspend inline fun <reified T: Any, reified E: Any> HttpClient.post(
-        endpoint: String,
+        resource: Any,
         body: E,
         hostname: String? = null,
         skipAuthorization: Boolean = false,
-    ): T = post(endpoint) {
+    ): T = post(resource) {
         setAccessTokenAndHost(hostname, skipAuthorization)
         setBody(body)
     }.body()

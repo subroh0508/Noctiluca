@@ -1,5 +1,3 @@
-import extension.localProperties
-
 plugins {
     id("multiplatform-library")
     kotlin("plugin.serialization")

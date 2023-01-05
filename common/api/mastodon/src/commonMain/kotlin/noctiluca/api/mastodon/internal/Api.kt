@@ -1,25 +1,26 @@
 package noctiluca.api.mastodon.internal
 
 import io.ktor.resources.*
+import kotlinx.serialization.Serializable
 
-@Resource("/api")
+@Resource("/api") @Serializable
 object Api {
-    @Resource("v1")
+    @Resource("v1") @Serializable
     class V1(val parent: Api = Api) {
-        @Resource("accounts")
+        @Resource("accounts") @Serializable
         class Accounts(val parent: V1 = V1()) {
-            @Resource("verify_credentials")
+            @Resource("verify_credentials") @Serializable
             class VerifyCredentials(val parent: Accounts = Accounts())
-            @Resource("update_credentials")
+            @Resource("update_credentials") @Serializable
             class UpdateCredentials(val parent: Accounts = Accounts())
         }
 
-        @Resource("instance")
+        @Resource("instance") @Serializable
         class Instance(val parent: V1 = V1())
 
-        @Resource("timelines")
+        @Resource("timelines") @Serializable
         class Timelines(val parent: V1 = V1()) {
-            @Resource("public")
+            @Resource("public") @Serializable
             class Public(val parent: Timelines = Timelines())
         }
     }

@@ -12,7 +12,7 @@ interface MastodonApiV1 {
         hostname: String,
     ): AccountCredentialJson
 
-    suspend fun getTimelinesPublic(
-
-    ): List<Unit>
+    // suspend fun getTimelinesPublic(
+    //
+    //  ): List<Unit>
 }

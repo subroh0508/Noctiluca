@@ -6,7 +6,7 @@ import kotlinx.serialization.json.Json
 import noctiluca.account.infra.di.AccountRepositoriesModule
 import noctiluca.api.authentication.di.buildHttpClient as buildHttpClientForAuthentication
 import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
-import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForMastodon
+import noctiluca.api.mastodon.di.buildHttpClient as buildHttpClientForMastodon
 import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule

@@ -15,38 +15,41 @@ internal class MastodonApiV1Client(
 ) : MastodonApiV1 {
     override suspend fun getInstance(
         hostname: String,
-    ) = client.get<V1InstanceJson>(
+    ): V1InstanceJson = client.get(
         Api.V1.Instance(),
         hostname = hostname,
         skipAuthorization = true,
-    )
+    ).body()
 
     override suspend fun getVerifyAccountsCredentials(
         hostname: String,
-    ) = client.get<AccountCredentialJson>(
+    ): AccountCredentialJson = client.get(
         Api.V1.Accounts.VerifyCredentials(),
         hostname = hostname,
-    )
+    ).body()
 
-    override suspend fun getTimelinesPublic() = client.get<List<Unit>>(Api.V1.Timelines.Public())
+    // override suspend fun getTimelinesPublic(
+    // ) = client.get<List<Unit>>(
+    //     Api.V1.Timelines.Public()
+    // ).body
 
     private suspend inline fun <reified T: Any> HttpClient.get(
-        resource: Any,
+        resource: T,
         hostname: String? = null,
         skipAuthorization: Boolean = false,
-    ): T = get(resource) {
+    ) = get(resource) {
         setAccessTokenAndHost(hostname, skipAuthorization)
-    }.body()
+    }
 
     private suspend inline fun <reified T: Any, reified E: Any> HttpClient.post(
-        resource: Any,
+        resource: T,
         body: E,
         hostname: String? = null,
         skipAuthorization: Boolean = false,
-    ): T = post(resource) {
+    ) = post(resource) {
         setAccessTokenAndHost(hostname, skipAuthorization)
         setBody(body)
-    }.body()
+    }
 
     private suspend fun HttpRequestBuilder.setAccessTokenAndHost(
         hostname: String?,

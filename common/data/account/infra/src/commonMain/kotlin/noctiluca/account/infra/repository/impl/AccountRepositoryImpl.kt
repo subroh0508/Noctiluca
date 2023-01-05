@@ -2,14 +2,14 @@ package noctiluca.account.infra.repository.impl
 
 import noctiluca.account.infra.repository.AccountRepository
 import noctiluca.account.model.Account
-import noctiluca.api.mastodon.MastodonV1Api
+import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.model.*
 import noctiluca.repository.TokenProvider
 
 internal class AccountRepositoryImpl(
     private val tokenProvider: TokenProvider,
-    private val v1: MastodonV1Api,
+    private val v1: MastodonApiV1,
 ) : AccountRepository {
     override suspend fun fetchCurrentAccount(): Account {
         val current = tokenProvider.getCurrent() ?: throw AuthorizedTokenNotFoundException

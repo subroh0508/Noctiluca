@@ -2,7 +2,7 @@ package noctiluca.instance.infra.repository.impl
 
 import noctiluca.api.instancessocial.InstancesSocialApi
 import noctiluca.api.instancessocial.json.InstanceJson
-import noctiluca.api.mastodon.MastodonV1Api
+import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.instance.infra.repository.InstanceRepository
 import noctiluca.instance.model.Instance
@@ -11,7 +11,7 @@ import java.net.UnknownHostException
 
 internal class InstanceRepositoryImpl(
     private val instancesSocialApi: InstancesSocialApi,
-    private val v1: MastodonV1Api,
+    private val v1: MastodonApiV1,
 ): InstanceRepository {
     override suspend fun search(
         query: String,

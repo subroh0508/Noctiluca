@@ -3,7 +3,7 @@ package noctiluca.api.mastodon
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 
-interface MastodonV1Api {
+interface MastodonApiV1 {
     suspend fun getInstance(
         hostname: String,
     ): V1InstanceJson

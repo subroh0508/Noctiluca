@@ -4,11 +4,14 @@ import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.resources.*
+import io.ktor.client.plugins.resources.Resources
 import io.ktor.http.*
+import io.ktor.resources.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
-import noctiluca.api.mastodon.MastodonV1Api
-import noctiluca.api.mastodon.internal.MastodonV1ApiClient
+import noctiluca.api.mastodon.MastodonApiV1
+import noctiluca.api.mastodon.internal.MastodonApiV1Client
 import org.koin.core.module.Module
 
 fun buildHttpClient(
@@ -23,11 +26,13 @@ fun buildHttpClient(
     install(ContentNegotiation) {
         json(json)
     }
+
+    install(Resources)
 }
 
 @Suppress("FunctionName")
 fun Module.MastodonApiModule(
     client: HttpClient,
 ) {
-    single<MastodonV1Api> { MastodonV1ApiClient(get(), client) }
+    single<MastodonApiV1> { MastodonApiV1Client(get(), client) }
 }

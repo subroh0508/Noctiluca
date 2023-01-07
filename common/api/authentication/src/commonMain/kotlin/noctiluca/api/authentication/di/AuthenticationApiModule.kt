@@ -4,6 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.resources.Resources
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
@@ -23,6 +24,8 @@ fun buildHttpClient(
     install(ContentNegotiation) {
         json(json)
     }
+
+    install(Resources)
 }
 
 @Suppress("FunctionName")

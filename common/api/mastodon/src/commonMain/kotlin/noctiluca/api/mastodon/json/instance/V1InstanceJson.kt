@@ -27,11 +27,11 @@ data class V1InstanceJson(
     val approvalRequired: Boolean,
     @SerialName("invites_enabled")
     val invitesEnabled: Boolean,
-    val configuration: Configuration,
+    val configuration: Configuration?,
     @SerialName("contact_account")
     val contactAccount: AccountJson,
     @SerialName("rules")
-    val rules: List<RuleJson>,
+    val rules: List<RuleJson>?,
 ) {
     @Serializable
     data class Urls(

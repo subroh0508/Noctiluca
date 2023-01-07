@@ -7,7 +7,6 @@ abstract class PostApps {
     companion object {
         private const val SCOPE = "read write follow push"
         private const val WEBSITE = "https://github.com/subroh0508/noctiluca"
-        internal const val ESCAPED_SCOPE = "read%20write%20follow%20push"
     }
 
     @Serializable

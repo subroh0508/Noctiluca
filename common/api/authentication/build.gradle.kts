@@ -8,6 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(libs.bundles.ktor.client.common)
+                implementation(libs.ktor.client.resources)
                 implementation(libs.koin.core)
             }
         }

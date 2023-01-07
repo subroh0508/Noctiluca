@@ -4,7 +4,7 @@ import io.ktor.resources.*
 import kotlinx.serialization.Serializable
 
 @Resource("/api") @Serializable
-object Api {
+internal object Api {
     @Resource("v1") @Serializable
     class V1(val parent: Api = Api) {
         @Resource("accounts") @Serializable

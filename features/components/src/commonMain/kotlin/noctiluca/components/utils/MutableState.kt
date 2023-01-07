@@ -13,7 +13,7 @@ internal fun <T: Any> CoroutineScope.loadLazy(
     val job = launch(start = CoroutineStart.LAZY) {
         runCatching { block() }
             .onSuccess { state.value = LoadState.Loaded(it) }
-            .onFailure { state.value = LoadState.Error(it) }
+            .onFailure { it.printStackTrace(); state.value = LoadState.Error(it) }
     }
 
     state.value = LoadState.Loading(job)

@@ -12,6 +12,7 @@ kotlin {
             dependencies {
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.bundles.ktor.client.common)
+                implementation(libs.ktor.client.resources)
                 implementation(libs.koin.core)
             }
         }

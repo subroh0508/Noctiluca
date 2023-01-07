@@ -7,6 +7,7 @@ import io.ktor.client.request.*
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
+import noctiluca.api.mastodon.json.status.StatusJson
 import noctiluca.repository.TokenCache
 
 internal class MastodonApiV1Client(
@@ -28,18 +29,35 @@ internal class MastodonApiV1Client(
         hostname = hostname,
     ).body()
 
-    // override suspend fun getTimelinesPublic(
-    // ) = client.get<List<Unit>>(
-    //     Api.V1.Timelines.Public()
-    // ).body
+    override suspend fun getTimelinesPublic(
+        local: Boolean,
+        remote: Boolean,
+        onlyMedia: Boolean,
+        maxId: String?,
+        sinceId: String?,
+        minId: String?,
+        limit: Int,
+    ): List<StatusJson> = client.get(
+        Api.V1.Timelines.Public(),
+    ) {
+        parameter("local", local.toString())
+        parameter("remote", remote.toString())
+        parameter("only_media", onlyMedia.toString())
+        parameter("max_id", maxId)
+        parameter("since_id", sinceId)
+        parameter("min_id", minId)
+        parameter("limit", limit.toString())
+    }.body()
 
     private suspend inline fun <reified T: Any> HttpClient.get(
         resource: T,
         hostname: String? = null,
         skipAuthorization: Boolean = false,
-    ) = get(resource) {
+        httpRequestBuilder: HttpRequestBuilder.() -> Unit = {},
+    ) = get(resource, builder = {
         setAccessTokenAndHost(hostname, skipAuthorization)
-    }
+        httpRequestBuilder()
+    })
 
     private suspend inline fun <reified T: Any, reified E: Any> HttpClient.post(
         resource: T,

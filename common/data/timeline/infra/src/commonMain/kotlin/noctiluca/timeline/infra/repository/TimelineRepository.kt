@@ -5,7 +5,7 @@ import noctiluca.status.model.Status
 
 interface TimelineRepository {
     suspend fun fetchGlobal(
-        remote: Boolean = false,
+        onlyRemote: Boolean = false,
         onlyMedia: Boolean = false,
         maxId: StatusId? = null,
     ): List<Status>

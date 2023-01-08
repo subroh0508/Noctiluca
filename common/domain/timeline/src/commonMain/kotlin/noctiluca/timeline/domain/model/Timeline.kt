@@ -7,6 +7,14 @@ import noctiluca.timeline.model.List as AccountList
 sealed class Timeline {
     abstract val statuses: StatusList
 
+    operator fun plus(list: StatusList): Timeline = when (this) {
+        is Global -> copy(statuses = statuses + list)
+        is Local -> copy(statuses = statuses + list)
+        is Home -> copy(statuses = statuses + list)
+        is HashTag -> copy(statuses = statuses + list)
+        is List -> copy(statuses = statuses + list)
+    }
+
     data class Global(
         override val statuses: StatusList,
         val onlyRemote: Boolean,

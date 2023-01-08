@@ -12,6 +12,7 @@ dependencies {
     implementation(project(":common:data:account:infra"))
     implementation(project(":common:data:authentication:infra"))
     implementation(project(":common:data:instance:infra"))
+    implementation(project(":common:data:timeline:infra"))
 
     implementation(project(":features:theme"))
     implementation(project(":features:components"))

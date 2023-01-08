@@ -2,6 +2,7 @@ package noctiluca.timeline.domain.model
 
 import noctiluca.status.model.StatusList
 import noctiluca.timeline.model.HashTag as HashTagValue
+import noctiluca.timeline.model.List as AccountList
 
 sealed class Timeline {
     abstract val statuses: StatusList
@@ -29,5 +30,6 @@ sealed class Timeline {
 
     data class List(
         override val statuses: StatusList,
+        val list: AccountList,
     ) : Timeline()
 }

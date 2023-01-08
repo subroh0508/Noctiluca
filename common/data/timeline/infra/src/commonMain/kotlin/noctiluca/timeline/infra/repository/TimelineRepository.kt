@@ -1,4 +1,4 @@
-package noctiluca.status.infra.repository
+package noctiluca.timeline.infra.repository
 
 import noctiluca.model.StatusId
 import noctiluca.status.model.Status

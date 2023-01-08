@@ -10,13 +10,12 @@ import androidx.compose.ui.unit.dp
 import noctiluca.components.atoms.appbar.NavigateIconSize
 import noctiluca.components.atoms.appbar.TopAppBar
 import noctiluca.components.atoms.image.AsyncImage
-import noctiluca.components.atoms.image.imageResources
 import noctiluca.features.timeline.getString
-import noctiluca.features.timeline.state.rememberCurrentStatus
+import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 
 @Composable
 fun CurrentInstanceTopAppBar() {
-    val account by rememberCurrentStatus()
+    val account by rememberCurrentAuthorizedAccountStatus()
 
     TopAppBar(
         account.hostname?.value ?: getString().timeline_page_title,

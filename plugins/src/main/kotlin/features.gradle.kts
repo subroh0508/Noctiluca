@@ -15,6 +15,7 @@ kotlin {
                 implementation(compose.foundation)
                 @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
                 implementation(compose.preview)
 
                 implementation(libs.coroutinesCore)

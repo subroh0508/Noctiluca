@@ -12,6 +12,8 @@ kotlin {
                 implementation(project(":common:data:account:infra"))
                 implementation(project(":common:data:status:infra"))
                 implementation(project(":common:data:timeline:infra"))
+
+                implementation(libs.kotlinx.coroutines.core)
             }
         }
     }

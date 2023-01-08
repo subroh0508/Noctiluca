@@ -1,6 +1,8 @@
 package noctiluca.timeline.domain.usecase.internal
 
-import noctiluca.status.model.Status
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.withContext
 import noctiluca.status.model.StatusList
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.UpdateTimelineUseCase
@@ -10,13 +12,15 @@ internal class UpdateTimelineUseCaseImpl(
     private val repository: TimelineRepository
 ) : UpdateTimelineUseCase {
     override suspend fun execute(
-        current: List<Timeline>,
-    ) = current.map {
-        if (it.statuses.isEmpty()) {
-            return@map it + fetchInitialStatuses(it)
-        }
+        initial: List<Timeline>,
+    ) = withContext(Dispatchers.Default) {
+        initial.map {
+            if (it.statuses.isEmpty()) {
+                return@map async { it + fetchInitialStatuses(it) }
+            }
 
-        it
+            async { it }
+        }
     }
 
     private suspend fun fetchInitialStatuses(

@@ -30,7 +30,7 @@ internal data class CurrentAuthorizedAccount(
 }
 
 @Composable
-internal fun rememberCurrentStatus(
+internal fun rememberCurrentAuthorizedAccountStatus(
     scope: Scope = LocalScope.current,
 ): State<CurrentAuthorizedAccount> {
     val tokenProvider: TokenProvider = remember { scope.get() }

@@ -16,6 +16,6 @@ data class MediaAttachmentJson(
     @SerialName("remote_url")
     val remoteUrl: String?,
     // val meta: Meta,
-    val description: String,
+    val description: String?,
     val blurhash: String,
 )

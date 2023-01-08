@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="timeline_page_title">読み込み中…</string>
+    <string name="timeline_global">連合</string>
+    <string name="timeline_local">ローカル</string>
+    <string name="timeline_home">ホーム</string>
 </resources>

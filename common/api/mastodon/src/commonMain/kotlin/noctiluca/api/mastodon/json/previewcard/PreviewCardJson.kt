@@ -20,7 +20,7 @@ data class PreviewCardJson(
     @SerialName("provider_name")
     val providerName: String,
     @SerialName("provide_url")
-    val providerUrl: String,
+    val providerUrl: String?,
     val html: String,
     val width: Int,
     val height: Int,

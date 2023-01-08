@@ -1,6 +1,9 @@
 package noctiluca.status.infra
 
 import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.status.StatusJson
 import noctiluca.model.AccountId
@@ -13,7 +16,7 @@ fun StatusJson.toEntity(newAccountId: AccountId?) = Status(
     (reblog?.id ?: id).let(::StatusId),
     reblog?.content ?: content,
     spoilerText,
-    LocalDateTime.parse(reblog?.createdAt ?: createdAt),
+    (reblog?.createdAt ?: createdAt).toInstant().toLocalDateTime(TimeZone.of("JST")),
     Status.Visibility.valueOf(visibility.uppercase()),
     reblog?.repliesCount ?: repliesCount,
     reblog?.favouritesCount ?: favouritesCount,

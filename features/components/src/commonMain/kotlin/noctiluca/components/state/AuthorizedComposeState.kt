@@ -2,6 +2,7 @@ package noctiluca.components.state
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ProduceStateScope
+import androidx.compose.runtime.remember
 import kotlinx.coroutines.*
 import noctiluca.components.LocalCoroutineExceptionHandler
 import noctiluca.components.UnauthorizedExceptionHandler
@@ -13,16 +14,20 @@ interface AuthorizedComposeState<T> {
 
     companion object {
         operator fun <T> invoke(
-            handler: UnauthorizedExceptionHandler,
+            handler: UnauthorizedExceptionHandler = UnauthorizedExceptionHandler(),
         ): AuthorizedComposeState<T> = Impl(handler)
-
-        @Composable
-        operator fun <T> invoke() = invoke<T>(LocalCoroutineExceptionHandler.current)
     }
 
     private class Impl<T>(
         override val exceptionHandler: UnauthorizedExceptionHandler,
     ) : AuthorizedComposeState<T>
+}
+
+@Composable
+fun <T> rememberAuthorizedComposeState(): AuthorizedComposeState<T> {
+    val handler = LocalCoroutineExceptionHandler.current
+
+    return remember { AuthorizedComposeState(handler) }
 }
 
 inline fun <T, R> AuthorizedComposeState<T>.runCatchingWithAuth(

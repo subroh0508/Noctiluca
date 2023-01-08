@@ -14,5 +14,5 @@ data class CustomEmojiJson(
     val staticUrl: String,
     @SerialName("visible_in_picker")
     val visibleInPicker: Boolean,
-    val category: String,
+    val category: String?,
 )

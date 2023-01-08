@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import noctiluca.components.atoms.text.HtmlText
 import noctiluca.features.timeline.state.rememberTimelineStatus
 
 @Composable
@@ -16,7 +17,7 @@ internal fun TimelineLane(
 
     LazyColumn(modifier = modifier) {
         items(statuses) {
-            Text(it.content)
+            HtmlText(it.content)
         }
     }
 }

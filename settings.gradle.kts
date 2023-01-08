@@ -62,6 +62,7 @@ include(
     ":common:domain:authentication",
     ":common:domain:timeline",
     ":features:components",
+    ":features:shared",
     ":features:theme",
     ":features:page:timeline",
     ":features:page:authentication",

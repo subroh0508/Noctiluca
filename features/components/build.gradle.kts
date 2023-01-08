@@ -12,6 +12,7 @@ kotlin {
         androidMain {
             dependencies {
                 implementation(libs.ktor.client.okhttp)
+                implementation(libs.androidx.core)
                 implementation(libs.androidx.browser)
             }
         }

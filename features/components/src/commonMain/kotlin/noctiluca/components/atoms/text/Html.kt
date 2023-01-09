@@ -10,7 +10,13 @@ fun HtmlText(
     text: String,
     modifier: Modifier = Modifier,
     style: TextStyle = LocalTextStyle.current,
-) = ExpectHtmlText(text, modifier, style)
+) {
+    if (text.contains("<span class=\"invisible\">")) {
+        println(text)
+    }
+
+    ExpectHtmlText(removeInvisibleTags(text), modifier, style)
+}
 
 @Composable
 internal expect fun ExpectHtmlText(
@@ -18,3 +24,15 @@ internal expect fun ExpectHtmlText(
     modifier: Modifier,
     style: TextStyle,
 )
+
+private val REGEX_INVISIBLE_CLASS = """<[a-z]+ class="invisible">(.*?)</[a-z]+>""".toRegex()
+
+private fun removeInvisibleTags(
+    html: String,
+): String {
+    val matchResults = REGEX_INVISIBLE_CLASS.findAll(html).toList()
+
+    return matchResults.foldIndexed(html) { index, acc, matchResult ->
+        acc.replace(matchResult.value, if (index < matchResults.lastIndex) "" else "...")
+    }
+}

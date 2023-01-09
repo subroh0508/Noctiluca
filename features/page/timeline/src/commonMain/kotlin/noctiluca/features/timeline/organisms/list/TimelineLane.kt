@@ -1,11 +1,9 @@
 package noctiluca.features.timeline.organisms.list
 
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import noctiluca.components.atoms.text.HtmlText
+import noctiluca.components.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.state.rememberTimelineStatus
 
@@ -16,9 +14,10 @@ internal fun TimelineLane(
     val timeline = rememberTimelineStatus()
     val statuses = timeline.findForeground()?.timeline?.statuses ?: listOf()
 
-    LazyColumn(modifier = modifier) {
-        items(statuses) {
-            Status(it)
-        }
-    }
+    LazyColumn(
+        statuses,
+        modifier = modifier,
+        state = rememberLazyListState(),
+        showDivider = true,
+    ) { _, item -> Status(item) }
 }

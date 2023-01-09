@@ -1,6 +1,7 @@
 package noctiluca.components.atoms.image
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
@@ -35,5 +36,5 @@ private fun LoadedImage(
 ) = when {
     imageBitmap != null -> Image(imageBitmap, contentDescription, modifier)
     fallback != null -> Image(fallback, contentDescription, modifier)
-    else -> Unit
+    else -> Spacer(modifier)
 }

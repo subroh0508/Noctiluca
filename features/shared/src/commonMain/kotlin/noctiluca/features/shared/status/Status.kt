@@ -2,6 +2,7 @@ package noctiluca.features.shared.status
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -18,14 +19,23 @@ private val TooterIconSize = 40.dp
 fun Status(
     status: Status,
     modifier: Modifier = Modifier,
-) = Row(modifier) {
+) = Row(
+    modifier = Modifier.padding(
+        top = 12.dp,
+        bottom = 12.dp,
+        start = 16.dp,
+        end = 24.dp,
+    ).then(modifier),
+) {
     AsyncImage(
         status.tooter.avatar,
         //fallback = imageResources(getDrawables().icon_mastodon),
         modifier = Modifier.size(TooterIconSize),
     )
 
-    Column {
+    Column(
+        modifier = Modifier.padding(horizontal = 16.dp),
+    ) {
         Text(
             status.tooter.displayName,
             style = MaterialTheme.typography.titleMedium,

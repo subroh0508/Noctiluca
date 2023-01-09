@@ -8,6 +8,7 @@ import android.text.style.StrikethroughSpan
 import android.text.style.StyleSpan
 import android.text.style.URLSpan
 import android.text.style.UnderlineSpan
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -30,8 +31,13 @@ internal actual fun ExpectHtmlText(
 ) {
     val spanned = remember(text) { Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT) }
 
+    val urlSpanStyle = SpanStyle(
+        color = MaterialTheme.colorScheme.primary,
+        textDecoration = TextDecoration.Underline,
+    )
+
     Text(
-        buildAnnotatedString(spanned, style),
+        buildAnnotatedString(spanned, style, urlSpanStyle),
         modifier = modifier,
         style = style,
     )
@@ -40,44 +46,38 @@ internal actual fun ExpectHtmlText(
 private fun buildAnnotatedString(
     spanned: Spanned,
     textStyle: TextStyle,
-): AnnotatedString {
-    val urlSpanStyle = SpanStyle(
-        color = Color.Blue,
-        textDecoration = TextDecoration.Underline,
-    )
+    urlSpanStyle: SpanStyle,
+) = buildComposeAnnotatedString {
+    append(spanned.toString())
+    //addStyle(textStyle.toSpanStyle(), 0, spanned.length)
 
-    return buildComposeAnnotatedString {
-        append(spanned.toString())
-        //addStyle(textStyle.toSpanStyle(), 0, spanned.length)
+    with (spanned) {
+        forSpansEach<URLSpan> { start, end, urlSpan ->
+            addStyle(urlSpanStyle, start, end)
+            addStringAnnotation("url", urlSpan.url, start, end)
+        }
 
-        with (spanned) {
-            forSpansEach<URLSpan> { start, end, urlSpan ->
-                addStyle(urlSpanStyle, start, end)
-                addStringAnnotation("url", urlSpan.url, start, end)
+        forSpansEach<StyleSpan> { start, end, styleSpan ->
+            val style = when (styleSpan.style) {
+                Typeface.BOLD -> textStyle.copy(fontWeight = FontWeight.Bold)
+                Typeface.ITALIC -> textStyle.copy(fontStyle = FontStyle.Italic)
+                Typeface.BOLD_ITALIC -> textStyle.copy(fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic)
+                else -> textStyle
             }
 
-            forSpansEach<StyleSpan> { start, end, styleSpan ->
-                val style = when (styleSpan.style) {
-                    Typeface.BOLD -> textStyle.copy(fontWeight = FontWeight.Bold)
-                    Typeface.ITALIC -> textStyle.copy(fontStyle = FontStyle.Italic)
-                    Typeface.BOLD_ITALIC -> textStyle.copy(fontWeight = FontWeight.Bold, fontStyle = FontStyle.Italic)
-                    else -> textStyle
-                }
+            addStyle(style.toSpanStyle(), start, end)
+        }
 
-                addStyle(style.toSpanStyle(), start, end)
-            }
+        forSpansEach<ForegroundColorSpan> { start, end, colorSpan ->
+            addStyle(textStyle.copy(color = Color(colorSpan.foregroundColor)).toSpanStyle(), start, end)
+        }
 
-            forSpansEach<ForegroundColorSpan> { start, end, colorSpan ->
-                addStyle(textStyle.copy(color = Color(colorSpan.foregroundColor)).toSpanStyle(), start, end)
-            }
+        forSpansEach<UnderlineSpan> { start, end, _ ->
+            addStyle(textStyle.copy(textDecoration = TextDecoration.Underline).toSpanStyle(), start, end)
+        }
 
-            forSpansEach<UnderlineSpan> { start, end, _ ->
-                addStyle(textStyle.copy(textDecoration = TextDecoration.Underline).toSpanStyle(), start, end)
-            }
-
-            forSpansEach<StrikethroughSpan> { start, end, _ ->
-                addStyle(textStyle.copy(textDecoration = TextDecoration.LineThrough).toSpanStyle(), start, end)
-            }
+        forSpansEach<StrikethroughSpan> { start, end, _ ->
+            addStyle(textStyle.copy(textDecoration = TextDecoration.LineThrough).toSpanStyle(), start, end)
         }
     }
 }

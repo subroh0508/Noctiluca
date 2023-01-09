@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.material3.TopAppBarScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -16,7 +18,9 @@ import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 
 @Composable
-fun CurrentInstanceTopAppBar() {
+fun CurrentInstanceTopAppBar(
+    topAppBarScrollBehavior: TopAppBarScrollBehavior,
+) {
     val account by rememberCurrentAuthorizedAccountStatus()
 
     TopAppBar(
@@ -33,6 +37,7 @@ fun CurrentInstanceTopAppBar() {
                         .clip(RoundedCornerShape(8.dp)),
                 )
             }
-        }
+        },
+        scrollBehavior = topAppBarScrollBehavior,
     )
 }

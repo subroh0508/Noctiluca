@@ -28,41 +28,41 @@ internal class AuthenticationApiClient(
     }
 
     override suspend fun postApps(
-        hostname: String,
+        domain: String,
         clientName: String,
         redirectUri: String
     ): Pair<AppCredentialJson, String> {
         val request = PostApps.Request(clientName, redirectUri)
 
         return client.post(Api.V1.Apps()) {
-            host = hostname
+            host = domain
             setBody(request)
         }.body<AppCredentialJson>().let { credential ->
-            credential to buildAuthorizeUrl(hostname, credential, redirectUri, request.scopes)
+            credential to buildAuthorizeUrl(domain, credential, redirectUri, request.scopes)
         }
     }
 
     override suspend fun postOAuthToken(
-        hostname: String,
+        domain: String,
         clientId: String,
         clientSecret: String,
         redirectUri: String,
         code: String
     ): TokenJson = client.post(OAuth.Token()) {
-        host = hostname
+        host = domain
         setBody(PostOauthToken.Request(clientId, clientSecret, redirectUri, code))
     }.body()
 
     override suspend fun getVerifyAccountsCredentials(
-        hostname: String,
+        domain: String,
         accessToken: String,
     ): GetAccountsVerifyCredential.Response = client.get(Api.V1.Accounts.VerifyCredentials()) {
-        host = hostname
+        host = domain
         bearerAuth(accessToken)
     }.body()
 
     private fun buildAuthorizeUrl(
-        hostname: String,
+        domain: String,
         credential: AppCredentialJson,
         redirectUri: String,
         scopes: String,
@@ -72,7 +72,7 @@ internal class AuthenticationApiClient(
             OAuth.Authorize(),
             url.apply {
                 protocol = URLProtocol.HTTPS
-                host = hostname
+                host = domain
                 parameters.apply {
                     append(RESPONSE_TYPE, REQUIRED_RESPONSE_TYPE)
                     append(CLIENT_ID, credential.clientId)

@@ -24,7 +24,7 @@ internal data class CurrentAuthorizedAccount(
 ) {
     val current get() = currentLoadState.getValueOrNull<Account>()
     val all get() = allLoadState.getValueOrNull<List<Account>>() ?: listOf()
-    val hostname get() = cache?.hostname ?: current?.hostname
+    val domain get() = cache?.domain ?: current?.domain
 
     val loading get() = currentLoadState.loading || allLoadState.loading
 }

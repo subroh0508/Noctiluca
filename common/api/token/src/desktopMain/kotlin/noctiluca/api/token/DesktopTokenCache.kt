@@ -8,7 +8,7 @@ import kotlinx.serialization.json.Json
 import noctiluca.api.token.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
-import noctiluca.model.Hostname
+import noctiluca.model.Domain
 import noctiluca.repository.TokenCache
 import java.util.prefs.Preferences
 
@@ -22,7 +22,7 @@ actual class LocalTokenCache internal constructor(
 
     override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
 
-    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.hostname?.value
+    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
 
     actual suspend fun getAll(): List<AuthorizedUser> = withContext(Dispatchers.IO) {
         getTokensJson().map(::Token)
@@ -50,10 +50,10 @@ actual class LocalTokenCache internal constructor(
 
     actual suspend fun add(
         id: AccountId,
-        hostname: Hostname,
+        domain: Domain,
         accessToken: String,
     ) = withContext(Dispatchers.IO) {
-        val nextTokens = getTokensJson() + listOf(Token.Json(id, hostname, accessToken))
+        val nextTokens = getTokensJson() + listOf(Token.Json(id, domain, accessToken))
         saveTokensJson(nextTokens)
 
         nextTokens as List<AuthorizedUser>

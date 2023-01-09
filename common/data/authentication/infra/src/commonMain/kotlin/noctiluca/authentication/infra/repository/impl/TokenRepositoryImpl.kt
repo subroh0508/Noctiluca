@@ -8,7 +8,7 @@ import noctiluca.authentication.infra.repository.local.AppCredentialCache
 import noctiluca.authentication.model.AppCredential
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
-import noctiluca.model.Hostname
+import noctiluca.model.Domain
 import noctiluca.model.Uri
 
 internal class TokenRepositoryImpl(
@@ -17,38 +17,38 @@ internal class TokenRepositoryImpl(
     private val tokenCache: LocalTokenCache,
 ) : TokenRepository {
     override suspend fun fetchAppCredential(
-        hostname: Hostname,
+        domain: Domain,
         client: String,
         redirectUri: Uri,
     ): AppCredential {
-        val (json, authorizeUrl) = api.postApps(hostname.value, client, redirectUri.value)
+        val (json, authorizeUrl) = api.postApps(domain.value, client, redirectUri.value)
 
-        return AppCredential(json.clientId, json.clientSecret, hostname, Uri(authorizeUrl))
+        return AppCredential(json.clientId, json.clientSecret, domain, Uri(authorizeUrl))
     }
 
     override suspend fun cacheAppCredential(appCredential: AppCredential) {
-        appCredentialCache.save(appCredential.hostname, AppCredentialJson(appCredential.clientId, appCredential.clientSecret))
+        appCredentialCache.save(appCredential.domain, AppCredentialJson(appCredential.clientId, appCredential.clientSecret))
     }
 
     override suspend fun fetchToken(
         code: String,
         redirectUri: Uri,
     ): AuthorizedUser? {
-        val (hostname, clientId, clientSecret) = appCredentialCache.getCurrent()?.let { (host, json) ->
+        val (domain, clientId, clientSecret) = appCredentialCache.getCurrent()?.let { (host, json) ->
             Triple(host, json.clientId, json.clientSecret)
         } ?: return null
 
         val accessToken = api.postOAuthToken(
-            hostname.value,
+            domain.value,
             clientId,
             clientSecret,
             redirectUri.value,
             code,
         ).accessToken
 
-        val id = AccountId(api.getVerifyAccountsCredentials(hostname.value, accessToken).id)
+        val id = AccountId(api.getVerifyAccountsCredentials(domain.value, accessToken).id)
 
-        tokenCache.add(id, hostname, accessToken)
+        tokenCache.add(id, domain, accessToken)
 
         return tokenCache.setCurrent(id)
     }

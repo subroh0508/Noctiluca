@@ -1,11 +1,11 @@
 package noctiluca.authentication.domain.usecase
 
-import noctiluca.model.Hostname
+import noctiluca.model.Domain
 import noctiluca.model.Uri
 
 interface RequestAppCredentialUseCase {
     suspend fun execute(
-        hostname: Hostname,
+        domain: Domain,
         clientName: String,
         redirectUri: Uri,
     ): Uri

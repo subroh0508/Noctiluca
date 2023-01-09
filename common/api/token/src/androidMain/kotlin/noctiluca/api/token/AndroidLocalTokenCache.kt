@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.first
 import noctiluca.api.token.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
-import noctiluca.model.Hostname
+import noctiluca.model.Domain
 import noctiluca.repository.TokenCache
 
 actual class LocalTokenCache internal constructor(
@@ -13,7 +13,7 @@ actual class LocalTokenCache internal constructor(
 ) : TokenCache {
     override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
 
-    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.hostname?.value
+    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
 
     actual suspend fun getAll(): List<AuthorizedUser> = dataStore.data.first().map(::Token)
 
@@ -37,10 +37,10 @@ actual class LocalTokenCache internal constructor(
 
     actual suspend fun add(
         id: AccountId,
-        hostname: Hostname,
+        domain: Domain,
         accessToken: String,
     ): List<AuthorizedUser> = dataStore.updateData {
-        it + Token.Json(id, hostname, accessToken)
+        it + Token.Json(id, domain, accessToken)
     }.map(::Token)
 
     actual suspend fun delete(id: AccountId): List<AuthorizedUser> = dataStore.updateData {

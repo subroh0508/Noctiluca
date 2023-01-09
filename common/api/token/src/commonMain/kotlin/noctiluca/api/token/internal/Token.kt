@@ -4,16 +4,16 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
-import noctiluca.model.Hostname
+import noctiluca.model.Domain
 
 internal data class Token(
     override val id: AccountId,
-    override val hostname: Hostname,
+    override val domain: Domain,
     val accessToken: String,
 ) : AuthorizedUser {
     internal constructor(json: Json) : this(
         AccountId(json.accountId),
-        Hostname(json.hostname),
+        Domain(json.domain),
         json.accessToken,
     )
 
@@ -21,19 +21,18 @@ internal data class Token(
     internal data class Json(
         @SerialName("account_id")
         val accountId: String,
-        @SerialName("hostname")
-        val hostname: String,
+        val domain: String,
         @SerialName("access_token")
         val accessToken: String,
         val current: Boolean,
     ) {
         constructor(
             id: AccountId,
-            hostname: Hostname,
+            domain: Domain,
             accessToken: String,
         ) : this(
             id.value,
-            hostname.value,
+            domain.value,
             accessToken,
             current = false,
         )

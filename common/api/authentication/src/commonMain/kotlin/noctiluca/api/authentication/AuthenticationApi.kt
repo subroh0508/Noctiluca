@@ -6,13 +6,13 @@ import noctiluca.api.authentication.params.GetAccountsVerifyCredential
 
 interface AuthenticationApi {
     suspend fun postApps(
-        hostname: String,
+        domain: String,
         clientName: String,
         redirectUri: String,
     ): Pair<AppCredentialJson, String>
 
     suspend fun postOAuthToken(
-        hostname: String,
+        domain: String,
         clientId: String,
         clientSecret: String,
         redirectUri: String,
@@ -20,7 +20,7 @@ interface AuthenticationApi {
     ): TokenJson
 
     suspend fun getVerifyAccountsCredentials(
-        hostname: String,
+        domain: String,
         accessToken: String,
     ): GetAccountsVerifyCredential.Response
 }

@@ -18,7 +18,7 @@ fun CurrentInstanceTopAppBar() {
     val account by rememberCurrentAuthorizedAccountStatus()
 
     TopAppBar(
-        account.hostname?.value ?: getString().timeline_page_title,
+        account.domain?.value ?: getString().timeline_page_title,
         navigationIcon = {
             IconButton(
                 onClick = {},

@@ -14,22 +14,22 @@ internal class AccountRepositoryImpl(
     override suspend fun fetchCurrentAccount(): Account {
         val current = tokenProvider.getCurrent() ?: throw AuthorizedTokenNotFoundException
 
-        return v1.getVerifyAccountsCredentials(current.hostname.value).toEntity(current.hostname)
+        return v1.getVerifyAccountsCredentials(current.domain.value).toEntity(current.domain)
     }
 
     override suspend fun fetchAllAuthorizedAccounts(): List<Account> {
         val accounts = tokenProvider.getAuthorizedUsers().takeIf(List<AuthorizedUser>::isNotEmpty) ?: throw AuthorizedTokenNotFoundException
 
         return accounts.map {
-            v1.getVerifyAccountsCredentials(it.hostname.value).toEntity(it.hostname)
+            v1.getVerifyAccountsCredentials(it.domain.value).toEntity(it.domain)
         }
     }
 
-    private fun AccountCredentialJson.toEntity(hostname: Hostname) = Account(
+    private fun AccountCredentialJson.toEntity(domain: Domain) = Account(
         AccountId(id),
         username,
         displayName,
-        hostname,
+        domain,
         Uri(avatar),
     )
 }

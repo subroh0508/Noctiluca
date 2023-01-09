@@ -6,11 +6,11 @@ import noctiluca.api.mastodon.json.status.StatusJson
 
 interface MastodonApiV1 {
     suspend fun getInstance(
-        hostname: String,
+        domain: String,
     ): V1InstanceJson
 
     suspend fun getVerifyAccountsCredentials(
-        hostname: String,
+        domain: String,
     ): AccountCredentialJson
 
     suspend fun getTimelinesPublic(

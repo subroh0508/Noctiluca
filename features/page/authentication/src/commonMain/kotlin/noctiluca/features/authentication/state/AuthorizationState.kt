@@ -17,7 +17,7 @@ import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.*
 import noctiluca.instance.model.Instance
 import noctiluca.model.AuthorizedUser
-import noctiluca.model.Hostname
+import noctiluca.model.Domain
 import noctiluca.model.Uri
 import org.koin.core.scope.Scope
 
@@ -54,10 +54,10 @@ internal class AuthorizedUserState(
 
     fun requestAuthorize() {
         val instance: Instance = instanceLoadState.getValueOrNull() ?: return
-        val hostname = Hostname(instance.domain)
+        val domain = Domain(instance.domain)
 
         val job = scope.launch(start = CoroutineStart.LAZY) {
-            runCatching { requestAppCredentialUseCase.execute(hostname, clientName, redirectUri) }
+            runCatching { requestAppCredentialUseCase.execute(domain, clientName, redirectUri) }
                 .onSuccess { navController.openBrowser(it) }
                 .onFailure { value = LoadState.Error(it) }
         }

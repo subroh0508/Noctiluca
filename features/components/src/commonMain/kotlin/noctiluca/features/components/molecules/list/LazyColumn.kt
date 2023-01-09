@@ -5,6 +5,7 @@ import androidx.compose.foundation.gestures.ScrollableDefaults
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ fun <T> LazyColumn(
         listContent(index, item)
 
         if (showDivider && index < items.lastIndex) {
-            Divider()
+            Divider(color = MaterialTheme.colorScheme.outline)
         }
     }
 }

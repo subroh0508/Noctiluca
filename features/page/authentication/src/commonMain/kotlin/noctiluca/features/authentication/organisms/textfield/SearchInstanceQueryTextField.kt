@@ -6,10 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.IconButtonDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -78,10 +75,9 @@ private fun ClearQueryIcon(
         onClick,
         modifier = modifier,
     ) {
-        Image(
+        Icon(
             Icons.Default.Clear,
             contentDescription = "clear",
-            colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface),
         )
     }
 }

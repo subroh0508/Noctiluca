@@ -3,6 +3,7 @@ package noctiluca.features.timeline.organisms.navigationbar
 import androidx.compose.foundation.Image
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
@@ -18,7 +19,7 @@ internal fun TimelineNavigationBar() {
     NavigationBar {
         timeline.value.forEachIndexed { index, (value, _, foreground) ->
             NavigationBarItem(
-                icon = { Image(value.icon, contentDescription = value.label()) },
+                icon = { Icon(value.icon, contentDescription = value.label()) },
                 label = { Text(value.label()) },
                 selected = foreground,
                 onClick = {},

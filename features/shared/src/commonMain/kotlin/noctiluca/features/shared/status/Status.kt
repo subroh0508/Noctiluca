@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -87,11 +88,10 @@ private fun StatusHeader(
 @Composable
 private fun MenuIcon(
     modifier: Modifier,
-) = Image(
+) = Icon(
     Icons.Default.MoreHoriz,
     contentDescription = "menu",
     modifier,
-    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.outline),
 )
 
 @Composable
@@ -106,10 +106,10 @@ private fun VisibilityIcon(
         Status.Visibility.DIRECT -> Icons.Default.AlternateEmail
     }
 
-    Image(
+    Icon(
         icon,
         contentDescription = visibility.name,
         modifier,
-        colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.outline),
+        tint = MaterialTheme.colorScheme.outline,
     )
 }

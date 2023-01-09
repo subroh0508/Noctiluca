@@ -37,7 +37,13 @@ class ImageLoader internal constructor(
 
     private fun loadImageFromResources(
         path: String,
-    ) = javaClass.getResourceAsStream(path).readBytes().toImageBitmap()
+    ): ImageBitmap {
+        val bitmap = javaClass.getResourceAsStream(path)
+            ?.readBytes()
+            ?.toImageBitmap()
+
+        return bitmap ?: throw FileNotFoundException()
+    }
 
     private suspend fun loadImageFromRemote(
         path: String,

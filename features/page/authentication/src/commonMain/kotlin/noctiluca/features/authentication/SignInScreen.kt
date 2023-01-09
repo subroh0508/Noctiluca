@@ -8,10 +8,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
-import noctiluca.components.FeatureComposable
-import noctiluca.components.atoms.appbar.TopAppBar
-import noctiluca.components.atoms.snackbar.LocalSnackbarHostState
-import noctiluca.components.di.getKoinRootScope
+import noctiluca.features.components.FeatureComposable
+import noctiluca.features.components.atoms.appbar.TopAppBar
+import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
+import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.LocalNavController
 import noctiluca.features.authentication.model.NavController

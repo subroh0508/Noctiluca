@@ -3,7 +3,7 @@ package noctiluca.features.timeline.organisms.list
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import noctiluca.components.molecules.list.LazyColumn
+import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.state.rememberTimelineStatus
 

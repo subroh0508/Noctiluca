@@ -3,11 +3,10 @@ package noctiluca.features.timeline.state
 import androidx.compose.runtime.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Deferred
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import noctiluca.components.state.AuthorizedComposeState
-import noctiluca.components.state.rememberAuthorizedComposeState
-import noctiluca.components.state.runCatchingWithAuth
+import noctiluca.features.components.state.AuthorizedComposeState
+import noctiluca.features.components.state.rememberAuthorizedComposeState
+import noctiluca.features.components.state.runCatchingWithAuth
 import noctiluca.features.timeline.LocalScope
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.UpdateTimelineUseCase

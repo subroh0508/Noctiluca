@@ -1,6 +1,5 @@
 package noctiluca.status.infra
 
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -16,7 +15,7 @@ fun StatusJson.toEntity(newAccountId: AccountId?) = Status(
     (reblog?.id ?: id).let(::StatusId),
     reblog?.content ?: content,
     spoilerText,
-    (reblog?.createdAt ?: createdAt).toInstant().toLocalDateTime(TimeZone.of("JST")),
+    (reblog?.createdAt ?: createdAt).toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     Status.Visibility.valueOf(visibility.uppercase()),
     reblog?.repliesCount ?: repliesCount,
     reblog?.favouritesCount ?: favouritesCount,
@@ -32,7 +31,7 @@ fun StatusJson.toEntity(newAccountId: AccountId?) = Status(
 
 private fun AccountJson.toTooter() = Tooter(
     AccountId(id),
-    username,
+    acct,
     displayName,
     Uri(url),
     Uri(avatar),

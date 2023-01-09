@@ -3,7 +3,7 @@ package app.noctiluca.navigation
 import android.net.Uri
 import androidx.navigation.*
 import androidx.navigation.compose.composable
-import noctiluca.components.utils.Browser
+import noctiluca.features.components.utils.Browser
 import noctiluca.features.authentication.SignInScreen
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult

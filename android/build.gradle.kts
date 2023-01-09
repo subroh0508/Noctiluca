@@ -35,6 +35,8 @@ dependencies {
     implementation(libs.koin.android)
 
     testImplementation(libs.junit)
+
+    coreLibraryDesugaring(libs.android.desugarjdk)
 }
 
 android {
@@ -47,6 +49,7 @@ android {
         versionName = "1.0-SNAPSHOT"
     }
     compileOptions {
+        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }

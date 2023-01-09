@@ -7,10 +7,10 @@ import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
 import noctiluca.authentication.domain.usecase.ShowMastodonInstanceUseCase
-import noctiluca.components.model.LoadState
-import noctiluca.components.state.LoadStateComposeState
-import noctiluca.components.state.loadLazy
-import noctiluca.components.state.produceLoadState
+import noctiluca.features.components.model.LoadState
+import noctiluca.features.components.state.LoadStateComposeState
+import noctiluca.features.components.state.loadLazy
+import noctiluca.features.components.state.produceLoadState
 import noctiluca.features.authentication.LocalAuthorizeResult
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.getString

@@ -8,8 +8,8 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
-import noctiluca.components.AuthorizedFeatureComposable
-import noctiluca.components.di.getKoinRootScope
+import noctiluca.features.components.AuthorizedFeatureComposable
+import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.navigationbar.TimelineNavigationBar
 import noctiluca.features.timeline.organisms.topappbar.CurrentInstanceTopAppBar

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import app.noctiluca.navigation.*
-import noctiluca.components.utils.Browser
+import noctiluca.features.components.utils.Browser
 
 @Composable
 fun Routing(

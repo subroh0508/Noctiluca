@@ -12,7 +12,7 @@ import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.token.di.TokenApiModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
-import noctiluca.components.di.ImageLoaderModule
+import noctiluca.features.components.di.ImageLoaderModule
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
 import noctiluca.timeline.infra.di.TimelineRepositoriesModule
 import okhttp3.logging.HttpLoggingInterceptor

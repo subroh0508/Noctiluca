@@ -11,11 +11,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import noctiluca.components.atoms.image.AsyncImage
-import noctiluca.components.atoms.image.imageResources
-import noctiluca.components.atoms.list.LeadingAvatarContainerSize
-import noctiluca.components.atoms.list.ThreeLineListItem
-import noctiluca.components.molecules.HeadlineWithProgress
+import noctiluca.features.components.atoms.image.AsyncImage
+import noctiluca.features.components.atoms.image.imageResources
+import noctiluca.features.components.atoms.list.LeadingAvatarContainerSize
+import noctiluca.features.components.atoms.list.ThreeLineListItem
+import noctiluca.features.components.molecules.HeadlineWithProgress
 import noctiluca.features.authentication.getDrawables
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.QueryText

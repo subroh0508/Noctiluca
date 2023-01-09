@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import app.noctiluca.navigation.redirectToSignIn
-import noctiluca.components.utils.Browser
+import noctiluca.features.components.utils.Browser
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {

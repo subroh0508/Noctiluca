@@ -16,10 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import noctiluca.components.atoms.list.OneLineListItem
-import noctiluca.components.atoms.textfield.DebouncedTextForm
-import noctiluca.components.atoms.textfield.SingleLineTextField
-import noctiluca.components.model.LoadState
+import noctiluca.features.components.atoms.list.OneLineListItem
+import noctiluca.features.components.atoms.textfield.DebouncedTextForm
+import noctiluca.features.components.atoms.textfield.SingleLineTextField
+import noctiluca.features.components.model.LoadState
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.QueryText
 import noctiluca.features.authentication.state.rememberMastodonInstanceSuggests

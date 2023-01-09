@@ -1,7 +1,7 @@
 package noctiluca.features.authentication.model
 
 import androidx.compose.runtime.compositionLocalOf
-import noctiluca.components.utils.Browser
+import noctiluca.features.components.utils.Browser
 import noctiluca.model.Uri
 
 internal val LocalNavController = compositionLocalOf { NavController() }

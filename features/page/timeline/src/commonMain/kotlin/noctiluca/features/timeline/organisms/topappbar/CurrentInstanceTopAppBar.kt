@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import noctiluca.components.atoms.appbar.NavigateIconSize
-import noctiluca.components.atoms.appbar.TopAppBar
-import noctiluca.components.atoms.image.AsyncImage
+import noctiluca.features.components.atoms.appbar.NavigateIconSize
+import noctiluca.features.components.atoms.appbar.TopAppBar
+import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 

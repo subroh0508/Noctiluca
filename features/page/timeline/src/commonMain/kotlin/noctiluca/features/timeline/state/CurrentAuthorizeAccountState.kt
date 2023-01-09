@@ -7,9 +7,9 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import noctiluca.account.model.Account
-import noctiluca.components.model.LoadState
-import noctiluca.components.state.ProduceAuthorizedStateScope
-import noctiluca.components.state.produceAuthorizedState
+import noctiluca.features.components.model.LoadState
+import noctiluca.features.components.state.ProduceAuthorizedStateScope
+import noctiluca.features.components.state.produceAuthorizedState
 import noctiluca.features.timeline.LocalScope
 import noctiluca.model.AuthorizedUser
 import noctiluca.repository.TokenProvider

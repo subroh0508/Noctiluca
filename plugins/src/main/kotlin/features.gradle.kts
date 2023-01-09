@@ -1,4 +1,6 @@
 import extension.*
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import tasks.ResourceGeneratorTask
 
 plugins {
     id("multiplatform-library")

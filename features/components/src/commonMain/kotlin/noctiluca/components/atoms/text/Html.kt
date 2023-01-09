@@ -33,6 +33,12 @@ private fun removeInvisibleTags(
     val matchResults = REGEX_INVISIBLE_CLASS.findAll(html).toList()
 
     return matchResults.foldIndexed(html) { index, acc, matchResult ->
-        acc.replace(matchResult.value, if (index < matchResults.lastIndex) "" else "...")
+        val ellipse =
+            if (matchResults.size <= 1 || index < matchResults.lastIndex)
+                ""
+            else
+                "..."
+
+        acc.replace(matchResult.value, ellipse)
     }
 }

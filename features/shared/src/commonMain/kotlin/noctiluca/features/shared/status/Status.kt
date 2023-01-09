@@ -1,17 +1,16 @@
 package noctiluca.features.shared.status
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDateTime
 import noctiluca.features.components.atoms.image.AsyncImage
@@ -23,39 +22,26 @@ import noctiluca.features.shared.account.TooterName
 import noctiluca.status.model.Status
 import noctiluca.status.model.Tooter
 
-private val TooterIconSize = 40.dp
-
 @Composable
 fun Status(
     status: Status,
     modifier: Modifier = Modifier,
-) = Row(
+) = Column(
     modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
         .then(modifier),
 ) {
-    AsyncImage(
-        status.tooter.avatar,
-        //fallback = imageResources(getDrawables().icon_mastodon),
-        modifier = Modifier.size(TooterIconSize)
-            .clip(RoundedCornerShape(8.dp)),
+    StatusHeader(
+        status.tooter,
+        status.visibility,
+        status.createdAt,
     )
 
-    Spacer(Modifier.width(16.dp))
+    Spacer(Modifier.height(8.dp))
 
-    Column {
-        StatusHeader(
-            status.tooter,
-            status.visibility,
-            status.createdAt,
-        )
-
-        Spacer(Modifier.height(4.dp))
-
-        HtmlText(
-            status.content,
-            style = MaterialTheme.typography.bodyLarge,
-        )
-    }
+    HtmlText(
+        status.content,
+        style = MaterialTheme.typography.bodyLarge,
+    )
 }
 
 @Composable
@@ -63,10 +49,27 @@ private fun StatusHeader(
     tooter: Tooter,
     visibility: Status.Visibility,
     createdAt: LocalDateTime,
-) = Row(Modifier.fillMaxWidth()) {
+) = Row {
+    var tooterIconSize by remember { mutableStateOf(0) }
+
+    AsyncImage(
+        tooter.avatar,
+        //fallback = imageResources(getDrawables().icon_mastodon),
+        modifier = Modifier.size(tooterIconSize.toDp())
+            .clip(RoundedCornerShape(8.dp)),
+    )
+
+    Spacer(Modifier.width(16.dp))
+
     TooterName(
         tooter,
-        modifier = Modifier.weight(1F, true),
+        modifier = Modifier.weight(1F, true)
+            .layout { measurable, constraints ->
+                val placeable = measurable.measure(constraints)
+                tooterIconSize = placeable.height
+
+                layout(placeable.width, placeable.height) { placeable.place(0, 0) }
+            },
         trailing = { baselineModifier ->
             VisibilityIcon(
                 visibility,

@@ -16,6 +16,7 @@ import androidx.compose.foundation.lazy.LazyColumn as ComposeLazyColumn
 @Composable
 fun <T> LazyColumn(
     items: List<T>,
+    key: (T) -> String,
     modifier: Modifier = Modifier,
     state: LazyListState = rememberLazyListState(),
     contentPadding: PaddingValues = PaddingValues(0.dp),
@@ -26,6 +27,7 @@ fun <T> LazyColumn(
     flingBehavior: FlingBehavior = ScrollableDefaults.flingBehavior(),
     userScrollEnabled: Boolean = true,
     showDivider: Boolean = false,
+    footerContent: (@Composable LazyItemScope.() -> Unit)? = null,
     listContent: @Composable LazyItemScope.(index: Int, item: T) -> Unit,
 ) = ComposeLazyColumn(
     modifier,
@@ -37,11 +39,18 @@ fun <T> LazyColumn(
     flingBehavior,
     userScrollEnabled,
 ) {
-    itemsIndexed(items) { index, item ->
+    itemsIndexed(items, key = { _, item -> key(item) }) { index, item ->
         listContent(index, item)
 
         if (showDivider && index < items.lastIndex) {
             Divider(color = MaterialTheme.colorScheme.outline)
+        }
+    }
+
+    footerContent?.let { footer ->
+        item {
+            Divider(color = MaterialTheme.colorScheme.outline)
+            footer()
         }
     }
 }

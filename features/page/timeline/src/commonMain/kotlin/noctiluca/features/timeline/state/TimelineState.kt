@@ -48,17 +48,13 @@ internal class TimelineListState(
 
     fun loadAll(deferreds: List<Deferred<Timeline>>) {
         setDeferreds(deferreds)
-        value.forEachIndexed { i, _ -> load(i) }
+        value.forEachIndexed { i, _ -> execute(i) }
     }
 
-    fun load(index: Int) {
-        val deferred = deferreds[index] ?: return
+    fun load(index: Int, deferred: Deferred<Timeline>) {
+        setDeferred(index, deferred)
 
-        launch {
-            runCatchingWithAuth { deferred.await() }
-                .onSuccess { set(index) { copy(timeline = it, deferred = null) } }
-                .onFailure { it.printStackTrace() }
-        }
+        execute(index)
     }
 
     private fun setDeferreds(deferreds: List<Deferred<Timeline>>) {
@@ -69,11 +65,18 @@ internal class TimelineListState(
     }
 
     private fun setDeferred(index: Int, deferred: Deferred<Timeline>) {
-        if (deferreds[index] != null) {
-            return
-        }
-
+        deferreds[index]?.cancel()
         set(index) { copy(deferred = deferred) }
+    }
+
+    private fun execute(index: Int) {
+        val deferred = deferreds[index] ?: return
+
+        launch {
+            runCatchingWithAuth { deferred.await() }
+                .onSuccess { set(index) { copy(timeline = it, deferred = null) } }
+                .onFailure { it.printStackTrace() }
+        }
     }
 
     private operator fun set(index: Int, block: TimelineState.() -> TimelineState) {

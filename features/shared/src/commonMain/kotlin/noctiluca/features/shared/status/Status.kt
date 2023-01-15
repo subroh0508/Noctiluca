@@ -5,11 +5,14 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDateTime
@@ -22,12 +25,17 @@ import noctiluca.features.shared.account.TooterName
 import noctiluca.status.model.Status
 import noctiluca.status.model.Tooter
 
+enum class StatusAction {
+    REPLY, BOOST, FAVOURITE, SHARE, OTHERS
+}
+
 @Composable
 fun Status(
     status: Status,
+    onClickAction: (StatusAction) -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(
-    modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp)
+    modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 16.dp)
         .then(modifier),
 ) {
     StatusHeader(
@@ -42,6 +50,8 @@ fun Status(
         status.content,
         style = MaterialTheme.typography.bodyLarge,
     )
+
+    StatusActions(onClickAction)
 }
 
 @Composable
@@ -89,15 +99,6 @@ private fun StatusHeader(
 }
 
 @Composable
-private fun MenuIcon(
-    modifier: Modifier,
-) = Icon(
-    Icons.Default.MoreHoriz,
-    contentDescription = "menu",
-    modifier,
-)
-
-@Composable
 private fun VisibilityIcon(
     visibility: Status.Visibility,
     modifier: Modifier = Modifier,
@@ -114,5 +115,61 @@ private fun VisibilityIcon(
         contentDescription = visibility.name,
         modifier,
         tint = MaterialTheme.colorScheme.outline,
+    )
+}
+
+
+@Composable
+private fun StatusActions(
+    onClick: (StatusAction) -> Unit,
+) {
+    CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.outline) {
+        Row {
+            ActionIcon(
+                Icons.Default.Reply,
+                contentDescription = "reply",
+                onClick = { onClick(StatusAction.REPLY) },
+            )
+
+            ActionIcon(
+                Icons.Default.Repeat,
+                contentDescription = "boost",
+                onClick = { onClick(StatusAction.BOOST) },
+            )
+
+            ActionIcon(
+                Icons.Default.StarBorder,
+                contentDescription = "favourite",
+                onClick = { onClick(StatusAction.FAVOURITE) },
+            )
+
+            ActionIcon(
+                Icons.Default.Share,
+                contentDescription = "share",
+                onClick = { onClick(StatusAction.SHARE) },
+            )
+
+            ActionIcon(
+                Icons.Default.MoreHoriz,
+                contentDescription = "others",
+                onClick = { onClick(StatusAction.OTHERS) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun RowScope.ActionIcon(
+    imageVector: ImageVector,
+    contentDescription: String?,
+    onClick: () -> Unit,
+) = IconButton(
+    onClick,
+    modifier = Modifier.weight(1F),
+) {
+    Icon(
+        imageVector,
+        contentDescription,
+        modifier = Modifier.size(24.dp),
     )
 }

@@ -19,5 +19,10 @@ internal fun TimelineLane(
         modifier = modifier,
         state = rememberLazyListState(),
         showDivider = true,
-    ) { _, item -> Status(item) }
+    ) { _, item ->
+        Status(
+            item,
+            onClickAction = {},
+        )
+    }
 }

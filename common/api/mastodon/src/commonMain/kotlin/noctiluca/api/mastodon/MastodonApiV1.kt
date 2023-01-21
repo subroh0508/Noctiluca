@@ -22,4 +22,11 @@ interface MastodonApiV1 {
         minId: String? = null,
         limit: Int = 20,
     ): List<StatusJson>
+
+    suspend fun getTimelinesHome(
+        maxId: String? = null,
+        sinceId: String? = null,
+        minId: String? = null,
+        limit: Int = 20,
+    ): List<StatusJson>
 }

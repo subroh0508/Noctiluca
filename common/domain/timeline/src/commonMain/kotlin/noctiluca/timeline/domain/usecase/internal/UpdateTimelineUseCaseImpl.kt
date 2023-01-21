@@ -27,7 +27,9 @@ internal class UpdateTimelineUseCaseImpl(
                 timeline.onlyMedia,
                 maxId = maxId,
             )
-            is Timeline.Home -> listOf()
+            is Timeline.Home -> repository.fetchHome(
+                maxId = maxId,
+            )
             is Timeline.HashTag -> listOf()
             is Timeline.List -> listOf()
         }

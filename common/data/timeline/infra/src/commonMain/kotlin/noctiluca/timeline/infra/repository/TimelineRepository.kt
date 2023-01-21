@@ -14,4 +14,8 @@ interface TimelineRepository {
         onlyMedia: Boolean = false,
         maxId: StatusId? = null,
     ): List<Status>
+
+    suspend fun fetchHome(
+        maxId: StatusId? = null,
+    ): List<Status>
 }

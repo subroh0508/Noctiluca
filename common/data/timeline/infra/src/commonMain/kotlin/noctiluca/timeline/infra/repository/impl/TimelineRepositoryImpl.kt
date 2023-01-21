@@ -4,6 +4,7 @@ import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.model.StatusId
 import noctiluca.repository.TokenProvider
 import noctiluca.status.infra.toEntity
+import noctiluca.status.model.Status
 import noctiluca.timeline.infra.repository.TimelineRepository
 
 internal class TimelineRepositoryImpl(
@@ -26,6 +27,12 @@ internal class TimelineRepositoryImpl(
     ) = api.getTimelinesPublic(
         local = true,
         onlyMedia = onlyMedia,
+        maxId = maxId?.value,
+    ).map { it.toEntity(tokenProvider.getCurrent()?.id) }
+
+    override suspend fun fetchHome(
+        maxId: StatusId?,
+    ) = api.getTimelinesHome(
         maxId = maxId?.value,
     ).map { it.toEntity(tokenProvider.getCurrent()?.id) }
 }

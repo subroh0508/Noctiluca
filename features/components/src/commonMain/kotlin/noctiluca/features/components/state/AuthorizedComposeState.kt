@@ -5,29 +5,29 @@ import androidx.compose.runtime.remember
 import noctiluca.features.components.LocalCoroutineExceptionHandler
 import noctiluca.features.components.UnauthorizedExceptionHandler
 
-interface AuthorizedComposeState<T> {
+interface AuthorizedComposeState {
     val exceptionHandler: UnauthorizedExceptionHandler
 
     companion object {
-        operator fun <T> invoke(
+        operator fun invoke(
             handler: UnauthorizedExceptionHandler = UnauthorizedExceptionHandler(),
-        ): AuthorizedComposeState<T> = Impl(handler)
+        ): AuthorizedComposeState = Impl(handler)
     }
 
-    private class Impl<T>(
+    private class Impl(
         override val exceptionHandler: UnauthorizedExceptionHandler,
-    ) : AuthorizedComposeState<T>
+    ) : AuthorizedComposeState
 }
 
 @Composable
-fun <T> rememberAuthorizedComposeState(): AuthorizedComposeState<T> {
+fun rememberAuthorizedComposeState(): AuthorizedComposeState {
     val handler = LocalCoroutineExceptionHandler.current
 
     return remember { AuthorizedComposeState(handler) }
 }
 
-inline fun <T, R> AuthorizedComposeState<T>.runCatchingWithAuth(
-    block: AuthorizedComposeState<T>.() -> R,
+inline fun <R> AuthorizedComposeState.runCatchingWithAuth(
+    block: AuthorizedComposeState.() -> R,
 ) = runCatching(block).apply {
     exceptionOrNull()?.let(exceptionHandler::handleException)
 }

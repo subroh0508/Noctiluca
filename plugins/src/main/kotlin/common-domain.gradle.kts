@@ -4,7 +4,6 @@ import extension.libs
 
 plugins {
     id("multiplatform-library")
-    id("org.jetbrains.compose")
     id("common-model")
 }
 
@@ -13,8 +12,6 @@ kotlin {
         named("commonMain") {
             dependencies {
                 implementation(libs.koinCore)
-
-                implementation(compose.runtime)
             }
         }
         named("commonTest") {

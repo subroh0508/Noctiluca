@@ -1,5 +1,6 @@
 package noctiluca.features.timeline
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -50,11 +51,22 @@ private fun TimelineScaffold() {
             TimelineNavigationBar()
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) {
+    ) { TimelineLanes(it) }
+}
+
+@Composable
+private fun TimelineLanes(
+    paddingValues: PaddingValues,
+) {
+    val timelineListState = LocalTimelineListState.current
+
+    timelineListState.value.forEach {
         TimelineLane(
+            it,
+            onLoad = { timeline -> timelineListState.load(this, timeline) },
             modifier = Modifier.padding(
-                top = it.calculateTopPadding(),
-                bottom = it.calculateBottomPadding(),
+                top = paddingValues.calculateTopPadding(),
+                bottom = paddingValues.calculateBottomPadding(),
             ),
         )
     }

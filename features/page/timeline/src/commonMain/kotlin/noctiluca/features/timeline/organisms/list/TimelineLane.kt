@@ -1,35 +1,39 @@
 package noctiluca.features.timeline.organisms.list
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Status
-import noctiluca.features.timeline.LocalTimelineListState
-import noctiluca.features.timeline.state.TimelineListState
 import noctiluca.features.timeline.state.TimelineState
+import noctiluca.timeline.domain.model.Timeline
 
 @Composable
 internal fun TimelineLane(
-    timelineListState: TimelineListState = LocalTimelineListState.current,
+    timelineState: TimelineState,
+    onLoad: suspend CoroutineScope.(Timeline) -> Unit,
+    lazyListState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
 ) {
-    val foreground = timelineListState.findForeground() ?: return
+    if (!timelineState.foreground) {
+        return
+    }
 
     LazyColumn(
-        foreground.timeline.statuses,
+        timelineState.timeline.statuses,
         key = { it.id.value },
         modifier = modifier,
-        state = rememberLazyListState(),
+        state = lazyListState,
         showDivider = true,
-        footerContent = { TimelineFooter(foreground) },
+        footerContent = { TimelineFooter(timelineState, onLoad) },
     ) { _, item ->
         Status(
             item,
@@ -41,10 +45,9 @@ internal fun TimelineLane(
 @Composable
 private fun TimelineFooter(
     foreground: TimelineState,
+    onLoad: suspend CoroutineScope.(Timeline) -> Unit,
     height: Dp = 64.dp,
 ) {
-    val timeline = LocalTimelineListState.current
-
     if (foreground.jobs.isEmpty()) {
         Spacer(Modifier.height(height))
         return
@@ -54,8 +57,7 @@ private fun TimelineFooter(
         if (foreground.timeline.statuses.isEmpty()) {
             return@LaunchedEffect
         }
-
-        timeline.load(this, foreground.timeline)
+        onLoad(foreground.timeline)
     }
 
     Box(

@@ -1,6 +1,5 @@
 package noctiluca.features.timeline.organisms.navigationbar
 
-import androidx.compose.foundation.Image
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.Icon
@@ -14,15 +13,15 @@ import noctiluca.timeline.domain.model.Timeline
 
 @Composable
 internal fun TimelineNavigationBar() {
-    val timeline = LocalTimelineListState.current
+    val timelineListState = LocalTimelineListState.current
 
     NavigationBar {
-        timeline.value.forEachIndexed { index, (value, _, foreground) ->
+        timelineListState.value.forEachIndexed { index, (value, _, foreground) ->
             NavigationBarItem(
                 icon = { Icon(value.icon, contentDescription = value.label()) },
                 label = { Text(value.label()) },
                 selected = foreground,
-                onClick = {},
+                onClick = { timelineListState.setForeground(index) },
             )
         }
     }

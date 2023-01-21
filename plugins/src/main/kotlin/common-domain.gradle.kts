@@ -1,11 +1,10 @@
 import extension.koinAndroid
 import extension.koinCore
 import extension.libs
-import gradle.kotlin.dsl.accessors._533be12ecf36a3a2c2d759fae22357cd.kotlin
-import gradle.kotlin.dsl.accessors._533be12ecf36a3a2c2d759fae22357cd.sourceSets
 
 plugins {
     id("multiplatform-library")
+    id("org.jetbrains.compose")
     id("common-model")
 }
 
@@ -14,6 +13,8 @@ kotlin {
         named("commonMain") {
             dependencies {
                 implementation(libs.koinCore)
+
+                implementation(compose.runtime)
             }
         }
         named("commonTest") {

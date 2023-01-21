@@ -1,4 +1,3 @@
-import extension.*
 import org.gradle.kotlin.dsl.kotlin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 import tasks.ResourceGeneratorTask

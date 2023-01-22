@@ -6,6 +6,7 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.plugins.resources.Resources
+import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.serialization.kotlinx.json.*
@@ -27,12 +28,14 @@ fun buildHttpClient(
         json(json)
     }
 
+    install(WebSockets)
     install(Resources)
 }
 
 @Suppress("FunctionName")
 fun Module.MastodonApiModule(
     client: HttpClient,
+    json: Json,
 ) {
-    single<MastodonApiV1> { MastodonApiV1Client(get(), client) }
+    single<MastodonApiV1> { MastodonApiV1Client(get(), client, json) }
 }

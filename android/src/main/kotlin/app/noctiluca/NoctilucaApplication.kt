@@ -52,7 +52,7 @@ class NoctilucaApplication : Application() {
     private fun buildApiModules() = module {
         AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
         InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
-        MastodonApiModule(buildHttpClientForMastodon(json, httpClientEngine))
+        MastodonApiModule(buildHttpClientForMastodon(json, httpClientEngine), json)
         TokenApiModule()
     }
 

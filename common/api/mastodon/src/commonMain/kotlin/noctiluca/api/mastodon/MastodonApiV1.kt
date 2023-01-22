@@ -1,8 +1,10 @@
 package noctiluca.api.mastodon
 
+import kotlinx.coroutines.flow.Flow
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
+import noctiluca.api.mastodon.json.streaming.StreamEventJson
 
 interface MastodonApiV1 {
     suspend fun getInstance(
@@ -29,4 +31,11 @@ interface MastodonApiV1 {
         minId: String? = null,
         limit: Int = 20,
     ): List<StatusJson>
+
+    suspend fun streaming(
+        stream: String,
+        type: String,
+        listId: String? = null,
+        tag: String? = null,
+    ): Flow<StreamEventJson>
 }

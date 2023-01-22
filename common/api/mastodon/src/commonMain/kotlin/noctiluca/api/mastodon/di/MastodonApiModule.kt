@@ -12,7 +12,9 @@ import io.ktor.resources.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import noctiluca.api.mastodon.MastodonApiV1
+import noctiluca.api.mastodon.MastodonStream
 import noctiluca.api.mastodon.internal.MastodonApiV1Client
+import noctiluca.api.mastodon.internal.MastodonStreamClient
 import org.koin.core.module.Module
 
 fun buildHttpClient(
@@ -28,14 +30,25 @@ fun buildHttpClient(
         json(json)
     }
 
-    install(WebSockets)
     install(Resources)
+}
+
+fun buildWebSocketClient(
+    engine: HttpClientEngine,
+) = HttpClient(engine) {
+    defaultRequest {
+        url { protocol = URLProtocol.WSS }
+    }
+
+    install(WebSockets)
 }
 
 @Suppress("FunctionName")
 fun Module.MastodonApiModule(
     client: HttpClient,
+    webSocket: HttpClient,
     json: Json,
 ) {
-    single<MastodonApiV1> { MastodonApiV1Client(get(), client, json) }
+    single<MastodonApiV1> { MastodonApiV1Client(get(), client) }
+    single<MastodonStream> { MastodonStreamClient(get(), webSocket, json) }
 }

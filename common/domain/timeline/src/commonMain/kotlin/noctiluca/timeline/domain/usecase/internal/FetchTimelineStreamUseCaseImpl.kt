@@ -16,7 +16,7 @@ internal class FetchTimelineStreamUseCaseImpl(
         is Timeline.Local -> repository.buildLocalStream(
             onlyMedia = timeline.onlyMedia,
         )
-        is Timeline.Home -> flow {  }
+        is Timeline.Home -> repository.buildHomeStream()
         is Timeline.HashTag -> flow {  }
         is Timeline.List -> flow {  }
     }

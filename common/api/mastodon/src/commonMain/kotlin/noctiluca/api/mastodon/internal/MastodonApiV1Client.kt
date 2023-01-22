@@ -2,30 +2,17 @@ package noctiluca.api.mastodon.internal
 
 import io.ktor.client.*
 import io.ktor.client.call.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.resources.*
-import io.ktor.client.plugins.resources.Resources
-import io.ktor.client.plugins.websocket.*
 import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.resources.*
-import io.ktor.websocket.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.runBlocking
-import kotlinx.serialization.json.Json
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
-import noctiluca.api.mastodon.json.streaming.StreamEventJson
 import noctiluca.repository.TokenCache
 
 internal class MastodonApiV1Client(
     private val token: TokenCache,
     private val client: HttpClient,
-    override val json: Json,
 ) : MastodonApiV1 {
     override suspend fun getInstance(
         domain: String,
@@ -76,31 +63,6 @@ internal class MastodonApiV1Client(
         parameter("limit", limit.toString())
     }.body()
 
-    override suspend fun streaming(
-        stream: String,
-        type: String,
-        listId: String?,
-        tag: String?,
-    ): Flow<StreamEventJson> = flow {
-        client.websocket(
-            Api.V1.Streaming(),
-            httpRequestBuilder = {
-                parameter("type", type)
-                parameter("stream", stream)
-                parameter("list", listId)
-                parameter("tag", tag)
-            },
-        ) {
-            val frame = incoming.receive()
-            if (frame is Frame.Text) {
-                val text = frame.readText()
-
-                println(text)
-                emit(json.decodeFromString(StreamEventJson.serializer(), text))
-            }
-        }
-    }
-
     private suspend inline fun <reified T: Any> HttpClient.get(
         resource: T,
         domain: String? = null,
@@ -120,33 +82,6 @@ internal class MastodonApiV1Client(
         setAccessTokenAndHost(domain, skipAuthorization)
         setBody(body)
     }
-
-    private suspend inline fun <reified T: Any> HttpClient.websocket(
-        resource: T,
-        domain: String? = null,
-        skipAuthorization: Boolean = false,
-        crossinline httpRequestBuilder: HttpRequestBuilder.() -> Unit = {},
-        noinline block: suspend DefaultClientWebSocketSession.() -> Unit,
-    ) = webSocket(
-        {
-            method = HttpMethod.Get
-            val (host, token) = runBlocking {
-                getCurrentAccessToken() to (domain ?: getCurrentDomain())
-            }
-
-            if (host != null) {
-                this.host = host
-            }
-
-            href(client.plugin(Resources).resourcesFormat, resource)
-
-            if (token != null && !skipAuthorization) {
-                parameter("access_token", host)
-            }
-            httpRequestBuilder()
-        },
-        block,
-    )
 
     private suspend fun HttpRequestBuilder.setAccessTokenAndHost(
         domain: String? = null,

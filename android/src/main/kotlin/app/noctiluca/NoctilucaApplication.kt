@@ -10,6 +10,7 @@ import noctiluca.api.mastodon.di.buildHttpClient as buildHttpClientForMastodon
 import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule
+import noctiluca.api.mastodon.di.buildWebSocketClient
 import noctiluca.api.token.di.TokenApiModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.features.components.di.ImageLoaderModule
@@ -52,7 +53,11 @@ class NoctilucaApplication : Application() {
     private fun buildApiModules() = module {
         AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
         InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
-        MastodonApiModule(buildHttpClientForMastodon(json, httpClientEngine), json)
+        MastodonApiModule(
+            buildHttpClientForMastodon(json, httpClientEngine),
+            buildWebSocketClient(httpClientEngine),
+            json,
+        )
         TokenApiModule()
     }
 

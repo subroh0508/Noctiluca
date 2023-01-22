@@ -34,9 +34,5 @@ internal object Api {
             @Serializable
             class Home(val parent: Timelines = Timelines())
         }
-
-        @Resource("streaming")
-        @Serializable
-        class Streaming(val parent: V1 = V1())
     }
 }

@@ -29,4 +29,6 @@ interface TimelineRepository {
     suspend fun buildLocalStream(
         onlyMedia: Boolean = false,
     ): Flow<StreamEvent>
+
+    suspend fun buildHomeStream(): Flow<StreamEvent>
 }

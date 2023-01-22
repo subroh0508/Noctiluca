@@ -1,9 +1,9 @@
 package noctiluca.timeline.infra.repository.impl
 
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import noctiluca.api.mastodon.MastodonApiV1
+import noctiluca.api.mastodon.MastodonStream
 import noctiluca.api.mastodon.json.status.StatusJson
 import noctiluca.api.mastodon.json.streaming.Event
 import noctiluca.api.mastodon.json.streaming.Stream
@@ -12,12 +12,12 @@ import noctiluca.api.mastodon.json.streaming.StreamingType
 import noctiluca.model.StatusId
 import noctiluca.repository.TokenProvider
 import noctiluca.status.infra.toEntity
-import noctiluca.status.model.Status
 import noctiluca.timeline.infra.repository.TimelineRepository
 import noctiluca.timeline.model.StreamEvent
 
 internal class TimelineRepositoryImpl(
     private val api: MastodonApiV1,
+    private val webSocket: MastodonStream,
     private val tokenProvider: TokenProvider,
 ) : TimelineRepository {
     override suspend fun fetchGlobal(
@@ -56,7 +56,7 @@ internal class TimelineRepositoryImpl(
             else -> Stream.PUBLIC
         }
 
-        return api.streaming(
+        return webSocket.streaming(
             stream.value,
             StreamingType.SUBSCRIBE.name.lowercase(),
         ).mapNotNull { it.toValueObject() }
@@ -67,11 +67,16 @@ internal class TimelineRepositoryImpl(
     ): Flow<StreamEvent> {
         val stream = if (onlyMedia) Stream.PUBLIC_LOCAL_MEDIA else Stream.PUBLIC_LOCAL
 
-        return api.streaming(
+        return webSocket.streaming(
             stream.value,
             StreamingType.SUBSCRIBE.name.lowercase(),
         ).mapNotNull { it.toValueObject() }
     }
+
+    override suspend fun buildHomeStream() = webSocket.streaming(
+        Stream.USER.value,
+        StreamingType.SUBSCRIBE.name.lowercase(),
+    ).mapNotNull { it.toValueObject() }
 
     private suspend fun StreamEventJson.toValueObject() = when (Event.findEvent(event)) {
         Event.UPDATE -> payload?.let {
@@ -86,5 +91,5 @@ internal class TimelineRepositoryImpl(
         else -> null
     }
 
-    private val json get() = api.json
+    private val json get() = webSocket.json
 }

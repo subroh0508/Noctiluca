@@ -6,7 +6,7 @@ import noctiluca.timeline.domain.usecase.UpdateTimelineUseCase
 import noctiluca.timeline.infra.repository.TimelineRepository
 
 internal class UpdateTimelineUseCaseImpl(
-    private val repository: TimelineRepository
+    private val repository: TimelineRepository,
 ) : UpdateTimelineUseCase {
     override suspend fun execute(
         timeline: Timeline,

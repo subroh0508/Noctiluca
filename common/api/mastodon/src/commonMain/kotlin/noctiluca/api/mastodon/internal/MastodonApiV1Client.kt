@@ -25,7 +25,7 @@ import noctiluca.repository.TokenCache
 internal class MastodonApiV1Client(
     private val token: TokenCache,
     private val client: HttpClient,
-    private val json: Json,
+    override val json: Json,
 ) : MastodonApiV1 {
     override suspend fun getInstance(
         domain: String,

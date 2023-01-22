@@ -2,14 +2,11 @@ package noctiluca.features.timeline.state
 
 import androidx.compose.runtime.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.launchIn
 import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.components.state.AuthorizedComposeState
 import noctiluca.features.components.state.rememberAuthorizedComposeState
 import noctiluca.features.components.state.runCatchingWithAuth
 import noctiluca.features.timeline.LocalScope
-import noctiluca.status.model.Status
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.FetchTimelineStreamUseCase
 import noctiluca.timeline.domain.usecase.UpdateTimelineUseCase
@@ -20,6 +17,7 @@ internal data class TimelineState(
     val timeline: Timeline,
     val jobs: List<Job> = listOf(),
     val latestEvent: StreamEvent? = null,
+    val scrollToTop: Boolean = false,
     val foreground: Boolean = false,
 )
 
@@ -41,9 +39,18 @@ internal class TimelineListState(
 
     fun findForeground() = value.find { it.foreground }
     fun setForeground(index: Int) {
+        if (value[index].foreground) {
+            set(index) { copy(scrollToTop = true) }
+            return
+        }
+
         timelineList.value = value.mapIndexed { i, state ->
             state.copy(foreground = i == index)
         }
+    }
+
+    fun scrolledToTop(index: Int) {
+        set(index) { copy(scrollToTop = false) }
     }
 
     fun subscribeAll(scope: CoroutineScope) {

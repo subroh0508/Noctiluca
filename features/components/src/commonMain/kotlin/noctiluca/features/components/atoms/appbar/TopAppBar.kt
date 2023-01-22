@@ -21,3 +21,8 @@ fun TopAppBar(
     navigationIcon,
     scrollBehavior = scrollBehavior,
 )
+
+fun TopAppBarScrollBehavior.scrollToTop() {
+    state.offset = 0F
+    state.contentOffset = 0F
+}

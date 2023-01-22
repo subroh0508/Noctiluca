@@ -24,6 +24,7 @@ import noctiluca.timeline.domain.model.Timeline
 internal fun TimelineLane(
     timelineState: TimelineState,
     onLoad: suspend CoroutineScope.(Timeline) -> Unit,
+    onScrollToTop: () -> Unit,
     lazyListState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
 ) {
@@ -37,6 +38,15 @@ internal fun TimelineLane(
         }
 
         lazyListState.scrollToItem(0)
+    }
+
+    LaunchedEffect(timelineState.scrollToTop) {
+        if (!timelineState.scrollToTop) {
+            return@LaunchedEffect
+        }
+
+        lazyListState.animateScrollToItem(0)
+        onScrollToTop()
     }
 
     val res = getString()

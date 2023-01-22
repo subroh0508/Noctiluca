@@ -2,15 +2,13 @@ package noctiluca.features.timeline
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberTopAppBarScrollState
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.intl.Locale
 import noctiluca.features.components.AuthorizedFeatureComposable
+import noctiluca.features.components.atoms.appbar.scrollToTop
 import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.navigationbar.TimelineNavigationBar
@@ -51,19 +49,24 @@ private fun TimelineScaffold() {
             TimelineNavigationBar()
         },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) { TimelineLanes(it) }
+    ) { TimelineLanes(it, scrollBehavior) }
 }
 
 @Composable
 private fun TimelineLanes(
     paddingValues: PaddingValues,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) {
     val timelineListState = LocalTimelineListState.current
 
-    timelineListState.value.forEach {
+    timelineListState.value.forEachIndexed { index, timeline ->
         TimelineLane(
-            it,
-            onLoad = { timeline -> timelineListState.load(this, timeline) },
+            timeline,
+            onLoad = { timelineListState.load(this, it) },
+            onScrollToTop = {
+                timelineListState.scrolledToTop(index)
+                scrollBehavior.scrollToTop()
+            },
             modifier = Modifier.padding(
                 top = paddingValues.calculateTopPadding(),
                 bottom = paddingValues.calculateBottomPadding(),

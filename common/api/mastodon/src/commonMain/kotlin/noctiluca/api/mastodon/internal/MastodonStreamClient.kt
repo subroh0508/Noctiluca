@@ -8,15 +8,18 @@ import io.ktor.websocket.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import noctiluca.api.mastodon.MastodonStream
+import noctiluca.api.mastodon.json.status.StatusJson
+import noctiluca.api.mastodon.json.streaming.Event
 import noctiluca.api.mastodon.json.streaming.StreamEventJson
 import noctiluca.repository.TokenCache
 
 internal class MastodonStreamClient(
     private val token: TokenCache,
     private val client: HttpClient,
-    override val json: Json,
+    private val json: Json,
 ) : MastodonStream {
     override suspend fun streaming(
         stream: String,
@@ -37,7 +40,7 @@ internal class MastodonStreamClient(
                 val text = frame.readText()
 
                 println(text)
-                emit(json.decodeFromString(StreamEventJson.serializer(), text))
+                emit(decode(text))
             }
         }
     }
@@ -73,4 +76,34 @@ internal class MastodonStreamClient(
 
     private suspend fun getCurrentAccessToken() = token.getCurrentAccessToken()
     private suspend fun getCurrentDomain() = token.getCurrentDomain()
+
+    @Serializable
+    private data class StreamEventRawJson(
+        val stream: List<String>,
+        val event: String,
+        val payload: String?,
+    )
+
+    private fun decode(text: String) = json.decodeFromString(
+        StreamEventRawJson.serializer(),
+        text,
+    ).let { raw ->
+        StreamEventJson(
+            raw.stream,
+            raw.event,
+            raw.buildPayload(),
+        )
+    }
+
+    private fun StreamEventRawJson.buildPayload(): StreamEventJson.Payload? {
+        payload ?: return null
+
+        return when (Event.findEvent(event)) {
+            Event.UPDATE, Event.STATUS_UPDATE -> StreamEventJson.Payload.Updated(
+                json.decodeFromString(StatusJson.serializer(), payload),
+            )
+            Event.DELETE -> StreamEventJson.Payload.Deleted(payload)
+            else -> null
+        }
+    }
 }

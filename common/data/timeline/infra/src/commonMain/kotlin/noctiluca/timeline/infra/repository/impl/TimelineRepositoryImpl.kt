@@ -4,8 +4,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.MastodonStream
-import noctiluca.api.mastodon.json.status.StatusJson
-import noctiluca.api.mastodon.json.streaming.Event
 import noctiluca.api.mastodon.json.streaming.Stream
 import noctiluca.api.mastodon.json.streaming.StreamEventJson
 import noctiluca.api.mastodon.json.streaming.StreamingType
@@ -78,18 +76,16 @@ internal class TimelineRepositoryImpl(
         StreamingType.SUBSCRIBE.name.lowercase(),
     ).mapNotNull { it.toValueObject() }
 
-    private suspend fun StreamEventJson.toValueObject() = when (Event.findEvent(event)) {
-        Event.UPDATE -> payload?.let {
-            StreamEvent.Updated(
-                json.decodeFromString(StatusJson.serializer(), it)
-                    .toEntity(tokenProvider.getCurrent()?.id),
+    private suspend fun StreamEventJson.toValueObject() = payload?.let {
+        when (it) {
+            is StreamEventJson.Payload.Updated -> StreamEvent.Updated(
+                it.status.toEntity(tokenProvider.getCurrent()?.id),
             )
+            is StreamEventJson.Payload.StatusEdited -> StreamEvent.StatusEdited(
+                it.status.toEntity(tokenProvider.getCurrent()?.id),
+            )
+            is StreamEventJson.Payload.Deleted -> StreamEvent.Deleted(StatusId(it.id))
+            else -> null
         }
-        Event.DELETE -> payload?.let {
-            StreamEvent.Deleted(StatusId(it))
-        }
-        else -> null
     }
-
-    private val json get() = webSocket.json
 }

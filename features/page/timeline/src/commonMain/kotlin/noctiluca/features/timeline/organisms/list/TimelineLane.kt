@@ -27,6 +27,14 @@ internal fun TimelineLane(
         return
     }
 
+    LaunchedEffect(timelineState.latestEvent) {
+        if (lazyListState.firstVisibleItemIndex > 1 || lazyListState.firstVisibleItemScrollOffset != 0) {
+            return@LaunchedEffect
+        }
+
+        lazyListState.scrollToItem(0)
+    }
+
     LazyColumn(
         timelineState.timeline.statuses,
         key = { it.id.value },

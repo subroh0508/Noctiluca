@@ -16,7 +16,7 @@ internal fun TimelineNavigationBar() {
     val timelineListState = LocalTimelineListState.current
 
     NavigationBar {
-        timelineListState.value.forEachIndexed { index, (value, _, foreground) ->
+        timelineListState.value.forEachIndexed { index, (value, _, _, foreground) ->
             NavigationBarItem(
                 icon = { Icon(value.icon, contentDescription = value.label()) },
                 label = { Text(value.label()) },

@@ -10,13 +10,7 @@ fun HtmlText(
     text: String,
     modifier: Modifier = Modifier,
     style: TextStyle = LocalTextStyle.current,
-) {
-    if (text.contains("<span class=\"invisible\">")) {
-        println(text)
-    }
-
-    ExpectHtmlText(removeInvisibleTags(text), modifier, style)
-}
+) = ExpectHtmlText(removeInvisibleTags(text), modifier, style)
 
 @Composable
 internal expect fun ExpectHtmlText(

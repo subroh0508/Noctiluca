@@ -19,6 +19,7 @@ import org.koin.core.scope.Scope
 internal data class TimelineState(
     val timeline: Timeline,
     val jobs: List<Job> = listOf(),
+    val latestEvent: StreamEvent? = null,
     val foreground: Boolean = false,
 )
 
@@ -49,7 +50,7 @@ internal class TimelineListState(
         value.forEachIndexed { index, (timeline) ->
             scope.launch {
                 fetchTimelineStreamUseCase.execute(timeline)
-                    .collect { println("event: $it"); receiveEvent(index, it) }
+                    .collect { receiveEvent(index, it) }
             }
         }
     }
@@ -80,7 +81,7 @@ internal class TimelineListState(
             is StreamEvent.StatusEdited -> current.timeline.replace(event.status)
         }
 
-        set(index) { copy(timeline = next) }
+        set(index) { copy(timeline = next, latestEvent = event) }
     }
 
     private fun setTimeline(index: Int, timeline: Timeline) {

@@ -49,7 +49,7 @@ internal class TimelineListState(
         value.forEachIndexed { index, (timeline) ->
             scope.launch {
                 fetchTimelineStreamUseCase.execute(timeline)
-                    .collect { receiveEvent(index, it) }
+                    .collect { println("event: $it"); receiveEvent(index, it) }
             }
         }
     }

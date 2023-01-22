@@ -21,6 +21,10 @@ internal class MastodonStreamClient(
     private val client: HttpClient,
     private val json: Json,
 ) : MastodonStream {
+    companion object {
+        private const val ENDPOINT = "/api/v1/streaming/"
+    }
+
     override suspend fun streaming(
         stream: String,
         type: String,
@@ -35,12 +39,13 @@ internal class MastodonStreamClient(
                 parameter("tag", tag)
             },
         ) {
-            val frame = incoming.receive()
-            if (frame is Frame.Text) {
-                val text = frame.readText()
+            for (frame in incoming) {
+                if (frame is Frame.Text) {
+                    val text = frame.readText()
 
-                println(text)
-                emit(decode(text))
+                    println(text)
+                    emit(decode(text))
+                }
             }
         }
     }
@@ -63,7 +68,7 @@ internal class MastodonStreamClient(
                     if (host != null) {
                         this.host = host
                     }
-                    encodedPath = "/api/v1/streaming/"
+                    encodedPath = ENDPOINT
                 }
                 if (token != null && !skipAuthorization) {
                     parameter("access_token", token)

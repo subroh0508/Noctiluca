@@ -11,9 +11,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
+import noctiluca.features.components.StringResources
+import noctiluca.features.components.atoms.text.buildTimestamp
+import noctiluca.features.components.getString
 import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.state.TimelineState
+import noctiluca.status.model.Status
 import noctiluca.timeline.domain.model.Timeline
 
 @Composable
@@ -35,9 +39,11 @@ internal fun TimelineLane(
         lazyListState.scrollToItem(0)
     }
 
+    val res = getString()
+
     LazyColumn(
         timelineState.timeline.statuses,
-        key = { it.id.value },
+        key = { it.key(res) },
         modifier = modifier,
         state = lazyListState,
         showDivider = true,
@@ -73,3 +79,5 @@ private fun TimelineFooter(
             .height(height),
     ) { CircularProgressIndicator(Modifier.align(Alignment.Center)) }
 }
+
+private fun Status.key(res: StringResources) = "${id.value}/${buildTimestamp(createdAt, res = res)}"

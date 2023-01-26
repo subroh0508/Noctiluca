@@ -22,6 +22,7 @@ fun StatusJson.toEntity(newAccountId: AccountId?) = Status(
     reblog?.reblogsCount ?: reblogsCount,
     (reblog?.favourited ?: favourited) ?: false,
     (reblog?.reblogged ?: reblogged) ?: false,
+    (reblog?.bookmarked ?: bookmarked) ?: false,
     (reblog?.account ?: account).toTooter(),
     if (reblog != null && newAccountId?.value != reblog?.account?.id)
         reblog?.account?.toTooter()

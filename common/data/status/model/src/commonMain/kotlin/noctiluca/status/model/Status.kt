@@ -14,6 +14,7 @@ data class Status(
     val reblogCount: Int,
     val favourited: Boolean,
     val reblogged: Boolean,
+    val bookmarked: Boolean,
     val tooter: Tooter,
     val rebloggedBy: Tooter?,
 ) {

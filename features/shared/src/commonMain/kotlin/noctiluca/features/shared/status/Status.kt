@@ -1,13 +1,12 @@
 package noctiluca.features.shared.status
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -51,7 +50,10 @@ fun Status(
         style = MaterialTheme.typography.bodyLarge,
     )
 
-    StatusActions(onClickAction)
+    StatusActions(
+        status,
+        onClickAction,
+    )
 }
 
 @Composable
@@ -121,24 +123,28 @@ private fun VisibilityIcon(
 
 @Composable
 private fun StatusActions(
+    status: Status,
     onClick: (StatusAction) -> Unit,
 ) {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.outline) {
         Row {
             ActionIcon(
                 Icons.Default.Reply,
+                status.repliesCount,
                 contentDescription = "reply",
                 onClick = { onClick(StatusAction.REPLY) },
             )
 
             ActionIcon(
                 Icons.Default.Repeat,
+                status.reblogCount,
                 contentDescription = "boost",
                 onClick = { onClick(StatusAction.BOOST) },
             )
 
             ActionIcon(
                 Icons.Default.StarBorder,
+                status.favouriteCount,
                 contentDescription = "favourite",
                 onClick = { onClick(StatusAction.FAVOURITE) },
             )
@@ -161,15 +167,27 @@ private fun StatusActions(
 @Composable
 private fun RowScope.ActionIcon(
     imageVector: ImageVector,
+    count: Int? = null,
     contentDescription: String?,
     onClick: () -> Unit,
-) = IconButton(
-    onClick,
-    modifier = Modifier.weight(1F),
+) = Row(
+    modifier = Modifier.height(48.dp)
+        .weight(1F),
 ) {
+    Spacer(Modifier.width(12.dp))
     Icon(
         imageVector,
         contentDescription,
-        modifier = Modifier.size(24.dp),
+        modifier = Modifier.size(24.dp)
+            .align(Alignment.CenterVertically)
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() },
+            ) { onClick() },
+    )
+    Text(
+        count?.takeIf { it > 0 }?.toString() ?: "",
+        modifier = Modifier.padding(horizontal = 4.dp)
+            .align(Alignment.CenterVertically),
     )
 }

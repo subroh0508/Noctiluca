@@ -13,9 +13,9 @@ internal class StatusRepositoryImpl(
     override suspend fun favourite(status: Status): Status {
         val json =
             if (status.favourited)
-                api.postStatusesFavourite(status.id.value)
-            else
                 api.postStatusesUnfavourite(status.id.value)
+            else
+                api.postStatusesFavourite(status.id.value)
 
         return json.toEntity(tokenProvider.getCurrent()?.id)
     }
@@ -23,9 +23,9 @@ internal class StatusRepositoryImpl(
     override suspend fun boost(status: Status): Status {
         val json =
             if (status.reblogged)
-                api.postStatusesReblog(status.id.value)
-            else
                 api.postStatusesUnreblog(status.id.value)
+            else
+                api.postStatusesReblog(status.id.value)
 
         return json.toEntity(tokenProvider.getCurrent()?.id)
     }
@@ -33,9 +33,9 @@ internal class StatusRepositoryImpl(
     override suspend fun bookmark(status: Status): Status {
         val json =
             if (status.bookmarked)
-                api.postStatusesBookmark(status.id.value)
-            else
                 api.postStatusesUnbookmark(status.id.value)
+            else
+                api.postStatusesBookmark(status.id.value)
 
         return json.toEntity(tokenProvider.getCurrent()?.id)
     }

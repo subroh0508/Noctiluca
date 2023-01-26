@@ -15,6 +15,7 @@ import noctiluca.features.components.StringResources
 import noctiluca.features.components.atoms.text.buildTimestamp
 import noctiluca.features.components.getString
 import noctiluca.features.components.molecules.list.LazyColumn
+import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.state.TimelineState
 import noctiluca.status.model.Status
@@ -24,6 +25,7 @@ import noctiluca.timeline.domain.model.Timeline
 internal fun TimelineLane(
     timelineState: TimelineState,
     onLoad: suspend CoroutineScope.(Timeline) -> Unit,
+    onExecuteAction: CoroutineScope.(Timeline, Status, Action) -> Unit,
     onScrollToTop: () -> Unit,
     lazyListState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
@@ -61,7 +63,7 @@ internal fun TimelineLane(
     ) { _, item ->
         Status(
             item,
-            onClickAction = {},
+            onClickAction = { onExecuteAction(timelineState.timeline, item, it) },
         )
     }
 }

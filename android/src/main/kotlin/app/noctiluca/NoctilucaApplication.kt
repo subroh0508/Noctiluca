@@ -15,6 +15,7 @@ import noctiluca.api.token.di.TokenApiModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.features.components.di.ImageLoaderModule
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
+import noctiluca.status.infra.di.StatusRepositoriesModule
 import noctiluca.timeline.infra.di.TimelineRepositoriesModule
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
@@ -66,6 +67,7 @@ class NoctilucaApplication : Application() {
         AuthenticationRepositoriesModule()
         InstanceRepositoriesModule()
         TimelineRepositoriesModule()
+        StatusRepositoriesModule()
     }
 
     private fun buildFeaturesModules() = ImageLoaderModule(httpClientEngine)

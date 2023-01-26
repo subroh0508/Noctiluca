@@ -6,8 +6,12 @@ import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.components.state.AuthorizedComposeState
 import noctiluca.features.components.state.rememberAuthorizedComposeState
 import noctiluca.features.components.state.runCatchingWithAuth
+import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.LocalScope
+import noctiluca.status.model.Status
+import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.model.Timeline
+import noctiluca.timeline.domain.usecase.ExecuteStatusActionUseCase
 import noctiluca.timeline.domain.usecase.FetchTimelineStreamUseCase
 import noctiluca.timeline.domain.usecase.UpdateTimelineUseCase
 import noctiluca.timeline.model.StreamEvent
@@ -26,6 +30,7 @@ internal class TimelineListState(
     private val state: AuthorizedComposeState,
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
     private val updateTimelineUseCase: UpdateTimelineUseCase,
+    private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
 ) : State<List<TimelineState>> by timelineList, AuthorizedComposeState by state {
     constructor(
         state: AuthorizedComposeState = AuthorizedComposeState(),
@@ -35,7 +40,13 @@ internal class TimelineListState(
             TimelineState(Timeline.Home(listOf())),
             TimelineState(Timeline.Global(listOf(), onlyRemote = false, onlyMedia = false)),
         ),
-    ) : this(mutableStateOf(timelineList), state, koinScope.get(), koinScope.get())
+    ) : this(
+        mutableStateOf(timelineList),
+        state,
+        koinScope.get(),
+        koinScope.get(),
+        koinScope.get(),
+    )
 
     fun findForeground() = value.find { it.foreground }
     fun setForeground(index: Int) {
@@ -79,6 +90,23 @@ internal class TimelineListState(
         job.start()
     }
 
+    fun favourite(scope: CoroutineScope, timeline: Timeline, status: Status) = execute(scope, timeline, status, StatusAction.FAVOURITE)
+    fun boost(scope: CoroutineScope, timeline: Timeline, status: Status) = execute(scope, timeline, status, StatusAction.BOOST)
+    fun bookmark(scope: CoroutineScope, timeline: Timeline, status: Status) = execute(scope, timeline, status, StatusAction.BOOKMARK)
+
+    private fun execute(scope: CoroutineScope, timeline: Timeline, status: Status, action: StatusAction) {
+        val index = value.indexOfFirst { it.timeline == timeline }
+
+        val job = scope.launch(start = CoroutineStart.LAZY) {
+            runCatchingWithAuth { executeStatusActionUseCase.execute(status, action) }
+                .onSuccess { setStatus(index, status) }
+                .onFailure { it.printStackTrace() }
+        }
+
+        setJob(index, job)
+        job.start()
+    }
+
     private fun receiveEvent(index: Int, event: StreamEvent) {
         val current = value[index]
 
@@ -93,6 +121,9 @@ internal class TimelineListState(
 
     private fun setTimeline(index: Int, timeline: Timeline) {
         set(index) { copy(timeline = timeline, jobs = jobs.filterNot { it.isCompleted }) }
+    }
+    private fun setStatus(index: Int, status: Status) {
+        set(index) { copy(timeline = timeline.replace(status), jobs = jobs.filterNot { it.isCompleted }) }
     }
     private fun setJob(index: Int, job: Job) {
         set(index) { copy(jobs = jobs + job) }

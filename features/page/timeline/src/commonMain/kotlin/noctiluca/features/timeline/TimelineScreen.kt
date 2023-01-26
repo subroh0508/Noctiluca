@@ -10,6 +10,7 @@ import androidx.compose.ui.text.intl.Locale
 import noctiluca.features.components.AuthorizedFeatureComposable
 import noctiluca.features.components.atoms.appbar.scrollToTop
 import noctiluca.features.components.di.getKoinRootScope
+import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.navigationbar.TimelineNavigationBar
 import noctiluca.features.timeline.organisms.topappbar.CurrentInstanceTopAppBar
@@ -59,10 +60,17 @@ private fun TimelineLanes(
 ) {
     val timelineListState = LocalTimelineListState.current
 
-    timelineListState.value.forEachIndexed { index, timeline ->
+    timelineListState.value.forEachIndexed { index, timelineState ->
         TimelineLane(
-            timeline,
+            timelineState,
             onLoad = { timelineListState.load(this, it) },
+            onExecuteAction = { timeline, status, action ->
+                when (action) {
+                    Action.FAVOURITE -> timelineListState.favourite(this, timeline, status)
+                    Action.BOOST -> timelineListState.boost(this, timeline, status)
+                    else -> Unit
+                }
+            },
             onScrollToTop = {
                 timelineListState.scrolledToTop(index)
                 scrollBehavior.scrollToTop()

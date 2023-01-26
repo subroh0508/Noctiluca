@@ -11,9 +11,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDateTime
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
@@ -24,14 +26,14 @@ import noctiluca.features.shared.account.TooterName
 import noctiluca.status.model.Status
 import noctiluca.status.model.Tooter
 
-enum class StatusAction {
+enum class Action {
     REPLY, BOOST, FAVOURITE, SHARE, OTHERS
 }
 
 @Composable
 fun Status(
     status: Status,
-    onClickAction: (StatusAction) -> Unit,
+    onClickAction: CoroutineScope.(Action) -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 16.dp)
@@ -124,7 +126,7 @@ private fun VisibilityIcon(
 @Composable
 private fun StatusActions(
     status: Status,
-    onClick: (StatusAction) -> Unit,
+    onClick: CoroutineScope.(Action) -> Unit,
 ) {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.outline) {
         Row {
@@ -132,33 +134,35 @@ private fun StatusActions(
                 Icons.Default.Reply,
                 status.repliesCount,
                 contentDescription = "reply",
-                onClick = { onClick(StatusAction.REPLY) },
+                onClick = { onClick(Action.REPLY) },
             )
 
             ActionIcon(
                 Icons.Default.Repeat,
                 status.reblogCount,
                 contentDescription = "boost",
-                onClick = { onClick(StatusAction.BOOST) },
+                onClick = { onClick(Action.BOOST) },
+                tint = if (status.reblogged) Color.Green else LocalContentColor.current,
             )
 
             ActionIcon(
-                Icons.Default.StarBorder,
+                if (status.favourited) Icons.Default.Star else Icons.Default.StarBorder,
                 status.favouriteCount,
                 contentDescription = "favourite",
-                onClick = { onClick(StatusAction.FAVOURITE) },
+                onClick = { onClick(Action.FAVOURITE) },
+                tint = if (status.favourited) Color.Yellow else LocalContentColor.current,
             )
 
             ActionIcon(
                 Icons.Default.Share,
                 contentDescription = "share",
-                onClick = { onClick(StatusAction.SHARE) },
+                onClick = { onClick(Action.SHARE) },
             )
 
             ActionIcon(
                 Icons.Default.MoreHoriz,
                 contentDescription = "others",
-                onClick = { onClick(StatusAction.OTHERS) },
+                onClick = { onClick(Action.OTHERS) },
             )
         }
     }
@@ -169,25 +173,31 @@ private fun RowScope.ActionIcon(
     imageVector: ImageVector,
     count: Int? = null,
     contentDescription: String?,
-    onClick: () -> Unit,
-) = Row(
-    modifier = Modifier.height(48.dp)
-        .weight(1F),
+    onClick: CoroutineScope.() -> Unit,
+    tint: Color = LocalContentColor.current,
 ) {
-    Spacer(Modifier.width(12.dp))
-    Icon(
-        imageVector,
-        contentDescription,
-        modifier = Modifier.size(24.dp)
-            .align(Alignment.CenterVertically)
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() },
-            ) { onClick() },
-    )
-    Text(
-        count?.takeIf { it > 0 }?.toString() ?: "",
-        modifier = Modifier.padding(horizontal = 4.dp)
-            .align(Alignment.CenterVertically),
-    )
+    val scope = rememberCoroutineScope()
+
+    Row(
+        modifier = Modifier.height(48.dp)
+            .weight(1F),
+    ) {
+        Spacer(Modifier.width(12.dp))
+        Icon(
+            imageVector,
+            contentDescription,
+            modifier = Modifier.size(24.dp)
+                .align(Alignment.CenterVertically)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                ) { onClick(scope) },
+            tint = tint,
+        )
+        Text(
+            count?.takeIf { it > 0 }?.toString() ?: "",
+            modifier = Modifier.padding(horizontal = 4.dp)
+                .align(Alignment.CenterVertically),
+        )
+    }
 }

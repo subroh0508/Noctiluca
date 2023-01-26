@@ -1,9 +1,7 @@
 package noctiluca.timeline.domain.di
 
-import noctiluca.timeline.domain.usecase.FetchAllAuthorizedAccountsUseCase
-import noctiluca.timeline.domain.usecase.FetchCurrentAuthorizedAccountUseCase
-import noctiluca.timeline.domain.usecase.FetchTimelineStreamUseCase
-import noctiluca.timeline.domain.usecase.UpdateTimelineUseCase
+import noctiluca.timeline.domain.usecase.*
+import noctiluca.timeline.domain.usecase.internal.*
 import noctiluca.timeline.domain.usecase.internal.FetchAllAuthorizedAccountsUseCaseImpl
 import noctiluca.timeline.domain.usecase.internal.FetchCurrentAuthorizedAccountUseCaseImpl
 import noctiluca.timeline.domain.usecase.internal.FetchTimelineStreamUseCaseImpl
@@ -17,4 +15,5 @@ fun ScopeDSL.TimelineDomainModule() {
     scoped<FetchAllAuthorizedAccountsUseCase> { FetchAllAuthorizedAccountsUseCaseImpl(get()) }
     scoped<FetchTimelineStreamUseCase> { FetchTimelineStreamUseCaseImpl(get()) }
     scoped<UpdateTimelineUseCase> { UpdateTimelineUseCaseImpl(get()) }
+    scoped<ExecuteStatusActionUseCase> { ExecuteStatusActionUseCaseImpl(get()) }
 }

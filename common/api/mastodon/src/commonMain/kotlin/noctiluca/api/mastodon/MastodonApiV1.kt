@@ -29,4 +29,28 @@ interface MastodonApiV1 {
         minId: String? = null,
         limit: Int = 20,
     ): List<StatusJson>
+
+    suspend fun postStatusesFavourite(
+        id: String,
+    ): StatusJson
+
+    suspend fun postStatusesUnfavourite(
+        id: String,
+    ): StatusJson
+
+    suspend fun postStatusesReblog(
+        id: String,
+    ): StatusJson
+
+    suspend fun postStatusesUnreblog(
+        id: String,
+    ): StatusJson
+
+    suspend fun postStatusesBookmark(
+        id: String,
+    ): StatusJson
+
+    suspend fun postStatusesUnbookmark(
+        id: String,
+    ): StatusJson
 }

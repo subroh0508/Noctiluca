@@ -63,6 +63,42 @@ internal class MastodonApiV1Client(
         parameter("limit", limit.toString())
     }.body()
 
+    override suspend fun postStatusesFavourite(
+        id: String,
+    ): StatusJson = client.post(
+        Api.V1.Statuses.Id.Favourite(id = id),
+    ).body()
+
+    override suspend fun postStatusesUnfavourite(
+        id: String,
+    ): StatusJson = client.post(
+        Api.V1.Statuses.Id.Unfavourite(id = id),
+    ).body()
+
+    override suspend fun postStatusesReblog(
+        id: String,
+    ): StatusJson = client.post(
+        Api.V1.Statuses.Id.Reblog(id = id),
+    ).body()
+
+    override suspend fun postStatusesUnreblog(
+        id: String,
+    ): StatusJson = client.post(
+        Api.V1.Statuses.Id.Unreblog(id = id),
+    ).body()
+
+    override suspend fun postStatusesBookmark(
+        id: String,
+    ): StatusJson = client.post(
+        Api.V1.Statuses.Id.Bookmark(id = id),
+    ).body()
+
+    override suspend fun postStatusesUnbookmark(
+        id: String,
+    ): StatusJson = client.post(
+        Api.V1.Statuses.Id.Unbookmark(id = id),
+    ).body()
+
     private suspend inline fun <reified T: Any> HttpClient.get(
         resource: T,
         domain: String? = null,
@@ -72,6 +108,14 @@ internal class MastodonApiV1Client(
         setAccessTokenAndHost(domain, skipAuthorization)
         httpRequestBuilder()
     })
+
+    private suspend inline fun <reified T: Any> HttpClient.post(
+        resource: T,
+        domain: String? = null,
+        skipAuthorization: Boolean = false,
+    ) = post(resource) {
+        setAccessTokenAndHost(domain, skipAuthorization)
+    }
 
     private suspend inline fun <reified T: Any, reified E: Any> HttpClient.post(
         resource: T,

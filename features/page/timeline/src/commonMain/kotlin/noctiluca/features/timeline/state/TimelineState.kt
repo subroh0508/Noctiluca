@@ -65,12 +65,7 @@ internal class TimelineListState(
     }
 
     fun subscribeAll(scope: CoroutineScope) {
-        value.forEachIndexed { index, (timeline) ->
-            scope.launch {
-                fetchTimelineStreamUseCase.execute(timeline)
-                    .collect { receiveEvent(index, it) }
-            }
-        }
+        value.forEachIndexed { index, (timeline) -> subscribe(scope, index, timeline) }
     }
 
     fun loadAll(scope: CoroutineScope) {
@@ -100,11 +95,19 @@ internal class TimelineListState(
         val job = scope.launch(start = CoroutineStart.LAZY) {
             runCatchingWithAuth { executeStatusActionUseCase.execute(status, action) }
                 .onSuccess { setStatus(index, status) }
-                .onFailure { it.printStackTrace() }
         }
 
         setJob(index, job)
         job.start()
+    }
+
+    private fun subscribe(scope: CoroutineScope, index: Int, timeline: Timeline) {
+        scope.launch {
+            runCatchingWithAuth {
+                fetchTimelineStreamUseCase.execute(timeline)
+                    .collect { receiveEvent(index, it) }
+            }
+        }
     }
 
     private fun receiveEvent(index: Int, event: StreamEvent) {

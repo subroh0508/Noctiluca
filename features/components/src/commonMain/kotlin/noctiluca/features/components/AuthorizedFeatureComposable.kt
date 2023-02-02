@@ -3,14 +3,11 @@ package noctiluca.features.components
 import androidx.compose.runtime.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.runBlocking
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.repository.TokenProvider
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.scope.Scope
-import kotlin.coroutines.AbstractCoroutineContextElement
-import kotlin.coroutines.CoroutineContext
 
 internal val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedExceptionHandler() }
 

@@ -40,7 +40,7 @@ fun TimelineScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimelineScaffold() {
-    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarScrollState())
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     Scaffold(
         topBar = {
@@ -53,6 +53,7 @@ private fun TimelineScaffold() {
     ) { TimelineLanes(it, scrollBehavior) }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimelineLanes(
     paddingValues: PaddingValues,

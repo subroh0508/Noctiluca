@@ -3,9 +3,9 @@ package noctiluca.features.timeline.organisms.topappbar
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.TopAppBarScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -17,6 +17,7 @@ import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrentInstanceTopAppBar(
     topAppBarScrollBehavior: TopAppBarScrollBehavior,

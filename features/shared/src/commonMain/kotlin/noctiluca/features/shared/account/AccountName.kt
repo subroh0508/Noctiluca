@@ -8,6 +8,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import noctiluca.account.model.Account
@@ -48,15 +49,17 @@ fun TooterName(
 fun AccountName(
     account: Account,
     modifier: Modifier = Modifier,
+    displayNameStyle: TextStyle = MaterialTheme.typography.titleLarge,
+    usernameStyle: TextStyle = MaterialTheme.typography.titleMedium,
 ) = Column(modifier) {
     Text(
         account.displayName,
-        style = MaterialTheme.typography.titleLarge,
+        style = displayNameStyle,
     )
 
     Text(
         "@${account.username}",
         color = MaterialTheme.colorScheme.outline,
-        style = MaterialTheme.typography.titleMedium,
+        style = usernameStyle,
     )
 }

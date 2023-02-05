@@ -46,6 +46,7 @@ kotlinx-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serializa
 compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
 buildconfig-plugin = { module = "com.github.gmazzo:gradle-buildconfig-plugin", version.ref = "buildconfig" }
 detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
+detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }

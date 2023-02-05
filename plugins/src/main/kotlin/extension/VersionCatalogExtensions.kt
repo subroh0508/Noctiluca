@@ -8,9 +8,11 @@ import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.getByType
 
+internal val VersionCatalog.detektFormatting: Provider<MinimalExternalModuleDependency> get() = getLibrary("detekt-formatting")
+
 internal val VersionCatalog.coroutinesCore: Provider<MinimalExternalModuleDependency> get() = getLibrary("kotlinx-coroutines-core")
 
-    internal val VersionCatalog.koinCore: Provider<MinimalExternalModuleDependency> get() = getLibrary("koin-core")
+internal val VersionCatalog.koinCore: Provider<MinimalExternalModuleDependency> get() = getLibrary("koin-core")
 internal val VersionCatalog.koinAndroid: Provider<MinimalExternalModuleDependency> get() = getLibrary("koin-android")
 
 internal val VersionCatalog.androidxActivities: Provider<ExternalModuleDependencyBundle> get() = getBundle("androidx-activities")

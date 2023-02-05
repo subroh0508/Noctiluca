@@ -1,10 +1,16 @@
 package lint
 
+import extension.detektFormatting
+import extension.libs
 import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.kotlin.dsl.register
 
 plugins {
     id("io.gitlab.arturbosch.detekt")
+}
+
+dependencies {
+    detektPlugins(libs.detektFormatting)
 }
 
 tasks.register("detektAll", Detekt::class) {

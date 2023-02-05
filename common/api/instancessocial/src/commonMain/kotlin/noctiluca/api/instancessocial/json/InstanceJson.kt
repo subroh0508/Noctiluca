@@ -47,7 +47,7 @@ data class InstanceJson(
         @SerialName("full_description")
         val fullDescription: String?,
         val topic: String?,
-        val languages: List<String>,
+        val languages: List<String>?,
         @SerialName("other_languages_accepted")
         val otherLanguagesAccepted: Boolean,
         @SerialName("federates_with")

@@ -29,8 +29,8 @@ internal fun InstanceCard(
 
     LaunchedEffect(authorizedUser.loading) { onLoading(authorizedUser.loading) }
 
-    MastodonInstanceCard(instance ?: return, authorizedUser, modifier)
-    SnackbarForError(authorizedUser.getErrorOrNull() ?: return)
+    instance?.let { MastodonInstanceCard(it, authorizedUser, modifier) }
+    authorizedUser.getErrorOrNull()?.let { SnackbarForError(it) }
 }
 
 @Composable

@@ -2,7 +2,7 @@ package noctiluca.api.authentication.params
 
 import kotlinx.serialization.Serializable
 
-abstract class GetAccountsVerifyCredential {
+sealed interface GetAccountsVerifyCredential {
     @Serializable
     data class Response(
         val id: String,

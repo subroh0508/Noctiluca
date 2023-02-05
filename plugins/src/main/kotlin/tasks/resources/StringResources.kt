@@ -41,10 +41,11 @@ class StringResources(packageName: String) : Resources {
     ): TypeSpec {
         val languageCode = key.toUpperCase()
         val languagesProperties: List<PropertySpec> =
-            if (key == BASE_LANGUAGE_CODE)
+            if (key == BASE_LANGUAGE_CODE) {
                 emptyList()
-            else
+            } else {
                 language.map { it.createLanguageProperty() }
+            }
 
         return TypeSpec.objectBuilder(languageCode)
             .superclass(stringResourceClass)

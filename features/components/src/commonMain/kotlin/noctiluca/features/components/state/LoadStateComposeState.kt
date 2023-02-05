@@ -5,11 +5,11 @@ import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.components.model.LoadState
 import noctiluca.features.components.utils.loadLazy
 
-interface LoadStateComposeState<T: Any> : MutableState<LoadState> {
+interface LoadStateComposeState<T : Any> : MutableState<LoadState> {
     companion object {
-        operator fun <T: Any> invoke(
+        operator fun <T : Any> invoke(
             state: MutableState<LoadState>,
-        ) : LoadStateComposeState<T> = Impl(state)
+        ): LoadStateComposeState<T> = Impl(state)
     }
 
     val loading get() = value is LoadState.Loading
@@ -24,7 +24,7 @@ interface LoadStateComposeState<T: Any> : MutableState<LoadState> {
         block: suspend CoroutineScope.() -> T,
     ) = loadLazy(this@LoadStateComposeState, block)
 
-    private class Impl<T: Any>(
+    private class Impl<T : Any>(
         private val state: MutableState<LoadState>
     ) : LoadStateComposeState<T>, MutableState<LoadState> by state
 }

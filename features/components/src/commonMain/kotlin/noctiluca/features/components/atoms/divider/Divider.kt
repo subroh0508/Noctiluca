@@ -16,7 +16,7 @@ fun Divider(
     color: Color = MaterialTheme.colorScheme.outline, // MaterialTheme.colorScheme.outlineVariant
 ) {
     val density = LocalDensity.current
-    val heightDp = remember(density) { with (density) { 1F.toDp() } }
+    val heightDp = remember(density) { with(density) { 1F.toDp() } }
 
     MaterialDivider(
         modifier = Modifier.fillMaxWidth()

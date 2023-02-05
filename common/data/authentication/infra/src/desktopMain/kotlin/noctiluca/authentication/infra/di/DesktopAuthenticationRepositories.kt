@@ -5,7 +5,6 @@ import noctiluca.authentication.infra.repository.impl.TokenRepositoryImpl
 import noctiluca.authentication.infra.repository.local.AppCredentialCache
 import noctiluca.repository.TokenProvider
 import org.koin.core.module.Module
-import org.koin.dsl.module
 
 @Suppress("FunctionName")
 actual fun Module.AuthenticationRepositoriesModule() {

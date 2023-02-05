@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontStyle
@@ -49,9 +48,9 @@ private fun buildAnnotatedString(
     urlSpanStyle: SpanStyle,
 ) = buildComposeAnnotatedString {
     append(spanned.toString())
-    //addStyle(textStyle.toSpanStyle(), 0, spanned.length)
+    // addStyle(textStyle.toSpanStyle(), 0, spanned.length)
 
-    with (spanned) {
+    with(spanned) {
         forSpansEach<URLSpan> { start, end, urlSpan ->
             addStyle(urlSpanStyle, start, end)
             addStringAnnotation("url", urlSpan.url, start, end)

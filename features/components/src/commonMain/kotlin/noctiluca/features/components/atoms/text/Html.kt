@@ -28,10 +28,11 @@ private fun removeInvisibleTags(
 
     return matchResults.foldIndexed(html) { index, acc, matchResult ->
         val ellipse =
-            if (matchResults.size <= 1 || index < matchResults.lastIndex)
+            if (matchResults.size <= 1 || index < matchResults.lastIndex) {
                 ""
-            else
+            } else {
                 "..."
+            }
 
         acc.replace(matchResult.value, ellipse)
     }

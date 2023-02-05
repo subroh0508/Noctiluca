@@ -29,7 +29,8 @@ class ImageLoader internal constructor(
             }
 
             Result.success(imageBitmap)
-        } catch (e: Exception) {
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            @Suppress("PrintStackTrace")
             e.printStackTrace()
             Result.failure(e)
         }

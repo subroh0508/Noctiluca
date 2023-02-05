@@ -64,7 +64,7 @@ private fun CurrentInstanceTopAppBar(
         ) {
             AsyncImage(
                 account.current?.avatar,
-                //fallback = imageResources(getDrawables().icon_mastodon),
+                // fallback = imageResources(getDrawables().icon_mastodon),
                 modifier = Modifier.size(NavigateIconSize)
                     .clip(RoundedCornerShape(8.dp)),
             )

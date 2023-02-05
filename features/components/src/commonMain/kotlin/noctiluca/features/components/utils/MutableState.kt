@@ -6,7 +6,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import noctiluca.features.components.model.LoadState
 
-internal fun <T: Any> CoroutineScope.loadLazy(
+internal fun <T : Any> CoroutineScope.loadLazy(
     state: MutableState<LoadState>,
     block: suspend CoroutineScope.() -> T,
 ) {

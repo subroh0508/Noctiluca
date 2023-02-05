@@ -6,7 +6,6 @@ import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.components.state.AuthorizedComposeState
 import noctiluca.features.components.state.rememberAuthorizedComposeState
 import noctiluca.features.components.state.runCatchingWithAuth
-import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.LocalScope
 import noctiluca.status.model.Status
 import noctiluca.timeline.domain.model.StatusAction
@@ -25,6 +24,7 @@ internal data class TimelineState(
     val foreground: Boolean = false,
 )
 
+@Suppress("TooManyFunctions")
 internal class TimelineListState(
     private val timelineList: MutableState<List<TimelineState>>,
     private val state: AuthorizedComposeState,

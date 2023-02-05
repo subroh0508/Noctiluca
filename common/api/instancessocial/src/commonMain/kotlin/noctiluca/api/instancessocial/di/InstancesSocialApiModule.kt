@@ -8,11 +8,10 @@ import io.ktor.client.plugins.resources.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
-import noctiluca.common.api.instancessocial.BuildConfig
 import noctiluca.api.instancessocial.InstancesSocialApi
 import noctiluca.api.instancessocial.internal.InstancesSocialApiClient
+import noctiluca.common.api.instancessocial.BuildConfig
 import org.koin.core.module.Module
-import org.koin.dsl.module
 
 private const val HOST_INSTANCES_SOCIAL = "instances.social"
 

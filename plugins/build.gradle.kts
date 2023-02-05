@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation(libs.bundles.plugins)
+    implementation(libs.kotlin.poet)
 }
 
 tasks.withType<KotlinCompile>().configureEach {

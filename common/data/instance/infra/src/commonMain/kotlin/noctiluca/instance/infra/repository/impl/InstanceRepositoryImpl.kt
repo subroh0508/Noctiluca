@@ -12,12 +12,12 @@ import java.net.UnknownHostException
 internal class InstanceRepositoryImpl(
     private val instancesSocialApi: InstancesSocialApi,
     private val v1: MastodonApiV1,
-): InstanceRepository {
+) : InstanceRepository {
     override suspend fun search(
         query: String,
     ): List<Instance.Suggest> = try {
         listOf(v1.getInstance(query).toSuggest())
-    } catch (e: UnknownHostException) {
+    } catch (@Suppress("SwallowedException") e: UnknownHostException) {
         instancesSocialApi.search(query)
             .instances
             .filterNot(InstanceJson::dead)

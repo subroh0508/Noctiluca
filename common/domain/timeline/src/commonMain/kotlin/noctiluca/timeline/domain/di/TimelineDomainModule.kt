@@ -6,7 +6,6 @@ import noctiluca.timeline.domain.usecase.internal.FetchAllAuthorizedAccountsUseC
 import noctiluca.timeline.domain.usecase.internal.FetchCurrentAuthorizedAccountUseCaseImpl
 import noctiluca.timeline.domain.usecase.internal.FetchTimelineStreamUseCaseImpl
 import noctiluca.timeline.domain.usecase.internal.UpdateTimelineUseCaseImpl
-import org.koin.core.module.Module
 import org.koin.dsl.ScopeDSL
 
 @Suppress("FunctionName")

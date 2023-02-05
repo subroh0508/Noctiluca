@@ -2,7 +2,6 @@ package noctiluca.features.components
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
-import noctiluca.features.components.Resources
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.scope.Scope
 

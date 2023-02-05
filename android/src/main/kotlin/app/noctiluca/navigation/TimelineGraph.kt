@@ -5,7 +5,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import noctiluca.features.timeline.TimelineScreen
 import noctiluca.features.timeline.di.TimelineComponent
-import org.koin.core.component.KoinScopeComponent
 
 const val RouteTimeline = "Timeline"
 

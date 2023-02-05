@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 import noctiluca.api.instancessocial.json.InstanceJson
 import noctiluca.api.instancessocial.json.PaginationJson
 
-abstract class GetInstancesSearch {
+sealed interface GetInstancesSearch {
     @Serializable
     data class Response(
         val instances: List<InstanceJson>,

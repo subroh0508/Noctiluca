@@ -4,9 +4,6 @@ import android.app.Application
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
 import noctiluca.account.infra.di.AccountRepositoriesModule
-import noctiluca.api.authentication.di.buildHttpClient as buildHttpClientForAuthentication
-import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
-import noctiluca.api.mastodon.di.buildHttpClient as buildHttpClientForMastodon
 import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule
@@ -19,10 +16,12 @@ import noctiluca.status.infra.di.StatusRepositoriesModule
 import noctiluca.timeline.infra.di.TimelineRepositoriesModule
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
-import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import org.koin.dsl.module
+import noctiluca.api.authentication.di.buildHttpClient as buildHttpClientForAuthentication
+import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
+import noctiluca.api.mastodon.di.buildHttpClient as buildHttpClientForMastodon
 
 class NoctilucaApplication : Application() {
     private val json by lazy {

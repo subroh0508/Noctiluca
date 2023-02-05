@@ -8,15 +8,15 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import noctiluca.features.authentication.getString
+import noctiluca.features.authentication.model.QueryText
+import noctiluca.features.authentication.state.AuthorizedUserState
+import noctiluca.features.authentication.state.rememberInstanceAndAuthorization
 import noctiluca.features.components.atoms.card.CardHeader
 import noctiluca.features.components.atoms.card.CardSubhead
 import noctiluca.features.components.atoms.card.CardSupporting
 import noctiluca.features.components.atoms.card.FilledCard
 import noctiluca.features.components.atoms.snackbar.showSnackbar
-import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.model.QueryText
-import noctiluca.features.authentication.state.AuthorizedUserState
-import noctiluca.features.authentication.state.rememberInstanceAndAuthorization
 import noctiluca.instance.model.Instance
 
 @Composable

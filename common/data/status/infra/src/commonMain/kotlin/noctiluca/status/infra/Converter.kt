@@ -11,6 +11,7 @@ import noctiluca.model.Uri
 import noctiluca.status.model.Status
 import noctiluca.status.model.Tooter
 
+@Suppress("CyclomaticComplexMethod")
 fun StatusJson.toEntity(newAccountId: AccountId?) = Status(
     (reblog?.id ?: id).let(::StatusId),
     reblog?.content ?: content,

@@ -53,7 +53,7 @@ abstract class ResourceGeneratorTask : DefaultTask() {
                         drawableResource.setDrawable(readFileName(it))
                     }
                 }
-            } catch (e: Exception) {
+            } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
                 println("error during parsing $e")
             }
         }

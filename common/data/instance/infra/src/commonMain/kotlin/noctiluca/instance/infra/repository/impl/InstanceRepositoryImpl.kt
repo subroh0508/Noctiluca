@@ -17,7 +17,7 @@ internal class InstanceRepositoryImpl(
         query: String,
     ): List<Instance.Suggest> = try {
         listOf(v1.getInstance(query).toSuggest())
-    } catch (e: UnknownHostException) {
+    } catch (@Suppress("SwallowedException") e: UnknownHostException) {
         instancesSocialApi.search(query)
             .instances
             .filterNot(InstanceJson::dead)

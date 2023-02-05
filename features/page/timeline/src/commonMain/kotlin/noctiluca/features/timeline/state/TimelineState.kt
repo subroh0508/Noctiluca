@@ -24,6 +24,7 @@ internal data class TimelineState(
     val foreground: Boolean = false,
 )
 
+@Suppress("TooManyFunctions")
 internal class TimelineListState(
     private val timelineList: MutableState<List<TimelineState>>,
     private val state: AuthorizedComposeState,

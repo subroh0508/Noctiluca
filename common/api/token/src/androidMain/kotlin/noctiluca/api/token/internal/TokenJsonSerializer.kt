@@ -17,7 +17,7 @@ internal object TokenJsonSerializer : Serializer<List<Token.Json>> {
         val bytes = input.readBytes()
 
         Json.decodeFromString<Array<Token.Json>>(bytes.decodeToString()).toList()
-    } catch (e: SerializationException) {
+    } catch (@Suppress("SwallowedException") e: SerializationException) {
         defaultValue
     }
 

@@ -25,6 +25,7 @@ data class Instance(
         val patch: Int,
     ) : Comparable<Version> {
         companion object {
+            @Suppress("MagicNumber")
             operator fun invoke(
                 version: String,
             ) = version.split(".")

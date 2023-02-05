@@ -3,7 +3,7 @@ package noctiluca.api.authentication.params
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-abstract class PostOauthToken {
+sealed interface PostOauthToken {
     @Serializable
     data class Request(
         @SerialName("client_id")

@@ -3,6 +3,7 @@ package extension
 import org.jetbrains.kotlin.gradle.dsl.KotlinMultiplatformExtension
 
 enum class Target { ANDROID, DESKTOP }
+
 fun KotlinMultiplatformExtension.targets(vararg target: Target) {
     target.toList().forEach {
         when (it) {

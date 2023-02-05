@@ -17,7 +17,7 @@ tasks.register("detektAll", Detekt::class) {
     description = "Runs the Lint check whole project at once."
 
     parallel = true
-    // autoCorrect = true
+    autoCorrect = true
     setSource(files(rootProject.projectDir))
     config.setFrom(listOf(rootProject.files("config/detekt.yml")))
 

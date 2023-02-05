@@ -17,3 +17,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.features.authentication" }

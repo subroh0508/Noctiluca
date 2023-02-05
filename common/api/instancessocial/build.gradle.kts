@@ -30,6 +30,8 @@ kotlin {
     }
 }
 
+android { namespace = "noctiluca.api.instancessocial" }
+
 buildConfig {
     useKotlinOutput()
 

@@ -24,3 +24,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.status.infra" }

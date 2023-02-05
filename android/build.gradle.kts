@@ -41,6 +41,8 @@ dependencies {
 }
 
 android {
+    namespace = "app.noctiluca"
+
     compileSdk = 33
     defaultConfig {
         applicationId = "app.noctiluca"

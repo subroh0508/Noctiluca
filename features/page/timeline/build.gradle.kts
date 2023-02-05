@@ -20,3 +20,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.features.timeline" }

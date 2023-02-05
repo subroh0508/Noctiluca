@@ -28,3 +28,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.api.mastodon" }

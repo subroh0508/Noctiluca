@@ -14,3 +14,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.authentication.domain" }

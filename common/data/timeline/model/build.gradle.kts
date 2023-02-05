@@ -13,3 +13,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.timeline.model" }

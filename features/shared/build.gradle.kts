@@ -15,3 +15,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.features.shared" }

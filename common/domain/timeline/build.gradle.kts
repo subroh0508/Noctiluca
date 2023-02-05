@@ -18,3 +18,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.timeline.domain" }

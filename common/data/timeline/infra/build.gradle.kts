@@ -27,3 +27,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.timeline.infra" }

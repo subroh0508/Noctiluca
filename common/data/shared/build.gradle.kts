@@ -11,3 +11,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.model" }

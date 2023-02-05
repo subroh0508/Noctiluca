@@ -22,3 +22,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.authentication.infra" }

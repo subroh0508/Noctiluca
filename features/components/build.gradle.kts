@@ -25,3 +25,5 @@ kotlin {
         }
     }
 }
+
+android { namespace = "noctiluca.features.components" }

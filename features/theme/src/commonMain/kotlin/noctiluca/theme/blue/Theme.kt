@@ -1,8 +1,7 @@
 package noctiluca.theme.blue
 
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
-
+import androidx.compose.material3.lightColorScheme
 
 val LightBlue = lightColorScheme(
     primary = md_theme_light_primary,
@@ -37,7 +36,6 @@ val LightBlue = lightColorScheme(
     scrim = md_theme_light_scrim,
     */
 )
-
 
 val DarkBlue = darkColorScheme(
     primary = md_theme_dark_primary,

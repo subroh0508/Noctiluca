@@ -68,7 +68,7 @@ private fun StatusHeader(
 
     AsyncImage(
         tooter.avatar,
-        //fallback = imageResources(getDrawables().icon_mastodon),
+        // fallback = imageResources(getDrawables().icon_mastodon),
         modifier = Modifier.size(tooterIconSize.toDp())
             .clip(RoundedCornerShape(8.dp)),
     )
@@ -121,7 +121,6 @@ private fun VisibilityIcon(
         tint = MaterialTheme.colorScheme.outline,
     )
 }
-
 
 @Composable
 private fun StatusActions(

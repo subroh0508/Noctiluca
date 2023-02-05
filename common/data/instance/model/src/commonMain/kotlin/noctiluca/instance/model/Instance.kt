@@ -23,7 +23,7 @@ data class Instance(
         val major: Int,
         val minor: Int,
         val patch: Int,
-    ): Comparable<Version> {
+    ) : Comparable<Version> {
         companion object {
             operator fun invoke(
                 version: String,

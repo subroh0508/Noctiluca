@@ -12,7 +12,7 @@ import java.net.UnknownHostException
 internal class InstanceRepositoryImpl(
     private val instancesSocialApi: InstancesSocialApi,
     private val v1: MastodonApiV1,
-): InstanceRepository {
+) : InstanceRepository {
     override suspend fun search(
         query: String,
     ): List<Instance.Suggest> = try {

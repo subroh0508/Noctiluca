@@ -5,7 +5,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.TextUnit
 
 @Composable
-fun TextUnit.toDp() = with (LocalDensity.current) { toDp() }
+fun TextUnit.toDp() = with(LocalDensity.current) { toDp() }
 
 @Composable
 fun Int.toDp() = with(LocalDensity.current) { toDp() }

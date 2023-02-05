@@ -7,14 +7,14 @@ import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
 import noctiluca.authentication.domain.usecase.ShowMastodonInstanceUseCase
-import noctiluca.features.components.model.LoadState
-import noctiluca.features.components.state.LoadStateComposeState
-import noctiluca.features.components.state.loadLazy
-import noctiluca.features.components.state.produceLoadState
 import noctiluca.features.authentication.LocalAuthorizeResult
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.*
+import noctiluca.features.components.model.LoadState
+import noctiluca.features.components.state.LoadStateComposeState
+import noctiluca.features.components.state.loadLazy
+import noctiluca.features.components.state.produceLoadState
 import noctiluca.instance.model.Instance
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
@@ -27,7 +27,7 @@ internal class AuthorizedUserState(
     private val redirectUri: Uri,
     private val navController: NavController,
     private val requestAppCredentialUseCase: RequestAppCredentialUseCase,
-    private val requestRequestAccessTokenUseCase :RequestAccessTokenUseCase,
+    private val requestRequestAccessTokenUseCase: RequestAccessTokenUseCase,
     private val scope: CoroutineScope,
     private val state: MutableState<LoadState> = mutableStateOf(LoadState.Initial),
 ) : LoadStateComposeState<AuthorizedUser> by LoadStateComposeState(state) {
@@ -139,6 +139,6 @@ private fun rememberMastodonInstance(
             return@produceLoadState
         }
 
-        loadLazy { useCase.execute(query.text)  }
+        loadLazy { useCase.execute(query.text) }
     }
 }

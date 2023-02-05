@@ -27,7 +27,7 @@ internal fun TimelineNavigationBar() {
     }
 }
 
-private val Timeline.icon get() = when(this) {
+private val Timeline.icon get() = when (this) {
     is Timeline.Global -> Icons.Default.Public
     is Timeline.Local -> Icons.Default.Group
     is Timeline.Home -> Icons.Default.Home
@@ -36,7 +36,7 @@ private val Timeline.icon get() = when(this) {
 }
 
 @Composable
-private fun Timeline.label() = when(this) {
+private fun Timeline.label() = when (this) {
     is Timeline.Global -> getString().timeline_global
     is Timeline.Local -> getString().timeline_local
     is Timeline.Home -> getString().timeline_home

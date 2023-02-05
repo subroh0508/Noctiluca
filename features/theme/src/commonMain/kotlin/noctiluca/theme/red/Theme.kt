@@ -1,8 +1,7 @@
 package noctiluca.theme.red
 
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.material3.darkColorScheme
-
+import androidx.compose.material3.lightColorScheme
 
 val LightRed = lightColorScheme(
     primary = md_theme_light_primary,
@@ -37,7 +36,6 @@ val LightRed = lightColorScheme(
     scrim = md_theme_light_scrim,
     */
 )
-
 
 val DarkRed = darkColorScheme(
     primary = md_theme_dark_primary,

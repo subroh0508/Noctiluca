@@ -38,7 +38,7 @@ fun produceAuthorizedLoadState(
     producer = producer,
 )
 
-fun <T: Any> ProduceAuthorizedLoadStateScope.loadLazy(
+fun <T : Any> ProduceAuthorizedLoadStateScope.loadLazy(
     block: suspend CoroutineScope.() -> T,
 ) {
     val job = launch(start = CoroutineStart.LAZY) {

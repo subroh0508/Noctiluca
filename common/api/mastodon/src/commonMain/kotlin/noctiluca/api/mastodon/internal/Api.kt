@@ -15,6 +15,7 @@ internal object Api {
             @Resource("verify_credentials")
             @Serializable
             class VerifyCredentials(val parent: Accounts = Accounts())
+
             @Resource("update_credentials")
             @Serializable
             class UpdateCredentials(val parent: Accounts = Accounts())
@@ -30,6 +31,7 @@ internal object Api {
             @Resource("public")
             @Serializable
             class Public(val parent: Timelines = Timelines())
+
             @Resource("home")
             @Serializable
             class Home(val parent: Timelines = Timelines())

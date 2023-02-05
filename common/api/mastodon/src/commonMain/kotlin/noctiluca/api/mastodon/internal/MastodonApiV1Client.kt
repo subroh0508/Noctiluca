@@ -99,7 +99,7 @@ internal class MastodonApiV1Client(
         Api.V1.Statuses.Id.Unbookmark(id = id),
     ).body()
 
-    private suspend inline fun <reified T: Any> HttpClient.get(
+    private suspend inline fun <reified T : Any> HttpClient.get(
         resource: T,
         domain: String? = null,
         skipAuthorization: Boolean = false,
@@ -109,7 +109,7 @@ internal class MastodonApiV1Client(
         httpRequestBuilder()
     })
 
-    private suspend inline fun <reified T: Any> HttpClient.post(
+    private suspend inline fun <reified T : Any> HttpClient.post(
         resource: T,
         domain: String? = null,
         skipAuthorization: Boolean = false,
@@ -117,7 +117,7 @@ internal class MastodonApiV1Client(
         setAccessTokenAndHost(domain, skipAuthorization)
     }
 
-    private suspend inline fun <reified T: Any, reified E: Any> HttpClient.post(
+    private suspend inline fun <reified T : Any, reified E : Any> HttpClient.post(
         resource: T,
         body: E,
         domain: String? = null,
@@ -129,7 +129,7 @@ internal class MastodonApiV1Client(
 
     private suspend fun HttpRequestBuilder.setAccessTokenAndHost(
         domain: String? = null,
-        skipAuthorization: Boolean= false,
+        skipAuthorization: Boolean = false,
     ) {
         val token = getCurrentAccessToken()
         val host = domain ?: getCurrentDomain()
@@ -142,7 +142,6 @@ internal class MastodonApiV1Client(
             bearerAuth(token)
         }
     }
-
 
     private suspend fun getCurrentAccessToken() = token.getCurrentAccessToken()
     private suspend fun getCurrentDomain() = token.getCurrentDomain()

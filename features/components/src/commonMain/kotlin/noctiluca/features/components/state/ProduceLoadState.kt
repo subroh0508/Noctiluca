@@ -21,6 +21,6 @@ fun produceLoadState(
     producer = producer,
 )
 
-fun <T: Any> ProduceLoadStateScope.loadLazy(
+fun <T : Any> ProduceLoadStateScope.loadLazy(
     block: suspend CoroutineScope.() -> T,
 ) = loadLazy(this, block)

@@ -5,7 +5,6 @@ on: push
 jobs:
   lint:
     runs-on: ubuntu-latest
-    environment: production
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v3
@@ -16,14 +15,12 @@ jobs:
           java-version: 11
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
-      - name: Prepare Access Token
-        env:
-          ACCESS_TOKEN_INSTANCES_SOCIAL: ${{ secrets.ACCESS_TOKEN_INSTANCES_SOCIAL }}
-        run: echo instances.social.token=$ACCESS_TOKEN_INSTANCES_SOCIAL > ./local.properties
+      - name: Prepare dummy access token
+        run: echo instances.social.token=XXX > ./local.properties
       - name: Run detekt
         run: ./gradlew detektAll
       - name: Upload SARIF to Github using the upload-sarif action
         uses: github/codeql-action/upload-sarif@v2
         if: success() || failure()
         with:
-          sarif_file: build/reports/detekt/detekt.sarif
+          sarif_file: lint-reports/kotlin/detekt.sarif

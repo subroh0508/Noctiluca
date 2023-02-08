@@ -16,6 +16,7 @@ dependencies {
 tasks.register("detektAll", Detekt::class) {
     description = "Runs the Lint check whole project at once."
 
+    basePath = rootProject.projectDir.absolutePath
     parallel = true
     autoCorrect = true
     setSource(files(rootProject.projectDir))

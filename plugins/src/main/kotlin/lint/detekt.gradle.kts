@@ -30,9 +30,9 @@ tasks.register("detektAll", Detekt::class) {
             outputLocation.set(rootProject.file("lint-reports/kotlin/detekt.html"))
         }
 
-        xml {
+        sarif {
             required.set(true)
-            outputLocation.set(rootProject.file("lint-reports/kotlin/detekt.xml"))
+            outputLocation.set(rootProject.file("lint-reports/kotlin/detekt.sarif"))
         }
 
         txt {

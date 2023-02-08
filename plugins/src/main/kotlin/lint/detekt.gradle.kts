@@ -16,6 +16,7 @@ dependencies {
 tasks.register("detektAll", Detekt::class) {
     description = "Runs the Lint check whole project at once."
 
+    basePath = rootProject.projectDir.absolutePath
     parallel = true
     autoCorrect = true
     setSource(files(rootProject.projectDir))
@@ -30,9 +31,9 @@ tasks.register("detektAll", Detekt::class) {
             outputLocation.set(rootProject.file("lint-reports/kotlin/detekt.html"))
         }
 
-        xml {
+        sarif {
             required.set(true)
-            outputLocation.set(rootProject.file("lint-reports/kotlin/detekt.xml"))
+            outputLocation.set(rootProject.file("lint-reports/kotlin/detekt.sarif"))
         }
 
         txt {

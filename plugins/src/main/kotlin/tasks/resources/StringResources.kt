@@ -21,7 +21,7 @@ class StringResources(packageName: String) : Resources {
         commonStringSets += strings
     }
 
-    override fun addToWrapper(wrapper: TypeSpec.Builder) = with(wrapper) {
+    override fun addToWrapper(wrapper: TypeSpec.Builder) = with (wrapper) {
         addTypes(createLanguageClass())
         addFunction(createGetStringMethod())
     }

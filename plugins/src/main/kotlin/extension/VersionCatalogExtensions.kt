@@ -12,6 +12,9 @@ internal val VersionCatalog.detektFormatting: Provider<MinimalExternalModuleDepe
 
 internal val VersionCatalog.coroutinesCore: Provider<MinimalExternalModuleDependency> get() = getLibrary("kotlinx-coroutines-core")
 
+internal val VersionCatalog.ktorSerializationKotlinxJson: Provider<MinimalExternalModuleDependency> get() = getLibrary("ktor-serialization-kotlinx-json")
+internal val VersionCatalog.ktorClientMock: Provider<MinimalExternalModuleDependency> get() = getLibrary("ktor-client-mock")
+
 internal val VersionCatalog.koinCore: Provider<MinimalExternalModuleDependency> get() = getLibrary("koin-core")
 internal val VersionCatalog.koinAndroid: Provider<MinimalExternalModuleDependency> get() = getLibrary("koin-android")
 

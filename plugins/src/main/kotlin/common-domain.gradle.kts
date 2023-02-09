@@ -15,7 +15,12 @@ kotlin {
         }
         named("commonTest") {
             dependencies {
+                implementation(project(":common:api:mastodon"))
+                implementation(project(":common:api:token"))
+
                 implementation(kotlin("test"))
+                implementation(libs.ktorSerializationKotlinxJson)
+                implementation(libs.ktorClientMock)
                 implementation(libs.kotestAssertionsCore)
                 implementation(libs.kotestFrameworkEngine)
             }

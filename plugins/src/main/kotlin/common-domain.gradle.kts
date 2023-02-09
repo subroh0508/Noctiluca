@@ -1,6 +1,5 @@
-import extension.koinAndroid
-import extension.koinCore
-import extension.libs
+import extension.*
+import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     id("multiplatform-library")
@@ -17,6 +16,8 @@ kotlin {
         named("commonTest") {
             dependencies {
                 implementation(kotlin("test"))
+                implementation(libs.kotestAssertionsCore)
+                implementation(libs.kotestFrameworkEngine)
             }
         }
         named("androidMain") {
@@ -24,8 +25,36 @@ kotlin {
                 implementation(libs.koinAndroid)
             }
         }
-        named("androidTest")
+        named("androidTest") {
+            dependencies {
+                implementation(libs.kotestRunnerJunit5)
+            }
+        }
         named("desktopMain")
-        named("desktopTest")
+        named("desktopTest") {
+            dependencies {
+                implementation(libs.kotestRunnerJunit5)
+            }
+        }
+    }
+}
+
+tasks.named<Test>("desktopTest") {
+    useJUnitPlatform()
+    testLogging {
+        showExceptions = true
+        showStandardStreams = true
+        events = setOf(TestLogEvent.FAILED, TestLogEvent.PASSED)
+    }
+}
+
+android {
+    testOptions.unitTests.all {
+        it.useJUnitPlatform()
+        it.testLogging {
+            showExceptions = true
+            showStandardStreams = true
+            events = setOf(TestLogEvent.FAILED, TestLogEvent.PASSED)
+        }
     }
 }

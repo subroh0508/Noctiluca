@@ -1,7 +1,6 @@
 package noctiluca.test.mock
 
 import noctiluca.repository.TokenCache
-import noctiluca.test.DOMAIN_MASTODON_JP
 import noctiluca.test.DUMMY_ACCESS_TOKEN
 import noctiluca.test.me
 

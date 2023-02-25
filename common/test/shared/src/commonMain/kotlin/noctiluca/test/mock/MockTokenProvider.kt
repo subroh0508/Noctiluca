@@ -4,7 +4,6 @@ import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.repository.TokenProvider
 import noctiluca.test.me
-import noctiluca.test.model.MockAuthorizedUser
 
 class MockTokenProvider(
     private val current: AuthorizedUser = me,

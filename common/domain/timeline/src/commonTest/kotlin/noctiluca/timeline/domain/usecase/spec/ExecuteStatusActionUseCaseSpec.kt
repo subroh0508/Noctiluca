@@ -82,7 +82,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
                     format,
                     Api.V1.Statuses.Id.Unbookmark(status.id.value),
                 ) -> JSON_STATUSES_UNBOOKMARK
-                else -> throw IllegalStateException()
+                else -> error("Unexpected path: ${request.url}")
             }
 
             respond(

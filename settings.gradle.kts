@@ -36,6 +36,7 @@ include(
     ":common:data:status:infra",
     ":common:data:timeline:model",
     ":common:data:timeline:infra",
+    ":common:test:shared",
     ":common:domain:authentication",
     ":common:domain:timeline",
     ":features:components",

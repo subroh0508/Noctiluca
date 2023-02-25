@@ -1,11 +1,11 @@
-package noctiluca.api.mastodon.internal
+package noctiluca.api.mastodon
 
 import io.ktor.resources.*
 import kotlinx.serialization.Serializable
 
 @Resource("/api")
 @Serializable
-internal object Api {
+object Api {
     @Resource("v1")
     @Serializable
     class V1(val parent: Api = Api) {

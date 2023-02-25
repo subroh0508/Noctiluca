@@ -26,6 +26,8 @@ okhttp3 = "4.10.0"
 
 junit = "4.13.2"
 
+kotest = "5.5.5"
+
 kotlin-poet = "1.12.0"
 
 [plugins]
@@ -36,6 +38,7 @@ compose = { id = "org.jetbrains.compose", version.ref = "compose" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
+kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
 
 [libraries]
 android-gradle-build-tools = { module = "com.android.tools.build:gradle", version.ref = "agp" }
@@ -47,6 +50,7 @@ compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin"
 buildconfig-plugin = { module = "com.github.gmazzo:gradle-buildconfig-plugin", version.ref = "buildconfig" }
 detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
+kotest-plugin = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
 
 androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-core" }
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
@@ -70,6 +74,7 @@ ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negoti
 ktor-client-resources = { module = "io.ktor:ktor-client-resources", version.ref = "ktor" }
 ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
+ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
@@ -77,6 +82,10 @@ koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 okhttp3-logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "okhttp3" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
+
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
+kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
+kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 
 kotlin-poet = { module = "com.squareup:kotlinpoet", version.ref = "kotlin-poet" }
 
@@ -89,6 +98,7 @@ plugins = [
     "compose-gradle-plugin",
     "buildconfig-plugin",
     "detekt-plugin",
+    "kotest-plugin",
 ]
 
 ktor-client-common = [

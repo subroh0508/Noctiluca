@@ -6,6 +6,6 @@ import noctiluca.model.Domain
 import noctiluca.test.DOMAIN_MASTODON_JP
 
 data class MockAuthorizedUser(
-    override val id: AccountId = AccountId("1"),
-    override val domain: Domain = Domain(DOMAIN_MASTODON_JP),
+    override val id: AccountId,
+    override val domain: Domain,
 ) : AuthorizedUser

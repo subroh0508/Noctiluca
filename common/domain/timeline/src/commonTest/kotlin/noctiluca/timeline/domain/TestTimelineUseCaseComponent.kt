@@ -13,6 +13,7 @@ import noctiluca.timeline.infra.di.TimelineRepositoriesModule
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope
 import org.koin.core.context.loadKoinModules
+import org.koin.core.context.startKoin
 import org.koin.core.scope.Scope
 import org.koin.dsl.module
 
@@ -29,22 +30,22 @@ class TestTimelineUseCaseComponent(
         }
     }
 
-    init {
-        loadKoinModules(module {
-            MastodonApiModule(
-                buildHttpClient(json, mockHttpClientEngine),
-                buildWebSocketClient(mockHttpClientEngine),
-                json,
-            )
-            MockTokenModule()
+    init { startKoin { modules(buildModule()) } }
 
-            AccountRepositoriesModule()
-            StatusRepositoriesModule()
-            TimelineRepositoriesModule()
+    private fun buildModule() = module {
+        MastodonApiModule(
+            buildHttpClient(json, mockHttpClientEngine),
+            buildWebSocketClient(mockHttpClientEngine),
+            json,
+        )
+        MockTokenModule()
 
-            scope(scope.scopeQualifier) {
-                TimelineDomainModule()
-            }
-        })
+        AccountRepositoriesModule()
+        StatusRepositoriesModule()
+        TimelineRepositoriesModule()
+
+        scope(scope.scopeQualifier) {
+            TimelineDomainModule()
+        }
     }
 }

@@ -17,9 +17,12 @@ kotlin {
             dependencies {
                 implementation(project(":common:api:mastodon"))
                 implementation(project(":common:api:token"))
+                implementation(project(":common:data:shared"))
+                implementation(project(":common:test:shared"))
 
                 implementation(kotlin("test"))
                 implementation(libs.ktorSerializationKotlinxJson)
+                implementation(libs.ktorClientResources)
                 implementation(libs.ktorClientMock)
                 implementation(libs.kotestAssertionsCore)
                 implementation(libs.kotestFrameworkEngine)

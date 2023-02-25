@@ -7,6 +7,7 @@ import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.mastodon.di.buildHttpClient
 import noctiluca.api.mastodon.di.buildWebSocketClient
 import noctiluca.status.infra.di.StatusRepositoriesModule
+import noctiluca.test.di.MockTokenModule
 import noctiluca.timeline.domain.di.TimelineDomainModule
 import noctiluca.timeline.infra.di.TimelineRepositoriesModule
 import org.koin.core.component.KoinScopeComponent
@@ -35,6 +36,8 @@ class TestTimelineUseCaseComponent(
                 buildWebSocketClient(mockHttpClientEngine),
                 json,
             )
+            MockTokenModule()
+
             AccountRepositoriesModule()
             StatusRepositoriesModule()
             TimelineRepositoriesModule()

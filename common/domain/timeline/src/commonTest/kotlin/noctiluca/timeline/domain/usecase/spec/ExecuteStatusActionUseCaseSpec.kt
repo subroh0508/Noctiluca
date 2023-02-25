@@ -12,6 +12,9 @@ import noctiluca.timeline.domain.usecase.ExecuteStatusActionUseCase
 class ExecuteStatusActionUseCaseSpec : DescribeSpec({
     val component = TestTimelineUseCaseComponent(
         MockEngine { request ->
+
+            request.url
+
             respond(
                 content = ByteReadChannel("""{"ip":"127.0.0.1"}"""),
                 status = HttpStatusCode.OK,

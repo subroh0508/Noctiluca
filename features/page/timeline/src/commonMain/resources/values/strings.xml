@@ -5,6 +5,6 @@
     <string name="timeline_local">ローカル</string>
     <string name="timeline_home">ホーム</string>
 
-    <string name="timeline_profile">プロフィール</string>
+    <string name="timeline_new_account">アカウントを追加</string>
     <string name="timeline_settings">設定</string>
 </resources>

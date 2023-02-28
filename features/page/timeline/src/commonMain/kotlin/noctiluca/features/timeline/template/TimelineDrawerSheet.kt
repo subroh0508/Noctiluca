@@ -1,13 +1,13 @@
 package noctiluca.features.timeline.template
 
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
@@ -15,24 +15,24 @@ import noctiluca.features.shared.account.AccountHeader
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.state.CurrentAuthorizedAccount
 
-internal sealed class DrawerMenu {
+internal sealed class TimelineDrawerMenu {
     abstract val label: String
     abstract val icon: Pair<ImageVector, String>
 
-    data class Profile(
+    data class NewAccount(
         override val label: String,
-        override val icon: Pair<ImageVector, String> = Icons.Default.Person to "Profile",
-    ) : DrawerMenu()
+        override val icon: Pair<ImageVector, String> = Icons.Default.AddCircle to "NewAccount",
+    ) : TimelineDrawerMenu()
 
     data class Settings(
         override val label: String,
         override val icon: Pair<ImageVector, String> = Icons.Default.Settings to "Settings",
-    ) : DrawerMenu()
+    ) : TimelineDrawerMenu()
 
     companion object {
         @Composable
         fun Build() = listOf(
-            Profile(getString().timeline_profile),
+            NewAccount(getString().timeline_new_account),
             Settings(getString().timeline_settings),
         )
     }
@@ -43,7 +43,9 @@ internal sealed class DrawerMenu {
 internal fun TimelineDrawerSheet(
     account: CurrentAuthorizedAccount,
     onClose: () -> Unit,
-) = ModalDrawerSheet {
+) = ModalDrawerSheet(
+    Modifier.fillMaxHeight(),
+) {
     Spacer(Modifier.height(12.dp))
     account.current?.let {
         AccountHeader(
@@ -56,11 +58,16 @@ internal fun TimelineDrawerSheet(
         )
     }
 
-    DrawerMenu.Build().forEach { item ->
+    Divider(Modifier.fillMaxWidth())
+
+    Box(Modifier.weight(1F))
+
+    Divider(Modifier.fillMaxWidth())
+
+    TimelineDrawerMenu.Build().forEach { item ->
         TimelineDrawerMenuItem(
             item.icon,
             item.label,
-            selected = false,
             onClick = { onClose() },
         )
     }
@@ -71,12 +78,32 @@ internal fun TimelineDrawerSheet(
 private fun TimelineDrawerMenuItem(
     icon: Pair<ImageVector, String>,
     label: String,
-    selected: Boolean,
     onClick: () -> Unit,
-) = NavigationDrawerItem(
-    icon = { Icon(icon.first, contentDescription = icon.second) },
-    label = { Text(label) },
-    selected = selected,
+    colors: NavigationDrawerItemColors = NavigationDrawerItemDefaults.colors(),
+) = Surface(
     onClick = onClick,
-    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-)
+    modifier = Modifier.height(56.dp)
+        .fillMaxWidth(),
+) {
+    Row(
+        Modifier.padding(horizontal = 28.dp),
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        val iconColor = colors.iconColor(selected = false).value
+        val labelColor = colors.textColor(selected = false).value
+
+        CompositionLocalProvider(
+            LocalContentColor provides iconColor,
+        ) {
+            Icon(icon.first, contentDescription = icon.second)
+        }
+
+        Spacer(Modifier.width(12.dp))
+
+        CompositionLocalProvider(
+            LocalContentColor provides labelColor,
+        ) {
+            Text(label)
+        }
+    }
+}

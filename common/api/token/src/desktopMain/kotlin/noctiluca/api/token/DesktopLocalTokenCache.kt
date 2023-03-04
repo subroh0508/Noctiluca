@@ -25,27 +25,41 @@ actual class LocalTokenCache internal constructor(
     override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
 
     actual suspend fun getAll(): List<AuthorizedUser> = withContext(Dispatchers.IO) {
-        getTokensJson().map(::Token)
+        val current = getCurrent()
+
+        listOfNotNull(current) + getTokensJson().filterNot {
+            current != null && it.accountId == current.id.value
+        }.map(::Token)
     }
 
     actual suspend fun getCurrent(): AuthorizedUser? = withContext(Dispatchers.IO) {
         getTokensJson().find(Token.Json::current)?.let(::Token)
     }
-    actual suspend fun setCurrent(id: AccountId): AuthorizedUser = withContext(Dispatchers.IO) {
-        val prevTokens = getTokensJson()
 
-        val token = prevTokens.find { it.accountId == id.value }
-        val nextTokens = listOfNotNull(token?.copy(current = true)) + prevTokens.mapNotNull {
-            if (it.accountId == id.value) {
-                return@mapNotNull null
+    actual suspend fun setCurrent(id: AccountId): AuthorizedUser =
+        withContext(Dispatchers.IO) {
+            val prevTokens = getTokensJson()
+
+            val token = prevTokens.find { it.accountId == id.value }
+            val nextTokens = listOfNotNull(token?.copy(current = true)) + prevTokens.mapNotNull {
+                if (it.accountId == id.value) {
+                    return@mapNotNull null
+                }
+
+                it.copy(current = false)
             }
 
-            it.copy(current = false)
+            saveTokensJson(nextTokens)
+
+            Token(getTokensJson().first(Token.Json::current))
         }
 
-        saveTokensJson(nextTokens)
+    actual suspend fun getAccessToken(id: AccountId) = withContext(Dispatchers.IO) {
+        getTokensJson().find { it.accountId == id.value }?.accessToken
+    }
 
-        Token(getTokensJson().first(Token.Json::current))
+    actual suspend fun getDomain(id: AccountId) = withContext(Dispatchers.IO) {
+        getTokensJson().find { it.accountId == id.value }?.domain?.let(::Domain)
     }
 
     actual suspend fun add(

@@ -62,7 +62,7 @@ class NoctilucaApplication : Application() {
     }
 
     private fun buildRepositoriesModules() = module {
-        AccountRepositoriesModule()
+        AccountRepositoriesModule(json)
         AuthenticationRepositoriesModule()
         InstanceRepositoriesModule()
         TimelineRepositoriesModule()

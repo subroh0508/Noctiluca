@@ -39,7 +39,7 @@ class TestTimelineUseCaseComponent(
         )
         MockTokenModule()
 
-        AccountRepositoriesModule()
+        AccountRepositoriesModule(json)
         StatusRepositoriesModule()
         TimelineRepositoriesModule()
 

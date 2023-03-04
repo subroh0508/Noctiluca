@@ -1,6 +1,7 @@
 package noctiluca.api.mastodon
 
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
+import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
 
@@ -11,6 +12,7 @@ interface MastodonApiV1 {
 
     suspend fun getVerifyAccountsCredentials(
         domain: String,
+        accessToken: String? = null,
     ): AccountCredentialJson
 
     suspend fun getTimelinesPublic(
@@ -53,4 +55,8 @@ interface MastodonApiV1 {
     suspend fun postStatusesUnbookmark(
         id: String,
     ): StatusJson
+
+    suspend fun getAccount(
+        id: String,
+    ): AccountJson
 }

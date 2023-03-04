@@ -7,6 +7,7 @@ import io.ktor.client.request.*
 import noctiluca.api.mastodon.Api
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
+import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
 import noctiluca.repository.TokenCache
@@ -25,9 +26,11 @@ internal class MastodonApiV1Client(
 
     override suspend fun getVerifyAccountsCredentials(
         domain: String,
+        accessToken: String?,
     ): AccountCredentialJson = client.get(
         Api.V1.Accounts.VerifyCredentials(),
         domain = domain,
+        accessToken = accessToken,
     ).body()
 
     override suspend fun getTimelinesPublic(
@@ -100,13 +103,20 @@ internal class MastodonApiV1Client(
         Api.V1.Statuses.Id.Unbookmark(id = id),
     ).body()
 
+    override suspend fun getAccount(
+        id: String,
+    ): AccountJson = client.get(
+        Api.V1.Accounts.Id(id = id),
+    ).body()
+
     private suspend inline fun <reified T : Any> HttpClient.get(
         resource: T,
         domain: String? = null,
+        accessToken: String? = null,
         skipAuthorization: Boolean = false,
         httpRequestBuilder: HttpRequestBuilder.() -> Unit = {},
     ) = get(resource, builder = {
-        setAccessTokenAndHost(domain, skipAuthorization)
+        setAccessTokenAndHost(domain, accessToken, skipAuthorization)
         httpRequestBuilder()
     })
 
@@ -115,7 +125,7 @@ internal class MastodonApiV1Client(
         domain: String? = null,
         skipAuthorization: Boolean = false,
     ) = post(resource) {
-        setAccessTokenAndHost(domain, skipAuthorization)
+        setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
     }
 
     private suspend inline fun <reified T : Any, reified E : Any> HttpClient.post(
@@ -124,15 +134,16 @@ internal class MastodonApiV1Client(
         domain: String? = null,
         skipAuthorization: Boolean = false,
     ) = post(resource) {
-        setAccessTokenAndHost(domain, skipAuthorization)
+        setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
         setBody(body)
     }
 
     private suspend fun HttpRequestBuilder.setAccessTokenAndHost(
         domain: String? = null,
+        accessToken: String? = null,
         skipAuthorization: Boolean = false,
     ) {
-        val token = getCurrentAccessToken()
+        val token = accessToken ?: getCurrentAccessToken()
         val host = domain ?: getCurrentDomain()
 
         if (host != null) {

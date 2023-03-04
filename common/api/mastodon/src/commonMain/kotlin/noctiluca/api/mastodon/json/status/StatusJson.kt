@@ -4,6 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.customemoji.CustomEmojiJson
+import noctiluca.api.mastodon.json.filterresult.FilterResultJson
 import noctiluca.api.mastodon.json.mediaattachment.MediaAttachmentJson
 import noctiluca.api.mastodon.json.poll.PollJson
 import noctiluca.api.mastodon.json.previewcard.PreviewCardJson
@@ -53,7 +54,7 @@ data class StatusJson(
     val muted: Boolean?,
     val bookmarked: Boolean?,
     val pinned: Boolean?,
-    val filtered: Boolean?,
+    val filtered: List<FilterResultJson.Filter>?,
 ) {
     @Serializable
     data class Application(

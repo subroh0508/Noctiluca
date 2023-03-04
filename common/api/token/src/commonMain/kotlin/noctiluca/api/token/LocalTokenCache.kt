@@ -12,6 +12,10 @@ expect class LocalTokenCache : TokenCache {
 
     suspend fun setCurrent(id: AccountId): AuthorizedUser
 
+    suspend fun getAccessToken(id: AccountId): String?
+
+    suspend fun getDomain(id: AccountId): Domain?
+
     suspend fun add(id: AccountId, domain: Domain, accessToken: String): List<AuthorizedUser>
 
     suspend fun delete(id: AccountId): List<AuthorizedUser>

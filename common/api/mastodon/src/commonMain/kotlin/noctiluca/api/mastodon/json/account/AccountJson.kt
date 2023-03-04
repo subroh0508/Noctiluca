@@ -43,4 +43,10 @@ data class AccountJson(
     val followersCount: Int,
     @SerialName("following_count")
     val followingCount: Int,
-)
+) {
+    companion object {
+        private val REGEX_ACCOUNT_URL = """^https?://(.*?)/@.*$""".toRegex()
+    }
+
+    val domain get() = REGEX_ACCOUNT_URL.find(url)?.value
+}

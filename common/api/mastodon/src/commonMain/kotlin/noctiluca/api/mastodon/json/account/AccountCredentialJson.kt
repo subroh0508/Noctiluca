@@ -1,5 +1,6 @@
 package noctiluca.api.mastodon.json.account
 
+import io.ktor.http.*
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import noctiluca.api.mastodon.json.customemoji.CustomEmojiJson
@@ -57,4 +58,9 @@ data class AccountCredentialJson(
         val followRequestsCount: Int,
         val fields: List<FieldJson>,
     )
+
+    fun hasSameIdentifier(
+        id: String,
+        domain: String,
+    ) = this.id == id && acct.endsWith("@$domain")
 }

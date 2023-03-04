@@ -53,7 +53,16 @@ internal class TokenRepositoryImpl(
         return tokenCache.setCurrent(id)
     }
 
-    override suspend fun getAuthorizedUsers() = tokenCache.getAll()
+    override suspend fun getAuthorizedUsers(includeCurrent: Boolean): List<AuthorizedUser> {
+        val users = tokenCache.getAll()
+        val current = getCurrent()
+
+        if (includeCurrent || current == null) {
+            return users
+        }
+
+        return users.filterNot { it.id == current.id && it.domain == current.domain }
+    }
 
     override suspend fun getCurrent() = tokenCache.getCurrent()
 

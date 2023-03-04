@@ -1,8 +1,8 @@
 package noctiluca.account.infra.repository
 
 import noctiluca.account.model.Account
+import noctiluca.model.AccountId
 
 interface AccountRepository {
-    suspend fun fetchCurrentAccount(): Account
-    suspend fun fetchAllAuthorizedAccounts(): List<Account>
+    suspend fun fetchAccount(id: AccountId): Account
 }

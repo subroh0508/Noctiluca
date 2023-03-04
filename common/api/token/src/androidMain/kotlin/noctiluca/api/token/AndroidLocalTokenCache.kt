@@ -15,15 +15,22 @@ actual class LocalTokenCache internal constructor(
 
     override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
 
-    actual suspend fun getAll(): List<AuthorizedUser> = dataStore.data.first().map(::Token)
+    actual suspend fun getAll(): List<AuthorizedUser> {
+        val current = getCurrent()
 
-    actual suspend fun getCurrent(): AuthorizedUser? = dataStore.data.first().find(Token.Json::current)?.let(::Token)
+        return listOfNotNull(current) + dataStore.data.first().filterNot {
+            current != null && it.accountId == current.id.value
+        }.map(::Token)
+    }
+
+    actual suspend fun getCurrent(): AuthorizedUser? =
+        dataStore.data.first().find(Token.Json::current)?.let(::Token)
 
     actual suspend fun setCurrent(id: AccountId): AuthorizedUser {
-        dataStore.updateData {
-            val token = it.find { t -> t.accountId == id.value }
+        dataStore.updateData { json ->
+            val token = json.find { it.accountId == id.value }
 
-            listOfNotNull(token?.copy(current = true)) + it.mapNotNull { t ->
+            listOfNotNull(token?.copy(current = true)) + json.mapNotNull { t ->
                 if (t.accountId == id.value) {
                     return@mapNotNull null
                 }
@@ -35,6 +42,12 @@ actual class LocalTokenCache internal constructor(
         return Token(dataStore.data.first().first(Token.Json::current))
     }
 
+    actual suspend fun getAccessToken(id: AccountId) =
+        dataStore.data.first().find { it.accountId == id.value }?.accessToken
+
+    actual suspend fun getDomain(id: AccountId) =
+        dataStore.data.first().find { it.accountId == id.value }?.domain?.let(::Domain)
+
     actual suspend fun add(
         id: AccountId,
         domain: Domain,
@@ -43,7 +56,8 @@ actual class LocalTokenCache internal constructor(
         it + Token.Json(id, domain, accessToken)
     }.map(::Token)
 
-    actual suspend fun delete(id: AccountId): List<AuthorizedUser> = dataStore.updateData {
-        it.filterNot { t -> t.accountId == id.value }
-    }.map(::Token)
+    actual suspend fun delete(id: AccountId): List<AuthorizedUser> =
+        dataStore.updateData {
+            it.filterNot { t -> t.accountId == id.value }
+        }.map(::Token)
 }

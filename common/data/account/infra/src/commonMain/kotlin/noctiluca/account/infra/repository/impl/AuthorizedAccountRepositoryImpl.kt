@@ -21,7 +21,7 @@ internal class AuthorizedAccountRepositoryImpl(
         return fetchAccountCredential(
             current.id,
             current.domain,
-        )?.toEntity(current.domain) ?: throw AuthorizedAccountNotFoundException
+        )?.toEntity() ?: throw AuthorizedAccountNotFoundException
     }
 
     override suspend fun refresh(id: AccountId, domain: Domain): Account {
@@ -31,7 +31,7 @@ internal class AuthorizedAccountRepositoryImpl(
             id,
             domain,
             accessToken,
-        )?.toEntity(domain) ?: throw AuthorizedAccountNotFoundException
+        )?.toEntity() ?: throw AuthorizedAccountNotFoundException
     }
 
     private suspend fun fetchAccountCredential(
@@ -51,13 +51,11 @@ internal class AuthorizedAccountRepositoryImpl(
         }.getOrNull()
     }
 
-    private fun AccountCredentialJson.toEntity(
-        domain: Domain,
-    ) = Account(
+    private fun AccountCredentialJson.toEntity() = Account(
         AccountId(id),
         username,
         displayName,
-        domain,
         Uri(avatar),
+        acct,
     )
 }

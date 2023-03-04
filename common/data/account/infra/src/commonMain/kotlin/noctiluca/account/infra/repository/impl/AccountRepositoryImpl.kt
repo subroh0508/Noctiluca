@@ -17,7 +17,7 @@ internal class AccountRepositoryImpl(
         AccountId(id),
         username,
         displayName,
-        Domain(domain ?: throw IllegalStateException()),
         Uri(avatar),
+        acct
     )
 }

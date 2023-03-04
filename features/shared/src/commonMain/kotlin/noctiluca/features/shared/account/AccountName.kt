@@ -58,7 +58,7 @@ fun AccountName(
     )
 
     Text(
-        "@${account.username}",
+        account.screen,
         color = MaterialTheme.colorScheme.outline,
         style = usernameStyle,
     )

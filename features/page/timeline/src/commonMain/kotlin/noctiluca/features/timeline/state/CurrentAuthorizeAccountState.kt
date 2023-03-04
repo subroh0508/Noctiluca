@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.remember
 import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import noctiluca.account.model.Account
@@ -24,7 +23,7 @@ internal data class CurrentAuthorizedAccount(
     private val cache: AuthorizedUser? = null,
 ) {
     val current get() = loadState.getValueOrNull<Account>()
-    val domain get() = cache?.domain ?: current?.domain
+    val domain get() = cache?.domain
 
     val loading get() = loadState.loading
 }
@@ -49,7 +48,6 @@ internal fun rememberCurrentAuthorizedAccountStatus(
         loadAllAccounts(fetchAllAuthorizedAccountsUseCase)
     }
 }
-
 
 private fun ProduceAuthorizedStateScope<CurrentAuthorizedAccount>.loadAccount(
     useCase: FetchCurrentAuthorizedAccountUseCase,

@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import noctiluca.features.components.AuthorizedFeatureComposable
 import noctiluca.features.components.atoms.appbar.scrollToTop
@@ -16,6 +17,7 @@ import noctiluca.features.timeline.organisms.navigationbar.TimelineNavigationBar
 import noctiluca.features.timeline.organisms.scaffold.TimelineScaffold
 import noctiluca.features.timeline.state.TimelineListState
 import noctiluca.features.timeline.state.rememberTimelineStatus
+import noctiluca.features.timeline.template.TimelineDrawerMenu
 import noctiluca.features.timeline.template.TimelineDrawerSheet
 import org.koin.core.component.KoinScopeComponent
 
@@ -39,7 +41,14 @@ fun TimelineScreen(
     ) {
         TimelineScaffold(
             drawerContent = { scope, drawerState, account ->
-                TimelineDrawerSheet(account) { scope.launch { drawerState.close() } }
+                TimelineDrawerSheet(account) { menu ->
+                    handleOnClickDrawerItem(
+                        menu,
+                        scope,
+                        drawerState,
+                        onBackToSignIn,
+                    )
+                }
             },
             bottomBar = { TimelineNavigationBar() },
         ) { paddingValues, scrollBehavior -> TimelineLanes(paddingValues, scrollBehavior) }
@@ -75,4 +84,19 @@ private fun TimelineLanes(
             ),
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+private fun handleOnClickDrawerItem(
+    item: TimelineDrawerMenu,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+    onBackToSignIn: () -> Unit,
+) {
+    when (item) {
+        is TimelineDrawerMenu.NewAccount -> onBackToSignIn()
+        is TimelineDrawerMenu.Settings -> Unit
+    }
+
+    scope.launch { drawerState.close() }
 }

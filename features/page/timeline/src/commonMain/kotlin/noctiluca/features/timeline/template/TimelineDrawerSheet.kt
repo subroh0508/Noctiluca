@@ -42,7 +42,7 @@ internal sealed class TimelineDrawerMenu {
 @Composable
 internal fun TimelineDrawerSheet(
     account: CurrentAuthorizedAccount,
-    onClose: () -> Unit,
+    onClick: (TimelineDrawerMenu) -> Unit,
 ) = ModalDrawerSheet(
     Modifier.fillMaxHeight(),
 ) {
@@ -68,7 +68,7 @@ internal fun TimelineDrawerSheet(
         TimelineDrawerMenuItem(
             item.icon,
             item.label,
-            onClick = { onClose() },
+            onClick = { onClick(item) },
         )
     }
 }

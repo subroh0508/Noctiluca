@@ -31,10 +31,11 @@ import noctiluca.timeline.domain.usecase.json.JSON_STATUSES_UNFAVOURITE
 class ExecuteStatusActionUseCaseSpec : DescribeSpec({
     val tooter = Tooter(
         AccountId("2"),
-        "piyo@$DOMAIN_MASTODON_JP",
+        "piyo",
         "Kotori Otonashi",
         Uri("$URL_MASTODON_JP/@piyo"),
         Uri("$URL_MASTODON_JP/accounts/avatars/avater.jpg"),
+        "@piyo@$DOMAIN_MASTODON_JP"
     )
 
     val status = Status(

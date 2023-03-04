@@ -2,7 +2,6 @@ package noctiluca.test.mock
 
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
-import noctiluca.model.Domain
 import noctiluca.repository.TokenProvider
 import noctiluca.test.me
 
@@ -12,6 +11,6 @@ class MockTokenProvider(
 ) : TokenProvider {
     override suspend fun getCurrent() = current
     override suspend fun getAuthorizedUsers(includeCurrent: Boolean) = authorizedUsers
-    override suspend fun switch(id: AccountId, domain: Domain) = me
+    override suspend fun switch(id: AccountId) = me
     override suspend fun expireCurrent() = Unit
 }

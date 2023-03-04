@@ -3,7 +3,6 @@ package noctiluca.api.token
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
 import noctiluca.api.token.internal.Token
-import noctiluca.api.token.internal.hasSameIdentifier
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
@@ -20,7 +19,7 @@ actual class LocalTokenCache internal constructor(
         val current = getCurrent()
 
         return listOfNotNull(current) + dataStore.data.first().filterNot {
-            current != null && it.hasSameIdentifier(current.id, current.domain)
+            current != null && it.accountId == current.id.value
         }.map(::Token)
     }
 

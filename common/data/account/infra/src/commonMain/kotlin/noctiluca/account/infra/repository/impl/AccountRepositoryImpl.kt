@@ -1,6 +1,8 @@
 package noctiluca.account.infra.repository.impl
 
 import noctiluca.account.infra.repository.AccountRepository
+import noctiluca.account.infra.repository.local.LocalAccountCredentialCache
+import noctiluca.account.infra.toEntity
 import noctiluca.account.model.Account
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
@@ -28,12 +30,4 @@ internal class AccountRepositoryImpl(
             accessToken,
         ).toEntity(user.domain)
     }
-
-    private fun AccountCredentialJson.toEntity(domain: Domain) = Account(
-        AccountId(id),
-        username,
-        displayName,
-        domain,
-        Uri(avatar),
-    )
 }

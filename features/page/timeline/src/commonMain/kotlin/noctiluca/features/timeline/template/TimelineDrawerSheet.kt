@@ -1,16 +1,16 @@
 package noctiluca.features.timeline.template
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import noctiluca.features.components.atoms.list.OneLineListItem
 import noctiluca.features.shared.account.AccountHeader
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.state.CurrentAuthorizedAccount
@@ -79,31 +79,10 @@ private fun TimelineDrawerMenuItem(
     icon: Pair<ImageVector, String>,
     label: String,
     onClick: () -> Unit,
-    colors: NavigationDrawerItemColors = NavigationDrawerItemDefaults.colors(),
-) = Surface(
-    onClick = onClick,
-    modifier = Modifier.height(56.dp)
-        .fillMaxWidth(),
+) = OneLineListItem(
+    label,
+    Modifier.clickable { onClick() }
+        .padding(horizontal = 12.dp)
 ) {
-    Row(
-        Modifier.padding(horizontal = 28.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        val iconColor = colors.iconColor(selected = false).value
-        val labelColor = colors.textColor(selected = false).value
-
-        CompositionLocalProvider(
-            LocalContentColor provides iconColor,
-        ) {
-            Icon(icon.first, contentDescription = icon.second)
-        }
-
-        Spacer(Modifier.width(12.dp))
-
-        CompositionLocalProvider(
-            LocalContentColor provides labelColor,
-        ) {
-            Text(label)
-        }
-    }
+    Icon(icon.first, contentDescription = icon.second)
 }

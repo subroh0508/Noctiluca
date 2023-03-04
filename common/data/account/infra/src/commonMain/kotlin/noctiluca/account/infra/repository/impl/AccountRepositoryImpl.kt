@@ -18,6 +18,6 @@ internal class AccountRepositoryImpl(
         username,
         displayName,
         Uri(avatar),
-        acct
+        "@$acct",
     )
 }

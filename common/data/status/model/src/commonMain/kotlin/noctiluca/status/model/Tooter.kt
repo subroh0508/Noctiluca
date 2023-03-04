@@ -9,4 +9,5 @@ data class Tooter(
     val displayName: String,
     val url: Uri,
     val avatar: Uri,
+    val screen: String,
 )

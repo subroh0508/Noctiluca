@@ -37,7 +37,7 @@ fun TooterName(
     }
 
     Text(
-        "@${tooter.username}",
+        tooter.screen,
         color = MaterialTheme.colorScheme.outline,
         overflow = TextOverflow.Ellipsis,
         maxLines = 1,

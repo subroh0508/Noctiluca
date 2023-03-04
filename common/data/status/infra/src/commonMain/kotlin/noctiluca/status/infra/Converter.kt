@@ -34,8 +34,9 @@ fun StatusJson.toEntity(newAccountId: AccountId?) = Status(
 
 private fun AccountJson.toTooter() = Tooter(
     AccountId(id),
-    acct,
+    username,
     displayName,
     Uri(url),
     Uri(avatar),
+    "@$acct",
 )

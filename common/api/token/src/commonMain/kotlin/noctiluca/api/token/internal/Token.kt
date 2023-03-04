@@ -38,3 +38,13 @@ internal data class Token(
         )
     }
 }
+
+internal fun List<Token.Json>.find(
+    id: AccountId,
+    domain: Domain,
+) = find { it.hasSameIdentifier(id, domain) }
+
+internal fun Token.Json.hasSameIdentifier(
+    id: AccountId,
+    domain: Domain,
+) = this.accountId == id.value && this.domain == domain.value

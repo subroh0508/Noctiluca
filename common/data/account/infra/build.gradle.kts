@@ -8,6 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":common:api:mastodon"))
+                implementation(project(":common:api:token"))
                 implementation(project(":common:data:account:model"))
             }
         }

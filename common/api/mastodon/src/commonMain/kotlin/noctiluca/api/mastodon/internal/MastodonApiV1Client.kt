@@ -25,9 +25,11 @@ internal class MastodonApiV1Client(
 
     override suspend fun getVerifyAccountsCredentials(
         domain: String,
+        accessToken: String?,
     ): AccountCredentialJson = client.get(
         Api.V1.Accounts.VerifyCredentials(),
         domain = domain,
+        accessToken = accessToken,
     ).body()
 
     override suspend fun getTimelinesPublic(
@@ -103,10 +105,11 @@ internal class MastodonApiV1Client(
     private suspend inline fun <reified T : Any> HttpClient.get(
         resource: T,
         domain: String? = null,
+        accessToken: String? = null,
         skipAuthorization: Boolean = false,
         httpRequestBuilder: HttpRequestBuilder.() -> Unit = {},
     ) = get(resource, builder = {
-        setAccessTokenAndHost(domain, skipAuthorization)
+        setAccessTokenAndHost(domain, accessToken, skipAuthorization)
         httpRequestBuilder()
     })
 
@@ -115,7 +118,7 @@ internal class MastodonApiV1Client(
         domain: String? = null,
         skipAuthorization: Boolean = false,
     ) = post(resource) {
-        setAccessTokenAndHost(domain, skipAuthorization)
+        setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
     }
 
     private suspend inline fun <reified T : Any, reified E : Any> HttpClient.post(
@@ -124,15 +127,16 @@ internal class MastodonApiV1Client(
         domain: String? = null,
         skipAuthorization: Boolean = false,
     ) = post(resource) {
-        setAccessTokenAndHost(domain, skipAuthorization)
+        setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
         setBody(body)
     }
 
     private suspend fun HttpRequestBuilder.setAccessTokenAndHost(
         domain: String? = null,
+        accessToken: String? = null,
         skipAuthorization: Boolean = false,
     ) {
-        val token = getCurrentAccessToken()
+        val token = accessToken ?: getCurrentAccessToken()
         val host = domain ?: getCurrentDomain()
 
         if (host != null) {

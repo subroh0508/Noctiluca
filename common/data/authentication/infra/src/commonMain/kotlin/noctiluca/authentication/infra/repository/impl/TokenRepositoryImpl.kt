@@ -50,17 +50,17 @@ internal class TokenRepositoryImpl(
 
         tokenCache.add(id, domain, accessToken)
 
-        return tokenCache.setCurrent(id)
+        return tokenCache.setCurrent(id, domain)
     }
 
     override suspend fun getAuthorizedUsers() = tokenCache.getAll()
 
     override suspend fun getCurrent() = tokenCache.getCurrent()
 
-    override suspend fun switch(id: AccountId) = tokenCache.setCurrent(id)
+    override suspend fun switch(id: AccountId, domain: Domain) = tokenCache.setCurrent(id, domain)
 
     override suspend fun expireCurrent() {
-        getCurrent()?.let { tokenCache.delete(it.id) }
-        tokenCache.getAll().firstOrNull()?.let { switch(it.id) }
+        getCurrent()?.let { tokenCache.delete(it.id, it.domain) }
+        tokenCache.getAll().firstOrNull()?.let { switch(it.id, it.domain) }
     }
 }

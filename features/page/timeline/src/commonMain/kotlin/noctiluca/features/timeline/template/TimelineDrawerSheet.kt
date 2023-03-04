@@ -2,15 +2,21 @@ package noctiluca.features.timeline.template
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
+import noctiluca.account.model.Account
+import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.list.OneLineListItem
+import noctiluca.features.components.atoms.list.TwoLineListItem
+import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.features.shared.account.AccountHeader
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.state.CurrentAuthorizedAccount
@@ -60,7 +66,9 @@ internal fun TimelineDrawerSheet(
 
     Divider(Modifier.fillMaxWidth())
 
-    Box(Modifier.weight(1F))
+    Box(Modifier.weight(1F)) {
+        AuthorizedAccountsList(account)
+    }
 
     Divider(Modifier.fillMaxWidth())
 
@@ -73,7 +81,30 @@ internal fun TimelineDrawerSheet(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AuthorizedAccountsList(
+    account: CurrentAuthorizedAccount,
+) = LazyColumn(
+    account.all,
+    key = { it.screen },
+) { _, item ->
+    AuthorizedAccountItem(item)
+}
+
+@Composable
+private fun AuthorizedAccountItem(
+    account: Account,
+) = TwoLineListItem(
+    account.displayName,
+    supportingText = account.screen,
+    leadingContent = {
+        AsyncImage(
+            account.avatar,
+            modifier = Modifier.clip(RoundedCornerShape(8.dp)),
+        )
+    }
+)
+
 @Composable
 private fun TimelineDrawerMenuItem(
     icon: Pair<ImageVector, String>,

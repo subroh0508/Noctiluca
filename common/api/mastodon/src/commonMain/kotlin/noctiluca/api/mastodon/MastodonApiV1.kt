@@ -11,6 +11,7 @@ interface MastodonApiV1 {
 
     suspend fun getVerifyAccountsCredentials(
         domain: String,
+        accessToken: String? = null,
     ): AccountCredentialJson
 
     suspend fun getTimelinesPublic(

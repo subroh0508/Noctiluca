@@ -62,5 +62,5 @@ data class AccountCredentialJson(
     fun hasSameIdentifier(
         id: String,
         domain: String,
-    ) = this.id == id && url.startsWith("${URLProtocol.HTTPS}://$domain")
+    ) = this.id == id && acct.endsWith("@$domain")
 }

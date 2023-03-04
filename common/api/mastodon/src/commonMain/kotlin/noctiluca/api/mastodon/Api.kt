@@ -19,6 +19,10 @@ object Api {
             @Resource("update_credentials")
             @Serializable
             class UpdateCredentials(val parent: Accounts = Accounts())
+
+            @Resource("{id}")
+            @Serializable
+            class Id(val parent: Accounts = Accounts(), val id: String)
         }
 
         @Resource("instance")

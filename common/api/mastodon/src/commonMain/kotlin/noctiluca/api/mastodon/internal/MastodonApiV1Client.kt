@@ -7,6 +7,7 @@ import io.ktor.client.request.*
 import noctiluca.api.mastodon.Api
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
+import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
 import noctiluca.repository.TokenCache
@@ -100,6 +101,12 @@ internal class MastodonApiV1Client(
         id: String,
     ): StatusJson = client.post(
         Api.V1.Statuses.Id.Unbookmark(id = id),
+    ).body()
+
+    override suspend fun getAccount(
+        id: String,
+    ): AccountJson = client.get(
+        Api.V1.Accounts.Id(id = id),
     ).body()
 
     private suspend inline fun <reified T : Any> HttpClient.get(

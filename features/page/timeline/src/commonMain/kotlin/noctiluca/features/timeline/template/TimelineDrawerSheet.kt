@@ -88,12 +88,13 @@ private fun AuthorizedAccountsList(
     account.others,
     key = { it.screen },
 ) { _, item ->
-    AuthorizedAccountItem(item)
+    AuthorizedAccountItem(item) {}
 }
 
 @Composable
 private fun AuthorizedAccountItem(
     account: Account,
+    onClick: () -> Unit,
 ) = TwoLineListItem(
     account.displayName,
     supportingText = account.screen,
@@ -102,7 +103,9 @@ private fun AuthorizedAccountItem(
             account.avatar,
             modifier = Modifier.clip(RoundedCornerShape(8.dp)),
         )
-    }
+    },
+    modifier = Modifier.clickable { onClick() }
+        .padding(horizontal = 12.dp)
 )
 
 @Composable

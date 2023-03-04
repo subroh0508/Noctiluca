@@ -18,5 +18,5 @@ fun Module.AccountRepositoriesModule(json: Json) {
             get()
         )
     }
-    single<AccountRepository> { AccountRepositoryImpl(get(), get(), get()) }
+    single<AccountRepository> { AccountRepositoryImpl(get()) }
 }

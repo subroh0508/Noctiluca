@@ -85,7 +85,7 @@ internal fun TimelineDrawerSheet(
 private fun AuthorizedAccountsList(
     account: CurrentAuthorizedAccount,
 ) = LazyColumn(
-    account.all,
+    account.others,
     key = { it.screen },
 ) { _, item ->
     AuthorizedAccountItem(item)

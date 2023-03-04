@@ -14,19 +14,19 @@ import noctiluca.features.timeline.LocalScope
 import noctiluca.model.AuthorizedUser
 import noctiluca.repository.TokenProvider
 import noctiluca.timeline.domain.usecase.FetchAllAuthorizedAccountsUseCase
-import noctiluca.timeline.domain.usecase.FetchCurrentAuthorizedAccountUseCase
 import org.koin.core.scope.Scope
 
 internal data class CurrentAuthorizedAccount(
-    private val currentLoadState: LoadState = LoadState.Initial,
-    private val allLoadState: LoadState = LoadState.Initial,
+    private val loadState: LoadState = LoadState.Initial,
     private val cache: AuthorizedUser? = null,
 ) {
-    val current get() = currentLoadState.getValueOrNull<Account>()
-    val all get() = allLoadState.getValueOrNull<List<Account>>() ?: listOf()
+    val current get() = all.firstOrNull()
+    val others get() = all.drop(1)
     val domain get() = cache?.domain ?: current?.domain
 
-    val loading get() = currentLoadState.loading || allLoadState.loading
+    val loading get() = loadState.loading
+
+    private val all get() = loadState.getValueOrNull<List<Account>>() ?: listOf()
 }
 
 @Composable
@@ -34,7 +34,6 @@ internal fun rememberCurrentAuthorizedAccountStatus(
     scope: Scope = LocalScope.current,
 ): State<CurrentAuthorizedAccount> {
     val tokenProvider: TokenProvider = remember { scope.get() }
-    val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase = remember { scope.get() }
     val fetchAllAuthorizedAccountsUseCase: FetchAllAuthorizedAccountsUseCase = remember { scope.get() }
 
     return produceAuthorizedState(
@@ -43,11 +42,12 @@ internal fun rememberCurrentAuthorizedAccountStatus(
     ) {
         runBlocking { value = value.copy(cache = tokenProvider.getCurrent()) }
 
-        loadAccount(fetchCurrentAuthorizedAccountUseCase)
+        //loadAccount(fetchCurrentAuthorizedAccountUseCase)
         loadAllAccounts(fetchAllAuthorizedAccountsUseCase)
     }
 }
 
+/*
 private fun ProduceAuthorizedStateScope<CurrentAuthorizedAccount>.loadAccount(
     useCase: FetchCurrentAuthorizedAccountUseCase,
 ) {
@@ -60,16 +60,17 @@ private fun ProduceAuthorizedStateScope<CurrentAuthorizedAccount>.loadAccount(
     value = value.copy(currentLoadState = LoadState.Loading(job))
     job.start()
 }
+*/
 
 private fun ProduceAuthorizedStateScope<CurrentAuthorizedAccount>.loadAllAccounts(
     useCase: FetchAllAuthorizedAccountsUseCase,
 ) {
     val job = launch(start = CoroutineStart.LAZY) {
         runCatchingWithAuth { useCase.execute() }
-            .onSuccess { value = value.copy(allLoadState = LoadState.Loaded(it)) }
-            .onFailure { value = value.copy(allLoadState = LoadState.Error(it)) }
+            .onSuccess { value = value.copy(loadState = LoadState.Loaded(it)) }
+            .onFailure { value = value.copy(loadState = LoadState.Error(it)) }
     }
 
-    value = value.copy(allLoadState = LoadState.Loading(job))
+    value = value.copy(loadState = LoadState.Loading(job))
     job.start()
 }

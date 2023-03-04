@@ -17,9 +17,16 @@ actual class LocalTokenCache internal constructor(
 
     override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
 
-    actual suspend fun getAll(): List<AuthorizedUser> = dataStore.data.first().map(::Token)
+    actual suspend fun getAll(): List<AuthorizedUser> {
+        val current = getCurrent()
 
-    actual suspend fun getCurrent(): AuthorizedUser? = dataStore.data.first().find(Token.Json::current)?.let(::Token)
+        return listOfNotNull(current) + dataStore.data.first().filterNot {
+            current != null && it.hasSameIdentifier(current.id, current.domain)
+        }.map(::Token)
+    }
+
+    actual suspend fun getCurrent(): AuthorizedUser? =
+        dataStore.data.first().find(Token.Json::current)?.let(::Token)
 
     actual suspend fun setCurrent(id: AccountId, domain: Domain): AuthorizedUser {
         dataStore.updateData {

@@ -49,23 +49,6 @@ internal class AuthorizedAccountRepositoryImpl(
         return json.toEntity(domain)
     }
 
-    private suspend fun fetchAccountCredential(
-        id: AccountId,
-        domain: Domain,
-        accessToken: String? = null,
-    ): AccountCredentialJson? {
-        val fromApi = runCatching {
-            v1.getVerifyAccountsCredentials(
-                domain.value,
-                accessToken,
-            )
-        }.getOrNull()
-
-        return fromApi ?: runCatching {
-            accountCredentialCache.get(id)
-        }.getOrNull()
-    }
-
     private fun AccountCredentialJson.toEntity(
         domain: Domain,
     ) = Account(

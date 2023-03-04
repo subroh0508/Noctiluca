@@ -4,7 +4,6 @@ import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.model.AccountId
-import noctiluca.model.Domain
 
 internal actual class LocalAccountCredentialCache(
     private val dataStore: DataStore<List<AccountCredentialJson>>,

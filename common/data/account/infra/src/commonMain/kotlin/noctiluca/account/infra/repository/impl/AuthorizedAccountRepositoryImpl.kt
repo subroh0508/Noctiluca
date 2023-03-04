@@ -15,27 +15,34 @@ internal class AuthorizedAccountRepositoryImpl(
     private val accountCredentialCache: LocalAccountCredentialCache,
     private val v1: MastodonApiV1,
 ) : AuthorizedAccountRepository {
-    override suspend fun fetchCurrent(): Account {
+    override suspend fun getCurrent() = tokenProvider.getCurrent()?.let { user ->
+        accountCredentialCache.get(user.id)
+            ?.toEntity(user.domain)
+            ?.let { it to user.domain }
+    }
+
+    override suspend fun getAll() = tokenCache.getAll().mapNotNull {
+        println(it)
+        accountCredentialCache.get(it.id)?.toEntity(it.domain)
+    }
+
+    override suspend fun fetchCurrent(): Pair<Account, Domain> {
         val current = tokenProvider.getCurrent() ?: throw AuthorizedAccountNotFoundException
 
-        val json = fetchAccountCredential(
-            current.id,
-            current.domain,
-        ) ?: throw AuthorizedAccountNotFoundException
+        val json = runCatching {
+            v1.getVerifyAccountsCredentials(current.domain.value)
+        }.getOrNull() ?: throw AuthorizedAccountNotFoundException
 
         accountCredentialCache.add(json)
 
-        return json.toEntity()
+        return json.toEntity(current.domain) to current.domain
     }
 
-    override suspend fun refresh(id: AccountId, domain: Domain): Account {
-        val accessToken = tokenCache.getAccessToken(id, domain)
+    override suspend fun refresh(id: AccountId): Account {
+        val accessToken = tokenCache.getAccessToken(id) ?: throw AuthorizedAccountNotFoundException
+        val domain = tokenCache.getDomain(id) ?: throw AuthorizedAccountNotFoundException
 
-        val json = fetchAccountCredential(
-            id,
-            domain,
-            accessToken,
-        ) ?: throw AuthorizedAccountNotFoundException
+        val json = v1.getVerifyAccountsCredentials(domain.value, accessToken)
 
         accountCredentialCache.add(json)
 
@@ -55,20 +62,17 @@ internal class AuthorizedAccountRepositoryImpl(
         }.getOrNull()
 
         return fromApi ?: runCatching {
-            accountCredentialCache.get(id, domain)
+            accountCredentialCache.get(id)
         }.getOrNull()
     }
 
     private fun AccountCredentialJson.toEntity(
-        domain: Domain? = null,
+        domain: Domain,
     ) = Account(
         AccountId(id),
         username,
         displayName,
         Uri(avatar),
-        listOfNotNull(
-            username,
-            domain?.value,
-        ).joinToString("@", prefix = "@"),
+        "@$username@${domain.value}",
     )
 }

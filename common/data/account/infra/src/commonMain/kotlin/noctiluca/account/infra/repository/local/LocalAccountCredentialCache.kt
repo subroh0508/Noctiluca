@@ -5,7 +5,7 @@ import noctiluca.model.AccountId
 import noctiluca.model.Domain
 
 internal expect class LocalAccountCredentialCache {
-    suspend fun get(id: AccountId, domain: Domain): AccountCredentialJson?
+    suspend fun get(id: AccountId): AccountCredentialJson?
     suspend fun add(json: AccountCredentialJson): List<AccountCredentialJson>
-    suspend fun delete(id: AccountId, domain: Domain): List<AccountCredentialJson>
+    suspend fun delete(id: AccountId): List<AccountCredentialJson>
 }

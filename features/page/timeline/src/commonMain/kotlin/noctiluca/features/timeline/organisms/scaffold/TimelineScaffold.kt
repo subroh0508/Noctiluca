@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -17,12 +16,14 @@ import noctiluca.features.components.atoms.appbar.TopAppBar
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.state.CurrentAuthorizedAccount
+import noctiluca.features.timeline.state.CurrentAuthorizedAccountState
 import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TimelineScaffold(
-    drawerContent: @Composable (CoroutineScope, DrawerState, CurrentAuthorizedAccount) -> Unit,
+    onReload: () -> Unit,
+    drawerContent: @Composable (CoroutineScope, DrawerState, CurrentAuthorizedAccountState) -> Unit,
     bottomBar: @Composable () -> Unit,
     content: @Composable (PaddingValues, TopAppBarScrollBehavior) -> Unit,
 ) {
@@ -30,7 +31,7 @@ internal fun TimelineScaffold(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val account by rememberCurrentAuthorizedAccountStatus()
+    val account = rememberCurrentAuthorizedAccountStatus(onReload)
 
     ModalNavigationDrawer(
         drawerContent = { drawerContent(scope, drawerState, account) },
@@ -39,7 +40,7 @@ internal fun TimelineScaffold(
         Scaffold(
             topBar = {
                 CurrentInstanceTopAppBar(
-                    account,
+                    account.value,
                     scrollBehavior,
                 ) { scope.launch { drawerState.open() } }
             },

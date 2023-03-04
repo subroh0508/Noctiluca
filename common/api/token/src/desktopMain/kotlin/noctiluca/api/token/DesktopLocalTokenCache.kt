@@ -1,14 +1,11 @@
 package noctiluca.api.token
 
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import noctiluca.api.token.internal.Token
-import noctiluca.api.token.internal.find
-import noctiluca.api.token.internal.hasSameIdentifier
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
@@ -31,7 +28,7 @@ actual class LocalTokenCache internal constructor(
         val current = getCurrent()
 
         listOfNotNull(current) + getTokensJson().filterNot {
-            current != null && it.hasSameIdentifier(current.id, current.domain)
+            current != null && it.accountId == current.id.value
         }.map(::Token)
     }
 
@@ -39,13 +36,13 @@ actual class LocalTokenCache internal constructor(
         getTokensJson().find(Token.Json::current)?.let(::Token)
     }
 
-    actual suspend fun setCurrent(id: AccountId, domain: Domain): AuthorizedUser =
+    actual suspend fun setCurrent(id: AccountId): AuthorizedUser =
         withContext(Dispatchers.IO) {
             val prevTokens = getTokensJson()
 
-            val token = prevTokens.find(id, domain)
+            val token = prevTokens.find { it.accountId == id.value }
             val nextTokens = listOfNotNull(token?.copy(current = true)) + prevTokens.mapNotNull {
-                if (it.hasSameIdentifier(id, domain)) {
+                if (it.accountId == id.value) {
                     return@mapNotNull null
                 }
 
@@ -57,8 +54,12 @@ actual class LocalTokenCache internal constructor(
             Token(getTokensJson().first(Token.Json::current))
         }
 
-    actual suspend fun getAccessToken(id: AccountId, domain: Domain) = withContext(Dispatchers.IO) {
-        getTokensJson().find(id, domain)?.accessToken
+    actual suspend fun getAccessToken(id: AccountId) = withContext(Dispatchers.IO) {
+        getTokensJson().find { it.accountId == id.value }?.accessToken
+    }
+
+    actual suspend fun getDomain(id: AccountId) = withContext(Dispatchers.IO) {
+        getTokensJson().find { it.accountId == id.value }?.domain?.let(::Domain)
     }
 
     actual suspend fun add(
@@ -72,8 +73,8 @@ actual class LocalTokenCache internal constructor(
         nextTokens as List<AuthorizedUser>
     }
 
-    actual suspend fun delete(id: AccountId, domain: Domain) = withContext(Dispatchers.IO) {
-        val nextTokens = getTokensJson().filterNot { it.hasSameIdentifier(id, domain) }
+    actual suspend fun delete(id: AccountId) = withContext(Dispatchers.IO) {
+        val nextTokens = getTokensJson().filterNot { it.accountId == id.value }
         saveTokensJson(nextTokens)
 
         nextTokens as List<AuthorizedUser>

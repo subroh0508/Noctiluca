@@ -48,7 +48,8 @@ internal sealed class TimelineDrawerMenu {
 @Composable
 internal fun TimelineDrawerSheet(
     account: CurrentAuthorizedAccount,
-    onClick: (TimelineDrawerMenu) -> Unit,
+    onClickAccount: (Account) -> Unit,
+    onClickDrawerMenu: (TimelineDrawerMenu) -> Unit,
 ) = ModalDrawerSheet(
     Modifier.fillMaxHeight(),
 ) {
@@ -67,7 +68,7 @@ internal fun TimelineDrawerSheet(
     Divider(Modifier.fillMaxWidth())
 
     Box(Modifier.weight(1F)) {
-        AuthorizedAccountsList(account)
+        AuthorizedAccountsList(account, onClickAccount)
     }
 
     Divider(Modifier.fillMaxWidth())
@@ -76,7 +77,7 @@ internal fun TimelineDrawerSheet(
         TimelineDrawerMenuItem(
             item.icon,
             item.label,
-            onClick = { onClick(item) },
+            onClick = { onClickDrawerMenu(item) },
         )
     }
 }
@@ -84,11 +85,12 @@ internal fun TimelineDrawerSheet(
 @Composable
 private fun AuthorizedAccountsList(
     account: CurrentAuthorizedAccount,
+    onClick: (Account) -> Unit,
 ) = LazyColumn(
     account.others,
     key = { it.screen },
 ) { _, item ->
-    AuthorizedAccountItem(item) {}
+    AuthorizedAccountItem(item) { onClick(item) }
 }
 
 @Composable

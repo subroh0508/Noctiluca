@@ -9,7 +9,7 @@ interface TokenProvider {
 
     suspend fun getAuthorizedUsers(includeCurrent: Boolean): List<AuthorizedUser>
 
-    suspend fun switch(id: AccountId, domain: Domain): AuthorizedUser
+    suspend fun switch(id: AccountId): AuthorizedUser
 
     suspend fun expireCurrent()
 }

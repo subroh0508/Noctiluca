@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import noctiluca.account.model.Account
 import noctiluca.features.components.AuthorizedFeatureComposable
 import noctiluca.features.components.atoms.appbar.scrollToTop
 import noctiluca.features.components.di.getKoinRootScope
@@ -15,6 +16,7 @@ import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.navigationbar.TimelineNavigationBar
 import noctiluca.features.timeline.organisms.scaffold.TimelineScaffold
+import noctiluca.features.timeline.state.CurrentAuthorizedAccountState
 import noctiluca.features.timeline.state.TimelineListState
 import noctiluca.features.timeline.state.rememberTimelineStatus
 import noctiluca.features.timeline.template.TimelineDrawerMenu
@@ -40,15 +42,25 @@ fun TimelineScreen(
         LocalTimelineListState provides timeline,
     ) {
         TimelineScaffold(
+            onReload,
             drawerContent = { scope, drawerState, account ->
-                TimelineDrawerSheet(account) { menu ->
-                    handleOnClickDrawerItem(
-                        menu,
-                        scope,
-                        drawerState,
-                        onBackToSignIn,
-                    )
-                }
+                TimelineDrawerSheet(
+                    account.value,
+                    onClickAccount = { clicked ->
+                        scope.launch {
+                            drawerState.close()
+                            account.switch(this, clicked)
+                        }
+                    },
+                    onClickDrawerMenu = { menu ->
+                        handleOnClickDrawerItem(
+                            menu,
+                            scope,
+                            drawerState,
+                            onBackToSignIn,
+                        )
+                    },
+                )
             },
             bottomBar = { TimelineNavigationBar() },
         ) { paddingValues, scrollBehavior -> TimelineLanes(paddingValues, scrollBehavior) }
@@ -84,6 +96,17 @@ private fun TimelineLanes(
             ),
         )
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+private fun handleOnClickAccount(
+    accountState: CurrentAuthorizedAccountState,
+    account: Account,
+    scope: CoroutineScope,
+    drawerState: DrawerState,
+) {
+    accountState.switch(scope, account)
+    scope.launch { drawerState.close() }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

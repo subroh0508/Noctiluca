@@ -3,7 +3,6 @@ package noctiluca.api.token
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
 import noctiluca.api.token.internal.Token
-import noctiluca.api.token.internal.find
 import noctiluca.api.token.internal.hasSameIdentifier
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
@@ -28,12 +27,12 @@ actual class LocalTokenCache internal constructor(
     actual suspend fun getCurrent(): AuthorizedUser? =
         dataStore.data.first().find(Token.Json::current)?.let(::Token)
 
-    actual suspend fun setCurrent(id: AccountId, domain: Domain): AuthorizedUser {
-        dataStore.updateData {
-            val token = it.find(id, domain)
+    actual suspend fun setCurrent(id: AccountId): AuthorizedUser {
+        dataStore.updateData { json ->
+            val token = json.find { it.accountId == id.value }
 
-            listOfNotNull(token?.copy(current = true)) + it.mapNotNull { t ->
-                if (t.hasSameIdentifier(id, domain)) {
+            listOfNotNull(token?.copy(current = true)) + json.mapNotNull { t ->
+                if (t.accountId == id.value) {
                     return@mapNotNull null
                 }
 
@@ -44,8 +43,11 @@ actual class LocalTokenCache internal constructor(
         return Token(dataStore.data.first().first(Token.Json::current))
     }
 
-    actual suspend fun getAccessToken(id: AccountId, domain: Domain) =
-        dataStore.data.first().find(id, domain)?.accessToken
+    actual suspend fun getAccessToken(id: AccountId) =
+        dataStore.data.first().find { it.accountId == id.value }?.accessToken
+
+    actual suspend fun getDomain(id: AccountId) =
+        dataStore.data.first().find { it.accountId == id.value }?.domain?.let(::Domain)
 
     actual suspend fun add(
         id: AccountId,
@@ -55,8 +57,8 @@ actual class LocalTokenCache internal constructor(
         it + Token.Json(id, domain, accessToken)
     }.map(::Token)
 
-    actual suspend fun delete(id: AccountId, domain: Domain): List<AuthorizedUser> =
+    actual suspend fun delete(id: AccountId): List<AuthorizedUser> =
         dataStore.updateData {
-            it.filterNot { t -> t.hasSameIdentifier(id, domain) }
+            it.filterNot { t -> t.accountId == id.value }
         }.map(::Token)
 }

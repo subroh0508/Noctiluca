@@ -9,21 +9,13 @@ import noctiluca.model.Domain
 internal actual class LocalAccountCredentialCache(
     private val dataStore: DataStore<List<AccountCredentialJson>>,
 ) {
-    actual suspend fun get(
-        id: AccountId,
-        domain: Domain,
-    ) = dataStore.data.first().find {
-        it.hasSameIdentifier(id.value, domain.value)
-    }
+    actual suspend fun get(id: AccountId) = dataStore.data.first().find { it.id == id.value }
 
     actual suspend fun add(json: AccountCredentialJson) = dataStore.updateData { list ->
         list.filterNot { it.url == json.url } + json
     }
 
-    actual suspend fun delete(
-        id: AccountId,
-        domain: Domain,
-    ) = dataStore.updateData { list ->
-        list.filterNot { it.hasSameIdentifier(id.value, domain.value) }
+    actual suspend fun delete(id: AccountId) = dataStore.updateData { list ->
+        list.filterNot { it.id == id.value }
     }
 }

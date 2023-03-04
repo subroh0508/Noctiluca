@@ -18,20 +18,28 @@ internal class AuthorizedAccountRepositoryImpl(
     override suspend fun fetchCurrent(): Account {
         val current = tokenProvider.getCurrent() ?: throw AuthorizedAccountNotFoundException
 
-        return fetchAccountCredential(
+        val json = fetchAccountCredential(
             current.id,
             current.domain,
-        )?.toEntity() ?: throw AuthorizedAccountNotFoundException
+        ) ?: throw AuthorizedAccountNotFoundException
+
+        accountCredentialCache.add(json)
+
+        return json.toEntity()
     }
 
     override suspend fun refresh(id: AccountId, domain: Domain): Account {
         val accessToken = tokenCache.getAccessToken(id, domain)
 
-        return fetchAccountCredential(
+        val json = fetchAccountCredential(
             id,
             domain,
             accessToken,
-        )?.toEntity() ?: throw AuthorizedAccountNotFoundException
+        ) ?: throw AuthorizedAccountNotFoundException
+
+        accountCredentialCache.add(json)
+
+        return json.toEntity(domain)
     }
 
     private suspend fun fetchAccountCredential(
@@ -51,11 +59,16 @@ internal class AuthorizedAccountRepositoryImpl(
         }.getOrNull()
     }
 
-    private fun AccountCredentialJson.toEntity() = Account(
+    private fun AccountCredentialJson.toEntity(
+        domain: Domain? = null,
+    ) = Account(
         AccountId(id),
         username,
         displayName,
         Uri(avatar),
-        acct,
+        listOfNotNull(
+            username,
+            domain?.value,
+        ).joinToString("@", prefix = "@"),
     )
 }

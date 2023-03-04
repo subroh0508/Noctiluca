@@ -6,5 +6,5 @@ import noctiluca.timeline.domain.usecase.FetchCurrentAuthorizedAccountUseCase
 internal class FetchCurrentAuthorizedAccountUseCaseImpl(
     private val repository: AccountRepository,
 ) : FetchCurrentAuthorizedAccountUseCase {
-    override suspend fun execute() = repository.fetchCurrentAccount()
+    override suspend fun execute() = repository.fetchCurrentAuthorizedAccount()
 }

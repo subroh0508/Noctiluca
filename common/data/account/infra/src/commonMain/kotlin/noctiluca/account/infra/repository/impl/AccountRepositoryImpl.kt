@@ -13,24 +13,20 @@ internal class AccountRepositoryImpl(
     private val tokenCache: LocalTokenCache,
     private val v1: MastodonApiV1,
 ) : AccountRepository {
-    override suspend fun fetchCurrentAccount(): Account {
+    override suspend fun fetchCurrentAuthorizedAccount(): Account {
         val current = tokenProvider.getCurrent() ?: throw AuthorizedTokenNotFoundException
 
         return v1.getVerifyAccountsCredentials(current.domain.value).toEntity(current.domain)
     }
 
-    override suspend fun fetchAllAuthorizedAccounts(): List<Account> {
-        val accounts = tokenProvider.getAuthorizedUsers().takeIf(List<AuthorizedUser>::isNotEmpty)
+    override suspend fun fetchAuthorizedAccount(user: AuthorizedUser): Account {
+        val accessToken = tokenCache.getAccessToken(user.id, user.domain)
             ?: throw AuthorizedTokenNotFoundException
 
-        return accounts.mapNotNull {
-            val accessToken = tokenCache.getAccessToken(it.id, it.domain) ?: return@mapNotNull null
-
-            v1.getVerifyAccountsCredentials(
-                it.domain.value,
-                accessToken,
-            ).toEntity(it.domain)
-        }
+        return v1.getVerifyAccountsCredentials(
+            user.domain.value,
+            accessToken,
+        ).toEntity(user.domain)
     }
 
     private fun AccountCredentialJson.toEntity(domain: Domain) = Account(

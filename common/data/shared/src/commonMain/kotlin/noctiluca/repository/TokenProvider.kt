@@ -7,7 +7,7 @@ import noctiluca.model.Domain
 interface TokenProvider {
     suspend fun getCurrent(): AuthorizedUser?
 
-    suspend fun getAuthorizedUsers(): List<AuthorizedUser>
+    suspend fun getAuthorizedUsers(includeCurrent: Boolean): List<AuthorizedUser>
 
     suspend fun switch(id: AccountId, domain: Domain): AuthorizedUser
 

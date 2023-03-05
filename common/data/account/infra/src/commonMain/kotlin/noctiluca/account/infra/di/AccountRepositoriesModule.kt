@@ -8,13 +8,6 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.AccountRepositoriesModule() {
-    single<AuthorizedAccountRepository> {
-        AuthorizedAccountRepositoryImpl(
-            get(),
-            get(),
-            get(),
-            get()
-        )
-    }
+    single<AuthorizedAccountRepository> { AuthorizedAccountRepositoryImpl(get(), get(), get(), get()) }
     single<AccountRepository> { AccountRepositoryImpl(get()) }
 }

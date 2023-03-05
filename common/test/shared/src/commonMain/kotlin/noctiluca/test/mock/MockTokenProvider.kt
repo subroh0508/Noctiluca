@@ -10,7 +10,6 @@ class MockTokenProvider(
     private val authorizedUsers: List<AuthorizedUser> = listOf(),
 ) : TokenProvider {
     override suspend fun getCurrent() = current
-    override suspend fun getAuthorizedUsers(includeCurrent: Boolean) = authorizedUsers
     override suspend fun switch(id: AccountId) = me
     override suspend fun expireCurrent() = Unit
 }

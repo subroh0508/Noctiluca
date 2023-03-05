@@ -5,6 +5,6 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.AccountInfraModule(json: Json) {
-    AccountCredentialCacheModule(json)
+    LocalAccountRepositoriesModule(json)
     AccountRepositoriesModule()
 }

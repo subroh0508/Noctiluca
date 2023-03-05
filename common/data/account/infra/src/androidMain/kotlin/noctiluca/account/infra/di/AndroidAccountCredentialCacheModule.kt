@@ -11,6 +11,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import noctiluca.account.infra.repository.local.AndroidLocalAccountCredentialCache
 import noctiluca.account.infra.repository.local.LocalAccountCredentialCache
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import org.koin.core.module.Module
@@ -45,5 +46,11 @@ private class AccountCredentialJsonSerializer(
 
 @Suppress("FunctionName")
 actual fun Module.AccountCredentialCacheModule(json: Json) {
-    single { LocalAccountCredentialCache(get<Application>().getAccountCredentialDataStore(json)) }
+    single<LocalAccountCredentialCache> {
+        AndroidLocalAccountCredentialCache(
+            get<Application>().getAccountCredentialDataStore(
+                json
+            )
+        )
+    }
 }

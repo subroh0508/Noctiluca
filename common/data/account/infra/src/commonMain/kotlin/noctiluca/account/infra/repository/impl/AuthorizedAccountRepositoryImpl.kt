@@ -22,7 +22,6 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     override suspend fun getAll() = tokenCache.getAll().mapNotNull {
-        println(it)
         accountCredentialCache.get(it.id)?.toEntity(it.domain)
     }
 

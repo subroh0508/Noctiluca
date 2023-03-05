@@ -3,12 +3,14 @@ package app.noctiluca
 import android.app.Application
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
+import noctiluca.account.infra.di.AccountInfraModule
 import noctiluca.account.infra.di.AccountRepositoriesModule
 import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.mastodon.di.buildWebSocketClient
 import noctiluca.api.token.di.TokenApiModule
+import noctiluca.authentication.infra.di.AuthenticationInfraModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.features.components.di.ImageLoaderModule
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
@@ -62,8 +64,8 @@ class NoctilucaApplication : Application() {
     }
 
     private fun buildRepositoriesModules() = module {
-        AccountRepositoriesModule(json)
-        AuthenticationRepositoriesModule()
+        AccountInfraModule(json)
+        AuthenticationInfraModule()
         InstanceRepositoriesModule()
         TimelineRepositoriesModule()
         StatusRepositoriesModule()

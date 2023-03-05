@@ -11,12 +11,17 @@ internal class AuthorizedAccountRepositoryImpl(
     private val local: LocalAuthorizedAccountRepository,
     private val v1: MastodonApiV1,
 ) : AuthorizedAccountRepository {
-    override suspend fun getCurrent() = local.getCurrent()
+    override suspend fun getCurrent(): Pair<Account, Domain>? {
+        val account = local.getCurrentAccount() ?: return null
+        val domain = local.getCurrentDomain() ?: return null
+
+        return account to domain
+    }
 
     override suspend fun getAll() = local.getAll()
 
     override suspend fun fetchCurrent(): Pair<Account, Domain> {
-        val (_, domain) = local.getCurrent() ?: throw AuthorizedAccountNotFoundException
+        val domain = local.getCurrentDomain() ?: throw AuthorizedAccountNotFoundException
 
         val json = runCatching {
             v1.getVerifyAccountsCredentials(domain.value)

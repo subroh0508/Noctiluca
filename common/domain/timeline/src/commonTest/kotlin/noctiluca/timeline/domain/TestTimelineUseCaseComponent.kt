@@ -3,7 +3,7 @@ package noctiluca.timeline.domain
 import io.ktor.client.engine.HttpClientEngine
 import kotlinx.serialization.json.Json
 import noctiluca.account.infra.di.AccountRepositoriesModule
-import noctiluca.account.infra.repository.local.LocalAccountCredentialCache
+import noctiluca.account.infra.repository.local.LocalAuthorizedAccountRepository
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.mastodon.di.buildHttpClient
 import noctiluca.api.mastodon.di.buildWebSocketClient
@@ -11,7 +11,6 @@ import noctiluca.status.infra.di.StatusRepositoriesModule
 import noctiluca.test.di.MockTokenModule
 import noctiluca.timeline.domain.di.TimelineDomainModule
 import noctiluca.timeline.infra.di.TimelineRepositoriesModule
-import org.koin.core.KoinApplication
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope
 import org.koin.core.module.Module
@@ -21,7 +20,7 @@ import org.koin.dsl.module
 
 class TestTimelineUseCaseComponent(
     private val mockHttpClientEngine: HttpClientEngine,
-    private val mockLocalAccountCredentialCache: LocalAccountCredentialCache? = null,
+    private val mockLocalAuthorizedAccountRepository: LocalAuthorizedAccountRepository? = null,
 ) : KoinScopeComponent {
     private val json by lazy {
         Json {
@@ -59,7 +58,9 @@ class TestTimelineUseCaseComponent(
     }
 
     private fun Module.buildAccountInfraModule() {
-        mockLocalAccountCredentialCache?.let { single { it } }
+        mockLocalAuthorizedAccountRepository?.let { repository ->
+            single { repository }
+        }
 
         AccountRepositoriesModule()
     }

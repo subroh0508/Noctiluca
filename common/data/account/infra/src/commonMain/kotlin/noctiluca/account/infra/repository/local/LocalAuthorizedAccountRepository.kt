@@ -6,7 +6,8 @@ import noctiluca.model.AccountId
 import noctiluca.model.Domain
 
 interface LocalAuthorizedAccountRepository {
-    suspend fun getCurrent(): Pair<Account, Domain>?
+    suspend fun getCurrentAccount(): Account?
+    suspend fun getCurrentDomain(): Domain?
     suspend fun getAll(): List<Account>
 
     suspend fun getAccessToken(id: AccountId): Pair<String, Domain>?

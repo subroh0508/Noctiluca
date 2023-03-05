@@ -15,7 +15,7 @@ object MockHttpClientEngine {
         expected: String,
     ) = MockEngine { request ->
         if (!request.url.isMatched(format, resource)) {
-            return@MockEngine error()
+            return@MockEngine mockError()
         }
 
         respond(
@@ -27,16 +27,31 @@ object MockHttpClientEngine {
 
     inline operator fun <reified T> invoke(
         resource: T,
+        errorStatusCode: HttpStatusCode,
+    ) = MockEngine { request ->
+        if (!request.url.isMatched(format, resource)) {
+            return@MockEngine mockError()
+        }
+
+        respond(
+            content = ByteReadChannel("\"error\":\"${errorStatusCode.description}\""),
+            status = errorStatusCode,
+            headers = headersOf(HttpHeaders.ContentType, "application/json"),
+        )
+    }
+
+    inline operator fun <reified T> invoke(
+        resource: T,
         crossinline handler: suspend MockRequestHandleScope.(HttpRequestData) -> HttpResponseData,
     ) = MockEngine { request ->
         if (!request.url.isMatched(format, resource)) {
-            return@MockEngine error()
+            return@MockEngine mockError()
         }
 
         handler(request)
     }
 
-    fun MockRequestHandleScope.error() = respond(
+    fun MockRequestHandleScope.mockError() = respond(
         content = ByteReadChannel("{\"error\":\"mock error\"}"),
         status = HttpStatusCode.InternalServerError,
         headers = headersOf(HttpHeaders.ContentType, "application/json"),

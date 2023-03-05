@@ -14,11 +14,12 @@ internal class LocalAuthorizedAccountRepositoryImpl(
     private val tokenCache: LocalTokenCache,
     private val accountCredentialCache: LocalAccountCredentialCache,
 ) : LocalAuthorizedAccountRepository {
-    override suspend fun getCurrent() = tokenProvider.getCurrent()?.let { user ->
+    override suspend fun getCurrentAccount() = tokenProvider.getCurrent()?.let { user ->
         accountCredentialCache.get(user.id)
             ?.toEntity(user.domain)
-            ?.let { it to user.domain }
     }
+
+    override suspend fun getCurrentDomain() = tokenProvider.getCurrent()?.domain
 
     override suspend fun getAll() = tokenCache.getAll().mapNotNull {
         accountCredentialCache.get(it.id)?.toEntity(it.domain)

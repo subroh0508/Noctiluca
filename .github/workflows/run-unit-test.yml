@@ -25,6 +25,16 @@ jobs:
         run: ./gradlew testDebugUnitTest --stacktrace testDebugUnitTestReport --stacktrace
       - name: Run test on Desktop
         run: ./gradlew desktopTest --stacktrace desktopTestReport --stacktrace
+      - name: Publish test report on Android
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure()
+        with:
+          report_paths: 'build/test-results/testDebugUnitTest/TEST-*.xml'
+      - name: Publish test report on Desktop
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure()
+        with:
+          report_paths: 'build/test-results/desktopTest/TEST-*.xml'
       - name: Archive test on Android results artifact
         uses: actions/upload-artifact@master
         with:

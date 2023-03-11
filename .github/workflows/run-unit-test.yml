@@ -1,0 +1,37 @@
+name: 'Run Unit Test'
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    types: [ opened, synchronize ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Prepare dummy access token
+        run: echo instances.social.token=XXX > ./local.properties
+      - name: Run test on Android
+        run: ./gradlew testDebugUnitTest --stacktrace testDebugUnitTestReport --stacktrace
+      - name: Run test on Desktop
+        run: ./gradlew desktopTest --stacktrace desktopTestReport --stacktrace
+      - name: Archive test on Android results artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: all-jvm-test-reports
+          path: ./build/reports/allTests/testDebugUnitTest
+      - name: Archive test on Desktop results artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: all-jvm-test-reports
+          path: ./build/reports/allTests/desktopTest

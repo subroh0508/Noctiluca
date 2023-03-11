@@ -5,8 +5,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import noctiluca.components.model.LoadState
 import noctiluca.instance.model.Instance
 import noctiluca.theme.NoctilucaTheme
 
@@ -24,6 +22,7 @@ private val instances = listOf(
 internal fun InstanceListPreview() {
     NoctilucaTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
+            /*
             SearchInstanceListLayout(
                 LoadState.Loaded(instances),
                 instances,
@@ -32,6 +31,7 @@ internal fun InstanceListPreview() {
                 onSelect = {},
                 modifier = Modifier.padding(16.dp),
             )
+            */
         }
     }
 }

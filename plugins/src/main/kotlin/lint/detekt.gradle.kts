@@ -13,7 +13,7 @@ dependencies {
     detektPlugins(libs.detektFormatting)
 }
 
-tasks.register("detektAll", Detekt::class) {
+tasks.register(TASK_DETEKT_ALL, Detekt::class) {
     description = "Runs the Lint check whole project at once."
 
     basePath = rootProject.projectDir.absolutePath

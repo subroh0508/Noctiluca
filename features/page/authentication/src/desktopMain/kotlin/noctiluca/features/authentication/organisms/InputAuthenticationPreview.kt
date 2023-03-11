@@ -26,7 +26,7 @@ private val instance = Instance(
 fun InputAuthenticationPreview() {
     NoctilucaTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            InputAuthenticationLayout(instance, Modifier.padding(16.dp))
+            //InputAuthenticationLayout(instance, Modifier.padding(16.dp))
         }
     }
 }

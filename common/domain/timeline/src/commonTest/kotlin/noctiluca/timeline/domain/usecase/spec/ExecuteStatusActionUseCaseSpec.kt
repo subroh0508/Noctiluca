@@ -20,7 +20,6 @@ import noctiluca.status.model.Tooter
 import noctiluca.test.DOMAIN_MASTODON_JP
 import noctiluca.test.URL_MASTODON_JP
 import noctiluca.test.mock.MockHttpClientEngine
-import noctiluca.test.util.isMatched
 import noctiluca.timeline.domain.TestTimelineUseCaseComponent
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.usecase.ExecuteStatusActionUseCase

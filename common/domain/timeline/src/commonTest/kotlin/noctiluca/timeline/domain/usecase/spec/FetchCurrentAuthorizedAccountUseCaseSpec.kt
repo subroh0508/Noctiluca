@@ -1,11 +1,9 @@
 package noctiluca.timeline.domain.usecase.spec
 
-import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.assertions.throwables.shouldThrowAny
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
-import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.ktor.client.plugins.*
@@ -15,7 +13,6 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import noctiluca.account.model.Account
 import noctiluca.api.mastodon.Api
-import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedAccountNotFoundException
 import noctiluca.model.Domain

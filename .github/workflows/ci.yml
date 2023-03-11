@@ -1,4 +1,4 @@
-name: 'Run Unit Test'
+name: 'CI'
 
 on:
   push:

@@ -1,3 +1,3 @@
 package lint
 
-const val TASK_DETEKT_ALL = "detectAll"
+const val TASK_DETEKT_ALL = "detektAll"

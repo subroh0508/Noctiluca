@@ -23,18 +23,20 @@ jobs:
         run: echo instances.social.token=XXX > ./local.properties
       - name: Run test on Android
         run: ./gradlew testDebugUnitTest --stacktrace testDebugUnitTestReport --stacktrace
-      - name: Run test on Desktop
-        run: ./gradlew desktopTest --stacktrace desktopTestReport --stacktrace
       - name: Publish test report on Android
         uses: mikepenz/action-junit-report@v3
         if: success() || failure()
         with:
-          report_paths: 'build/test-results/testDebugUnitTest/TEST-*.xml'
+          check_name: 'Test Report on Android'
+          report_paths: '**/build/test-results/testDebugUnitTest/TEST-*.xml'
+      - name: Run test on Desktop
+        run: ./gradlew desktopTest --stacktrace desktopTestReport --stacktrace
       - name: Publish test report on Desktop
         uses: mikepenz/action-junit-report@v3
         if: success() || failure()
         with:
-          report_paths: 'build/test-results/desktopTest/TEST-*.xml'
+          check_name: 'Test Report on Desktop'
+          report_paths: '**/build/test-results/desktopTest/TEST-*.xml'
       - name: Archive test on Android results artifact
         uses: actions/upload-artifact@master
         with:

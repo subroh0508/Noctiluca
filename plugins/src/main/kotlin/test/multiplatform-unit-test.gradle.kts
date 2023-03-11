@@ -13,10 +13,7 @@ android { testOptions.unitTests.all { it.config() } }
 
 fun Test.config() {
     useJUnitPlatform()
-    reports {
-        junitXml.required.set(true)
-        junitXml.outputLocation.set(file("${rootProject.buildDir}/test-results/$name"))
-    }
+    reports.junitXml.required.set(true)
     testLogging {
         showExceptions = true
         showStandardStreams = true

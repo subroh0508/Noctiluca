@@ -1,6 +1,12 @@
 package noctiluca.authentication.infra.di
 
+import noctiluca.authentication.infra.repository.TokenRepository
+import noctiluca.authentication.infra.repository.impl.TokenRepositoryImpl
+import noctiluca.repository.TokenProvider
 import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-expect fun Module.AuthenticationRepositoriesModule()
+fun Module.AuthenticationRepositoriesModule() {
+    single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
+    single<TokenProvider> { get<TokenRepository>() }
+}

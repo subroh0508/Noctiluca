@@ -11,6 +11,7 @@ kotlin {
 
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.resources)
+                implementation(libs.ktor.client.mock)
                 implementation(libs.koin.core)
             }
         }

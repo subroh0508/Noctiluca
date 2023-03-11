@@ -19,7 +19,7 @@ import noctiluca.status.model.Status
 import noctiluca.status.model.Tooter
 import noctiluca.test.DOMAIN_MASTODON_JP
 import noctiluca.test.URL_MASTODON_JP
-import noctiluca.test.util.isMatched
+import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.timeline.domain.TestTimelineUseCaseComponent
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.usecase.ExecuteStatusActionUseCase
@@ -54,51 +54,14 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
         rebloggedBy = null,
     )
 
-    val format = ResourcesFormat()
-
-    val component = TestTimelineUseCaseComponent(
-        MockEngine { request ->
-            val json = when {
-                request.url.isMatched(
-                    format,
-                    Api.V1.Statuses.Id.Favourite(status.id.value),
-                ) -> JSON_STATUSES_FAVOURITE
-                request.url.isMatched(
-                    format,
-                    Api.V1.Statuses.Id.Unfavourite(status.id.value),
-                ) -> JSON_STATUSES_UNFAVOURITE
-                request.url.isMatched(
-                    format,
-                    Api.V1.Statuses.Id.Reblog(status.id.value),
-                ) -> """{"id":"1"}"""
-                request.url.isMatched(
-                    format,
-                    Api.V1.Statuses.Id.Unreblog(status.id.value),
-                ) -> """{"id":"1"}"""
-                request.url.isMatched(
-                    format,
-                    Api.V1.Statuses.Id.Bookmark(status.id.value),
-                ) -> JSON_STATUSES_BOOKMARK
-                request.url.isMatched(
-                    format,
-                    Api.V1.Statuses.Id.Unbookmark(status.id.value),
-                ) -> JSON_STATUSES_UNBOOKMARK
-                else -> error("Unexpected path: ${request.url}")
-            }
-
-            respond(
-                content = ByteReadChannel(json),
-                status = HttpStatusCode.OK,
-                headers = headersOf(HttpHeaders.ContentType, "application/json"),
-            )
-        }
-    )
-
-    val useCase: ExecuteStatusActionUseCase = component.scope.get()
-
     describe("#execute") {
         context("when action is favourite") {
             it("returns favourited status") {
+                val useCase = buildUseCase(
+                    Api.V1.Statuses.Id.Favourite(status.id.value),
+                    JSON_STATUSES_FAVOURITE,
+                )
+
                 runBlocking {
                     useCase.execute(
                         status.copy(favourited = false, favouriteCount = 0),
@@ -108,6 +71,11 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
             }
 
             it("returns unfavourited status") {
+                val useCase = buildUseCase(
+                    Api.V1.Statuses.Id.Unfavourite(status.id.value),
+                    JSON_STATUSES_UNFAVOURITE,
+                )
+
                 runBlocking {
                     useCase.execute(
                         status.copy(favourited = true, favouriteCount = 1),
@@ -119,6 +87,11 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
 
         context("when action is bookmark") {
             it("returns bookmarked status") {
+                val useCase = buildUseCase(
+                    Api.V1.Statuses.Id.Bookmark(status.id.value),
+                    JSON_STATUSES_BOOKMARK,
+                )
+
                 runBlocking {
                     useCase.execute(
                         status.copy(bookmarked = false),
@@ -128,6 +101,11 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
             }
 
             it("returns unbookmarked status") {
+                val useCase = buildUseCase(
+                    Api.V1.Statuses.Id.Unbookmark(status.id.value),
+                    JSON_STATUSES_UNBOOKMARK,
+                )
+
                 runBlocking {
                     useCase.execute(
                         status.copy(bookmarked = true),
@@ -138,3 +116,10 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
         }
     }
 })
+
+private inline fun <reified T> buildUseCase(
+    resource: T,
+    expected: String,
+): ExecuteStatusActionUseCase = TestTimelineUseCaseComponent(
+    MockHttpClientEngine(resource, expected),
+).scope.get()

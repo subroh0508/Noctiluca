@@ -5,6 +5,6 @@ import noctiluca.account.infra.repository.local.LocalAccountCredentialCache
 import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-actual fun Module.AccountCredentialCacheModule(json: Json) {
+internal actual fun Module.AccountCredentialCacheModule(json: Json) {
     single { LocalAccountCredentialCache(get(), get()) }
 }

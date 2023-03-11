@@ -1,0 +1,108 @@
+name: 'CI'
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**.kt'
+      - '**.gradle.kts'
+      - 'config/detekt.yml'
+      - '.github/workflows/test.yml'
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    paths:
+      - '**.kt'
+      - '**.gradle.kts'
+      - 'config/detekt.yml'
+      - '.github/workflows/test.yml'
+
+jobs:
+  lint:
+    name: 'Lint'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Prepare dummy access token
+        run: echo instances.social.token=XXX > ./local.properties
+      - name: Run detekt
+        run: ./gradlew detektAll
+      - name: Upload SARIF to Github using the upload-sarif action
+        uses: github/codeql-action/upload-sarif@v2
+        if: success() || failure()
+        with:
+          sarif_file: lint-reports/kotlin/detekt.sarif
+  android:
+    name: 'Test / Android'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Prepare dummy access token
+        run: echo instances.social.token=XXX > ./local.properties
+      - name: Run test on Android
+        run: ./gradlew testDebugUnitTest --stacktrace
+      - name: Report test on Android
+        if: success() || failure()
+        run: ./gradlew testDebugUnitTestReport --stacktrace
+      - name: Publish test report on Android
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure()
+        with:
+          check_name: 'Test Report / Android'
+          report_paths: '**/build/test-results/testDebugUnitTest/TEST-*.xml'
+      - name: Archive test on Android results artifact
+        uses: actions/upload-artifact@master
+        if: success() || failure()
+        with:
+          name: all-android-test-reports
+          path: ./build/reports/testDebugUnitTest
+  desktop:
+    name: 'Test / Desktop'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Prepare dummy access token
+        run: echo instances.social.token=XXX > ./local.properties
+      - name: Run test on Desktop
+        run: ./gradlew desktopTest --stacktrace
+      - name: Report test on Desktop
+        if: success() || failure()
+        run: ./gradlew desktopTestReport --stacktrace
+      - name: Publish test report on Desktop
+        uses: mikepenz/action-junit-report@v3
+        if: success() || failure()
+        with:
+          check_name: 'Test Report / Desktop'
+          report_paths: '**/build/test-results/desktopTest/TEST-*.xml'
+      - name: Archive test on Desktop results artifact
+        uses: actions/upload-artifact@master
+        if: success() || failure()
+        with:
+          name: all-desktop-test-reports
+          path: ./build/reports/desktopTest

@@ -44,6 +44,6 @@ private class AccountCredentialJsonSerializer(
 }
 
 @Suppress("FunctionName")
-actual fun Module.AccountCredentialCacheModule(json: Json) {
+internal actual fun Module.AccountCredentialCacheModule(json: Json) {
     single { LocalAccountCredentialCache(get<Application>().getAccountCredentialDataStore(json)) }
 }

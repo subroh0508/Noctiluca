@@ -4,12 +4,44 @@ on:
   push:
     branches:
       - main
+    paths:
+      - '**.kt'
+      - '**.gradle.kts'
+      - 'config/detekt.yml'
+      - '.github/workflows/test.yml'
   pull_request:
     types:
       - opened
       - synchronize
+    paths:
+      - '**.kt'
+      - '**.gradle.kts'
+      - 'config/detekt.yml'
+      - '.github/workflows/test.yml'
 
 jobs:
+  lint:
+    name: 'Lint'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Prepare dummy access token
+        run: echo instances.social.token=XXX > ./local.properties
+      - name: Run detekt
+        run: ./gradlew detektAll
+      - name: Upload SARIF to Github using the upload-sarif action
+        uses: github/codeql-action/upload-sarif@v2
+        if: success() || failure()
+        with:
+          sarif_file: lint-reports/kotlin/detekt.sarif
   android:
     name: 'Test Android'
     runs-on: ubuntu-latest

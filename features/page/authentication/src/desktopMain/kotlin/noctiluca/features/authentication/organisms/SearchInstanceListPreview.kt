@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import noctiluca.instance.model.Instance
 import noctiluca.theme.NoctilucaTheme
 
+@Suppress("unused")
 private val instances = listOf(
     Instance.Suggest(
         "mastodon.net",

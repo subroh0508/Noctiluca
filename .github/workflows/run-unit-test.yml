@@ -7,7 +7,7 @@ on:
     types: [ opened, synchronize ]
 
 jobs:
-  test:
+  on-android:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -38,8 +38,21 @@ jobs:
         with:
           name: all-android-test-reports
           path: ./build/reports/testDebugUnitTest
+  on-desktop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: zulu
+          java-version: 11
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
+      - name: Prepare dummy access token
+        run: echo instances.social.token=XXX > ./local.properties
       - name: Run test on Desktop
-        if: success() || failure()
         run: ./gradlew desktopTest --stacktrace
       - name: Report test on Desktop
         if: success() || failure()

@@ -8,5 +8,5 @@ plugins {
     alias(libs.plugins.buildconfig) apply false
 
     id("lint.detekt")
-    id("test.unit-test")
+    id("test.report")
 }

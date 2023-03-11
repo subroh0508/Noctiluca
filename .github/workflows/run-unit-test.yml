@@ -28,10 +28,10 @@ jobs:
       - name: Archive test on Android results artifact
         uses: actions/upload-artifact@master
         with:
-          name: all-jvm-test-reports
+          name: all-android-test-reports
           path: ./build/reports/allTests/testDebugUnitTest
       - name: Archive test on Desktop results artifact
         uses: actions/upload-artifact@master
         with:
-          name: all-jvm-test-reports
+          name: all-desktop-test-reports
           path: ./build/reports/allTests/desktopTest

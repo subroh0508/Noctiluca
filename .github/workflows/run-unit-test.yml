@@ -2,12 +2,16 @@ name: 'Run Unit Test'
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
   pull_request:
-    types: [ opened, synchronize ]
+    types:
+      - opened
+      - synchronize
 
 jobs:
-  on-android:
+  android:
+    name: 'Test Android'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -30,7 +34,7 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: success() || failure()
         with:
-          check_name: 'Test Report on Android'
+          check_name: 'Test Report / Android'
           report_paths: '**/build/test-results/testDebugUnitTest/TEST-*.xml'
       - name: Archive test on Android results artifact
         uses: actions/upload-artifact@master
@@ -38,7 +42,8 @@ jobs:
         with:
           name: all-android-test-reports
           path: ./build/reports/testDebugUnitTest
-  on-desktop:
+  desktop:
+    name: 'Test Desktop'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -61,7 +66,7 @@ jobs:
         uses: mikepenz/action-junit-report@v3
         if: success() || failure()
         with:
-          check_name: 'Test Report on Desktop'
+          check_name: 'Test Report / Desktop'
           report_paths: '**/build/test-results/desktopTest/TEST-*.xml'
       - name: Archive test on Desktop results artifact
         uses: actions/upload-artifact@master

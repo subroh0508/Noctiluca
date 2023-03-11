@@ -22,31 +22,37 @@ jobs:
       - name: Prepare dummy access token
         run: echo instances.social.token=XXX > ./local.properties
       - name: Run test on Android
-        run: ./gradlew testDebugUnitTest --stacktrace testDebugUnitTestReport --stacktrace
+        run: ./gradlew testDebugUnitTest --stacktrace
+      - name: Report test on Android
+        if: success() || failure()
+        run: ./gradlew testDebugUnitTestReport --stacktrace
       - name: Publish test report on Android
         uses: mikepenz/action-junit-report@v3
         if: success() || failure()
         with:
           check_name: 'Test Report on Android'
           report_paths: '**/build/test-results/testDebugUnitTest/TEST-*.xml'
+      - name: Archive test on Android results artifact
+        uses: actions/upload-artifact@master
+        if: success() || failure()
+        with:
+          name: all-android-test-reports
+          path: ./build/reports/testDebugUnitTest
       - name: Run test on Desktop
         if: success() || failure()
-        run: ./gradlew desktopTest --stacktrace desktopTestReport --stacktrace
+        run: ./gradlew desktopTest --stacktrace
+      - name: Report test on Desktop
+        if: success() || failure()
+        run: ./gradlew desktopTestReport --stacktrace
       - name: Publish test report on Desktop
         uses: mikepenz/action-junit-report@v3
         if: success() || failure()
         with:
           check_name: 'Test Report on Desktop'
           report_paths: '**/build/test-results/desktopTest/TEST-*.xml'
-      - name: Archive test on Android results artifact
-        uses: actions/upload-artifact@master
-        if: success() || failure()
-        with:
-          name: all-android-test-reports
-          path: ./build/reports/allTests/testDebugUnitTest
       - name: Archive test on Desktop results artifact
         uses: actions/upload-artifact@master
         if: success() || failure()
         with:
           name: all-desktop-test-reports
-          path: ./build/reports/allTests/desktopTest
+          path: ./build/reports/desktopTest

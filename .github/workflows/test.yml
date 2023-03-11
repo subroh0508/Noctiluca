@@ -43,7 +43,7 @@ jobs:
         with:
           sarif_file: lint-reports/kotlin/detekt.sarif
   android:
-    name: 'Test Android'
+    name: 'Test / Android'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
@@ -75,7 +75,7 @@ jobs:
           name: all-android-test-reports
           path: ./build/reports/testDebugUnitTest
   desktop:
-    name: 'Test Desktop'
+    name: 'Test / Desktop'
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo

@@ -11,8 +11,10 @@ internal class FetchAllAuthorizedAccountsUseCaseImpl(
         repository.getAll().drop(1).forEach { cache ->
             emit(cache)
 
+            /*
             runCatching { repository.refresh(cache.id) }
                 .onSuccess { emit(it) }
+            */
         }
     }
 }

@@ -37,29 +37,6 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
         Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
         "@test1@$DOMAIN_SAMPLE_COM",
     )
-    val accounts = listOf(
-        Account(
-            AccountId("1"),
-            "test1",
-            "テスト太郎",
-            Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
-            "@test1@$DOMAIN_SAMPLE_COM",
-        ),
-        Account(
-            AccountId("2"),
-            "test2",
-            "テスト次郎",
-            Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
-            "@test2@$DOMAIN_SAMPLE_COM",
-        ),
-        Account(
-            AccountId("3"),
-            "test3",
-            "テスト三郎",
-            Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
-            "@test3@$DOMAIN_SAMPLE_COM",
-        ),
-    )
 
     describe("#execute") {
         context("when the local cache does not exists") {
@@ -134,6 +111,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 }
             }
         }
+
         context("when the local cache exists") {
             val current = Account(
                 AccountId("1"),

@@ -14,7 +14,7 @@ class MockLocalAuthorizedAccountRepository(
 ) : LocalAuthorizedAccountRepository {
     constructor(
         current: Pair<Account, Domain>,
-        accessToken: (AccountId) -> Pair<String, Domain>?,
+        accessToken: (AccountId) -> Pair<String, Domain>? = { null },
         all: List<Account> = listOf(),
     ) : this(current.first, current.second, all, accessToken)
 

@@ -1,9 +1,9 @@
 import extension.*
-import org.gradle.api.tasks.testing.logging.TestLogEvent
 
 plugins {
     id("multiplatform-library")
     id("common-model")
+    id("test.multiplatform-unit-test")
 }
 
 kotlin {
@@ -43,26 +43,6 @@ kotlin {
             dependencies {
                 implementation(libs.kotestRunnerJunit5)
             }
-        }
-    }
-}
-
-tasks.named<Test>("desktopTest") {
-    useJUnitPlatform()
-    testLogging {
-        showExceptions = true
-        showStandardStreams = true
-        events = setOf(TestLogEvent.FAILED, TestLogEvent.PASSED)
-    }
-}
-
-android {
-    testOptions.unitTests.all {
-        it.useJUnitPlatform()
-        it.testLogging {
-            showExceptions = true
-            showStandardStreams = true
-            events = setOf(TestLogEvent.FAILED, TestLogEvent.PASSED)
         }
     }
 }

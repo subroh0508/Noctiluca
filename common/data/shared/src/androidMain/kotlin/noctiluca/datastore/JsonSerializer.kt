@@ -11,13 +11,13 @@ import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
-class JsonSerializer<T : Any>(
+class JsonSerializer<T : Any?>(
     private val json: Json,
     private val serializer: KSerializer<T>,
     override val defaultValue: T,
 ) : Serializer<T> {
     companion object {
-        inline operator fun <reified T : Any> invoke(
+        inline operator fun <reified T : Any?> invoke(
             json: Json,
             defaultValue: T,
         ) = JsonSerializer(json, serializer(), defaultValue)
@@ -32,14 +32,14 @@ class JsonSerializer<T : Any>(
     }
 
     override suspend fun writeTo(t: T, output: OutputStream) {
-        val jsonString = json.encodeToString(serializer, t)
+        val jsonString = t?.let { json.encodeToString(serializer, it) } ?: ""
         withContext(Dispatchers.IO) {
             output.write(jsonString.encodeToByteArray())
         }
     }
 }
 
-fun <T : Any> Context.getJsonDataStore(
+fun <T : Any?> Context.getJsonDataStore(
     serializer: JsonSerializer<T>,
     fileName: String,
 ) = DataStoreFactory.create(

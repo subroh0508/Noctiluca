@@ -9,7 +9,16 @@ plugins {
 
 tasks.named<Test>(TASK_TEST_DESKTOP_TEST) { config() }
 
-android { testOptions.unitTests.all { it.config() } }
+android {
+    defaultConfig {
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    testOptions.unitTests {
+        isIncludeAndroidResources = true
+        all { it.config() }
+    }
+}
 
 fun Test.config() {
     useJUnitPlatform()

@@ -13,10 +13,7 @@ import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
 import noctiluca.account.model.Account
 import noctiluca.api.mastodon.Api
-import noctiluca.model.AccountId
-import noctiluca.model.AuthorizedAccountNotFoundException
-import noctiluca.model.Domain
-import noctiluca.model.Uri
+import noctiluca.model.*
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.DUMMY_ACCESS_TOKEN
 import noctiluca.test.URL_SAMPLE_COM
@@ -78,7 +75,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 it("raises AuthorizedAccountNotFoundException") {
                     val instances: MutableList<Pair<Account, Domain>> = mutableListOf()
 
-                    shouldThrowExactly<AuthorizedAccountNotFoundException> {
+                    shouldThrowExactly<AuthorizedTokenNotFoundException> {
                         runBlocking { useCase.execute().collect { instances.add(it) } }
                     }
                     instances should haveSize(0)
@@ -100,7 +97,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 it("raises AuthorizedAccountNotFoundException") {
                     val instances: MutableList<Pair<Account, Domain>> = mutableListOf()
 
-                    shouldThrowExactly<AuthorizedAccountNotFoundException> {
+                    shouldThrowExactly<AuthorizedTokenNotFoundException> {
                         runBlocking { useCase.execute().collect { instances.add(it) } }
                     }
                     instances should haveSize(0)

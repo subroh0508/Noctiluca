@@ -46,7 +46,7 @@ class JsonSerializerSpec {
     fun shouldReturnJsonFromList() = runTest {
         val dataStore = buildDataStore<List<TestData>>(defaultValue = listOf())
 
-        dataStore.data.first() should beEmpty()
+        dataStore.data.first() should be(listOf())
         dataStore.updateData { listOf(TestData("xxx", "テスト")) }
         dataStore.data.first() should be(listOf(TestData("xxx", "テスト")))
     }

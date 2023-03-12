@@ -7,6 +7,8 @@ import io.kotest.matchers.should
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import noctiluca.preferences.JsonPreferences
+import noctiluca.preferences.add
+import noctiluca.preferences.remove
 import java.util.prefs.Preferences
 
 @Serializable
@@ -34,8 +36,10 @@ class JsonPreferencesSpec : DescribeSpec({
             ).apply { clear() }
 
             prefs.data should be(listOf())
-            prefs.save(listOf(TestData("xxx", "テスト")))
+            prefs.add(TestData("xxx", "テスト"))
             prefs.data should be(listOf(TestData("xxx", "テスト")))
+            prefs.remove(TestData("xxx", "テスト"))
+            prefs.data should be(listOf())
         }
     }
 })

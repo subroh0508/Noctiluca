@@ -6,5 +6,5 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 internal actual fun Module.AccountCredentialCacheModule(json: Json) {
-    single { LocalAccountCredentialCache(get(), get()) }
+    single { LocalAccountCredentialCache(json) }
 }

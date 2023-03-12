@@ -26,9 +26,13 @@ class JsonPreferences<T : Any?>(
             json.decodeFromString(serializer, it)
         } ?: defaultValue
 
-    fun save(value: T) {
+    fun save(value: T): T {
         prefs.put(KEY, json.encodeToString(serializer, value))
+        return data
     }
 
     fun clear() = prefs.clear()
 }
+
+fun <T : Any> JsonPreferences<List<T>>.add(value: T) = save(data + value)
+fun <T : Any> JsonPreferences<List<T>>.remove(value: T) = save(data - value)

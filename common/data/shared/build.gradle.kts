@@ -37,6 +37,7 @@ kotlin {
                 implementation(libs.junit.core)
                 implementation(libs.junit.vintage)
                 implementation(libs.robolectric)
+                implementation(libs.kotlinx.coroutines.test)
                 implementation(libs.androidx.test.core)
                 implementation(libs.androidx.test.runner)
                 implementation(libs.androidx.test.junit)

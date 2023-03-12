@@ -11,3 +11,7 @@ android {
     androidApplicationConfig()
     proguardApplicationConfig()
 }
+
+dependencies {
+    coreLibraryDesugaring(libs.androidDesugarjdk)
+}

@@ -34,8 +34,6 @@ dependencies {
     implementation(libs.koin.android)
 
     testImplementation(libs.junit.core)
-
-    coreLibraryDesugaring(libs.android.desugarjdk)
 }
 
 android { namespace = "app.noctiluca" }

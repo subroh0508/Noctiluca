@@ -1,6 +1,9 @@
 package noctiluca.datastore
 
+import android.content.Context
+import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
+import androidx.datastore.dataStoreFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.*
@@ -35,3 +38,11 @@ class JsonSerializer<T : Any>(
         }
     }
 }
+
+fun <T : Any> Context.getJsonDataStore(
+    serializer: JsonSerializer<T>,
+    fileName: String,
+) = DataStoreFactory.create(
+    serializer,
+    produceFile = { dataStoreFile(fileName) },
+)

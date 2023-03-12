@@ -1,6 +1,5 @@
 plugins {
     id("common-infra")
-    kotlin("plugin.serialization")
 }
 
 kotlin {

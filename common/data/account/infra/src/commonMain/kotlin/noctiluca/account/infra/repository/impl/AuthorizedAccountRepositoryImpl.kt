@@ -21,11 +21,11 @@ internal class AuthorizedAccountRepositoryImpl(
     override suspend fun getAll() = local.getAll()
 
     override suspend fun fetchCurrent(): Pair<Account, Domain> {
-        val domain = local.getCurrentDomain() ?: throw AuthorizedAccountNotFoundException
+        val domain = local.getCurrentDomain() ?: throw AuthorizedTokenNotFoundException
 
         val json = runCatching {
             v1.getVerifyAccountsCredentials(domain.value)
-        }.getOrNull() ?: throw AuthorizedAccountNotFoundException
+        }.getOrNull() ?: throw AuthorizedTokenNotFoundException
 
         local.save(json)
 

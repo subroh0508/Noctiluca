@@ -58,7 +58,7 @@ class NoctilucaApplication : Application() {
             buildWebSocketClient(httpClientEngine),
             json,
         )
-        TokenApiModule()
+        TokenApiModule(json)
     }
 
     private fun buildRepositoriesModules() = module {

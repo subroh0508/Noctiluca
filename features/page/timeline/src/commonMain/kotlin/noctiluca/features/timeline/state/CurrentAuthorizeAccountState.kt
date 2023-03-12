@@ -49,8 +49,10 @@ internal class CurrentAuthorizedAccountState(
 
     fun loadCurrentAccount(scope: CoroutineScope) {
         scope.launch {
-            fetchCurrentAuthorizedAccountUseCase.execute().collect { (account, domain) ->
-                setCurrent(account, domain)
+            runCatchingWithAuth {
+                fetchCurrentAuthorizedAccountUseCase.execute().collect { (account, domain) ->
+                    setCurrent(account, domain)
+                }
             }
         }
     }

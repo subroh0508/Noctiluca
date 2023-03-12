@@ -1,7 +1,5 @@
+import extension.*
 import extension.Target
-import extension.androidConfig
-import extension.proguardConfig
-import extension.targets
 import org.gradle.kotlin.dsl.kotlin
 
 plugins {
@@ -14,6 +12,6 @@ kotlin {
 }
 
 android {
-    androidConfig()
-    proguardConfig()
+    androidLibraryConfig()
+    proguardLibraryConfig()
 }

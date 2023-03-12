@@ -1,7 +1,5 @@
 plugins {
-    alias(libs.plugins.compose)
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
+    id("android-application")
 }
 
 dependencies {
@@ -40,25 +38,4 @@ dependencies {
     coreLibraryDesugaring(libs.android.desugarjdk)
 }
 
-android {
-    namespace = "app.noctiluca"
-
-    compileSdk = 33
-    defaultConfig {
-        applicationId = "app.noctiluca"
-        minSdk = 24
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0-SNAPSHOT"
-    }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
-}
+android { namespace = "app.noctiluca" }

@@ -27,7 +27,8 @@ okhttp3 = "4.10.0"
 junit = "4.13.2"
 junit-vintage = "5.9.2"
 
-kotest = "5.5.5"
+# workaround: https://github.com/kotest/kotest/issues/3407
+kotest = "5.5.4"
 
 robolectric = "4.9.2"
 

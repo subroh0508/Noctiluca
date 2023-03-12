@@ -34,7 +34,8 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation(libs.kotest.runner.junit5)
-                implementation(libs.junit)
+                implementation(libs.junit.core)
+                implementation(libs.junit.vintage)
                 implementation(libs.robolectric)
                 implementation(libs.androidx.test.core)
                 implementation(libs.androidx.test.runner)

@@ -7,6 +7,6 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.AuthenticationRepositoriesModule() {
-    single<TokenRepository> { TokenRepositoryImpl(get(), get(), get()) }
+    single<TokenRepository> { TokenRepositoryImpl(get(), get()) }
     single<TokenProvider> { get<TokenRepository>() }
 }

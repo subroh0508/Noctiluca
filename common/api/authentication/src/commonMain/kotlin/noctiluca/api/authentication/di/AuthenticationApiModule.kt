@@ -20,6 +20,7 @@ fun buildHttpClient(
         url { protocol = URLProtocol.HTTPS }
         contentType(ContentType.Application.Json)
     }
+    expectSuccess = true
 
     install(ContentNegotiation) {
         json(json)

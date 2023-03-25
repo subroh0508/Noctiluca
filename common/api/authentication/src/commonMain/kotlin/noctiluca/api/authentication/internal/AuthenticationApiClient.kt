@@ -8,7 +8,9 @@ import io.ktor.client.plugins.resources.Resources
 import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.resources.*
+import noctiluca.api.authentication.Api
 import noctiluca.api.authentication.AuthenticationApi
+import noctiluca.api.authentication.OAuth
 import noctiluca.api.authentication.json.AppCredentialJson
 import noctiluca.api.authentication.json.TokenJson
 import noctiluca.api.authentication.params.GetAccountsVerifyCredential

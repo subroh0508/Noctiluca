@@ -12,6 +12,13 @@ kotlin {
                 implementation(project(":common:data:instance:infra"))
             }
         }
+
+        commonTest {
+            dependencies {
+                implementation(project(":common:api:authentication"))
+                implementation(project(":common:api:instancessocial"))
+            }
+        }
     }
 }
 

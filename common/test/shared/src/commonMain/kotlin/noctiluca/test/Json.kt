@@ -1,8 +1,10 @@
 package noctiluca.test
 
+const val ACCOUNT_ID = "1"
+
 val JSON_ACCOUNT_CREDENTIAL = """
     {
-      "id": "1",
+      "id": "$ACCOUNT_ID",
       "username": "test1",
       "acct": "test1",
       "display_name": "サンプル太郎",

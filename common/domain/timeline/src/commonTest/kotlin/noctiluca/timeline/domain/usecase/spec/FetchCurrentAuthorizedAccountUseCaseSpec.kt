@@ -33,7 +33,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
     )
 
     describe("#execute") {
-        context("when the local cache does not exists") {
+        context("when the local cache does not exist") {
             context("and the sever returns valid response") {
                 val localRepository = MockLocalAuthorizedAccountRepository(
                     account = null,

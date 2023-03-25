@@ -25,7 +25,7 @@ object Api {
 
 @Resource("/oauth")
 @Serializable
-internal object OAuth {
+object OAuth {
     @Resource("authorize")
     @Serializable
     class Authorize(val parent: OAuth = OAuth)

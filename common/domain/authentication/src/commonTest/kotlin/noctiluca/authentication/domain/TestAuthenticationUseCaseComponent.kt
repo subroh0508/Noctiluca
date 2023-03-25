@@ -6,12 +6,10 @@ import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.mastodon.di.buildHttpClient
-import noctiluca.api.mastodon.di.buildWebSocketClient
 import noctiluca.authentication.domain.di.AuthenticationDomainModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.authentication.infra.repository.local.LocalTokenRepository
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
-import noctiluca.test.di.MockTokenModule
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope
 import org.koin.core.module.Module

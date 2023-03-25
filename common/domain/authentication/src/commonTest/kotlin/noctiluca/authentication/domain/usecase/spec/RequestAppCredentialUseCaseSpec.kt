@@ -4,8 +4,10 @@ import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
+import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
+import io.ktor.client.engine.mock.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.api.authentication.Api
@@ -23,8 +25,9 @@ class RequestAppCredentialUseCaseSpec : DescribeSpec({
         context("when the server returns valid response") {
             val localRepository = MockLocalTokenRepository()
             val useCase = buildUseCase(
-                Api.V1.Apps(),
-                JSON_APP_CREDENTIAL,
+                MockHttpClientEngine
+                    .mock(Api.V1.Apps(), JSON_APP_CREDENTIAL)
+                    .build(),
                 localRepository,
             )
 
@@ -42,16 +45,19 @@ class RequestAppCredentialUseCaseSpec : DescribeSpec({
                     it.first().clientId should be(TEST_CLIENT_ID)
                     it.first().clientSecret should be(TEST_CLIENT_SECRET)
                 }
+                localRepository.users should beEmpty()
             }
         }
 
-        context("when the server returns error response ") {
+        context("when the server returns error response") {
             val useCase = buildUseCase(
-                Api.V1.Apps(),
-                HttpStatusCode.BadRequest,
+                MockHttpClientEngine
+                    .mock(Api.V1.Apps(), HttpStatusCode.BadRequest)
+                    .build(),
+                MockLocalTokenRepository(),
             )
 
-            it("raises Exception") {
+            it("raises ClientRequestException") {
                 shouldThrowExactly<ClientRequestException> {
                     useCase.execute(
                         Domain(DOMAIN_SAMPLE_COM),
@@ -72,20 +78,10 @@ private fun buildAuthorizedUrl() = buildString {
     append("&scope=read+write+follow+push")
 }.let { Uri(it) }
 
-private inline fun <reified T> buildUseCase(
-    resource: T,
-    expected: String,
+private fun buildUseCase(
+    engine: MockEngine,
     localRepository: MockLocalTokenRepository,
 ): RequestAppCredentialUseCase = TestAuthenticationUseCaseComponent(
-    MockHttpClientEngine(resource, expected),
-    localRepository,
-).scope.get()
-
-private inline fun <reified T> buildUseCase(
-    resource: T,
-    errorStatusCode: HttpStatusCode,
-    localRepository: MockLocalTokenRepository = MockLocalTokenRepository(),
-): RequestAppCredentialUseCase = TestAuthenticationUseCaseComponent(
-    MockHttpClientEngine(resource, errorStatusCode),
+    engine,
     localRepository,
 ).scope.get()

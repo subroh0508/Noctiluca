@@ -14,11 +14,10 @@ interface LocalTokenRepository {
 
     suspend fun getCurrentAuthorizedUser(): AuthorizedUser?
     suspend fun switchCurrentAuthorizedUser(id: AccountId): AuthorizedUser
+    suspend fun expireCurrentAuthorizedUser()
     suspend fun saveAuthorizedUser(
         id: AccountId,
         domain: Domain,
         accessToken: String,
     ): AuthorizedUser
-
-    suspend fun expireAuthorizedUser()
 }

@@ -32,7 +32,7 @@ internal class LocalTokenRepositoryImpl(
         return tokenCache.setCurrent(id)
     }
 
-    override suspend fun expireAuthorizedUser() {
+    override suspend fun expireCurrentAuthorizedUser() {
         getCurrentAuthorizedUser()?.let { tokenCache.delete(it.id) }
         tokenCache.getAll().firstOrNull()?.let {
             switchCurrentAuthorizedUser(it.id)

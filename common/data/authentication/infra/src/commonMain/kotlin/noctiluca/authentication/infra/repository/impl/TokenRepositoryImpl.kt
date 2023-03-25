@@ -54,5 +54,5 @@ internal class TokenRepositoryImpl(
 
     override suspend fun switch(id: AccountId) = local.switchCurrentAuthorizedUser(id)
 
-    override suspend fun expireCurrent() = local.expireAuthorizedUser()
+    override suspend fun expireCurrent() = local.expireCurrentAuthorizedUser()
 }

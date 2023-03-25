@@ -80,13 +80,11 @@ private fun InstanceSuggestsList(
                 it.domain,
                 supportingText = it.description ?: "",
                 leadingContent = {
-                    /*
                     AsyncImage(
                         it.thumbnail,
                         fallback = imageResources(getDrawables().icon_mastodon),
                         modifier = Modifier.size(LeadingAvatarContainerSize),
                     )
-                    */
                 },
                 modifier = Modifier.clickable {
                     focusManager.clearFocus()

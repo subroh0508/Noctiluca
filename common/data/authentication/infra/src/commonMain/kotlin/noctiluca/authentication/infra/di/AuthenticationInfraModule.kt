@@ -4,6 +4,6 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.AuthenticationInfraModule() {
-    AppCredentialCacheModule()
+    LocalTokenRepositoriesModule()
     AuthenticationRepositoriesModule()
 }

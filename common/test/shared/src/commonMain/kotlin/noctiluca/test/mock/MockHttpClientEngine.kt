@@ -14,6 +14,7 @@ object MockHttpClientEngine {
     class Builder {
         val valid: MutableList<Pair<String, String>> = mutableListOf()
         val invalid: MutableList<Pair<String, HttpStatusCode>> = mutableListOf()
+        val error: MutableList<Pair<String, Exception>> = mutableListOf()
 
         inline fun <reified T> mock(resource: T, expected: String): Builder {
             valid.add(href(format, resource) to expected)
@@ -22,6 +23,11 @@ object MockHttpClientEngine {
 
         inline fun <reified T> mock(resource: T, expected: HttpStatusCode): Builder {
             invalid.add(href(format, resource) to expected)
+            return this
+        }
+
+        inline fun <reified T> mock(resource: T, exception: Exception): Builder {
+            error.add(href(format, resource) to exception)
             return this
         }
 
@@ -46,12 +52,19 @@ object MockHttpClientEngine {
                 }
             }
 
+            error.forEach { (url, exception) ->
+                if (request.url.toString().contains(url)) {
+                    throw exception
+                }
+            }
+
             mockError()
         }
     }
 
     inline fun <reified T> mock(resource: T, expected: String) = Builder().mock(resource, expected)
     inline fun <reified T> mock(resource: T, expected: HttpStatusCode) = Builder().mock(resource, expected)
+    inline fun <reified T> mock(resource: T, exception: Exception) = Builder().mock(resource, exception)
 
     inline operator fun <reified T> invoke(
         resource: T,

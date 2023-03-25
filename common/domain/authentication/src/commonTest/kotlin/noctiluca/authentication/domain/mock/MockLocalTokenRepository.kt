@@ -8,18 +8,21 @@ import noctiluca.model.Domain
 import noctiluca.test.model.MockAuthorizedUser
 
 class MockLocalTokenRepository(
-    private val currentAppCredential: Pair<Domain, AppCredentialJson>?,
-    private val currentAuthorizedUser: AuthorizedUser?,
+    private val currentAppCredential: Pair<Domain, AppCredentialJson>? = null,
+    private val currentAuthorizedUser: AuthorizedUser? = null,
 ) : LocalTokenRepository {
-    private val credentials: MutableList<AppCredentialJson> = mutableListOf()
-    private val users: MutableList<AuthorizedUser> = mutableListOf()
+    private val _credentials: MutableList<AppCredentialJson> = mutableListOf()
+    private val _users: MutableList<AuthorizedUser> = mutableListOf()
+
+    val credentials get() = _credentials
+    val users get() = _users
 
     override suspend fun getCurrentAppCredential() = currentAppCredential
     override suspend fun saveAppCredential(
         domain: Domain,
         credential: AppCredentialJson,
     ) {
-        credentials.add(credential)
+        _credentials.add(credential)
     }
 
     override suspend fun getCurrentAuthorizedUser() = currentAuthorizedUser
@@ -29,5 +32,5 @@ class MockLocalTokenRepository(
         id: AccountId,
         domain: Domain,
         accessToken: String,
-    ) = MockAuthorizedUser(id, domain).also { mock -> users.add(mock) }
+    ) = MockAuthorizedUser(id, domain).also { mock -> _users.add(mock) }
 }

@@ -1,11 +1,11 @@
-package noctiluca.api.authentication.internal
+package noctiluca.api.authentication
 
 import io.ktor.resources.*
 import kotlinx.serialization.Serializable
 
 @Resource("/api")
 @Serializable
-internal object Api {
+object Api {
     @Resource("v1")
     @Serializable
     class V1(val parent: Api = Api) {

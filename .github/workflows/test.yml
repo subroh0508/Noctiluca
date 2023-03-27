@@ -18,6 +18,7 @@ on:
       - '**.gradle.kts'
       - 'config/detekt.yml'
       - '.github/workflows/test.yml'
+      - 'gradle/libs.versions.toml'
 
 jobs:
   lint:

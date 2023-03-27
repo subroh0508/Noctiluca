@@ -20,11 +20,7 @@ fun ApplicationExtension.androidApplicationConfig() {
         versionCode = 1
         versionName = "1.0-SNAPSHOT"
     }
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
+    compileOptions.isCoreLibraryDesugaringEnabled = true
 }
 
 fun LibraryExtension.proguardLibraryConfig() {
@@ -50,6 +46,11 @@ private fun CommonExtension<*, *, *, *>.androidConfig() {
     defaultConfig {
         compileSdk = Packages.compileSdk
         minSdk = Packages.minSdk
+    }
+
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
 
     // @see: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-debug/

@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     alias(libs.plugins.kotlin.mpp) apply false
     alias(libs.plugins.kotlin.android) apply false
@@ -9,4 +11,11 @@ plugins {
 
     id("lint.detekt")
     id("test.report")
+}
+
+// workaround: https://youtrack.jetbrains.com/issue/KT-55947/Unable-to-set-kapt-jvm-target-version
+subprojects {
+    tasks.withType(KotlinCompile::class) {
+        kotlinOptions.jvmTarget = "11"
+    }
 }

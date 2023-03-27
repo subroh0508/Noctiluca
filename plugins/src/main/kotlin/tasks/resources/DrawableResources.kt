@@ -42,7 +42,7 @@ class DrawableResources(packageName: String) : Resources {
 
     private fun createDrawableProperty(drawable: Map.Entry<String, Any>) =
         PropertySpec.builder(
-            drawable.key.toLowerCase(),
+            drawable.key.lowercase(),
             String::class
         ).initializer("%S", drawable.value)
             .build()

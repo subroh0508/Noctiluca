@@ -39,7 +39,7 @@ class StringResources(packageName: String) : Resources {
         key: String,
         language: Map<String, String>,
     ): TypeSpec {
-        val languageCode = key.toUpperCase()
+        val languageCode = key.uppercase()
         val languagesProperties: List<PropertySpec> =
             if (key == BASE_LANGUAGE_CODE) {
                 emptyList()
@@ -57,7 +57,7 @@ class StringResources(packageName: String) : Resources {
 
     private fun Map.Entry<String, Any>.createLanguageProperty() =
         PropertySpec.builder(
-            key.toLowerCase(),
+            key.lowercase(),
             String::class,
             KModifier.OVERRIDE,
         ).initializer("%S", value)
@@ -70,10 +70,10 @@ class StringResources(packageName: String) : Resources {
             stringSets
                 .filterNot { it.key.contains(BASE_LANGUAGE_CODE) }
                 .forEach {
-                    val lang = it.key.substringAfterLast("_").toUpperCase()
+                    val lang = it.key.substringAfterLast("_").uppercase()
                     addStatement("\"${lang}\" -> $lang")
                 }
-            addStatement("else -> ${BASE_LANGUAGE_CODE.toUpperCase()}")
+            addStatement("else -> ${BASE_LANGUAGE_CODE.uppercase()}")
             addStatement("}")
             addStatement("return language")
         }.build()
@@ -99,7 +99,7 @@ class StringResources(packageName: String) : Resources {
 
     private fun TypeSpec.Builder.addPropertyToStringResource(language: Map.Entry<String, Any>) {
         val prop = PropertySpec.builder(
-            language.key.toLowerCase(),
+            language.key.lowercase(),
             String::class,
             KModifier.OPEN,
         ).initializer("%S", language.value).build()

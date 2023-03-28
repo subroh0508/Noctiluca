@@ -23,8 +23,8 @@ import noctiluca.features.components.atoms.text.RelativeTime
 import noctiluca.features.components.utils.baseline
 import noctiluca.features.components.utils.toDp
 import noctiluca.features.shared.account.TooterName
+import noctiluca.model.Account
 import noctiluca.status.model.Status
-import noctiluca.status.model.Tooter
 
 enum class Action {
     REPLY, BOOST, FAVOURITE, SHARE, OTHERS
@@ -60,7 +60,7 @@ fun Status(
 
 @Composable
 private fun StatusHeader(
-    tooter: Tooter,
+    tooter: Account,
     visibility: Status.Visibility,
     createdAt: LocalDateTime,
 ) = Row {

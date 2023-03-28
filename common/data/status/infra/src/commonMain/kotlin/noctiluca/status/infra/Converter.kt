@@ -5,11 +5,11 @@ import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.status.StatusJson
+import noctiluca.model.Account
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.status.model.Status
-import noctiluca.status.model.Tooter
 
 @Suppress("CyclomaticComplexMethod")
 fun StatusJson.toEntity(newAccountId: AccountId?) = Status(
@@ -32,7 +32,7 @@ fun StatusJson.toEntity(newAccountId: AccountId?) = Status(
     },
 )
 
-private fun AccountJson.toTooter() = Tooter(
+private fun AccountJson.toTooter() = Account(
     AccountId(id),
     username,
     displayName,

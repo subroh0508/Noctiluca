@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import noctiluca.account.model.Account
+import noctiluca.model.Account
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.list.OneLineListItem
 import noctiluca.features.components.atoms.list.TwoLineListItem

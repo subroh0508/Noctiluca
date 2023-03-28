@@ -1,9 +1,9 @@
-package noctiluca.status.model
+package noctiluca.model
 
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
 
-data class Tooter(
+data class Account(
     val id: AccountId,
     val username: String,
     val displayName: String,

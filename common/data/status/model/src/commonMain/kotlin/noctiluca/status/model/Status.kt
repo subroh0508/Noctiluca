@@ -1,6 +1,7 @@
 package noctiluca.status.model
 
 import kotlinx.datetime.LocalDateTime
+import noctiluca.model.Account
 import noctiluca.model.StatusId
 
 data class Status(
@@ -15,8 +16,8 @@ data class Status(
     val favourited: Boolean,
     val reblogged: Boolean,
     val bookmarked: Boolean,
-    val tooter: Tooter,
-    val rebloggedBy: Tooter?,
+    val tooter: Account,
+    val rebloggedBy: Account?,
 ) {
     enum class Visibility { PUBLIC, UNLISTED, PRIVATE, DIRECT }
 

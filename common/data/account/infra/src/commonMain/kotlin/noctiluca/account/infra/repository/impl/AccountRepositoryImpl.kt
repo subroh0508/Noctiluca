@@ -1,7 +1,7 @@
 package noctiluca.account.infra.repository.impl
 
 import noctiluca.account.infra.repository.AccountRepository
-import noctiluca.account.model.Account
+import noctiluca.model.Account
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.model.*

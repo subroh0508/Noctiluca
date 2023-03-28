@@ -3,7 +3,7 @@ package noctiluca.account.infra.repository.impl
 import noctiluca.account.infra.repository.AuthorizedAccountRepository
 import noctiluca.account.infra.repository.local.LocalAuthorizedAccountRepository
 import noctiluca.account.infra.toEntity
-import noctiluca.account.model.Account
+import noctiluca.model.Account
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.model.*
 

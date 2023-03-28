@@ -11,12 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import noctiluca.account.model.Account
-import noctiluca.status.model.Tooter
+import noctiluca.model.Account
 
 @Composable
 fun TooterName(
-    tooter: Tooter,
+    tooter: Account,
     modifier: Modifier = Modifier,
     trailing: (@Composable (Modifier) -> Unit)? = null,
 ) = Column(modifier) {

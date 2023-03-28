@@ -6,12 +6,10 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
-import io.ktor.client.plugins.*
 import io.ktor.http.*
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import noctiluca.account.model.Account
+import noctiluca.model.Account
 import noctiluca.api.mastodon.Api
 import noctiluca.model.*
 import noctiluca.test.DOMAIN_SAMPLE_COM

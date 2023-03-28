@@ -3,7 +3,7 @@ package noctiluca.features.timeline.state
 import androidx.compose.runtime.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import noctiluca.account.model.Account
+import noctiluca.model.Account
 import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.components.state.*
 import noctiluca.features.timeline.LocalScope

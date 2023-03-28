@@ -28,6 +28,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
         AccountId("1"),
         "test1",
         "テスト太郎",
+        Uri("$URL_SAMPLE_COM/@test1"),
         Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
         "@test1@$DOMAIN_SAMPLE_COM",
     )
@@ -111,6 +112,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 AccountId("1"),
                 "test1",
                 "テスト太郎",
+                Uri("$URL_SAMPLE_COM/@test1"),
                 Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
                 "@test1@$DOMAIN_SAMPLE_COM",
             ) to Domain(DOMAIN_SAMPLE_COM)

@@ -1,19 +1,20 @@
-package noctiluca.account.infra.repository.impl
+package noctiluca.accountdetail.infra.repository.impl
 
-import noctiluca.account.infra.repository.AccountRepository
-import noctiluca.account.model.Account
+import noctiluca.accountdetail.infra.repository.AccountDetailRepository
+import noctiluca.accountdetail.model.AccountDetail
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountJson
-import noctiluca.model.*
+import noctiluca.model.AccountId
+import noctiluca.model.Uri
 
-internal class AccountRepositoryImpl(
+internal class AccountDetailRepositoryImpl(
     private val v1: MastodonApiV1,
-) : AccountRepository {
+) : AccountDetailRepository {
     override suspend fun fetchAccount(
         id: AccountId,
     ) = v1.getAccount(id.value).toEntity()
 
-    private fun AccountJson.toEntity() = Account(
+    private fun AccountJson.toEntity() = AccountDetail(
         AccountId(id),
         username,
         displayName,

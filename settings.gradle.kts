@@ -28,6 +28,8 @@ include(
     ":common:data:shared",
     ":common:data:account:model",
     ":common:data:account:infra",
+    ":common:data:accountdetail:model",
+    ":common:data:accountdetail:infra",
     ":common:data:authentication:model",
     ":common:data:authentication:infra",
     ":common:data:instance:model",

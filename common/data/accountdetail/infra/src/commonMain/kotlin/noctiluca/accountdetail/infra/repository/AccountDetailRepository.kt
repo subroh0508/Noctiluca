@@ -4,5 +4,5 @@ import noctiluca.accountdetail.model.AccountDetail
 import noctiluca.model.AccountId
 
 interface AccountDetailRepository {
-    suspend fun fetchAccount(id: AccountId): AccountDetail
+    suspend fun fetch(id: AccountId): AccountDetail
 }

@@ -10,7 +10,7 @@ import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import noctiluca.model.Account
+import noctiluca.account.model.Account
 import noctiluca.api.mastodon.Api
 import noctiluca.model.AccountId
 import noctiluca.model.Domain

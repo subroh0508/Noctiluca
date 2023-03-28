@@ -1,7 +1,7 @@
 package noctiluca.timeline.domain.mock
 
 import noctiluca.account.infra.repository.local.LocalAuthorizedAccountRepository
-import noctiluca.model.Account
+import noctiluca.account.model.Account
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.model.AccountId
 import noctiluca.model.Domain

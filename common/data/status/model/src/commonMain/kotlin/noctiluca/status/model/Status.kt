@@ -1,7 +1,7 @@
 package noctiluca.status.model
 
 import kotlinx.datetime.LocalDateTime
-import noctiluca.model.Account
+import noctiluca.account.model.Account
 import noctiluca.model.StatusId
 
 data class Status(

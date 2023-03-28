@@ -1,4 +1,4 @@
-package noctiluca.model
+package noctiluca.account.model
 
 import noctiluca.model.AccountId
 import noctiluca.model.Uri

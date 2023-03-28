@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import noctiluca.model.Account
+import noctiluca.account.model.Account
 
 @Composable
 fun TooterName(

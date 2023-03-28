@@ -23,7 +23,7 @@ import noctiluca.features.components.atoms.text.RelativeTime
 import noctiluca.features.components.utils.baseline
 import noctiluca.features.components.utils.toDp
 import noctiluca.features.shared.account.TooterName
-import noctiluca.model.Account
+import noctiluca.account.model.Account
 import noctiluca.status.model.Status
 
 enum class Action {

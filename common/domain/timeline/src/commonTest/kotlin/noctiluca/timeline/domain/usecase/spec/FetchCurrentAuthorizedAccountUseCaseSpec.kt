@@ -9,7 +9,7 @@ import io.kotest.matchers.should
 import io.ktor.http.*
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import noctiluca.model.Account
+import noctiluca.account.model.Account
 import noctiluca.api.mastodon.Api
 import noctiluca.model.*
 import noctiluca.test.DOMAIN_SAMPLE_COM

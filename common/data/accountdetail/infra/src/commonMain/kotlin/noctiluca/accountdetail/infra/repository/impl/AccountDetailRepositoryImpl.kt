@@ -3,6 +3,7 @@ package noctiluca.accountdetail.infra.repository.impl
 import noctiluca.accountdetail.infra.repository.AccountDetailRepository
 import noctiluca.accountdetail.infra.toValueObject
 import noctiluca.accountdetail.model.AccountDetail
+import noctiluca.accountdetail.model.Relationship
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.account.RelationshipJson
@@ -30,7 +31,7 @@ internal class AccountDetailRepositoryImpl(
     }
 
     private fun AccountJson.toEntity(
-        relationships: Set<AccountDetail.Relationship>? = null,
+        relationships: Set<Relationship>? = null,
     ): AccountDetail = AccountDetail(
         AccountId(id),
         username,
@@ -51,23 +52,23 @@ internal class AccountDetailRepositoryImpl(
         moved?.toEntity(),
     )
 
-    private fun RelationshipJson.toSet(current: AuthorizedUser?): Set<AccountDetail.Relationship>? {
+    private fun RelationshipJson.toSet(current: AuthorizedUser?): Set<Relationship>? {
         if (id == current?.id?.value) {
             return null
         }
 
         return setOfNotNull(
-            if (following) AccountDetail.Relationship.FOLLOWING else null,
-            if (showingReblogs) AccountDetail.Relationship.SHOWING_REBLOGS else null,
-            if (notifying) AccountDetail.Relationship.NOTIFYING else null,
-            if (followedBy) AccountDetail.Relationship.FOLLOWED_BY else null,
-            if (blocking) AccountDetail.Relationship.BLOCKING else null,
-            if (blockedBy) AccountDetail.Relationship.BLOCKED_BY else null,
-            if (muting) AccountDetail.Relationship.MUTING else null,
-            if (mutingNotifications) AccountDetail.Relationship.MUTING_NOTIFICATIONS else null,
-            if (requested) AccountDetail.Relationship.REQUESTED else null,
-            if (domainBlocking) AccountDetail.Relationship.DOMAIN_BLOCKING else null,
-            if (endorsed) AccountDetail.Relationship.ENDORSED else null,
+            if (following) Relationship.FOLLOWING else null,
+            if (showingReblogs) Relationship.SHOWING_REBLOGS else null,
+            if (notifying) Relationship.NOTIFYING else null,
+            if (followedBy) Relationship.FOLLOWED_BY else null,
+            if (blocking) Relationship.BLOCKING else null,
+            if (blockedBy) Relationship.BLOCKED_BY else null,
+            if (muting) Relationship.MUTING else null,
+            if (mutingNotifications) Relationship.MUTING_NOTIFICATIONS else null,
+            if (requested) Relationship.REQUESTED else null,
+            if (domainBlocking) Relationship.DOMAIN_BLOCKING else null,
+            if (endorsed) Relationship.ENDORSED else null,
         )
     }
 

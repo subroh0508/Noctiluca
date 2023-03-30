@@ -22,20 +22,6 @@ data class AccountDetail(
     val fields: List<Field>,
     val movedTo: AccountDetail?,
 ) {
-    enum class Relationship {
-        FOLLOWING,
-        SHOWING_REBLOGS,
-        NOTIFYING,
-        FOLLOWED_BY,
-        BLOCKING,
-        BLOCKED_BY,
-        MUTING,
-        MUTING_NOTIFICATIONS,
-        REQUESTED,
-        DOMAIN_BLOCKING,
-        ENDORSED,
-    }
-
     enum class Condition {
         LIMITED,
         SUSPENDED,

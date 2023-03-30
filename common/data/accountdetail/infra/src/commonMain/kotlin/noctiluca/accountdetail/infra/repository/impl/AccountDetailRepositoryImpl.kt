@@ -5,17 +5,33 @@ import noctiluca.accountdetail.infra.toValueObject
 import noctiluca.accountdetail.model.AccountDetail
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountJson
+import noctiluca.api.mastodon.json.account.RelationshipJson
 import noctiluca.model.AccountId
+import noctiluca.model.AuthorizedUser
 import noctiluca.model.Uri
+import noctiluca.repository.TokenProvider
 
 internal class AccountDetailRepositoryImpl(
     private val v1: MastodonApiV1,
+    private val tokenProvider: TokenProvider,
 ) : AccountDetailRepository {
     override suspend fun fetch(
         id: AccountId,
-    ) = v1.getAccount(id.value).toEntity()
+    ): AccountDetail {
+        val current = tokenProvider.getCurrent()
+        val account = v1.getAccount(id.value)
+        val relationships =
+            if (id != current?.id && account.moved == null)
+                v1.getAccountsRelationships(listOf(id.value)).find { it.id == id.value }
+            else
+                null
 
-    private fun AccountJson.toEntity() = AccountDetail(
+        return account.toEntity(relationships?.toSet(current))
+    }
+
+    private fun AccountJson.toEntity(
+        relationships: Set<AccountDetail.Relationship>? = null,
+    ): AccountDetail = AccountDetail(
         AccountId(id),
         username,
         displayName,
@@ -29,6 +45,36 @@ internal class AccountDetailRepositoryImpl(
         statusesCount,
         locked,
         bot,
+        relationships,
+        condition,
         fields.map { it.toValueObject() },
+        moved?.toEntity(),
     )
+
+    private fun RelationshipJson.toSet(current: AuthorizedUser?): Set<AccountDetail.Relationship>? {
+        if (id == current?.id?.value) {
+            return null
+        }
+
+        return setOfNotNull(
+            if (following) AccountDetail.Relationship.FOLLOWING else null,
+            if (showingReblogs) AccountDetail.Relationship.SHOWING_REBLOGS else null,
+            if (notifying) AccountDetail.Relationship.NOTIFYING else null,
+            if (followedBy) AccountDetail.Relationship.FOLLOWED_BY else null,
+            if (blocking) AccountDetail.Relationship.BLOCKING else null,
+            if (blockedBy) AccountDetail.Relationship.BLOCKED_BY else null,
+            if (muting) AccountDetail.Relationship.MUTING else null,
+            if (mutingNotifications) AccountDetail.Relationship.MUTING_NOTIFICATIONS else null,
+            if (requested) AccountDetail.Relationship.REQUESTED else null,
+            if (domainBlocking) AccountDetail.Relationship.DOMAIN_BLOCKING else null,
+            if (endorsed) AccountDetail.Relationship.ENDORSED else null,
+        )
+    }
+
+    private val AccountJson.condition
+        get() = when {
+            limited == true -> AccountDetail.Condition.LIMITED
+            suspended == true -> AccountDetail.Condition.SUSPENDED
+            else -> null
+        }
 }

@@ -1,5 +1,6 @@
 package noctiluca.accountdetail.model
 
+import noctiluca.account.model.Account
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
 
@@ -20,7 +21,7 @@ data class AccountDetail(
     val relationship: Set<Relationship>?,
     val condition: Condition?,
     val fields: List<Field>,
-    val movedTo: AccountDetail?,
+    val movedTo: Account?,
 ) {
     enum class Condition {
         LIMITED,

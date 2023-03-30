@@ -1,5 +1,6 @@
 package noctiluca.accountdetail.infra.repository.impl
 
+import noctiluca.account.model.Account
 import noctiluca.accountdetail.infra.repository.AccountDetailRepository
 import noctiluca.accountdetail.infra.toValueObject
 import noctiluca.accountdetail.model.AccountDetail
@@ -49,7 +50,7 @@ internal class AccountDetailRepositoryImpl(
         relationships,
         condition,
         fields.map { it.toValueObject() },
-        moved?.toEntity(),
+        moved?.toAccount(),
     )
 
     private fun RelationshipJson.toSet(current: AuthorizedUser?): Set<Relationship>? {
@@ -78,4 +79,13 @@ internal class AccountDetailRepositoryImpl(
             suspended == true -> AccountDetail.Condition.SUSPENDED
             else -> null
         }
+
+    private fun AccountJson.toAccount() = Account(
+        AccountId(id),
+        username,
+        displayName,
+        Uri(url),
+        Uri(avatar),
+        "@$acct",
+    )
 }

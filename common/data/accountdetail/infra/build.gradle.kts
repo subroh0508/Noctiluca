@@ -8,6 +8,7 @@ kotlin {
             dependencies {
                 implementation(project(":common:api:mastodon"))
                 implementation(project(":common:api:token"))
+                implementation(project(":common:data:account:model"))
                 implementation(project(":common:data:accountdetail:model"))
 
                 implementation(libs.kotlinx.serialization)

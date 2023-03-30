@@ -30,7 +30,7 @@ data class AccountJson(
     val group: Boolean,
     val discoverable: Boolean?,
     val noindex: Boolean?, // Since 4.0.0
-    val moved: Boolean?,
+    val moved: AccountJson?,
     val suspended: Boolean?,
     val limited: Boolean?,
     @SerialName("created_at")

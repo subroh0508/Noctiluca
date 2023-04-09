@@ -5,6 +5,6 @@ import noctiluca.accountdetail.infra.repository.impl.AccountDetailRepositoryImpl
 import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-fun Module.AccountDetailRepositoriesModule() {
+fun Module.AccountDetailInfraModule() {
     single<AccountDetailRepository> { AccountDetailRepositoryImpl(get(), get()) }
 }

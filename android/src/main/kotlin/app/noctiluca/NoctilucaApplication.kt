@@ -4,6 +4,7 @@ import android.app.Application
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
 import noctiluca.account.infra.di.AccountInfraModule
+import noctiluca.accountdetail.infra.di.AccountDetailInfraModule
 import noctiluca.api.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule
@@ -63,6 +64,7 @@ class NoctilucaApplication : Application() {
 
     private fun buildRepositoriesModules() = module {
         AccountInfraModule(json)
+        AccountDetailInfraModule()
         AuthenticationInfraModule()
         InstanceRepositoriesModule()
         TimelineRepositoriesModule()

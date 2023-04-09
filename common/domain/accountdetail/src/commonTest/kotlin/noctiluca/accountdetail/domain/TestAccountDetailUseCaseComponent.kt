@@ -3,7 +3,7 @@ package noctiluca.accountdetail.domain
 import io.ktor.client.engine.*
 import kotlinx.serialization.json.Json
 import noctiluca.accountdetail.domain.di.AccountDetailDomainModule
-import noctiluca.accountdetail.infra.di.AccountDetailRepositoriesModule
+import noctiluca.accountdetail.infra.di.AccountDetailInfraModule
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.mastodon.di.buildHttpClient
 import noctiluca.api.mastodon.di.buildWebSocketClient
@@ -42,7 +42,7 @@ class TestAccountDetailUseCaseComponent(
         )
         MockTokenModule()
 
-        AccountDetailRepositoriesModule()
+        AccountDetailInfraModule()
 
         scope(scope.scopeQualifier) {
             AccountDetailDomainModule()

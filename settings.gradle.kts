@@ -45,6 +45,7 @@ include(
     ":features:components",
     ":features:shared",
     ":features:theme",
-    ":features:page:timeline",
+    ":features:page:accountdetail",
     ":features:page:authentication",
+    ":features:page:timeline",
 )

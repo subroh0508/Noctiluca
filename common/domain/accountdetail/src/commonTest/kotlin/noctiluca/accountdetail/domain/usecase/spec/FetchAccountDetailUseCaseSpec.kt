@@ -1,10 +1,13 @@
 package noctiluca.accountdetail.domain.usecase.spec
 
+import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
 import io.kotest.matchers.should
 import io.ktor.client.engine.mock.*
+import io.ktor.client.plugins.*
+import io.ktor.http.*
 import noctiluca.accountdetail.domain.TestAccountDetailUseCaseComponent
 import noctiluca.accountdetail.domain.usecase.FetchAccountDetailUseCase
 import noctiluca.accountdetail.domain.usecase.json.*
@@ -117,7 +120,34 @@ class FetchAccountDetailUseCaseSpec : DescribeSpec({
         }
 
         context("when the server returns invalid response") {
-            it("returns null") {
+            context("and the id is mine") {
+                val testCase = buildUseCase(
+                    MockHttpClientEngine
+                        .mock(Api.V1.Accounts.Id(id = ACCOUNT_ID), HttpStatusCode.Unauthorized)
+                        .build(),
+                )
+
+                it("raises ClientRequestException") {
+                    shouldThrowExactly<ClientRequestException> {
+                        runBlocking {
+                            testCase.execute(AccountId(ACCOUNT_ID))
+                        }
+                    }
+                }
+            }
+            context("and the id is not mine") {
+                val testCase = buildUseCase(
+                    MockHttpClientEngine
+                        .mock(Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID), JSON_OTHER_ACCOUNT)
+                        .mock(Api.V1.Accounts.Relationships(), HttpStatusCode.UnprocessableEntity)
+                        .build(),
+                )
+
+                it("returns the account detail with none relationships") {
+                    runBlocking {
+                        testCase.execute(AccountId(OTHER_ACCOUNT_ID))
+                    } should be(otherAccount)
+                }
             }
         }
     }

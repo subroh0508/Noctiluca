@@ -5,6 +5,7 @@ import noctiluca.accountdetail.infra.repository.AccountDetailRepository
 import noctiluca.accountdetail.infra.toValueObject
 import noctiluca.accountdetail.model.AccountDetail
 import noctiluca.accountdetail.model.Relationship
+import noctiluca.accountdetail.model.Relationships
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.account.RelationshipJson
@@ -22,18 +23,33 @@ internal class AccountDetailRepositoryImpl(
     ): AccountDetail {
         val current = tokenProvider.getCurrent()
         val account = v1.getAccount(id.value)
-        val relationships =
-            if (id != current?.id && account.moved == null)
-                v1.getAccountsRelationships(listOf(id.value)).find { it.id == id.value }
-            else
-                null
 
-        return account.toEntity(relationships?.toSet(current))
+        return account.toEntity(
+            relationships =
+            if (id != current?.id && account.moved == null)
+                Relationships.NONE
+            else
+                Relationships.ME,
+        )
+    }
+
+    override suspend fun fetchRelationships(
+        id: AccountId,
+    ): Relationships {
+        if (id == tokenProvider.getCurrent()?.id) {
+            return Relationships.ME
+        }
+
+        val json = v1.getAccountsRelationships(listOf(id.value))
+            .find { it.id == id.value }
+            ?: return Relationships.NONE
+
+        return json.toValueObject(tokenProvider.getCurrent())
     }
 
     private fun AccountJson.toEntity(
-        relationships: Set<Relationship>? = null,
-    ): AccountDetail = AccountDetail(
+        relationships: Relationships,
+    ) = AccountDetail(
         AccountId(id),
         username,
         displayName,
@@ -53,23 +69,25 @@ internal class AccountDetailRepositoryImpl(
         moved?.toAccount(),
     )
 
-    private fun RelationshipJson.toSet(current: AuthorizedUser?): Set<Relationship>? {
+    private fun RelationshipJson.toValueObject(current: AuthorizedUser?): Relationships {
         if (id == current?.id?.value) {
-            return null
+            return Relationships.ME
         }
 
-        return setOfNotNull(
-            if (following) Relationship.FOLLOWING else null,
-            if (showingReblogs) Relationship.SHOWING_REBLOGS else null,
-            if (notifying) Relationship.NOTIFYING else null,
-            if (followedBy) Relationship.FOLLOWED_BY else null,
-            if (blocking) Relationship.BLOCKING else null,
-            if (blockedBy) Relationship.BLOCKED_BY else null,
-            if (muting) Relationship.MUTING else null,
-            if (mutingNotifications) Relationship.MUTING_NOTIFICATIONS else null,
-            if (requested) Relationship.REQUESTED else null,
-            if (domainBlocking) Relationship.DOMAIN_BLOCKING else null,
-            if (endorsed) Relationship.ENDORSED else null,
+        return Relationships(
+            setOfNotNull(
+                if (following) Relationship.FOLLOWING else null,
+                if (showingReblogs) Relationship.SHOWING_REBLOGS else null,
+                if (notifying) Relationship.NOTIFYING else null,
+                if (followedBy) Relationship.FOLLOWED_BY else null,
+                if (blocking) Relationship.BLOCKING else null,
+                if (blockedBy) Relationship.BLOCKED_BY else null,
+                if (muting) Relationship.MUTING else null,
+                if (mutingNotifications) Relationship.MUTING_NOTIFICATIONS else null,
+                if (requested) Relationship.REQUESTED else null,
+                if (domainBlocking) Relationship.DOMAIN_BLOCKING else null,
+                if (endorsed) Relationship.ENDORSED else null,
+            ),
         )
     }
 

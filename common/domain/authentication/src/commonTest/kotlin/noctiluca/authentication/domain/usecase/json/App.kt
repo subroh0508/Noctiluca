@@ -19,4 +19,4 @@ val JSON_APP_CREDENTIAL = """
       "client_secret": "$TEST_CLIENT_SECRET",
       "vapid_key": "zzz"
     }
-""".trimIndent().trim()
+""".trim()

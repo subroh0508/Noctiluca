@@ -18,7 +18,7 @@ data class AccountDetail(
     val statusesCount: Int,
     val locked: Boolean,
     val bot: Boolean,
-    val relationship: Set<Relationship>?,
+    val relationships: Relationships,
     val condition: Condition?,
     val fields: List<Field>,
     val movedTo: Account?,

@@ -14,6 +14,6 @@ val URL_SAMPLE_COM = "${URLProtocol.HTTPS.name}://$DOMAIN_SAMPLE_COM"
 val URL_MASTODON_JP = "${URLProtocol.HTTPS.name}://$DOMAIN_MASTODON_JP"
 
 val me = MockAuthorizedUser(
-    AccountId("1"),
+    AccountId(ACCOUNT_ID),
     Domain(DOMAIN_SAMPLE_COM),
 )

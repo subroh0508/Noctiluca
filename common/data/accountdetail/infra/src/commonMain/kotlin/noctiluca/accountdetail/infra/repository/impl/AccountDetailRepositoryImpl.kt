@@ -23,14 +23,9 @@ internal class AccountDetailRepositoryImpl(
     ): AccountDetail {
         val current = tokenProvider.getCurrent()
         val account = v1.getAccount(id.value)
+        val relationship = if (id != current?.id && account.moved == null) Relationships.NONE else Relationships.ME
 
-        return account.toEntity(
-            relationships =
-            if (id != current?.id && account.moved == null)
-                Relationships.NONE
-            else
-                Relationships.ME,
-        )
+        return account.toEntity(relationship)
     }
 
     override suspend fun fetchRelationships(

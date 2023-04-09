@@ -164,7 +164,7 @@ private inline fun eachAccountCondition(
         JSON_OTHER_ACCOUNT -> "normal account" to null
         JSON_LIMITED_ACCOUNT -> "account limited" to AccountDetail.Condition.LIMITED
         JSON_SUSPENDED_ACCOUNT -> "account suspended" to AccountDetail.Condition.SUSPENDED
-        else -> throw IllegalStateException()
+        else -> error("invalid json: $json")
     }
 
     block(json, name, condition)
@@ -197,7 +197,7 @@ private inline fun eachRelationship(
         JSON_ACCOUNTS_RELATIONSHIP_REQUESTED -> Relationship.REQUESTED
         JSON_ACCOUNTS_RELATIONSHIP_DOMAIN_BLOCKING -> Relationship.DOMAIN_BLOCKING
         JSON_ACCOUNTS_RELATIONSHIP_ENDORSED -> Relationship.ENDORSED
-        else -> throw IllegalStateException()
+        else -> error("invalid json: $json")
     }
 
     block(json, relationship)

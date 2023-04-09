@@ -17,13 +17,13 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDateTime
+import noctiluca.account.model.Account
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
 import noctiluca.features.components.atoms.text.RelativeTime
 import noctiluca.features.components.utils.baseline
 import noctiluca.features.components.utils.toDp
 import noctiluca.features.shared.account.TooterName
-import noctiluca.account.model.Account
 import noctiluca.status.model.Status
 
 enum class Action {

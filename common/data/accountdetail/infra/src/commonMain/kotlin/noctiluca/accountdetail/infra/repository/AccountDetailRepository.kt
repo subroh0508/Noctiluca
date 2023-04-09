@@ -1,7 +1,6 @@
 package noctiluca.accountdetail.infra.repository
 
 import noctiluca.accountdetail.model.AccountDetail
-import noctiluca.accountdetail.model.Relationship
 import noctiluca.accountdetail.model.Relationships
 import noctiluca.model.AccountId
 

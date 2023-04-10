@@ -16,6 +16,7 @@ dependencies {
 
     implementation(project(":features:theme"))
     implementation(project(":features:components"))
+    implementation(project(":features:page:accountdetail"))
     implementation(project(":features:page:authentication"))
     implementation(project(":features:page:timeline"))
 

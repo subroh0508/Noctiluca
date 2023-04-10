@@ -48,7 +48,8 @@ internal sealed class TimelineDrawerMenu {
 @Composable
 internal fun TimelineDrawerSheet(
     account: CurrentAuthorizedAccount,
-    onClickAccount: (Account) -> Unit,
+    onClickTopAccount: (Account) -> Unit,
+    onClickAccountList: (Account) -> Unit,
     onClickDrawerMenu: (TimelineDrawerMenu) -> Unit,
 ) = ModalDrawerSheet(
     Modifier.fillMaxHeight(),
@@ -57,7 +58,7 @@ internal fun TimelineDrawerSheet(
     account.current?.let {
         AccountHeader(
             it,
-            onClickAccountIcon = {},
+            onClickAccountIcon = { onClickTopAccount(it) },
             modifier = Modifier.padding(
                 horizontal = 28.dp,
                 vertical = 16.dp,
@@ -68,7 +69,7 @@ internal fun TimelineDrawerSheet(
     Divider(Modifier.fillMaxWidth())
 
     Box(Modifier.weight(1F)) {
-        AuthorizedAccountsList(account, onClickAccount)
+        AuthorizedAccountsList(account, onClickAccountList)
     }
 
     Divider(Modifier.fillMaxWidth())

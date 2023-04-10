@@ -8,6 +8,7 @@ kotlin {
             dependencies {
                 api(project(":common:data:account:model"))
                 api(project(":common:data:accountdetail:model"))
+                api(project(":common:data:status:model"))
                 implementation(project(":common:data:accountdetail:infra"))
 
                 implementation(libs.kotlinx.datetime)

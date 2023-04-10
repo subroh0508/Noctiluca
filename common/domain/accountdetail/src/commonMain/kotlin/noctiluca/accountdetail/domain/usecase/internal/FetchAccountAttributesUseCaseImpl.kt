@@ -1,14 +1,14 @@
 package noctiluca.accountdetail.domain.usecase.internal
 
-import noctiluca.accountdetail.domain.usecase.FetchAccountDetailUseCase
+import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.infra.repository.AccountDetailRepository
-import noctiluca.accountdetail.model.AccountDetail
+import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.model.AccountId
 
-internal class FetchAccountDetailUseCaseImpl(
+internal class FetchAccountAttributesUseCaseImpl(
     private val repository: AccountDetailRepository,
-) : FetchAccountDetailUseCase {
-    override suspend fun execute(id: AccountId): AccountDetail {
+) : FetchAccountAttributesUseCase {
+    override suspend fun execute(id: AccountId): AccountAttributes {
         val account = repository.fetch(id)
 
         return runCatching { repository.fetchRelationships(id) }

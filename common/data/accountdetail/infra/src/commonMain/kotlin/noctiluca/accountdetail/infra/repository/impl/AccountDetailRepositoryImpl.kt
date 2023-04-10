@@ -3,7 +3,7 @@ package noctiluca.accountdetail.infra.repository.impl
 import noctiluca.account.model.Account
 import noctiluca.accountdetail.infra.repository.AccountDetailRepository
 import noctiluca.accountdetail.infra.toValueObject
-import noctiluca.accountdetail.model.AccountDetail
+import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.accountdetail.model.Relationship
 import noctiluca.accountdetail.model.Relationships
 import noctiluca.api.mastodon.MastodonApiV1
@@ -20,7 +20,7 @@ internal class AccountDetailRepositoryImpl(
 ) : AccountDetailRepository {
     override suspend fun fetch(
         id: AccountId,
-    ): AccountDetail {
+    ): AccountAttributes {
         val current = tokenProvider.getCurrent()
         val account = v1.getAccount(id.value)
         val relationship = if (id != current?.id && account.moved == null) Relationships.NONE else Relationships.ME
@@ -44,7 +44,7 @@ internal class AccountDetailRepositoryImpl(
 
     private fun AccountJson.toEntity(
         relationships: Relationships,
-    ) = AccountDetail(
+    ) = AccountAttributes(
         AccountId(id),
         username,
         displayName,
@@ -88,8 +88,8 @@ internal class AccountDetailRepositoryImpl(
 
     private val AccountJson.condition
         get() = when {
-            limited == true -> AccountDetail.Condition.LIMITED
-            suspended == true -> AccountDetail.Condition.SUSPENDED
+            limited == true -> AccountAttributes.Condition.LIMITED
+            suspended == true -> AccountAttributes.Condition.SUSPENDED
             else -> null
         }
 

@@ -9,9 +9,9 @@ import io.ktor.client.engine.mock.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.accountdetail.domain.TestAccountDetailUseCaseComponent
-import noctiluca.accountdetail.domain.usecase.FetchAccountDetailUseCase
+import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.json.*
-import noctiluca.accountdetail.model.AccountDetail
+import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.accountdetail.model.Relationship
 import noctiluca.accountdetail.model.Relationships
 import noctiluca.api.mastodon.Api
@@ -21,8 +21,8 @@ import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.URL_SAMPLE_COM
 import noctiluca.test.mock.MockHttpClientEngine
 
-class FetchAccountDetailUseCaseSpec : DescribeSpec({
-    val myAccount = AccountDetail(
+class FetchAccountAttributesUseCaseSpec : DescribeSpec({
+    val myAccount = AccountAttributes(
         AccountId(ACCOUNT_ID),
         "test1",
         "サンプル太郎",
@@ -39,12 +39,12 @@ class FetchAccountDetailUseCaseSpec : DescribeSpec({
         Relationships.ME,
         null,
         listOf(
-            AccountDetail.Field("フィールド1", "ほげほげ"),
+            AccountAttributes.Field("フィールド1", "ほげほげ"),
         ),
         null,
     )
 
-    val otherAccount = AccountDetail(
+    val otherAccount = AccountAttributes(
         AccountId("10"),
         "test2",
         "サンプル次郎",
@@ -61,7 +61,7 @@ class FetchAccountDetailUseCaseSpec : DescribeSpec({
         Relationships.NONE,
         null,
         listOf(
-            AccountDetail.Field("フィールド1", "ふがふが"),
+            AccountAttributes.Field("フィールド1", "ふがふが"),
         ),
         null,
     )
@@ -154,7 +154,7 @@ class FetchAccountDetailUseCaseSpec : DescribeSpec({
 })
 
 private inline fun eachAccountCondition(
-    block: (String, String, AccountDetail.Condition?) -> Unit,
+    block: (String, String, AccountAttributes.Condition?) -> Unit,
 ) = listOf(
     JSON_OTHER_ACCOUNT,
     JSON_LIMITED_ACCOUNT,
@@ -162,8 +162,8 @@ private inline fun eachAccountCondition(
 ).forEach { json ->
     val (name, condition) = when (json) {
         JSON_OTHER_ACCOUNT -> "normal account" to null
-        JSON_LIMITED_ACCOUNT -> "account limited" to AccountDetail.Condition.LIMITED
-        JSON_SUSPENDED_ACCOUNT -> "account suspended" to AccountDetail.Condition.SUSPENDED
+        JSON_LIMITED_ACCOUNT -> "account limited" to AccountAttributes.Condition.LIMITED
+        JSON_SUSPENDED_ACCOUNT -> "account suspended" to AccountAttributes.Condition.SUSPENDED
         else -> error("invalid json: $json")
     }
 
@@ -205,6 +205,6 @@ private inline fun eachRelationship(
 
 private fun buildUseCase(
     engine: MockEngine,
-): FetchAccountDetailUseCase = TestAccountDetailUseCaseComponent(
+): FetchAccountAttributesUseCase = TestAccountDetailUseCaseComponent(
     engine,
 ).scope.get()

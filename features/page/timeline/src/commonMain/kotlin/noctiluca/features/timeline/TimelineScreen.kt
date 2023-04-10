@@ -29,6 +29,7 @@ internal val LocalTimelineListState = compositionLocalOf { TimelineListState() }
 @Composable
 fun TimelineScreen(
     component: KoinScopeComponent,
+    onNavigateToAccountDetail: (String) -> Unit,
     onReload: () -> Unit,
     onBackToSignIn: () -> Unit,
 ) = AuthorizedFeatureComposable(component, onReload, onBackToSignIn) { scope ->
@@ -44,7 +45,8 @@ fun TimelineScreen(
             drawerContent = { scope, drawerState, account ->
                 TimelineDrawerSheet(
                     account.value,
-                    onClickAccount = { clicked ->
+                    onClickTopAccount = { onNavigateToAccountDetail(it.id.value) },
+                    onClickAccountList = { clicked ->
                         scope.launch {
                             drawerState.close()
                             account.switch(this, clicked)

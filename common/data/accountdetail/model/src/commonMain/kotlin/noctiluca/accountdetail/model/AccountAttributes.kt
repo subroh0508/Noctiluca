@@ -4,7 +4,7 @@ import noctiluca.account.model.Account
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
 
-data class AccountDetail(
+data class AccountAttributes(
     val id: AccountId,
     val username: String,
     val displayName: String,

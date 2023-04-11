@@ -30,7 +30,7 @@ junit-vintage = "5.9.2"
 # workaround: https://github.com/kotest/kotest/issues/3407
 kotest = "5.5.4"
 
-robolectric = "4.9.2"
+robolectric = "4.10"
 
 androidx-test-core = "1.5.0"
 androidx-test-runner = "1.5.2"

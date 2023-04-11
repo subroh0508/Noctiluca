@@ -1,9 +1,9 @@
 package noctiluca.features.components.atoms.appbar
 
-import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarScrollBehavior
+import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -21,6 +21,29 @@ fun TopAppBar(
     { Text(title) },
     modifier,
     navigationIcon,
+    scrollBehavior = scrollBehavior,
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HeadlineTopAppBar(
+    title: @Composable () -> Unit,
+    modifier: Modifier = Modifier,
+    onBackPressed: () -> Unit = {},
+    colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+) = LargeTopAppBar(
+    title,
+    modifier,
+    {
+        IconButton(onClick = onBackPressed) {
+            Icon(
+                Icons.Filled.ArrowBack,
+                contentDescription = "Back",
+            )
+        }
+    },
+    colors = colors,
     scrollBehavior = scrollBehavior,
 )
 

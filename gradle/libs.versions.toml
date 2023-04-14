@@ -1,5 +1,5 @@
 [versions]
-agp = "7.3.0"
+agp = "7.4.2"
 kotlin = "1.8.20"
 compose = "1.4.0"
 buildconfig = "4.1.1"

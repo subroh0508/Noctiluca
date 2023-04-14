@@ -20,7 +20,7 @@ fun AccountHeaderTopAppBar(
     val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
 
     HeadlineTopAppBar(
-        { HeadlineText(detail?.screen, detail?.statusesCount, isScrolled) },
+        { HeadlineText(detail?.displayName, detail?.statusesCount, isScrolled) },
         modifier = Modifier.background(Color.Transparent),
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = Color.Transparent,
@@ -36,7 +36,7 @@ fun AccountHeaderTopAppBar(
 private fun rememberScrolledContainerColorAlpha(
     scrollBehavior: TopAppBarScrollBehavior,
 ): State<Float> = remember {
-    derivedStateOf { scrollBehavior.state.collapsedFraction * 0.5F }
+    derivedStateOf { scrollBehavior.state.collapsedFraction * 0.75F }
 }
 
 @Composable

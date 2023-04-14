@@ -2,7 +2,6 @@ package noctiluca.features.accountdetail.state
 
 import androidx.compose.runtime.*
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.model.AccountAttributes

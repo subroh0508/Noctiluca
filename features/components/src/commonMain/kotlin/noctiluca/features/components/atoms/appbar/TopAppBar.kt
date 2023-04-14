@@ -1,6 +1,5 @@
 package noctiluca.features.components.atoms.appbar
 
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*

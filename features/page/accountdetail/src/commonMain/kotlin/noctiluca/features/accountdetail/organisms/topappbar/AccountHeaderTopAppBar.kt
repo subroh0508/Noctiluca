@@ -6,7 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.font.FontWeight
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.components.atoms.appbar.HeadlineTopAppBar
 
@@ -17,18 +17,26 @@ fun AccountHeaderTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     val isScrolled by remember { derivedStateOf { scrollBehavior.state.contentOffset < -100F } }
+    val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
 
     HeadlineTopAppBar(
         { HeadlineText(detail?.screen, detail?.statusesCount, isScrolled) },
         modifier = Modifier.background(Color.Transparent),
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = Color.Transparent,
-            MaterialTheme.colorScheme.surfaceColorAtElevation(
-                elevation = 3.0.dp,
-            )
+            scrolledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = alpha),
         ),
         scrollBehavior = scrollBehavior,
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Suppress("MagicNumber")
+private fun rememberScrolledContainerColorAlpha(
+    scrollBehavior: TopAppBarScrollBehavior,
+): State<Float> = remember {
+    derivedStateOf { scrollBehavior.state.collapsedFraction * 0.5F }
 }
 
 @Composable
@@ -41,11 +49,15 @@ private fun HeadlineText(
         Column {
             Text(
                 screen,
-                style = MaterialTheme.typography.titleMedium,
+                style = MaterialTheme.typography.titleLarge.copy(
+                    fontWeight = FontWeight.Medium,
+                ),
             )
             Text(
                 "$statusesCount statuses",
-                style = MaterialTheme.typography.titleSmall,
+                style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.Normal,
+                ),
             )
         }
     }

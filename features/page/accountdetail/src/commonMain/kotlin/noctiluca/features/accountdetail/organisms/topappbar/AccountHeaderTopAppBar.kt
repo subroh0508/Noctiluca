@@ -16,7 +16,7 @@ fun AccountHeaderTopAppBar(
     detail: AccountAttributes?,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
-    val isScrolled by remember { derivedStateOf { scrollBehavior.state.contentOffset < -100F } }
+    val isScrolled by remember { derivedStateOf { scrollBehavior.state.contentOffset < -400F } }
     val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
 
     HeadlineTopAppBar(

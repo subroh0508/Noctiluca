@@ -46,19 +46,34 @@ fun TooterName(
 
 @Composable
 fun AccountName(
-    account: Account,
+    displayName: String,
+    screen: String,
     modifier: Modifier = Modifier,
     displayNameStyle: TextStyle = MaterialTheme.typography.titleLarge,
     usernameStyle: TextStyle = MaterialTheme.typography.titleMedium,
 ) = Column(modifier) {
     Text(
-        account.displayName,
+        displayName,
         style = displayNameStyle,
     )
 
     Text(
-        account.screen,
+        screen,
         color = MaterialTheme.colorScheme.outline,
         style = usernameStyle,
     )
 }
+
+@Composable
+fun AccountName(
+    account: Account,
+    modifier: Modifier = Modifier,
+    displayNameStyle: TextStyle = MaterialTheme.typography.titleLarge,
+    usernameStyle: TextStyle = MaterialTheme.typography.titleMedium,
+) = AccountName(
+    account.displayName,
+    account.screen,
+    modifier,
+    displayNameStyle,
+    usernameStyle,
+)

@@ -37,7 +37,19 @@ private fun LoadedImage(
     contentDescription: String?,
     modifier: Modifier,
 ) = when {
-    imageBitmap != null -> Image(imageBitmap, contentDescription, modifier, contentScale = contentScale)
-    fallback != null -> Image(fallback, contentDescription, modifier, contentScale = contentScale)
+    imageBitmap != null -> Image(
+        imageBitmap,
+        contentDescription,
+        modifier,
+        contentScale = contentScale,
+    )
+
+    fallback != null -> Image(
+        fallback,
+        contentDescription,
+        modifier,
+        contentScale = contentScale,
+    )
+
     else -> Spacer(modifier)
 }

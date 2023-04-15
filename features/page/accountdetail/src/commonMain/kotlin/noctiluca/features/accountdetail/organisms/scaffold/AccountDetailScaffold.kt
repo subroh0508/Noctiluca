@@ -1,18 +1,28 @@
 package noctiluca.features.accountdetail.organisms.scaffold
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
 import noctiluca.features.accountdetail.state.rememberAccountDetail
 import noctiluca.features.components.atoms.image.AsyncImage
+import noctiluca.features.components.atoms.text.HtmlText
+import noctiluca.features.shared.account.AccountName
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
 
@@ -21,36 +31,37 @@ private val CollapsedTopAppBarHeight = 64.dp
 
 private val HeaderHeightOffset = -(ExpandedTopAppBarHeight - CollapsedTopAppBarHeight)
 
+private val AvatarFrameSize = 104.dp
 private val AvatarIconSize = 96.dp
+
+private val AccountDetailScaffoldPadding = 16.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountDetailScaffold(
     id: AccountId,
 ) {
-    val detail = rememberAccountDetail(id)
+    val detail by rememberAccountDetail(id)
+    val (attributes, _) = detail
 
     ScaffoldWithHeaderAndAvatar(
-        detail.value.attributes?.header,
-        detail.value.attributes?.avatar,
+        attributes?.header,
+        attributes?.avatar,
         topAppBar = { scrollBehavior ->
             AccountHeaderTopAppBar(
-                detail.value.attributes,
+                attributes,
                 scrollBehavior,
             )
         },
-    ) { paddingValues ->
-        LazyColumn(
-            contentPadding = paddingValues,
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-        ) {
-            items(50) {
-                Text(
-                    "item $it",
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier.fillMaxWidth(),
-                )
-            }
+    ) {
+        AccountDetailCaption(attributes)
+
+        repeat(50) {
+            Text(
+                "item $it",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.fillMaxWidth(),
+            )
         }
     }
 }
@@ -62,12 +73,20 @@ private fun ScaffoldWithHeaderAndAvatar(
     avatar: Uri?,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
-    content: @Composable (PaddingValues) -> Unit,
+    content: @Composable ColumnScope.() -> Unit,
 ) = Scaffold(
     topBar = { topAppBar(scrollBehavior) },
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 ) { paddingValues ->
-    content(paddingValues)
+    Column(
+        modifier = Modifier.fillMaxSize()
+            .padding(
+                top = paddingValues.calculateTopPadding(),
+                start = AccountDetailScaffoldPadding,
+                end = AccountDetailScaffoldPadding,
+            )
+            .verticalScroll(rememberScrollState()),
+    ) { content() }
 
     AsyncImage(
         header,
@@ -78,18 +97,28 @@ private fun ScaffoldWithHeaderAndAvatar(
             },
     )
 
-    AsyncImage(
-        avatar,
-        modifier = Modifier.size(AvatarIconSize)
+    Box(
+        modifier = Modifier.size(AvatarFrameSize)
             .offset(
-                x = 16.dp,
-                y = ExpandedTopAppBarHeight - AvatarIconSize / 2,
+                x = AccountDetailScaffoldPadding,
+                y = ExpandedTopAppBarHeight - AvatarFrameSize / 2,
             )
             .graphicsLayer {
                 translationY = calculateTranslationY(scrollBehavior)
                 alpha = 1.0F - scrollBehavior.state.collapsedFraction
-            },
-    )
+            }
+            .background(
+                color = MaterialTheme.colorScheme.surface,
+                shape = RoundedCornerShape(8.dp),
+            ),
+        contentAlignment = Alignment.Center,
+    ) {
+        AsyncImage(
+            avatar,
+            modifier = Modifier.size(AvatarIconSize)
+                .clip(RoundedCornerShape(8.dp)),
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -98,4 +127,64 @@ private fun GraphicsLayerScope.calculateTranslationY(
 ): Float {
     val offset = HeaderHeightOffset.toPx()
     return if (offset < scrollBehavior.state.heightOffset) scrollBehavior.state.heightOffset else offset
+}
+
+@Composable
+private fun AccountDetailCaption(
+    attributes: AccountAttributes?,
+) = Column(
+    modifier = Modifier.fillMaxWidth(),
+) {
+    Row(
+        horizontalArrangement = Arrangement.End,
+        modifier = Modifier.fillMaxWidth()
+            .padding(vertical = 8.dp),
+    ) {
+        OutlinedButton(
+            onClick = { /*TODO*/ },
+        ) {
+            Text("プロフィールを編集")
+        }
+    }
+
+    if (attributes != null) {
+        AccountName(
+            attributes.displayName,
+            attributes.screen,
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+        HtmlText(
+            attributes.note,
+            style = MaterialTheme.typography.bodyLarge,
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            Text(
+                attributes.followingCount.toString(),
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                ),
+            )
+            Text(
+                "follows",
+                color = MaterialTheme.colorScheme.outline,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text(
+                attributes.followersCount.toString(),
+                style = MaterialTheme.typography.bodyLarge.copy(
+                    fontWeight = FontWeight.Bold,
+                ),
+            )
+            Text(
+                "followers",
+                color = MaterialTheme.colorScheme.outline,
+                style = MaterialTheme.typography.bodyLarge,
+            )
+        }
+    }
 }

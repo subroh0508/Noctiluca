@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
+import noctiluca.features.accountdetail.organisms.tab.AccountDetailContentTabs
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
 import noctiluca.features.accountdetail.state.rememberAccountDetail
 import noctiluca.features.components.atoms.card.FilledCard
@@ -59,6 +60,8 @@ fun AccountDetailScaffold(
         },
     ) {
         AccountDetailCaption(attributes)
+        Spacer(modifier = Modifier.height(16.dp))
+        AccountDetailContentTabs(0)
 
         repeat(50) {
             Text(
@@ -84,11 +87,7 @@ private fun ScaffoldWithHeaderAndAvatar(
 ) { paddingValues ->
     Column(
         modifier = Modifier.fillMaxSize()
-            .padding(
-                top = paddingValues.calculateTopPadding(),
-                start = AccountDetailScaffoldPadding,
-                end = AccountDetailScaffoldPadding,
-            )
+            .padding(top = paddingValues.calculateTopPadding())
             .verticalScroll(rememberScrollState()),
     ) { content() }
 
@@ -137,7 +136,8 @@ private fun GraphicsLayerScope.calculateTranslationY(
 private fun AccountDetailCaption(
     attributes: AccountAttributes?,
 ) = Column(
-    modifier = Modifier.fillMaxWidth(),
+    modifier = Modifier.fillMaxWidth()
+        .padding(horizontal = AccountDetailScaffoldPadding),
 ) {
     Row(
         horizontalArrangement = Arrangement.End,

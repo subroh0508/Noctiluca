@@ -64,4 +64,10 @@ interface MastodonApiV1 {
     suspend fun getAccountsRelationships(
         id: List<String>,
     ): List<RelationshipJson>
+
+    suspend fun getAccountsStatuses(
+        id: String,
+        maxId: String? = null,
+        limit: Int = 20,
+    ): List<StatusJson>
 }

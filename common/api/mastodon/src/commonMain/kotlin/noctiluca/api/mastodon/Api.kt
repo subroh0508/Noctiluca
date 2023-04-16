@@ -22,7 +22,11 @@ object Api {
 
             @Resource("{id}")
             @Serializable
-            class Id(val parent: Accounts = Accounts(), val id: String)
+            class Id(val parent: Accounts = Accounts(), val id: String) {
+                @Resource("statuses")
+                @Serializable
+                class Statuses(val parent: Id)
+            }
 
             @Resource("relationships")
             @Serializable

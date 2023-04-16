@@ -118,6 +118,17 @@ internal class MastodonApiV1Client(
         parameter("id", id)
     }.body()
 
+    override suspend fun getAccountsStatuses(
+        id: String,
+        maxId: String?,
+        limit: Int,
+    ): List<StatusJson> = client.get(
+        Api.V1.Accounts.Id.Statuses(Api.V1.Accounts.Id(id = id))
+    ) {
+        parameter("max_id", maxId)
+        parameter("limit", limit.toString())
+    }.body()
+
     private suspend inline fun <reified T : Any> HttpClient.get(
         resource: T,
         domain: String? = null,

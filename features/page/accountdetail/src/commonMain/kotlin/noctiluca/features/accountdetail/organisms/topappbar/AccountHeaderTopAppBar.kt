@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import noctiluca.accountdetail.model.AccountAttributes
+import noctiluca.features.accountdetail.getString
 import noctiluca.features.components.atoms.appbar.HeadlineTopAppBar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,7 +55,7 @@ private fun HeadlineText(
                 ),
             )
             Text(
-                "$statusesCount statuses",
+                getString().account_detail_statuses.format(statusesCount),
                 style = MaterialTheme.typography.titleSmall.copy(
                     fontWeight = FontWeight.Normal,
                 ),

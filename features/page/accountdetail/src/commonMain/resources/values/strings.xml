@@ -1,2 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<resources></resources>
+<resources>
+    <string name="account_detail_statuses">%,d件の投稿</string>
+    <string name="account_detail_follows">フォロー</string>
+    <string name="account_detail_followers">フォロワー</string>
+    <string name="account_detail_profile_edit">プロフィールを編集</string>
+</resources>

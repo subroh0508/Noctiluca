@@ -5,4 +5,6 @@
     <string name="time_minutes">%d分前</string>
     <string name="time_hours">%d時間前</string>
     <string name="time_days">%d日前</string>
+
+    <string name="amount">%,d</string>
 </resources>

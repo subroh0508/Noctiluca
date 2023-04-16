@@ -18,10 +18,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import noctiluca.accountdetail.model.AccountAttributes
+import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
 import noctiluca.features.accountdetail.state.rememberAccountDetail
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
+import noctiluca.features.components.utils.format
 import noctiluca.features.shared.account.AccountName
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
@@ -143,7 +145,7 @@ private fun AccountDetailCaption(
         OutlinedButton(
             onClick = { /*TODO*/ },
         ) {
-            Text("プロフィールを編集")
+            Text(getString().account_detail_profile_edit)
         }
     }
 
@@ -163,25 +165,25 @@ private fun AccountDetailCaption(
             horizontalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             Text(
-                attributes.followingCount.toString(),
+                format(attributes.followingCount),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold,
                 ),
             )
             Text(
-                "follows",
+                getString().account_detail_follows,
                 color = MaterialTheme.colorScheme.outline,
                 style = MaterialTheme.typography.bodyLarge,
             )
             Spacer(modifier = Modifier.width(8.dp))
             Text(
-                attributes.followersCount.toString(),
+                format(attributes.followersCount),
                 style = MaterialTheme.typography.bodyLarge.copy(
                     fontWeight = FontWeight.Bold,
                 ),
             )
             Text(
-                "followers",
+                getString().account_detail_followers,
                 color = MaterialTheme.colorScheme.outline,
                 style = MaterialTheme.typography.bodyLarge,
             )

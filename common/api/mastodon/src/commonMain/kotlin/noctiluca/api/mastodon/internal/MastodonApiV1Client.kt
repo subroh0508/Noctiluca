@@ -121,11 +121,16 @@ internal class MastodonApiV1Client(
     override suspend fun getAccountsStatuses(
         id: String,
         maxId: String?,
+        onlyMedia: Boolean,
+        excludeReplies: Boolean,
         limit: Int,
     ): List<StatusJson> = client.get(
         Api.V1.Accounts.Id.Statuses(Api.V1.Accounts.Id(id = id))
     ) {
         parameter("max_id", maxId)
+        parameter("only_media", onlyMedia)
+        parameter("exclude_replies", excludeReplies)
+        parameter("exclude_reblogs", false)
         parameter("limit", limit.toString())
     }.body()
 

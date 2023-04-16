@@ -50,7 +50,7 @@ fun AccountDetailScaffold(
     id: AccountId,
 ) {
     val detail by rememberAccountDetail(id)
-    val statuses by rememberAccountStatuses(id)
+    val statuses = rememberAccountStatuses(id)
     val (attributes, _) = detail
 
     ScaffoldWithHeaderAndAvatar(
@@ -66,7 +66,7 @@ fun AccountDetailScaffold(
         item { AccountDetailCaption(attributes) }
         item { AccountStatusesTabs(statuses) }
         items(
-            statuses.foreground,
+            statuses.value.foreground,
             key = { _, status -> status.id.value },
             showDivider = true,
         ) { _, status ->

@@ -12,5 +12,7 @@ interface AccountDetailRepository {
     suspend fun fetchStatuses(
         id: AccountId,
         maxId: StatusId? = null,
+        onlyMedia: Boolean = false,
+        excludeReplies: Boolean = true,
     ): List<Status>
 }

@@ -36,8 +36,11 @@ fun Status(
     onClickAction: CoroutineScope.(Action) -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(
-    modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp)
-        .then(modifier),
+    modifier = Modifier.padding(
+        start = 16.dp,
+        end = 16.dp,
+        top = 16.dp,
+    ).then(modifier),
 ) {
     StatusHeader(
         status.tooter,

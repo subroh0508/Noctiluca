@@ -68,6 +68,8 @@ interface MastodonApiV1 {
     suspend fun getAccountsStatuses(
         id: String,
         maxId: String? = null,
+        onlyMedia: Boolean = false,
+        excludeReplies: Boolean = true,
         limit: Int = 20,
     ): List<StatusJson>
 }

@@ -11,29 +11,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.state.AccountStatuses
+import noctiluca.features.accountdetail.state.AccountStatusesState
 
 @Composable
 private fun TabTitles() = listOf(
-    getString().account_detail_tab_statuses,
-    getString().account_detail_tab_statuses_and_replies,
-    getString().account_detail_tab_media,
+    AccountStatuses.Tab.STATUSES to getString().account_detail_tab_statuses,
+    AccountStatuses.Tab.STATUSES_AND_REPLIES to getString().account_detail_tab_statuses_and_replies,
+    AccountStatuses.Tab.MEDIA to getString().account_detail_tab_media,
 )
 
 @Composable
-fun AccountStatusesTabs(
-    statuses: AccountStatuses,
-) = TabRow(
-    selectedTabIndex = statuses.tab.ordinal,
+internal fun AccountStatusesTabs(
+    state: AccountStatusesState,
 ) {
-    TabTitles().forEachIndexed { i, tab ->
-        Tab(
-            i == statuses.tab.ordinal,
-            onClick = {},
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.height(48.dp),
-            ) { Text(tab) }
+    val statuses = state.value
+
+    TabRow(
+        selectedTabIndex = statuses.tab.ordinal,
+    ) {
+        TabTitles().forEach { (tab, title) ->
+            Tab(
+                tab == statuses.tab,
+                onClick = { state.switch(tab) },
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.height(48.dp),
+                ) { Text(title) }
+            }
         }
     }
 }

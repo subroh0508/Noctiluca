@@ -3,6 +3,7 @@ package noctiluca.features.accountdetail.state
 import androidx.compose.runtime.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
 import noctiluca.features.accountdetail.LocalScope
 import noctiluca.features.components.di.getKoinRootScope
@@ -41,6 +42,10 @@ internal class AccountStatusesState(
         koinScope.get(),
     )
 
+    fun switch(tab: AccountStatuses.Tab) {
+        statuses.value = value.copy(tab = tab)
+    }
+
     fun refresh(scope: CoroutineScope) {
         val tabs = AccountStatuses.Tab.values()
 
@@ -50,7 +55,13 @@ internal class AccountStatusesState(
             }
 
             scope.launch {
-                runCatchingWithAuth { fetchAccountStatusesUseCase.execute(id) }
+                val query = when (t) {
+                    AccountStatuses.Tab.STATUSES -> StatusesQuery.Default()
+                    AccountStatuses.Tab.STATUSES_AND_REPLIES -> StatusesQuery.WithReplies()
+                    AccountStatuses.Tab.MEDIA -> StatusesQuery.OnlyMedia()
+                }
+
+                runCatchingWithAuth { fetchAccountStatusesUseCase.execute(id, query) }
                     .onSuccess {
                         statuses.value = value.copy(statuses = value.statuses + mapOf(t to it))
                     }

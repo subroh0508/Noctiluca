@@ -47,7 +47,14 @@ internal class AccountDetailRepositoryImpl(
     override suspend fun fetchStatuses(
         id: AccountId,
         maxId: StatusId?,
-    ) = v1.getAccountsStatuses(id.value, maxId?.value).map {
+        onlyMedia: Boolean,
+        excludeReplies: Boolean,
+    ) = v1.getAccountsStatuses(
+        id.value,
+        maxId?.value,
+        onlyMedia,
+        excludeReplies,
+    ).map {
         it.toEntity(tokenProvider.getCurrent()?.id)
     }
 

@@ -11,8 +11,10 @@ import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.account.RelationshipJson
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
+import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.repository.TokenProvider
+import noctiluca.status.infra.toEntity
 
 internal class AccountDetailRepositoryImpl(
     private val v1: MastodonApiV1,
@@ -40,6 +42,13 @@ internal class AccountDetailRepositoryImpl(
             ?: return Relationships.NONE
 
         return json.toValueObject(tokenProvider.getCurrent())
+    }
+
+    override suspend fun fetchStatuses(
+        id: AccountId,
+        maxId: StatusId?,
+    ) = v1.getAccountsStatuses(id.value, maxId?.value).map {
+        it.toEntity(tokenProvider.getCurrent()?.id)
     }
 
     private fun AccountJson.toEntity(

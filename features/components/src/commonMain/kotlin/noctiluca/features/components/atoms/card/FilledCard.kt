@@ -7,7 +7,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FilledCard(
     headline: @Composable ColumnScope.() -> Unit,
@@ -32,3 +31,9 @@ fun FilledCard(
         }
     }
 }
+
+@Composable
+fun FilledCard(
+    modifier: Modifier = Modifier,
+    content: @Composable ColumnScope.() -> Unit,
+) = Card(modifier) { content() }

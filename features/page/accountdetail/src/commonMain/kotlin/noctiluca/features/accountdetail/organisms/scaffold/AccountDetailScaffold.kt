@@ -21,6 +21,8 @@ import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
 import noctiluca.features.accountdetail.state.rememberAccountDetail
+import noctiluca.features.components.atoms.card.FilledCard
+import noctiluca.features.components.atoms.divider.Divider
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
 import noctiluca.features.components.utils.format
@@ -154,39 +156,79 @@ private fun AccountDetailCaption(
             attributes.displayName,
             attributes.screen,
         )
+
         Spacer(modifier = Modifier.height(8.dp))
+
         HtmlText(
             attributes.note,
             style = MaterialTheme.typography.bodyLarge,
             modifier = Modifier.fillMaxWidth(),
         )
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-        ) {
-            Text(
-                format(attributes.followingCount),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                ),
-            )
-            Text(
-                getString().account_detail_follows,
-                color = MaterialTheme.colorScheme.outline,
-                style = MaterialTheme.typography.bodyLarge,
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text(
-                format(attributes.followersCount),
-                style = MaterialTheme.typography.bodyLarge.copy(
-                    fontWeight = FontWeight.Bold,
-                ),
-            )
-            Text(
-                getString().account_detail_followers,
-                color = MaterialTheme.colorScheme.outline,
-                style = MaterialTheme.typography.bodyLarge,
-            )
-        }
+        CustomFields(attributes.fields)
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        RelationshipCount(
+            attributes.followingCount,
+            attributes.followersCount,
+        )
     }
 }
+
+@Composable
+private fun RelationshipCount(
+    followingCount: Int,
+    followersCount: Int,
+) = Row(
+    horizontalArrangement = Arrangement.spacedBy(4.dp),
+) {
+    Text(
+        format(followingCount),
+        style = MaterialTheme.typography.bodyLarge.copy(
+            fontWeight = FontWeight.Bold,
+        ),
+    )
+    Text(
+        getString().account_detail_follows,
+        color = MaterialTheme.colorScheme.outline,
+        style = MaterialTheme.typography.bodyLarge,
+    )
+    Spacer(modifier = Modifier.width(8.dp))
+    Text(
+        format(followersCount),
+        style = MaterialTheme.typography.bodyLarge.copy(
+            fontWeight = FontWeight.Bold,
+        ),
+    )
+    Text(
+        getString().account_detail_followers,
+        color = MaterialTheme.colorScheme.outline,
+        style = MaterialTheme.typography.bodyLarge,
+    )
+}
+
+@Composable
+private fun CustomFields(
+    fields: List<AccountAttributes.Field>,
+) = FilledCard {
+    fields.forEachIndexed { i, field ->
+        if (i != 0) {
+            Divider(modifier = Modifier.fillMaxWidth())
+        }
+
+        CustomField(field)
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun CustomField(
+    field: AccountAttributes.Field,
+) = ListItem(
+    overlineText = { Text(field.name) },
+    headlineText = { HtmlText(field.value) },
+    colors = ListItemDefaults.colors(
+        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+    ),
+)

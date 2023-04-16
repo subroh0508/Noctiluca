@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.organisms.tab.AccountStatusesTabs
-import noctiluca.features.accountdetail.organisms.tab.statuses
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
 import noctiluca.features.accountdetail.state.rememberAccountDetail
 import noctiluca.features.accountdetail.state.rememberAccountStatuses
@@ -28,6 +27,7 @@ import noctiluca.features.components.atoms.divider.Divider
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
 import noctiluca.features.components.molecules.list.LazyColumn
+import noctiluca.features.components.molecules.list.items
 import noctiluca.features.components.utils.format
 import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.status.Status
@@ -65,7 +65,16 @@ fun AccountDetailScaffold(
     ) {
         item { AccountDetailCaption(attributes) }
         item { AccountStatusesTabs(statuses) }
-        statuses(statuses)
+        items(
+            statuses.foreground,
+            key = { _, status -> status.id.value },
+            showDivider = true,
+        ) { _, status ->
+            Status(
+                status,
+                onClickAction = { },
+            )
+        }
     }
 }
 

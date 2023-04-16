@@ -67,3 +67,21 @@ fun LazyColumn(
     contentPadding,
     content = content,
 )
+
+inline fun <T : Any> LazyListScope.items(
+    items: List<T>,
+    noinline key: ((index: Int, item: T) -> Any)? = null,
+    showDivider: Boolean = false,
+    crossinline contentType: (index: Int, item: T) -> Any? = { _, _ -> null },
+    crossinline itemContent: @Composable LazyItemScope.(index: Int, item: T) -> Unit
+) = itemsIndexed(
+    items,
+    key,
+    contentType,
+) { i, item ->
+    if (showDivider && i < items.lastIndex) {
+        Divider(color = MaterialTheme.colorScheme.outline)
+    }
+
+    itemContent(i, item)
+}

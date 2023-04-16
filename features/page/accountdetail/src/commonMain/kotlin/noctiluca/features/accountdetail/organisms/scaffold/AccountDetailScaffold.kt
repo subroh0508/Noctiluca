@@ -2,9 +2,8 @@ package noctiluca.features.accountdetail.organisms.scaffold
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -19,15 +18,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.accountdetail.organisms.tab.AccountDetailContentTabs
+import noctiluca.features.accountdetail.organisms.tab.AccountStatusesTabs
+import noctiluca.features.accountdetail.organisms.tab.statuses
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
 import noctiluca.features.accountdetail.state.rememberAccountDetail
+import noctiluca.features.accountdetail.state.rememberAccountStatuses
 import noctiluca.features.components.atoms.card.FilledCard
 import noctiluca.features.components.atoms.divider.Divider
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
+import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.features.components.utils.format
 import noctiluca.features.shared.account.AccountName
+import noctiluca.features.shared.status.Status
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
 
@@ -47,6 +50,7 @@ fun AccountDetailScaffold(
     id: AccountId,
 ) {
     val detail by rememberAccountDetail(id)
+    val statuses by rememberAccountStatuses(id)
     val (attributes, _) = detail
 
     ScaffoldWithHeaderAndAvatar(
@@ -59,17 +63,9 @@ fun AccountDetailScaffold(
             )
         },
     ) {
-        AccountDetailCaption(attributes)
-        Spacer(modifier = Modifier.height(16.dp))
-        AccountDetailContentTabs(0)
-
-        repeat(50) {
-            Text(
-                "item $it",
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
+        item { AccountDetailCaption(attributes) }
+        item { AccountStatusesTabs(statuses) }
+        statuses(statuses)
     }
 }
 
@@ -80,15 +76,14 @@ private fun ScaffoldWithHeaderAndAvatar(
     avatar: Uri?,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
-    content: @Composable ColumnScope.() -> Unit,
+    content: LazyListScope.() -> Unit,
 ) = Scaffold(
     topBar = { topAppBar(scrollBehavior) },
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 ) { paddingValues ->
-    Column(
-        modifier = Modifier.fillMaxSize()
-            .padding(top = paddingValues.calculateTopPadding())
-            .verticalScroll(rememberScrollState()),
+    LazyColumn(
+        contentPadding = paddingValues,
+        modifier = Modifier.fillMaxSize(),
     ) { content() }
 
     AsyncImage(
@@ -174,6 +169,8 @@ private fun AccountDetailCaption(
             attributes.followersCount,
         )
     }
+
+    Spacer(modifier = Modifier.height(16.dp))
 }
 
 @Composable

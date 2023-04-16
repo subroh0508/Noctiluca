@@ -54,3 +54,16 @@ fun <T> LazyColumn(
         }
     }
 }
+
+@Composable
+fun LazyColumn(
+    modifier: Modifier = Modifier,
+    state: LazyListState = rememberLazyListState(),
+    contentPadding: PaddingValues = PaddingValues(0.dp),
+    content: LazyListScope.() -> Unit
+) = ComposeLazyColumn(
+    modifier,
+    state,
+    contentPadding,
+    content = content,
+)

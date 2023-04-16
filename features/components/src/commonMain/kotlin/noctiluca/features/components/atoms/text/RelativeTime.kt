@@ -9,7 +9,6 @@ import androidx.compose.ui.text.TextStyle
 import kotlinx.datetime.*
 import noctiluca.features.components.StringResources
 import noctiluca.features.components.getString
-import okhttp3.internal.format
 
 @Composable
 fun RelativeTime(
@@ -29,10 +28,10 @@ fun buildTimestamp(
 
     return when {
         diff < DIFF_NOW -> res.time_now
-        diff < DIFF_SECONDS -> format(res.time_seconds, diff)
-        diff < DIFF_MINUTES -> format(res.time_minutes, diff / DIFF_SECONDS)
-        diff < DIFF_HOURS -> format(res.time_hours, diff / DIFF_MINUTES)
-        diff < DIFF_DAYS -> format(res.time_days, diff / DIFF_HOURS)
+        diff < DIFF_SECONDS -> res.time_seconds.format(diff)
+        diff < DIFF_MINUTES -> res.time_minutes.format(diff / DIFF_SECONDS)
+        diff < DIFF_HOURS -> res.time_hours.format(diff / DIFF_MINUTES)
+        diff < DIFF_DAYS -> res.time_days.format(diff / DIFF_HOURS)
         else -> date(dateTime, now.toLocalDateTime(timeZone).year)
     }
 }

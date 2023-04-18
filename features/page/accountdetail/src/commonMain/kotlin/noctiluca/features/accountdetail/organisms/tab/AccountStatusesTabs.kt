@@ -23,11 +23,13 @@ private fun TabTitles() = listOf(
 @Composable
 internal fun AccountStatusesTabs(
     state: AccountStatusesState,
+    modifier: Modifier = Modifier,
 ) {
     val statuses = state.value
 
     TabRow(
         selectedTabIndex = statuses.tab.ordinal,
+        modifier = modifier,
     ) {
         TabTitles().forEach { (tab, title) ->
             Tab(

@@ -3,10 +3,10 @@ package noctiluca.features.accountdetail.organisms.scaffold
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -62,9 +62,10 @@ fun AccountDetailScaffold(
                 scrollBehavior,
             )
         },
-    ) {
+        stickyHeader = { AccountStatusesTabs(statuses) },
+    ) { stickyHeaderLayout ->
         item { AccountDetailCaption(attributes) }
-        item { AccountStatusesTabs(statuses) }
+        item { stickyHeaderLayout() }
         items(
             statuses.value.foreground,
             key = { _, status -> status.id.value },
@@ -85,15 +86,19 @@ private fun ScaffoldWithHeaderAndAvatar(
     avatar: Uri?,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
-    content: LazyListScope.() -> Unit,
+    stickyHeader: @Composable () -> Unit = {},
+    content: LazyListScope.(@Composable () -> Unit) -> Unit,
 ) = Scaffold(
     topBar = { topAppBar(scrollBehavior) },
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 ) { paddingValues ->
+    val lazyListState = rememberLazyListState()
+
     LazyColumn(
+        state = lazyListState,
         contentPadding = paddingValues,
         modifier = Modifier.fillMaxSize(),
-    ) { content() }
+    ) { content(stickyHeader) }
 
     AsyncImage(
         header,
@@ -125,6 +130,14 @@ private fun ScaffoldWithHeaderAndAvatar(
             modifier = Modifier.size(AvatarIconSize)
                 .clip(RoundedCornerShape(8.dp)),
         )
+    }
+
+    if (lazyListState.firstVisibleItemIndex > 0) {
+        Box(
+            modifier = Modifier.offset(y = CollapsedTopAppBarHeight),
+        ) {
+            stickyHeader()
+        }
     }
 }
 

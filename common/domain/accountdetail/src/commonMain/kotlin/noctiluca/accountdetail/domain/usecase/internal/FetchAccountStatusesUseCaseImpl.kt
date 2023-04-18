@@ -4,7 +4,6 @@ import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
 import noctiluca.accountdetail.infra.repository.AccountDetailRepository
 import noctiluca.model.AccountId
-import noctiluca.model.StatusId
 
 internal class FetchAccountStatusesUseCaseImpl(
     private val repository: AccountDetailRepository,

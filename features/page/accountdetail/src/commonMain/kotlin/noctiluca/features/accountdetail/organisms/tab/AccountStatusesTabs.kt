@@ -14,7 +14,7 @@ import noctiluca.features.accountdetail.state.AccountStatuses
 import noctiluca.features.accountdetail.state.AccountStatusesState
 
 @Composable
-private fun TabTitles() = listOf(
+fun TabTitles() = listOf(
     AccountStatuses.Tab.STATUSES to getString().account_detail_tab_statuses,
     AccountStatuses.Tab.STATUSES_AND_REPLIES to getString().account_detail_tab_statuses_and_replies,
     AccountStatuses.Tab.MEDIA to getString().account_detail_tab_media,
@@ -22,7 +22,9 @@ private fun TabTitles() = listOf(
 
 @Composable
 internal fun AccountStatusesTabs(
+    tabTitles: List<Pair<AccountStatuses.Tab, String>>,
     state: AccountStatusesState,
+    onClickTab: (AccountStatuses.Tab, AccountStatuses.Tab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val statuses = state.value
@@ -31,10 +33,13 @@ internal fun AccountStatusesTabs(
         selectedTabIndex = statuses.tab.ordinal,
         modifier = modifier,
     ) {
-        TabTitles().forEach { (tab, title) ->
+        tabTitles.forEach { (tab, title) ->
             Tab(
                 tab == statuses.tab,
-                onClick = { state.switch(tab) },
+                onClick = {
+                    onClickTab(statuses.tab, tab)
+                    state.switch(tab)
+                },
             ) {
                 Box(
                     contentAlignment = Alignment.Center,

@@ -4,7 +4,6 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -20,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.organisms.tab.AccountStatusesTabs
-import noctiluca.features.accountdetail.organisms.tab.TabTitles
+import noctiluca.features.accountdetail.organisms.tab.rememberTabbedAccountStatusesState
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
 import noctiluca.features.accountdetail.state.rememberAccountDetail
 import noctiluca.features.accountdetail.state.rememberAccountStatuses
@@ -53,28 +52,14 @@ fun AccountDetailScaffold(
 ) {
     val detail by rememberAccountDetail(id)
     val statuses = rememberAccountStatuses(id)
-    val (attributes, _) = detail
-    val tabTitles = TabTitles()
+    val statusesScrollState = rememberTabbedAccountStatusesState(statuses.value.tab)
 
-    val lazyListState = rememberLazyListState()
-    var cachedScrollPosition by remember {
-        mutableStateOf(List(tabTitles.size) { 1 to 0 })
-    }
-
-    LaunchedEffect(statuses.value.tab) {
-        if (lazyListState.firstVisibleItemIndex == 0) {
-            return@LaunchedEffect
-        }
-
-        val (index, offset) = cachedScrollPosition[statuses.value.tab.ordinal]
-
-        lazyListState.scrollToItem(index, offset)
-    }
+    val (attributes) = detail
 
     ScaffoldWithHeaderAndAvatar(
         attributes?.header,
         attributes?.avatar,
-        lazyListState,
+        statusesScrollState.lazyListState,
         topAppBar = { scrollBehavior ->
             AccountHeaderTopAppBar(
                 attributes,
@@ -83,17 +68,8 @@ fun AccountDetailScaffold(
         },
         stickyHeader = {
             AccountStatusesTabs(
-                tabTitles,
                 statuses,
-                onClickTab = { prev, _ ->
-                    cachedScrollPosition = cachedScrollPosition.mapIndexed { index, state ->
-                        if (lazyListState.firstVisibleItemIndex > 0 && index == prev.ordinal) {
-                            lazyListState.firstVisibleItemIndex to lazyListState.firstVisibleItemScrollOffset
-                        } else {
-                            state
-                        }
-                    }
-                },
+                statusesScrollState,
             )
         },
     ) { stickyHeaderLayout ->

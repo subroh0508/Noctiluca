@@ -11,6 +11,7 @@ import noctiluca.features.components.state.AuthorizedComposeState
 import noctiluca.features.components.state.rememberAuthorizedComposeState
 import noctiluca.features.components.state.runCatchingWithAuth
 import noctiluca.model.AccountId
+import noctiluca.model.StatusId
 import noctiluca.status.model.Status
 import org.koin.core.scope.Scope
 
@@ -19,7 +20,13 @@ data class AccountStatuses(
     val statuses: Map<Tab, List<Status>> = mapOf(),
 ) {
     enum class Tab {
-        STATUSES, STATUSES_AND_REPLIES, MEDIA
+        STATUSES, STATUSES_AND_REPLIES, MEDIA;
+
+        fun buildQuery(maxId: StatusId? = null) = when (this) {
+            STATUSES -> StatusesQuery.Default(maxId = maxId)
+            STATUSES_AND_REPLIES -> StatusesQuery.WithReplies(maxId = maxId)
+            MEDIA -> StatusesQuery.OnlyMedia(maxId = maxId)
+        }
     }
 
     val foreground get() = statuses[tab] ?: listOf()
@@ -55,18 +62,32 @@ internal class AccountStatusesState(
             }
 
             scope.launch {
-                val query = when (t) {
-                    AccountStatuses.Tab.STATUSES -> StatusesQuery.Default()
-                    AccountStatuses.Tab.STATUSES_AND_REPLIES -> StatusesQuery.WithReplies()
-                    AccountStatuses.Tab.MEDIA -> StatusesQuery.OnlyMedia()
-                }
-
-                runCatchingWithAuth { fetchAccountStatusesUseCase.execute(id, query) }
+                runCatchingWithAuth { fetchAccountStatusesUseCase.execute(id, t.buildQuery()) }
                     .onSuccess {
                         statuses.value = value.copy(statuses = value.statuses + mapOf(t to it))
                     }
                     .onFailure { }
             }
+        }
+    }
+
+    fun loadMore(scope: CoroutineScope) {
+        val tab = value.tab
+        val foregroundStatuses = value.foreground
+
+        scope.launch {
+            runCatchingWithAuth {
+                fetchAccountStatusesUseCase.execute(
+                    id,
+                    tab.buildQuery(foregroundStatuses.lastOrNull()?.id),
+                )
+            }
+                .onSuccess {
+                    statuses.value = value.copy(
+                        statuses = value.statuses + mapOf(tab to foregroundStatuses + it),
+                    )
+                }
+                .onFailure { }
         }
     }
 }

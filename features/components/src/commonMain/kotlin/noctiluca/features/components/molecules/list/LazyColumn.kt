@@ -2,16 +2,21 @@ package noctiluca.features.components.molecules.list
 
 import androidx.compose.foundation.gestures.FlingBehavior
 import androidx.compose.foundation.gestures.ScrollableDefaults
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.components.atoms.divider.Divider
 import androidx.compose.foundation.lazy.LazyColumn as ComposeLazyColumn
+
+val InfiniteScrollFooterHeight = 64.dp
 
 @Composable
 fun <T> LazyColumn(
@@ -47,12 +52,7 @@ fun <T> LazyColumn(
         }
     }
 
-    footerContent?.let { footer ->
-        item {
-            Divider(color = MaterialTheme.colorScheme.outline)
-            footer()
-        }
-    }
+    footerContent?.let { footer(it) }
 }
 
 @Composable
@@ -67,6 +67,25 @@ fun LazyColumn(
     contentPadding,
     content = content,
 )
+
+@Composable
+fun InfiniteScrollFooter(
+    isLoading: Boolean,
+    onLoad: suspend CoroutineScope.() -> Unit,
+    height: Dp = InfiniteScrollFooterHeight,
+) {
+    if (!isLoading) {
+        Spacer(Modifier.height(height))
+        return
+    }
+
+    LaunchedEffect(Unit) { onLoad() }
+
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .height(height),
+    ) { CircularProgressIndicator(Modifier.align(Alignment.Center)) }
+}
 
 inline fun <T : Any> LazyListScope.items(
     items: List<T>,
@@ -85,3 +104,16 @@ inline fun <T : Any> LazyListScope.items(
 
     itemContent(i, item)
 }
+
+inline fun LazyListScope.footer(
+    crossinline content: @Composable LazyItemScope.() -> Unit,
+) = item {
+    Divider(color = MaterialTheme.colorScheme.outline)
+    content()
+}
+
+fun LazyListScope.infiniteScrollFooter(
+    isLoading: Boolean,
+    onLoad: suspend CoroutineScope.() -> Unit,
+) = footer { InfiniteScrollFooter(isLoading, onLoad) }
+

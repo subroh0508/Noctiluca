@@ -16,6 +16,7 @@ import noctiluca.features.accountdetail.state.rememberAccountStatuses
 import noctiluca.features.components.atoms.card.FilledCard
 import noctiluca.features.components.atoms.divider.Divider
 import noctiluca.features.components.atoms.text.HtmlText
+import noctiluca.features.components.molecules.list.infiniteScrollFooter
 import noctiluca.features.components.molecules.list.items
 import noctiluca.features.components.molecules.scaffold.HeadlineHeader
 import noctiluca.features.components.molecules.scaffold.HeadlineAvatar
@@ -80,6 +81,15 @@ fun AccountDetailScaffold(
                 onClickAction = { },
             )
         }
+
+        infiniteScrollFooter(
+            isLoading = false,
+            onLoad = {
+                if (statuses.value.foreground.isNotEmpty()) {
+                    statuses.loadMore(this)
+                }
+            },
+        )
     }
 }
 

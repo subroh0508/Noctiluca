@@ -2,9 +2,12 @@ package noctiluca.features.accountdetail.organisms.topappbar
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import noctiluca.accountdetail.model.AccountAttributes
@@ -22,12 +25,27 @@ fun AccountHeaderTopAppBar(
 
     HeadlineTopAppBar(
         { HeadlineText(detail?.displayName, detail?.statusesCount, isScrolled) },
-        modifier = Modifier.background(Color.Transparent),
+        actions = {
+            IconButton(onClick = {}) {
+                Icon(
+                    Icons.Filled.Share,
+                    contentDescription = "Share",
+                )
+            }
+        },
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = Color.Transparent,
-            scrolledContainerColor = MaterialTheme.colorScheme.surface.copy(alpha = alpha),
+            scrolledContainerColor = Color.Transparent,
         ),
         scrollBehavior = scrollBehavior,
+        modifier = Modifier.background(
+            Brush.verticalGradient(
+                colors = listOf(
+                    Color.Black.copy(alpha = 0.75F),
+                    Color.Black.copy(alpha = alpha),
+                ),
+            ),
+        ),
     )
 }
 

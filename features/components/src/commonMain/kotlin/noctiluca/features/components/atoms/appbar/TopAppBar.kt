@@ -1,5 +1,6 @@
 package noctiluca.features.components.atoms.appbar
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
@@ -29,6 +30,7 @@ fun HeadlineTopAppBar(
     title: @Composable () -> Unit,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
     colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
     scrollBehavior: TopAppBarScrollBehavior? = null,
 ) = LargeTopAppBar(
@@ -42,6 +44,7 @@ fun HeadlineTopAppBar(
             )
         }
     },
+    actions,
     colors = colors,
     scrollBehavior = scrollBehavior,
 )

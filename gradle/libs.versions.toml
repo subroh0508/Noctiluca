@@ -28,7 +28,7 @@ junit = "4.13.2"
 junit-vintage = "5.9.2"
 
 # workaround: https://github.com/kotest/kotest/issues/3407
-kotest = "5.5.4"
+kotest = "5.6.1"
 
 robolectric = "4.10"
 

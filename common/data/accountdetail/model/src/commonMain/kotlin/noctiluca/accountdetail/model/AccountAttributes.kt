@@ -1,5 +1,6 @@
 package noctiluca.accountdetail.model
 
+import kotlinx.datetime.LocalDateTime
 import noctiluca.account.model.Account
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
@@ -21,6 +22,7 @@ data class AccountAttributes(
     val relationships: Relationships,
     val condition: Condition?,
     val fields: List<Field>,
+    val createdAt: LocalDateTime,
     val movedTo: Account?,
 ) {
     enum class Condition {

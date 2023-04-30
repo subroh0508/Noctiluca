@@ -1,5 +1,8 @@
 package noctiluca.accountdetail.infra.repository.impl
 
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import noctiluca.account.model.Account
 import noctiluca.accountdetail.infra.repository.AccountDetailRepository
 import noctiluca.accountdetail.infra.toValueObject
@@ -77,6 +80,7 @@ internal class AccountDetailRepositoryImpl(
         relationships,
         condition,
         fields.map { it.toValueObject() },
+        createdAt.toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
         moved?.toAccount(),
     )
 

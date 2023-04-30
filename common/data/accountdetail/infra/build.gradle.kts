@@ -14,6 +14,7 @@ kotlin {
                 implementation(project(":common:data:status:infra"))
 
                 implementation(libs.kotlinx.serialization)
+                implementation(libs.kotlinx.datetime)
             }
         }
 

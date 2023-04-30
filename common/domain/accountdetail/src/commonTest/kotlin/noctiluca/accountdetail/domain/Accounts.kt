@@ -1,5 +1,8 @@
 package noctiluca.accountdetail.domain
 
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.accountdetail.model.Relationships
 import noctiluca.model.AccountId
@@ -26,6 +29,7 @@ val myAccount = AccountAttributes(
     listOf(
         AccountAttributes.Field("フィールド1", "ほげほげ"),
     ),
+    "2019-04-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     null,
 )
 
@@ -48,5 +52,6 @@ val otherAccount = AccountAttributes(
     listOf(
         AccountAttributes.Field("フィールド1", "ふがふが"),
     ),
+    "2019-04-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     null,
 )

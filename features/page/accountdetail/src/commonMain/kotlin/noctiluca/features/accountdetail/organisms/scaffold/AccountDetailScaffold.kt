@@ -6,6 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.LocalDateTime
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.organisms.tab.AccountStatusesTabs
@@ -22,6 +23,7 @@ import noctiluca.features.components.molecules.scaffold.HeadlineAvatar
 import noctiluca.features.components.molecules.scaffold.HeadlineHeader
 import noctiluca.features.components.molecules.scaffold.HeadlinedScaffold
 import noctiluca.features.components.utils.format
+import noctiluca.features.components.utils.toYearMonthDay
 import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.status.Status
 import noctiluca.model.AccountId
@@ -129,7 +131,10 @@ private fun AccountDetailCaption(
             modifier = Modifier.fillMaxWidth(),
         )
 
-        CustomFields(attributes.fields)
+        CustomFields(
+            attributes.createdAt,
+            attributes.fields,
+        )
     }
 
     Spacer(modifier = Modifier.height(16.dp))
@@ -169,9 +174,17 @@ private fun RelationshipCount(
 
 @Composable
 private fun CustomFields(
+    createdAt: LocalDateTime,
     fields: List<AccountAttributes.Field>,
 ) = FilledCard {
-    fields.forEachIndexed { i, field ->
+    val items = listOf(
+        AccountAttributes.Field(
+            name = getString().account_detail_account_created_at,
+            value = createdAt.toYearMonthDay(),
+        ),
+    ) + fields
+
+    items.forEachIndexed { i, field ->
         if (i != 0) {
             Divider(modifier = Modifier.fillMaxWidth())
         }

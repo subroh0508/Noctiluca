@@ -17,8 +17,8 @@ import noctiluca.features.timeline.organisms.navigationbar.TimelineNavigationBar
 import noctiluca.features.timeline.organisms.scaffold.TimelineScaffold
 import noctiluca.features.timeline.state.TimelineListState
 import noctiluca.features.timeline.state.rememberTimelineStatus
-import noctiluca.features.timeline.template.TimelineDrawerMenu
 import noctiluca.features.timeline.template.TimelineDrawerSheet
+import noctiluca.features.timeline.template.drawer.TimelineDrawerMenu
 import org.koin.core.component.KoinScopeComponent
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }

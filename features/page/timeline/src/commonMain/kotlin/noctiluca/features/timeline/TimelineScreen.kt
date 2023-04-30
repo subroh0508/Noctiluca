@@ -17,8 +17,8 @@ import noctiluca.features.timeline.organisms.navigationbar.TimelineNavigationBar
 import noctiluca.features.timeline.organisms.scaffold.TimelineScaffold
 import noctiluca.features.timeline.state.TimelineListState
 import noctiluca.features.timeline.state.rememberTimelineStatus
-import noctiluca.features.timeline.template.TimelineDrawerMenu
 import noctiluca.features.timeline.template.TimelineDrawerSheet
+import noctiluca.features.timeline.template.drawer.TimelineDrawerMenu
 import org.koin.core.component.KoinScopeComponent
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
@@ -29,6 +29,7 @@ internal val LocalTimelineListState = compositionLocalOf { TimelineListState() }
 @Composable
 fun TimelineScreen(
     component: KoinScopeComponent,
+    onNavigateToAccountDetail: (String) -> Unit,
     onReload: () -> Unit,
     onBackToSignIn: () -> Unit,
 ) = AuthorizedFeatureComposable(component, onReload, onBackToSignIn) { scope ->
@@ -44,7 +45,13 @@ fun TimelineScreen(
             drawerContent = { scope, drawerState, account ->
                 TimelineDrawerSheet(
                     account.value,
-                    onClickAccount = { clicked ->
+                    onClickTopAccount = {
+                        scope.launch {
+                            drawerState.close()
+                            onNavigateToAccountDetail(it.id.value)
+                        }
+                    },
+                    onClickAccountList = { clicked ->
                         scope.launch {
                             drawerState.close()
                             account.switch(this, clicked)

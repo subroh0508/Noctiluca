@@ -17,6 +17,7 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDateTime
+import noctiluca.account.model.Account
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
 import noctiluca.features.components.atoms.text.RelativeTime
@@ -24,7 +25,6 @@ import noctiluca.features.components.utils.baseline
 import noctiluca.features.components.utils.toDp
 import noctiluca.features.shared.account.TooterName
 import noctiluca.status.model.Status
-import noctiluca.status.model.Tooter
 
 enum class Action {
     REPLY, BOOST, FAVOURITE, SHARE, OTHERS
@@ -36,8 +36,11 @@ fun Status(
     onClickAction: CoroutineScope.(Action) -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(
-    modifier = Modifier.padding(start = 12.dp, end = 12.dp, top = 16.dp)
-        .then(modifier),
+    modifier = Modifier.padding(
+        start = 16.dp,
+        end = 16.dp,
+        top = 16.dp,
+    ).then(modifier),
 ) {
     StatusHeader(
         status.tooter,
@@ -60,7 +63,7 @@ fun Status(
 
 @Composable
 private fun StatusHeader(
-    tooter: Tooter,
+    tooter: Account,
     visibility: Status.Visibility,
     createdAt: LocalDateTime,
 ) = Row {

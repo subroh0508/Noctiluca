@@ -17,5 +17,5 @@ data class MediaAttachmentJson(
     val remoteUrl: String?,
     // val meta: Meta,
     val description: String?,
-    val blurhash: String,
+    val blurhash: String?,
 )

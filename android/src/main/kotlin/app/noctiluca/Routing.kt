@@ -18,6 +18,13 @@ fun Routing(
     )
 
     timeline(
+        onNavigateToAccountDetail = { navController.navigateToAccountDetail(it) },
+        onReload = { navController.reload() },
+        onBackToSignIn = { navController.backToSignIn() },
+    )
+
+    accountDetail(
+        onBackToPreviousScreen = { navController.popBackStack() },
         onReload = { navController.reload() },
         onBackToSignIn = { navController.backToSignIn() },
     )

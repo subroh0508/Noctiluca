@@ -12,6 +12,7 @@ internal fun AccountCredentialJson.toEntity(
     AccountId(id),
     username,
     displayName,
+    Uri(url),
     Uri(avatar),
     "@$username@${domain.value}",
 )

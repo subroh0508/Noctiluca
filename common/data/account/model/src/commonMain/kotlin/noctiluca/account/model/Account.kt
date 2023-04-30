@@ -7,6 +7,7 @@ data class Account(
     val id: AccountId,
     val username: String,
     val displayName: String,
+    val url: Uri,
     val avatar: Uri,
     val screen: String,
 )

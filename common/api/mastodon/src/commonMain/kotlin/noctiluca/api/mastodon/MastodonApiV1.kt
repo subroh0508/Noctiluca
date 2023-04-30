@@ -2,6 +2,7 @@ package noctiluca.api.mastodon
 
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.json.account.AccountJson
+import noctiluca.api.mastodon.json.account.RelationshipJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
 
@@ -59,4 +60,16 @@ interface MastodonApiV1 {
     suspend fun getAccount(
         id: String,
     ): AccountJson
+
+    suspend fun getAccountsRelationships(
+        id: List<String>,
+    ): List<RelationshipJson>
+
+    suspend fun getAccountsStatuses(
+        id: String,
+        maxId: String? = null,
+        onlyMedia: Boolean = false,
+        excludeReplies: Boolean = true,
+        limit: Int = 20,
+    ): List<StatusJson>
 }

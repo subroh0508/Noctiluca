@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":common:api:mastodon"))
     implementation(project(":common:api:token"))
     implementation(project(":common:data:account:infra"))
+    implementation(project(":common:data:accountdetail:infra"))
     implementation(project(":common:data:authentication:infra"))
     implementation(project(":common:data:instance:infra"))
     implementation(project(":common:data:timeline:infra"))
@@ -15,6 +16,7 @@ dependencies {
 
     implementation(project(":features:theme"))
     implementation(project(":features:components"))
+    implementation(project(":features:page:accountdetail"))
     implementation(project(":features:page:authentication"))
     implementation(project(":features:page:timeline"))
 

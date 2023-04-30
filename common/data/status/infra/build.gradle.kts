@@ -8,6 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":common:api:mastodon"))
+                implementation(project(":common:data:account:model"))
                 implementation(project(":common:data:status:model"))
 
                 implementation(libs.kotlinx.datetime)

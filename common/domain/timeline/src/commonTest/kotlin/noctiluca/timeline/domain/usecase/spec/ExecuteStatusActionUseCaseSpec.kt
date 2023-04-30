@@ -3,20 +3,16 @@ package noctiluca.timeline.domain.usecase.spec
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
 import io.kotest.matchers.should
-import io.ktor.client.engine.mock.*
-import io.ktor.http.*
-import io.ktor.resources.serialization.*
-import io.ktor.utils.io.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
+import noctiluca.account.model.Account
 import noctiluca.api.mastodon.Api
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.status.model.Status
-import noctiluca.status.model.Tooter
 import noctiluca.test.DOMAIN_MASTODON_JP
 import noctiluca.test.URL_MASTODON_JP
 import noctiluca.test.mock.MockHttpClientEngine
@@ -29,7 +25,7 @@ import noctiluca.timeline.domain.usecase.json.JSON_STATUSES_UNBOOKMARK
 import noctiluca.timeline.domain.usecase.json.JSON_STATUSES_UNFAVOURITE
 
 class ExecuteStatusActionUseCaseSpec : DescribeSpec({
-    val tooter = Tooter(
+    val tooter = Account(
         AccountId("2"),
         "piyo",
         "Kotori Otonashi",

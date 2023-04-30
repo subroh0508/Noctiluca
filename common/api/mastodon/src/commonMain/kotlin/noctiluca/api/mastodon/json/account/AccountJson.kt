@@ -30,7 +30,7 @@ data class AccountJson(
     val group: Boolean,
     val discoverable: Boolean?,
     val noindex: Boolean?, // Since 4.0.0
-    val moved: Boolean?,
+    val moved: AccountJson?,
     val suspended: Boolean?,
     val limited: Boolean?,
     @SerialName("created_at")
@@ -45,6 +45,8 @@ data class AccountJson(
     val followingCount: Int,
 ) {
     companion object {
+        const val MISSING_IMAGE_NAME = "missing"
+
         private val REGEX_ACCOUNT_URL = """^https?://(.*?)/@.*$""".toRegex()
     }
 

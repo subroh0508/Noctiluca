@@ -18,9 +18,7 @@ import noctiluca.accountdetail.model.Relationship
 import noctiluca.accountdetail.model.Relationships
 import noctiluca.api.mastodon.Api
 import noctiluca.model.AccountId
-import noctiluca.model.Uri
 import noctiluca.test.ACCOUNT_ID
-import noctiluca.test.URL_SAMPLE_COM
 import noctiluca.test.mock.MockHttpClientEngine
 
 class FetchAccountAttributesUseCaseSpec : DescribeSpec({

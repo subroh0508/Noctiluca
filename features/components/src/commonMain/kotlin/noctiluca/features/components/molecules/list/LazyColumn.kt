@@ -116,4 +116,3 @@ fun LazyListScope.infiniteScrollFooter(
     isLoading: Boolean,
     onLoad: suspend CoroutineScope.() -> Unit,
 ) = footer { InfiniteScrollFooter(isLoading, onLoad) }
-

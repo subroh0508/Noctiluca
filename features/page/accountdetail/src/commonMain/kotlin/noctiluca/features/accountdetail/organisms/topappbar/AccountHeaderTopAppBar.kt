@@ -14,6 +14,8 @@ import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.components.atoms.appbar.HeadlineTopAppBar
 
+private const val CONTENT_SCROLL_OFFSET = -400F
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountHeaderTopAppBar(
@@ -21,7 +23,7 @@ fun AccountHeaderTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     onBackPressed: () -> Unit,
 ) {
-    val isScrolled by remember { derivedStateOf { scrollBehavior.state.contentOffset < -400F } }
+    val isScrolled by remember { derivedStateOf { scrollBehavior.state.contentOffset < CONTENT_SCROLL_OFFSET } }
     val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
 
     HeadlineTopAppBar(

@@ -18,14 +18,15 @@ import noctiluca.features.components.atoms.divider.Divider
 import noctiluca.features.components.atoms.text.HtmlText
 import noctiluca.features.components.molecules.list.infiniteScrollFooter
 import noctiluca.features.components.molecules.list.items
-import noctiluca.features.components.molecules.scaffold.HeadlineHeader
 import noctiluca.features.components.molecules.scaffold.HeadlineAvatar
+import noctiluca.features.components.molecules.scaffold.HeadlineHeader
 import noctiluca.features.components.molecules.scaffold.HeadlinedScaffold
 import noctiluca.features.components.utils.format
 import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.status.Status
 import noctiluca.model.AccountId
 
+@Suppress("LongMethod")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountDetailScaffold(

@@ -22,6 +22,7 @@ internal expect fun ExpectHtmlText(
 private val REGEX_INVISIBLE_CLASS = """<[a-z]+ class="invisible">(.*?)</[a-z]+>""".toRegex()
 private val REGEX_ELLIPSIS_CLASS = """(<[a-z]+ class="ellipsis">)(.*?)(</[a-z]+>)""".toRegex()
 
+@Suppress("MagicNumber")
 private fun removeInvisibleTags(
     html: String,
 ): String {

@@ -19,12 +19,14 @@ import noctiluca.features.components.atoms.appbar.HeadlineTopAppBar
 fun AccountHeaderTopAppBar(
     detail: AccountAttributes?,
     scrollBehavior: TopAppBarScrollBehavior,
+    onBackPressed: () -> Unit,
 ) {
     val isScrolled by remember { derivedStateOf { scrollBehavior.state.contentOffset < -400F } }
     val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
 
     HeadlineTopAppBar(
         { HeadlineText(detail?.displayName, detail?.statusesCount, isScrolled) },
+        onBackPressed = onBackPressed,
         actions = {
             IconButton(onClick = {}) {
                 Icon(

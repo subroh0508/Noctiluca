@@ -24,7 +24,7 @@ fun Routing(
     )
 
     accountDetail(
-        onBack = { navController.popBackStack() },
+        onBackToPreviousScreen = { navController.popBackStack() },
         onReload = { navController.reload() },
         onBackToSignIn = { navController.backToSignIn() },
     )

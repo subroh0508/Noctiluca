@@ -45,7 +45,12 @@ fun TimelineScreen(
             drawerContent = { scope, drawerState, account ->
                 TimelineDrawerSheet(
                     account.value,
-                    onClickTopAccount = { onNavigateToAccountDetail(it.id.value) },
+                    onClickTopAccount = {
+                        scope.launch {
+                            drawerState.close()
+                            onNavigateToAccountDetail(it.id.value)
+                        }
+                    },
                     onClickAccountList = { clicked ->
                         scope.launch {
                             drawerState.close()

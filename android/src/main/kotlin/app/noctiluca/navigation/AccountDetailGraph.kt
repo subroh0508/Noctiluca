@@ -9,14 +9,20 @@ import noctiluca.features.accountdetail.di.AccountDetailComponent
 const val RouteAccountDetail = "AccountDetail"
 
 fun NavGraphBuilder.accountDetail(
-    onBack: () -> Unit,
+    onBackToPreviousScreen: () -> Unit,
     onReload: () -> Unit,
     onBackToSignIn: () -> Unit,
 ) {
     composable("$RouteAccountDetail/{id}") { navBackStackEntry ->
         val id = navBackStackEntry.arguments?.getString("id") ?: return@composable
 
-        AccountDetailScreen(id, AccountDetailComponent(), onReload, onBackToSignIn)
+        AccountDetailScreen(
+            id,
+            AccountDetailComponent(),
+            onBackToPreviousScreen,
+            onReload,
+            onBackToSignIn,
+        )
     }
 }
 

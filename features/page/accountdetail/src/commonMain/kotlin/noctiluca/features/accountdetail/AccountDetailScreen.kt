@@ -17,6 +17,7 @@ internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 fun AccountDetailScreen(
     id: String,
     component: KoinScopeComponent,
+    onBackToPreviousScreen: () -> Unit,
     onReload: () -> Unit,
     onBackToSignIn: () -> Unit,
 ) = AuthorizedFeatureComposable(component, onReload, onBackToSignIn) { scope ->
@@ -24,6 +25,9 @@ fun AccountDetailScreen(
         LocalResources provides Resources(Locale.current.language),
         LocalScope provides scope,
     ) {
-        AccountDetailScaffold(AccountId(id))
+        AccountDetailScaffold(
+            AccountId(id),
+            onBackToPreviousScreen = onBackToPreviousScreen,
+        )
     }
 }

@@ -30,6 +30,7 @@ import noctiluca.model.AccountId
 @Composable
 fun AccountDetailScaffold(
     id: AccountId,
+    onBackToPreviousScreen: () -> Unit,
 ) {
     val detail by rememberAccountDetail(id)
     val statuses = rememberAccountStatuses(id)
@@ -43,6 +44,7 @@ fun AccountDetailScaffold(
             AccountHeaderTopAppBar(
                 attributes,
                 scrollBehavior,
+                onBackPressed = { onBackToPreviousScreen() },
             )
         },
         header = { scrollBehavior ->

@@ -1,11 +1,10 @@
 package noctiluca.features.timeline.template.drawer
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Bookmark
 import androidx.compose.material.icons.filled.BookmarkBorder
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,11 +20,11 @@ import noctiluca.features.shared.account.AccountName
 @Composable
 internal fun CurrentAuthorizedAccountHeader(
     account: Account,
-    onClickAccountIcon: () -> Unit,
+    onClickOpenAccountDetail: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     Row {
-        IconButton(onClick = onClickAccountIcon) {
+        IconButton(onClick = onClickOpenAccountDetail) {
             AsyncImage(
                 account.avatar,
                 // fallback = imageResources(getDrawables().icon_mastodon),
@@ -50,5 +49,8 @@ internal fun CurrentAuthorizedAccountHeader(
         }
     }
     Spacer(Modifier.height(16.dp))
-    AccountName(account)
+    AccountName(
+        account,
+        modifier = Modifier.clickable { onClickOpenAccountDetail() },
+    )
 }

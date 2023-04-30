@@ -26,7 +26,7 @@ internal fun TimelineDrawerSheet(
     account.current?.let {
         CurrentAuthorizedAccountHeader(
             it,
-            onClickAccountIcon = { onClickTopAccount(it) },
+            onClickOpenAccountDetail = { onClickTopAccount(it) },
             modifier = Modifier.fillMaxWidth()
                 .padding(
                     horizontal = 28.dp,

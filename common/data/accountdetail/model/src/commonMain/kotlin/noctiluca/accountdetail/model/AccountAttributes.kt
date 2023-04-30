@@ -10,7 +10,7 @@ data class AccountAttributes(
     val displayName: String,
     val url: Uri,
     val avatar: Uri,
-    val header: Uri,
+    val header: Uri?,
     val screen: String,
     val note: String,
     val followersCount: Int,

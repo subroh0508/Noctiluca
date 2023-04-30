@@ -66,7 +66,7 @@ internal class AccountDetailRepositoryImpl(
         displayName,
         Uri(url),
         Uri(avatar),
-        Uri(header),
+        if (!header.contains(AccountJson.MISSING_IMAGE_NAME)) Uri(header) else null,
         "@$acct",
         note,
         followersCount,

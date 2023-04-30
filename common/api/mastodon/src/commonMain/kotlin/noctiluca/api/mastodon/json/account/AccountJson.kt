@@ -45,6 +45,8 @@ data class AccountJson(
     val followingCount: Int,
 ) {
     companion object {
+        const val MISSING_IMAGE_NAME = "missing"
+
         private val REGEX_ACCOUNT_URL = """^https?://(.*?)/@.*$""".toRegex()
     }
 

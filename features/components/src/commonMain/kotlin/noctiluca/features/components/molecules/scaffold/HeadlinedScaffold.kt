@@ -69,14 +69,25 @@ fun HeadlinedScaffold(
 fun HeadlineHeader(
     header: Uri?,
     scrollBehavior: TopAppBarScrollBehavior,
-) = AsyncImage(
-    header,
-    ContentScale.FillHeight,
-    modifier = Modifier.height(ExpandedTopAppBarHeight)
+) {
+    val modifier = Modifier.height(ExpandedTopAppBarHeight)
         .graphicsLayer {
             translationY = calculateTranslationY(scrollBehavior)
-        },
-)
+        }
+
+    if (header == null) {
+        Spacer(
+            modifier = modifier.fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface),
+        )
+    } else {
+        AsyncImage(
+            header,
+            ContentScale.FillHeight,
+            modifier = modifier,
+        )
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

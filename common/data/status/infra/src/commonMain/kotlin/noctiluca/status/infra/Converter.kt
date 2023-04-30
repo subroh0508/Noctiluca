@@ -15,7 +15,7 @@ import noctiluca.status.model.Status
 fun StatusJson.toEntity(accountId: AccountId?) = Status(
     (reblog?.id ?: id).let(::StatusId),
     reblog?.content ?: content,
-    spoilerText,
+    spoilerText.takeIf(String::isNotBlank),
     (reblog?.createdAt ?: createdAt).toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     Status.Visibility.valueOf(visibility.uppercase()),
     reblog?.repliesCount ?: repliesCount,

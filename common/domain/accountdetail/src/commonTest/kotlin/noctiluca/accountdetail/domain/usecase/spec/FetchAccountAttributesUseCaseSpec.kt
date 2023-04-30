@@ -9,6 +9,8 @@ import io.ktor.client.engine.mock.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.accountdetail.domain.TestAccountDetailUseCaseComponent
+import noctiluca.accountdetail.domain.myAccount
+import noctiluca.accountdetail.domain.otherAccount
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.json.*
 import noctiluca.accountdetail.model.AccountAttributes
@@ -22,50 +24,6 @@ import noctiluca.test.URL_SAMPLE_COM
 import noctiluca.test.mock.MockHttpClientEngine
 
 class FetchAccountAttributesUseCaseSpec : DescribeSpec({
-    val myAccount = AccountAttributes(
-        AccountId(ACCOUNT_ID),
-        "test1",
-        "サンプル太郎",
-        Uri("$URL_SAMPLE_COM/@test1"),
-        Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
-        Uri("$URL_SAMPLE_COM/accounts/headers/header.png"),
-        "@test1",
-        "<p>note</p>",
-        100,
-        100,
-        1000,
-        locked = false,
-        bot = false,
-        Relationships.ME,
-        null,
-        listOf(
-            AccountAttributes.Field("フィールド1", "ほげほげ"),
-        ),
-        null,
-    )
-
-    val otherAccount = AccountAttributes(
-        AccountId("10"),
-        "test2",
-        "サンプル次郎",
-        Uri("$URL_SAMPLE_COM/@test2"),
-        Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
-        Uri("$URL_SAMPLE_COM/accounts/headers/header.png"),
-        "@test2",
-        "<p>note</p>",
-        100,
-        100,
-        1000,
-        locked = false,
-        bot = false,
-        Relationships.NONE,
-        null,
-        listOf(
-            AccountAttributes.Field("フィールド1", "ふがふが"),
-        ),
-        null,
-    )
-
     describe("#execute") {
         context("when the server returns valid response") {
             context("and the id is mine") {

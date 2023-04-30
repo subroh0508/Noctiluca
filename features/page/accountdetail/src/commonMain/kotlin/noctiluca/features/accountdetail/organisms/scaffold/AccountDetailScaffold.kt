@@ -107,13 +107,12 @@ private fun AccountDetailCaption(
     Row(
         horizontalArrangement = Arrangement.End,
         modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(top = 24.dp, bottom = 8.dp),
     ) {
-        OutlinedButton(
-            onClick = { /*TODO*/ },
-        ) {
-            Text(getString().account_detail_profile_edit)
-        }
+        RelationshipCount(
+            attributes?.followingCount ?: 0,
+            attributes?.followersCount ?: 0,
+        )
     }
 
     if (attributes != null) {
@@ -131,13 +130,6 @@ private fun AccountDetailCaption(
         )
 
         CustomFields(attributes.fields)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        RelationshipCount(
-            attributes.followingCount,
-            attributes.followersCount,
-        )
     }
 
     Spacer(modifier = Modifier.height(16.dp))

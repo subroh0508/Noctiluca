@@ -9,6 +9,8 @@ import androidx.compose.ui.text.TextStyle
 import kotlinx.datetime.*
 import noctiluca.features.components.StringResources
 import noctiluca.features.components.getString
+import noctiluca.features.components.utils.toMonthDay
+import noctiluca.features.components.utils.toYearMonthDay
 
 @Composable
 fun RelativeTime(
@@ -49,9 +51,3 @@ private fun date(dateTime: LocalDateTime, nowYear: Int): String {
 
     return dateTime.toYearMonthDay()
 }
-
-internal const val FORMAT_MONTH_DAY = "MM/dd"
-internal const val FORMAT_YEAR_MONTH_DAY = "yyyy/MM/dd"
-
-internal expect fun LocalDateTime.toMonthDay(): String
-internal expect fun LocalDateTime.toYearMonthDay(): String

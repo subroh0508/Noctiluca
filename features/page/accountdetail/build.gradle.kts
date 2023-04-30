@@ -8,6 +8,8 @@ kotlin {
             dependencies {
                 implementation(project(":common:domain:accountdetail"))
                 implementation(project(":features:shared"))
+
+                implementation(libs.kotlinx.datetime)
             }
         }
 

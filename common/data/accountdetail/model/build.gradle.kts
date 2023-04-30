@@ -7,6 +7,8 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":common:data:account:model"))
+
+                implementation(libs.kotlinx.datetime)
             }
         }
     }

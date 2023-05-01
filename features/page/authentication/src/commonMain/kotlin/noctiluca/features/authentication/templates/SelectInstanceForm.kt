@@ -2,25 +2,20 @@ package noctiluca.features.authentication.templates
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
-import noctiluca.features.authentication.getDrawables
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.QueryText
 import noctiluca.features.authentication.organisms.card.InstanceCard
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
-import noctiluca.features.components.atoms.image.AsyncImage
-import noctiluca.features.components.atoms.image.imageResources
-import noctiluca.features.components.atoms.list.LeadingAvatarContainerSize
 import noctiluca.features.components.atoms.list.ThreeLineListItem
 import noctiluca.features.components.molecules.HeadlineWithProgress
+import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.instance.model.Instance
 
 private val horizontalPadding = 16.dp
@@ -72,23 +67,23 @@ private fun InstanceSuggestsList(
     val focusManager = LocalFocusManager.current
 
     LazyColumn(
-        state = rememberLazyListState(),
+        instances,
+        key = { it.domain },
+        contentPadding = PaddingValues(
+            horizontal = 16.dp,
+            vertical = 8.dp,
+        ),
         modifier = modifier,
-    ) {
-        items(instances) {
+    ) { _, suggest ->
+        OutlinedCard(
+            modifier = Modifier.padding(bottom = 16.dp),
+        ) {
             ThreeLineListItem(
-                it.domain,
-                supportingText = it.description ?: "",
-                leadingContent = {
-                    AsyncImage(
-                        it.thumbnail,
-                        //fallback = imageResources(getDrawables().icon_mastodon),
-                        modifier = Modifier.size(LeadingAvatarContainerSize),
-                    )
-                },
+                suggest.domain,
+                supportingText = suggest.description ?: "",
                 modifier = Modifier.clickable {
                     focusManager.clearFocus()
-                    onSelect(it)
+                    onSelect(suggest)
                 },
             )
         }

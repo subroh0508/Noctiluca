@@ -82,7 +82,7 @@ private fun InstanceSuggestsList(
                 leadingContent = {
                     AsyncImage(
                         it.thumbnail,
-                        fallback = imageResources(getDrawables().icon_mastodon),
+                        //fallback = imageResources(getDrawables().icon_mastodon),
                         modifier = Modifier.size(LeadingAvatarContainerSize),
                     )
                 },

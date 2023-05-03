@@ -83,7 +83,7 @@ fun HeadlineHeader(
     } else {
         AsyncImage(
             header,
-            ContentScale.FillHeight,
+            contentScale = ContentScale.FillHeight,
             modifier = modifier,
         )
     }

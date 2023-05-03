@@ -3,6 +3,7 @@ package noctiluca.features.components.atoms.image
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
@@ -14,6 +15,7 @@ import noctiluca.model.Uri
 @Composable
 fun AsyncImage(
     uri: Uri?,
+    alignment: Alignment = Alignment.Center,
     contentScale: ContentScale = ContentScale.Fit,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
@@ -26,13 +28,21 @@ fun AsyncImage(
         imageBitmap = loader?.loadImage(uri)?.getOrNull()
     }
 
-    LoadedImage(imageBitmap, fallback, contentScale, contentDescription, modifier)
+    LoadedImage(
+        imageBitmap,
+        fallback,
+        alignment,
+        contentScale,
+        contentDescription,
+        modifier,
+    )
 }
 
 @Composable
 private fun LoadedImage(
     imageBitmap: ImageBitmap?,
     fallback: Painter?,
+    alignment: Alignment,
     contentScale: ContentScale,
     contentDescription: String?,
     modifier: Modifier,
@@ -41,6 +51,7 @@ private fun LoadedImage(
         imageBitmap,
         contentDescription,
         modifier,
+        alignment = alignment,
         contentScale = contentScale,
     )
 
@@ -48,6 +59,7 @@ private fun LoadedImage(
         fallback,
         contentDescription,
         modifier,
+        alignment = alignment,
         contentScale = contentScale,
     )
 

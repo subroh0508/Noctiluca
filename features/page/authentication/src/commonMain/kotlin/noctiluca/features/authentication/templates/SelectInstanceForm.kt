@@ -1,10 +1,8 @@
 package noctiluca.features.authentication.templates
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
@@ -12,8 +10,8 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.QueryText
 import noctiluca.features.authentication.organisms.card.InstanceCard
+import noctiluca.features.authentication.organisms.card.SuggestCard
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
-import noctiluca.features.components.atoms.list.ThreeLineListItem
 import noctiluca.features.components.molecules.HeadlineWithProgress
 import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.instance.model.Instance
@@ -64,7 +62,7 @@ private fun InstanceSuggestsList(
     onSelect: (Instance.Suggest) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val focusManager = LocalFocusManager.current
+    // val focusManager = LocalFocusManager.current
 
     LazyColumn(
         instances,
@@ -75,17 +73,10 @@ private fun InstanceSuggestsList(
         ),
         modifier = modifier,
     ) { _, suggest ->
-        OutlinedCard(
+        SuggestCard(
+            suggest,
+            onSelect,
             modifier = Modifier.padding(bottom = 16.dp),
-        ) {
-            ThreeLineListItem(
-                suggest.domain,
-                supportingText = suggest.description ?: "",
-                modifier = Modifier.clickable {
-                    focusManager.clearFocus()
-                    onSelect(suggest)
-                },
-            )
-        }
+        )
     }
 }

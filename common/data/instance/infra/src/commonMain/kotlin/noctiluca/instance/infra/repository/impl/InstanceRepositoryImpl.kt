@@ -50,11 +50,12 @@ internal class InstanceRepositoryImpl(
         stats.userCount ?: 0,
         stats.statusCount ?: 0,
         contactAccount.toAdministrator(),
+        rules?.map { Instance.Rule(it.id, it.text) } ?: listOf(),
         Instance.Version(version),
     )
 
     private fun AccountJson.toAdministrator() = Instance.Administrator(
-        username,
+        "@$acct",
         displayName,
         Uri(url),
         Uri(avatar),

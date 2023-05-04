@@ -14,6 +14,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
+import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
+import noctiluca.features.authentication.organisms.tab.InstanceInformation
+import noctiluca.features.authentication.organisms.tab.rememberTabbedInstanceDetailState
 import noctiluca.features.authentication.state.Instances
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
@@ -29,10 +32,10 @@ internal fun InstanceDetailScaffold(
     instance: Instance,
     onBackPressed: () -> Unit,
 ) {
-    val lazyListState = rememberLazyListState()
+    val statusesScrollState = rememberTabbedInstanceDetailState()
 
     HeadlinedScaffold(
-        lazyListState,
+        statusesScrollState.lazyListState,
         tabComposeIndex = 3,
         topAppBar = { scrollBehavior ->
             HeadlineTopAppBar(
@@ -40,19 +43,15 @@ internal fun InstanceDetailScaffold(
                     HeadlineText(
                         instance.name,
                         instance.domain,
-                        lazyListState.firstVisibleItemIndex > 1,
+                        statusesScrollState.lazyListState.firstVisibleItemIndex > 1,
                     )
                 },
                 onBackPressed = onBackPressed,
                 scrollBehavior = scrollBehavior,
             )
         },
-        bottomBar = { horizontalPadding ->
-            ActionButtons(horizontalPadding)
-        },
-        tabs = {
-            InstanceDetailTabs()
-        },
+        bottomBar = { horizontalPadding -> ActionButtons(horizontalPadding) },
+        tabs = { InstanceDetailTabs(statusesScrollState) },
     ) { tabs, horizontalPadding ->
         item { InstanceThumbnail(instance.thumbnail, horizontalPadding) }
         item { InstanceName(instance, horizontalPadding) }
@@ -60,7 +59,11 @@ internal fun InstanceDetailScaffold(
         item { tabs() }
 
         item {
-            Spacer(Modifier.height(1200.dp).background(Color.Red))
+            when (statusesScrollState.tab) {
+                Instances.Tab.INFO -> InstanceInformation(instance, horizontalPadding)
+                Instances.Tab.EXTENDED_DESCRIPTION -> Unit
+                Instances.Tab.LOCAL_TIMELINE -> Unit
+            }
         }
     }
 }
@@ -123,31 +126,12 @@ private fun InstanceDescription(
 )
 
 @Composable
-private fun InstanceDetailTabs(
-    modifier: Modifier = Modifier,
-) = TabRow(
-    selectedTabIndex = 0,
-    modifier = modifier,
-) {
-    Instances.Tab.values().forEachIndexed { i, tab ->
-        Tab(
-            selected = i == 0,
-            onClick = {},
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.height(48.dp),
-            ) { tab.label() }
-        }
-    }
-}
-
-@Composable
 private fun BoxScope.ActionButtons(
     horizontalPadding: Dp,
 ) = Column(
     modifier = Modifier.fillMaxWidth()
-        .align(Alignment.BottomCenter),
+        .align(Alignment.BottomCenter)
+        .background(MaterialTheme.colorScheme.surface),
 ) {
     Divider(Modifier.fillMaxWidth())
 
@@ -165,12 +149,3 @@ private fun BoxScope.ActionButtons(
         ) { Text(getString().sign_in_request_authentication) }
     }
 }
-
-@Composable
-private fun Instances.Tab.label() = Text(
-    when (this) {
-        Instances.Tab.INFO -> getString().sign_in_instance_detail_tab_info
-        Instances.Tab.EXTENDED_DESCRIPTION -> getString().sign_in_instance_detail_tab_extended_description
-        Instances.Tab.LOCAL_TIMELINE -> getString().sign_in_instance_detail_tab_local_timeline
-    }
-)

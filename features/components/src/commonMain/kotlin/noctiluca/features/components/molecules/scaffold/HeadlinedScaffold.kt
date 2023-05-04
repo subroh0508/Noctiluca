@@ -20,6 +20,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.molecules.list.LazyColumn
@@ -84,9 +85,16 @@ fun HeadlinedScaffold(
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             state = lazyListState,
-            contentPadding = paddingValues,
+            contentPadding = PaddingValues(
+                start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
+                top = paddingValues.calculateTopPadding(),
+                end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
+                bottom = 64.dp,
+            ),
             modifier = Modifier.fillMaxSize(),
-        ) { content(tabs, HeadlinedScaffoldHorizontalPadding) }
+        ) {
+            content(tabs, HeadlinedScaffoldHorizontalPadding)
+        }
 
         if (lazyListState.firstVisibleItemIndex >= tabComposeIndex) {
             Box(

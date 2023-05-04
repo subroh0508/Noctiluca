@@ -11,6 +11,7 @@ data class Instance(
     val users: Int,
     val statuses: Int,
     val administrator: Administrator,
+    val rules: List<Rule>,
     val version: Version?,
 ) {
     data class Suggest(
@@ -21,10 +22,15 @@ data class Instance(
     )
 
     data class Administrator(
-        val username: String,
+        val screen: String,
         val displayName: String,
         val url: Uri,
         val avatar: Uri,
+    )
+
+    data class Rule(
+        val id: String,
+        val text: String,
     )
 
     data class Version(

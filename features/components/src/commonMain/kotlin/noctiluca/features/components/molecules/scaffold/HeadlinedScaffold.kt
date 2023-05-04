@@ -70,18 +70,58 @@ fun HeadlinedScaffold(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeadlinedScaffold(
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+    lazyListState: LazyListState,
+    tabComposeIndex: Int = Int.MAX_VALUE,
+    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
     topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
-    header: @Composable (TopAppBarScrollBehavior) -> Unit = {},
-    content: @Composable (PaddingValues, Dp) -> Unit,
+    bottomBar: @Composable BoxScope.(Dp) -> Unit = {},
+    tabs: @Composable () -> Unit = {},
+    content: LazyListScope.(@Composable () -> Unit, Dp) -> Unit,
 ) = Scaffold(
     topBar = { topAppBar(scrollBehavior) },
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 ) { paddingValues ->
-    content(paddingValues, HeadlinedScaffoldHorizontalPadding)
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            state = lazyListState,
+            contentPadding = paddingValues,
+            modifier = Modifier.fillMaxSize(),
+        ) { content(tabs, HeadlinedScaffoldHorizontalPadding) }
 
-    header(scrollBehavior)
+        if (lazyListState.firstVisibleItemIndex >= tabComposeIndex) {
+            Box(
+                modifier = Modifier.offset(y = CollapsedTopAppBarHeight),
+            ) { tabs() }
+        }
+
+        bottomBar(HeadlinedScaffoldHorizontalPadding)
+    }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HeadlineTopAppBar(
+    title: @Composable () -> Unit,
+    onBackPressed: () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
+    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+) = TopAppBar(
+    { title() },
+    navigationIcon = {
+        IconButton(onClick = onBackPressed) {
+            Icon(
+                Icons.Filled.ArrowBack,
+                contentDescription = "Back",
+            )
+        }
+    },
+    actions = actions,
+    colors = TopAppBarDefaults.largeTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.surface,
+        scrolledContainerColor = MaterialTheme.colorScheme.surface,
+    ),
+    scrollBehavior = scrollBehavior,
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

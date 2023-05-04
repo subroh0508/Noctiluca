@@ -18,6 +18,10 @@ data class Instances(
     val error: Throwable? = null,
     val loaded: Boolean = false,
 ) : List<Instance.Suggest> by suggests {
+    enum class Tab {
+        INFO, EXTENDED_DESCRIPTION, LOCAL_TIMELINE
+    }
+
     val loading get() = job != null
 }
 

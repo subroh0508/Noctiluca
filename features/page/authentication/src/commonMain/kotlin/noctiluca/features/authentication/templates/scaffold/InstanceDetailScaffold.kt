@@ -2,73 +2,99 @@ package noctiluca.features.authentication.templates.scaffold
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
+import noctiluca.features.authentication.state.Instances
+import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
-import noctiluca.features.components.molecules.scaffold.HeadlineHeader
 import noctiluca.features.components.molecules.scaffold.HeadlineText
 import noctiluca.features.components.molecules.scaffold.HeadlineTopAppBar
 import noctiluca.features.components.molecules.scaffold.HeadlinedScaffold
 import noctiluca.instance.model.Instance
+import noctiluca.model.Uri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun InstanceDetailScaffold(
     instance: Instance,
     onBackPressed: () -> Unit,
-) = HeadlinedScaffold(
-    topAppBar = { scrollBehavior ->
-        HeadlineTopAppBar(
-            title = { isScrolled ->
-                HeadlineText(
-                    instance.name,
-                    instance.domain,
-                    isScrolled,
-                )
-            },
-            contentScrollOffset = -300F,
-            onBackPressed = onBackPressed,
-            scrollBehavior = scrollBehavior,
-        )
-    },
-    header = { scrollBehavior ->
-        HeadlineHeader(
-            instance.thumbnail,
-            scrollBehavior,
-            contentScale = ContentScale.FillWidth,
-        )
-    },
-) { paddingValues, horizontalPadding ->
-    Box(
-        modifier = Modifier.fillMaxSize()
-            .padding(top = paddingValues.calculateTopPadding()),
-    ) {
-        InstanceDetailCaption(
-            instance,
-            modifier = Modifier.padding(horizontal = horizontalPadding),
-        )
+) {
+    val lazyListState = rememberLazyListState()
 
-        ActionButtons(horizontalPadding)
+    HeadlinedScaffold(
+        lazyListState,
+        tabComposeIndex = 3,
+        topAppBar = { scrollBehavior ->
+            HeadlineTopAppBar(
+                title = {
+                    HeadlineText(
+                        instance.name,
+                        instance.domain,
+                        lazyListState.firstVisibleItemIndex > 1,
+                    )
+                },
+                onBackPressed = onBackPressed,
+                scrollBehavior = scrollBehavior,
+            )
+        },
+        bottomBar = { horizontalPadding ->
+            ActionButtons(horizontalPadding)
+        },
+        tabs = {
+            InstanceDetailTabs()
+        },
+    ) { tabs, horizontalPadding ->
+        item { InstanceThumbnail(instance.thumbnail, horizontalPadding) }
+        item { InstanceName(instance, horizontalPadding) }
+        item { InstanceDescription(instance, horizontalPadding) }
+        item { tabs() }
+
+        item {
+            Spacer(Modifier.height(1200.dp).background(Color.Red))
+        }
     }
 }
 
 @Composable
-private fun InstanceDetailCaption(
+private fun InstanceThumbnail(
+    thumbnail: Uri?,
+    horizontalPadding: Dp,
+) = Box(
+    Modifier.padding(
+        top = 8.dp,
+        start = horizontalPadding,
+        end = horizontalPadding,
+    )
+) {
+    AsyncImage(
+        thumbnail,
+        contentScale = ContentScale.FillWidth,
+        modifier = Modifier.fillMaxWidth()
+            .clip(RoundedCornerShape(8.dp)),
+    )
+}
+
+@Composable
+private fun InstanceName(
     instance: Instance,
-    modifier: Modifier = Modifier,
+    horizontalPadding: Dp,
 ) = Column(
     modifier = Modifier.fillMaxWidth()
-        .then(modifier),
+        .padding(
+            vertical = 16.dp,
+            horizontal = horizontalPadding,
+        ),
 ) {
-    Spacer(modifier = Modifier.height(16.dp))
-
     Text(
         instance.name,
         style = MaterialTheme.typography.headlineSmall,
@@ -79,14 +105,41 @@ private fun InstanceDetailCaption(
         color = MaterialTheme.colorScheme.outline,
         style = MaterialTheme.typography.bodyLarge,
     )
+}
 
-    Spacer(modifier = Modifier.height(16.dp))
+@Composable
+private fun InstanceDescription(
+    instance: Instance,
+    horizontalPadding: Dp,
+) = HtmlText(
+    instance.description ?: "",
+    style = MaterialTheme.typography.bodyLarge,
+    modifier = Modifier.fillMaxWidth()
+        .padding(
+            bottom = 16.dp,
+            start = horizontalPadding,
+            end = horizontalPadding,
+        ),
+)
 
-    HtmlText(
-        instance.description ?: "",
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier.fillMaxWidth(),
-    )
+@Composable
+private fun InstanceDetailTabs(
+    modifier: Modifier = Modifier,
+) = TabRow(
+    selectedTabIndex = 0,
+    modifier = modifier,
+) {
+    Instances.Tab.values().forEachIndexed { i, tab ->
+        Tab(
+            selected = i == 0,
+            onClick = {},
+        ) {
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.height(48.dp),
+            ) { tab.label() }
+        }
+    }
 }
 
 @Composable
@@ -112,3 +165,12 @@ private fun BoxScope.ActionButtons(
         ) { Text(getString().sign_in_request_authentication) }
     }
 }
+
+@Composable
+private fun Instances.Tab.label() = Text(
+    when (this) {
+        Instances.Tab.INFO -> getString().sign_in_instance_detail_tab_info
+        Instances.Tab.EXTENDED_DESCRIPTION -> getString().sign_in_instance_detail_tab_extended_description
+        Instances.Tab.LOCAL_TIMELINE -> getString().sign_in_instance_detail_tab_local_timeline
+    }
+)

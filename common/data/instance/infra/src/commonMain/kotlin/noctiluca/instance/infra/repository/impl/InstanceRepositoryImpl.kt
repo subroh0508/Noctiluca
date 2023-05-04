@@ -3,6 +3,7 @@ package noctiluca.instance.infra.repository.impl
 import noctiluca.api.instancessocial.InstancesSocialApi
 import noctiluca.api.instancessocial.json.InstanceJson
 import noctiluca.api.mastodon.MastodonApiV1
+import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.instance.infra.repository.InstanceRepository
 import noctiluca.instance.model.Instance
@@ -48,6 +49,14 @@ internal class InstanceRepositoryImpl(
         languages,
         stats.userCount ?: 0,
         stats.statusCount ?: 0,
+        contactAccount.toAdministrator(),
         Instance.Version(version),
+    )
+
+    private fun AccountJson.toAdministrator() = Instance.Administrator(
+        username,
+        displayName,
+        Uri(url),
+        Uri(avatar),
     )
 }

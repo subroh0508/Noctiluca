@@ -10,6 +10,7 @@ data class Instance(
     val languages: List<String>,
     val users: Int,
     val statuses: Int,
+    val administrator: Administrator,
     val version: Version?,
 ) {
     data class Suggest(
@@ -17,6 +18,13 @@ data class Instance(
         val description: String?,
         val thumbnail: Uri?,
         val version: Version?,
+    )
+
+    data class Administrator(
+        val username: String,
+        val displayName: String,
+        val url: Uri,
+        val avatar: Uri,
     )
 
     data class Version(

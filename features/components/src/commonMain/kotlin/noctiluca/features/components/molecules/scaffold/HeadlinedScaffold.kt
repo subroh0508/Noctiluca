@@ -5,15 +5,20 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.GraphicsLayerScope
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.image.AsyncImage
@@ -41,9 +46,7 @@ fun HeadlinedScaffold(
     tabs: @Composable () -> Unit = {},
     content: LazyListScope.(@Composable () -> Unit, Dp) -> Unit,
 ) = Scaffold(
-    topBar = {
-        topAppBar(scrollBehavior)
-    },
+    topBar = { topAppBar(scrollBehavior) },
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 ) { paddingValues ->
     LazyColumn(
@@ -66,24 +69,107 @@ fun HeadlinedScaffold(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+fun HeadlinedScaffold(
+    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+    topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
+    header: @Composable (TopAppBarScrollBehavior) -> Unit = {},
+    content: @Composable (PaddingValues, Dp) -> Unit,
+) = Scaffold(
+    topBar = { topAppBar(scrollBehavior) },
+    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+) { paddingValues ->
+    content(paddingValues, HeadlinedScaffoldHorizontalPadding)
+
+    header(scrollBehavior)
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HeadlineTopAppBar(
+    title: @Composable (Boolean) -> Unit,
+    contentScrollOffset: Float,
+    modifier: Modifier = Modifier,
+    onBackPressed: () -> Unit = {},
+    actions: @Composable RowScope.() -> Unit = {},
+    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+) {
+    val isScrolled by remember { derivedStateOf { scrollBehavior.state.contentOffset < contentScrollOffset } }
+    val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
+
+    LargeTopAppBar(
+        { title(isScrolled) },
+        modifier = modifier.background(
+            Brush.verticalGradient(
+                colors = listOf(
+                    Color.Black.copy(alpha = 0.75F),
+                    Color.Black.copy(alpha = alpha),
+                ),
+            ),
+        ),
+        navigationIcon = {
+            IconButton(onClick = onBackPressed) {
+                Icon(
+                    Icons.Filled.ArrowBack,
+                    contentDescription = "Back",
+                )
+            }
+        },
+        actions = actions,
+        colors = TopAppBarDefaults.largeTopAppBarColors(
+            containerColor = Color.Transparent,
+            scrolledContainerColor = Color.Transparent,
+        ),
+        scrollBehavior = scrollBehavior,
+    )
+}
+
+@Composable
+fun HeadlineText(
+    text: String,
+    supportingText: String,
+    isScrolled: Boolean,
+) {
+    if (!isScrolled) {
+        return
+    }
+
+    Column {
+        Text(
+            text,
+            style = MaterialTheme.typography.titleLarge.copy(
+                fontWeight = FontWeight.Medium,
+            ),
+        )
+        Text(
+            supportingText,
+            style = MaterialTheme.typography.titleSmall.copy(
+                fontWeight = FontWeight.Normal,
+            ),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
 fun HeadlineHeader(
     header: Uri?,
     scrollBehavior: TopAppBarScrollBehavior,
+    contentScale: ContentScale = ContentScale.FillHeight
 ) {
     val modifier = Modifier.height(ExpandedTopAppBarHeight)
+        .fillMaxWidth()
         .graphicsLayer {
             translationY = calculateTranslationY(scrollBehavior)
         }
 
     if (header == null) {
         Spacer(
-            modifier = modifier.fillMaxWidth()
-                .background(MaterialTheme.colorScheme.surface),
+            modifier = modifier.background(MaterialTheme.colorScheme.surface),
         )
     } else {
         AsyncImage(
             header,
-            contentScale = ContentScale.FillHeight,
+            contentScale = contentScale,
             modifier = modifier,
         )
     }
@@ -115,6 +201,15 @@ fun HeadlineAvatar(
         modifier = Modifier.size(AvatarIconSize)
             .clip(RoundedCornerShape(8.dp)),
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+@Suppress("MagicNumber")
+private fun rememberScrolledContainerColorAlpha(
+    scrollBehavior: TopAppBarScrollBehavior,
+): State<Float> = remember {
+    derivedStateOf { scrollBehavior.state.collapsedFraction * 0.75F }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

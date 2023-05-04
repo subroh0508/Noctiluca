@@ -74,12 +74,7 @@ class MastodonInstanceState(
         state.value = Instances()
     }
 
-    fun select(scope: CoroutineScope, suggest: Instance.Suggest?) {
-        if (suggest == null) {
-            instance = null
-            return
-        }
-
+    fun select(scope: CoroutineScope, suggest: Instance.Suggest) {
         val job = scope.launch(start = CoroutineStart.LAZY) {
             runCatching { showMastodonInstanceUseCase.execute(suggest.domain) }
                 .onSuccess { instance = it }
@@ -88,6 +83,10 @@ class MastodonInstanceState(
 
         reset(job = job)
         job.start()
+    }
+
+    fun clearInstance() {
+        instance = null
     }
 
     private fun reset(

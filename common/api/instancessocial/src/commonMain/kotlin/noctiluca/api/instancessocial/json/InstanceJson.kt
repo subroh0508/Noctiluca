@@ -8,7 +8,7 @@ data class InstanceJson(
     val id: String,
     val name: String,
     @SerialName("added_at")
-    val addedAt: String,
+    val addedAt: String?,
     @SerialName("updated_at")
     val updatedAt: String,
     @SerialName("checked_at")

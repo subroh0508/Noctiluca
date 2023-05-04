@@ -5,6 +5,7 @@ import androidx.compose.ui.text.intl.Locale
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.LocalNavController
 import noctiluca.features.authentication.model.NavController
+import noctiluca.features.authentication.state.rememberMastodonInstancesState
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
 import noctiluca.features.components.FeatureComposable
 import noctiluca.features.components.di.getKoinRootScope
@@ -32,6 +33,12 @@ fun SignInScreen(
 }
 
 @Composable
-private fun SignInScaffold() = SearchInstanceScaffold(
-    onSelect = { _ -> },
-)
+private fun SignInScaffold() {
+    val instancesState = rememberMastodonInstancesState()
+
+    when {
+        instancesState.instance == null -> SearchInstanceScaffold(instancesState)
+        else -> {
+        }
+    }
+}

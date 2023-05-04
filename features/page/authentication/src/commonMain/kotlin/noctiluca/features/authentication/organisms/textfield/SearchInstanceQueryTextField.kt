@@ -10,28 +10,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.state.rememberMastodonInstanceSuggests
+import noctiluca.features.authentication.state.MastodonInstanceState
 import noctiluca.features.components.atoms.list.OneLineListItem
 import noctiluca.features.components.atoms.textfield.DebouncedTextForm
 import noctiluca.features.components.atoms.textfield.SingleLineTextField
-import noctiluca.features.components.model.LoadState
 import noctiluca.instance.model.Instance
 
 private const val DEBOUNCE_TIME_MILLIS = 500L
 
 @Composable
 internal fun SearchInstanceQueryTextField(
+    state: MastodonInstanceState,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    headline: @Composable (Boolean) -> Unit = {},
+    headline: @Composable () -> Unit = {},
     listContent: @Composable (List<Instance.Suggest>) -> Unit,
 ) = Column(
     modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
 ) {
     var query by remember { mutableStateOf("") }
-    val instances by rememberMastodonInstanceSuggests(query)
 
-    headline(instances.loading)
+    LaunchedEffect(query) { state.search(this, query) }
+
+    headline()
 
     DebouncedTextForm(
         query,
@@ -51,13 +52,16 @@ internal fun SearchInstanceQueryTextField(
 
             ClearQueryIcon(
                 textState.value,
-                onClick = { textState.value = "" },
+                onClick = {
+                    query = ""
+                    state.clearSuggests()
+                },
                 modifier = Modifier.align(Alignment.CenterEnd),
             )
         }
     }
 
-    SearchResultList(instances) { listContent(it) }
+    SearchResultList(state) { listContent(it) }
 }
 
 @Composable
@@ -83,15 +87,13 @@ private fun ClearQueryIcon(
 
 @Composable
 private fun SearchResultList(
-    instancesLoadState: LoadState,
+    instancesState: MastodonInstanceState,
     content: @Composable (List<Instance.Suggest>) -> Unit,
 ) {
-    val instances: List<Instance.Suggest> = instancesLoadState.getValueOrNull() ?: listOf()
-
-    if (instancesLoadState.loaded && instances.isEmpty()) {
+    if (instancesState.loaded && instancesState.suggests.isEmpty()) {
         OneLineListItem(getString().sign_in_search_instances_empty)
         return
     }
 
-    content(instances)
+    content(instancesState.suggests)
 }

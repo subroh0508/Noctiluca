@@ -134,11 +134,6 @@ private fun rememberMastodonInstance(
     val useCase: ShowMastodonInstanceUseCase = remember { scope.get() }
 
     return produceLoadState(query.text) {
-        if (query !is QueryText.Static) {
-            value = LoadState.Initial
-            return@produceLoadState
-        }
-
         loadLazy { useCase.execute(query.text) }
     }
 }

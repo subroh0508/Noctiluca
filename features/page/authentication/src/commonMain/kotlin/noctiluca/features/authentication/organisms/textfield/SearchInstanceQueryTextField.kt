@@ -1,8 +1,6 @@
 package noctiluca.features.authentication.organisms.textfield
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
@@ -12,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.model.QueryText
 import noctiluca.features.authentication.state.rememberMastodonInstanceSuggests
 import noctiluca.features.components.atoms.list.OneLineListItem
 import noctiluca.features.components.atoms.textfield.DebouncedTextForm
@@ -24,48 +21,52 @@ private const val DEBOUNCE_TIME_MILLIS = 500L
 
 @Composable
 internal fun SearchInstanceQueryTextField(
-    onLoading: (Boolean) -> Unit,
+    paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
-    listContent: @Composable (List<Instance.Suggest>, MutableState<QueryText>) -> Unit,
+    headline: @Composable (Boolean) -> Unit = {},
+    listContent: @Composable (List<Instance.Suggest>) -> Unit,
+) = Column(
+    modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
 ) {
-    val query = remember { mutableStateOf<QueryText>(QueryText.Empty) }
-    val instances by rememberMastodonInstanceSuggests(query.value)
+    var query by remember { mutableStateOf("") }
+    val instances by rememberMastodonInstanceSuggests(query)
 
-    LaunchedEffect(instances.loading) { onLoading(instances.loading) }
+    headline(instances.loading)
 
-    Box(modifier.padding(bottom = 8.dp)) {
-        DebouncedTextForm(
-            query.value.text,
-            DEBOUNCE_TIME_MILLIS,
-            onDebouncedChange = { handleOnDebouncedTextChanged(query, it) },
-        ) { textState ->
+    DebouncedTextForm(
+        query,
+        DEBOUNCE_TIME_MILLIS,
+        onDebouncedChange = { query = it },
+    ) { textState ->
+        Box(
+            modifier = modifier.padding(bottom = 8.dp),
+        ) {
             SingleLineTextField(
                 textState.value,
                 { textState.value = it },
-                enabled = query.value !is QueryText.Static,
                 placeholder = { Text(getString().sign_in_search_instance_hint) },
                 keyboardType = KeyboardType.Email,
                 modifier = Modifier.fillMaxWidth(),
             )
-        }
 
-        ClearQueryIcon(
-            query.value,
-            onClick = { query.value = QueryText.Editable(query.value.text) },
-            modifier = Modifier.align(Alignment.CenterEnd),
-        )
+            ClearQueryIcon(
+                textState.value,
+                onClick = { textState.value = "" },
+                modifier = Modifier.align(Alignment.CenterEnd),
+            )
+        }
     }
 
-    SearchResultList(instances) { listContent(it, query) }
+    SearchResultList(instances) { listContent(it) }
 }
 
 @Composable
 private fun ClearQueryIcon(
-    query: QueryText,
+    query: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (query !is QueryText.Static) {
+    if (query.isBlank()) {
         return
     }
 
@@ -93,15 +94,4 @@ private fun SearchResultList(
     }
 
     content(instances)
-}
-
-private fun handleOnDebouncedTextChanged(
-    query: MutableState<QueryText>,
-    text: String,
-) {
-    if (query.value is QueryText.Static) {
-        return
-    }
-
-    query.value = QueryText(text)
 }

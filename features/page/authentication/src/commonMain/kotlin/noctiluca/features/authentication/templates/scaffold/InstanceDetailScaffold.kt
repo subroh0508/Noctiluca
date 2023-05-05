@@ -15,8 +15,10 @@ import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
 import noctiluca.features.authentication.organisms.tab.info.InstanceInformationTab
+import noctiluca.features.authentication.organisms.tab.localtimeline.InstanceLocalTimelineTab
 import noctiluca.features.authentication.organisms.tab.rememberTabbedInstanceDetailState
 import noctiluca.features.authentication.state.Instances
+import noctiluca.features.authentication.state.rememberLocalTimelineState
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
 import noctiluca.features.components.molecules.scaffold.HeadlineText
@@ -31,10 +33,11 @@ internal fun InstanceDetailScaffold(
     instance: Instance,
     onBackPressed: () -> Unit,
 ) {
-    val statusesScrollState = rememberTabbedInstanceDetailState(instance)
+    val tabbedScrollState = rememberTabbedInstanceDetailState(instance)
+    val localTimelineState = rememberLocalTimelineState(instance.domain)
 
     HeadlinedScaffold(
-        statusesScrollState.lazyListState,
+        tabbedScrollState.lazyListState,
         tabComposeIndex = 3,
         topAppBar = { scrollBehavior ->
             HeadlineTopAppBar(
@@ -42,7 +45,7 @@ internal fun InstanceDetailScaffold(
                     HeadlineText(
                         instance.name,
                         instance.domain,
-                        statusesScrollState.lazyListState.firstVisibleItemIndex > 1,
+                        tabbedScrollState.lazyListState.firstVisibleItemIndex > 1,
                     )
                 },
                 onBackPressed = onBackPressed,
@@ -50,19 +53,17 @@ internal fun InstanceDetailScaffold(
             )
         },
         bottomBar = { horizontalPadding -> ActionButtons(horizontalPadding) },
-        tabs = { InstanceDetailTabs(statusesScrollState) },
+        tabs = { InstanceDetailTabs(tabbedScrollState) },
     ) { tabs, horizontalPadding ->
         item { InstanceThumbnail(instance.thumbnail, horizontalPadding) }
         item { InstanceName(instance, horizontalPadding) }
         item { InstanceDescription(instance, horizontalPadding) }
         item { tabs() }
 
-        item {
-            when (statusesScrollState.tab) {
-                Instances.Tab.INFO -> InstanceInformationTab(instance)
-                Instances.Tab.EXTENDED_DESCRIPTION -> InstanceExtendedDescriptionTab(instance)
-                Instances.Tab.LOCAL_TIMELINE -> Unit
-            }
+        when (tabbedScrollState.tab) {
+            Instances.Tab.INFO -> item { InstanceInformationTab(instance) }
+            Instances.Tab.EXTENDED_DESCRIPTION -> item { InstanceExtendedDescriptionTab(instance) }
+            Instances.Tab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(instance, localTimelineState)
         }
     }
 }

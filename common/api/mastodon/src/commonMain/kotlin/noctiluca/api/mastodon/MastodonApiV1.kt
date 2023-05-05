@@ -31,6 +31,12 @@ interface MastodonApiV1 {
         limit: Int = 20,
     ): List<StatusJson>
 
+    suspend fun getTimelinesPublic(
+        domain: String,
+        maxId: String? = null,
+        limit: Int = 20,
+    ): List<StatusJson>
+
     suspend fun getTimelinesHome(
         maxId: String? = null,
         sinceId: String? = null,

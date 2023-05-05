@@ -8,6 +8,7 @@ kotlin {
             dependencies {
                 api(project(":common:data:authentication:model"))
                 api(project(":common:data:instance:model"))
+                api(project(":common:data:status:model"))
                 implementation(project(":common:data:authentication:infra"))
                 implementation(project(":common:data:instance:infra"))
             }

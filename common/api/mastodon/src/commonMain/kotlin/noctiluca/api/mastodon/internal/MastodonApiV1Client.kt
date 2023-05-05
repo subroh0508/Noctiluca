@@ -63,6 +63,21 @@ internal class MastodonApiV1Client(
         parameter("limit", limit.toString())
     }.body()
 
+    override suspend fun getTimelinesPublic(
+        domain: String,
+        maxId: String?,
+        limit: Int,
+    ): List<StatusJson> = client.get(
+        Api.V1.Timelines.Public(),
+        domain = domain,
+        skipAuthorization = true,
+    ) {
+        parameter("local", true)
+        parameter("only_media", false)
+        parameter("max_id", maxId)
+        parameter("limit", limit.toString())
+    }.body()
+
     override suspend fun getTimelinesHome(
         maxId: String?,
         sinceId: String?,

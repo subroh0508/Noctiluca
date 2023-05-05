@@ -9,7 +9,10 @@ import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.instance.V2InstanceJson
 import noctiluca.instance.infra.repository.InstanceRepository
 import noctiluca.instance.model.Instance
+import noctiluca.model.StatusId
 import noctiluca.model.Uri
+import noctiluca.status.infra.toEntity
+import noctiluca.status.model.Status
 import java.net.UnknownHostException
 
 internal class InstanceRepositoryImpl(
@@ -29,6 +32,13 @@ internal class InstanceRepositoryImpl(
     }
 
     override suspend fun show(domain: String) = getInstance(domain)
+
+    override suspend fun fetchLocalTimeline(
+        domain: String,
+        maxId: StatusId?,
+    ) = v1.getTimelinesPublic(domain, maxId?.value).map {
+        it.toEntity(accountId = null)
+    }
 
     private suspend fun getInstance(domain: String): Instance {
         val v1Instance = runCatching { v1.getInstance(domain) }.getOrNull()

@@ -7,6 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":common:domain:authentication"))
+                implementation(project(":features:shared"))
             }
         }
 

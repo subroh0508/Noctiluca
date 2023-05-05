@@ -30,7 +30,6 @@ data class V1InstanceJson(
     val configuration: Configuration?,
     @SerialName("contact_account")
     val contactAccount: AccountJson,
-    @SerialName("rules")
     val rules: List<RuleJson>?,
 ) {
     @Serializable

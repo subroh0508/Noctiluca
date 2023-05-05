@@ -73,12 +73,24 @@ object Api {
 
                 @Resource("bookmark")
                 @Serializable
-                class Bookmark(val parent: Id) { constructor(id: String) : this(Id(id = id)) }
+                class Bookmark(val parent: Id) {
+                    constructor(id: String) : this(Id(id = id))
+                }
 
                 @Resource("unbookmark")
                 @Serializable
-                class Unbookmark(val parent: Id) { constructor(id: String) : this(Id(id = id)) }
+                class Unbookmark(val parent: Id) {
+                    constructor(id: String) : this(Id(id = id))
+                }
             }
         }
+    }
+
+    @Resource("v2")
+    @Serializable
+    class V2(val parent: Api = Api) {
+        @Resource("instance")
+        @Serializable
+        class Instance(val parent: V2 = V2())
     }
 }

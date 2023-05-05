@@ -12,8 +12,10 @@ import io.ktor.resources.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import noctiluca.api.mastodon.MastodonApiV1
+import noctiluca.api.mastodon.MastodonApiV2
 import noctiluca.api.mastodon.MastodonStream
 import noctiluca.api.mastodon.internal.MastodonApiV1Client
+import noctiluca.api.mastodon.internal.MastodonApiV2Client
 import noctiluca.api.mastodon.internal.MastodonStreamClient
 import org.koin.core.module.Module
 
@@ -51,5 +53,6 @@ fun Module.MastodonApiModule(
     json: Json,
 ) {
     single<MastodonApiV1> { MastodonApiV1Client(get(), client) }
+    single<MastodonApiV2> { MastodonApiV2Client(get(), client) }
     single<MastodonStream> { MastodonStreamClient(get(), webSocket, json) }
 }

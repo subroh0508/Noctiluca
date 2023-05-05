@@ -14,9 +14,9 @@ import noctiluca.api.mastodon.json.status.StatusJson
 import noctiluca.repository.TokenCache
 
 internal class MastodonApiV1Client(
-    private val token: TokenCache,
-    private val client: HttpClient,
-) : MastodonApiV1 {
+    override val token: TokenCache,
+    override val client: HttpClient,
+) : MastodonApiV1, AbstractMastodonApiClient() {
     override suspend fun getInstance(
         domain: String,
     ): V1InstanceJson = client.get(
@@ -133,53 +133,4 @@ internal class MastodonApiV1Client(
         parameter("exclude_reblogs", false)
         parameter("limit", limit.toString())
     }.body()
-
-    private suspend inline fun <reified T : Any> HttpClient.get(
-        resource: T,
-        domain: String? = null,
-        accessToken: String? = null,
-        skipAuthorization: Boolean = false,
-        httpRequestBuilder: HttpRequestBuilder.() -> Unit = {},
-    ) = get(resource, builder = {
-        setAccessTokenAndHost(domain, accessToken, skipAuthorization)
-        httpRequestBuilder()
-    })
-
-    private suspend inline fun <reified T : Any> HttpClient.post(
-        resource: T,
-        domain: String? = null,
-        skipAuthorization: Boolean = false,
-    ) = post(resource) {
-        setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
-    }
-
-    private suspend inline fun <reified T : Any, reified E : Any> HttpClient.post(
-        resource: T,
-        body: E,
-        domain: String? = null,
-        skipAuthorization: Boolean = false,
-    ) = post(resource) {
-        setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
-        setBody(body)
-    }
-
-    private suspend fun HttpRequestBuilder.setAccessTokenAndHost(
-        domain: String? = null,
-        accessToken: String? = null,
-        skipAuthorization: Boolean = false,
-    ) {
-        val token = accessToken ?: getCurrentAccessToken()
-        val host = domain ?: getCurrentDomain()
-
-        if (host != null) {
-            this.host = host
-        }
-
-        if (token != null && !skipAuthorization) {
-            bearerAuth(token)
-        }
-    }
-
-    private suspend fun getCurrentAccessToken() = token.getCurrentAccessToken()
-    private suspend fun getCurrentDomain() = token.getCurrentDomain()
 }

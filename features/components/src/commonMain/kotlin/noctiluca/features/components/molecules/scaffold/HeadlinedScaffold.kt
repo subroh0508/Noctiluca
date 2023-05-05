@@ -127,7 +127,7 @@ fun HeadlineTopAppBar(
         }
     },
     actions = actions,
-    colors = TopAppBarDefaults.largeTopAppBarColors(
+    colors = TopAppBarDefaults.smallTopAppBarColors(
         containerColor = MaterialTheme.colorScheme.surface,
         scrolledContainerColor = MaterialTheme.colorScheme.surface,
     ),

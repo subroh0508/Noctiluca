@@ -9,7 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.state.Instances
+import noctiluca.features.authentication.state.InstancesTab
 import noctiluca.instance.model.Instance
 
 @Composable
@@ -56,7 +56,7 @@ internal fun rememberTabbedInstanceDetailState(
 }
 
 internal class InstanceDetailScrollState private constructor(
-    val tabs: List<Pair<Instances.Tab, String>>,
+    val tabs: List<Pair<InstancesTab, String>>,
     val lazyListState: LazyListState,
     private val currentTabIndex: MutableState<Int>,
     private val scrollPositions: MutableState<List<Pair<Int, Int>>>,
@@ -83,18 +83,18 @@ internal class InstanceDetailScrollState private constructor(
         @Composable
         private fun buildTabTitles(
             instance: Instance?,
-        ): List<Pair<Instances.Tab, String>> {
+        ): List<Pair<InstancesTab, String>> {
             instance ?: return listOf()
 
             @Suppress("MagicNumber")
             return listOfNotNull(
-                Instances.Tab.INFO to getString().sign_in_instance_detail_tab_info,
+                InstancesTab.INFO to getString().sign_in_instance_detail_tab_info,
                 if ((instance.version?.major ?: 0) >= 4) {
-                    Instances.Tab.EXTENDED_DESCRIPTION to getString().sign_in_instance_detail_tab_extended_description
+                    InstancesTab.EXTENDED_DESCRIPTION to getString().sign_in_instance_detail_tab_extended_description
                 } else {
                     null
                 },
-                Instances.Tab.LOCAL_TIMELINE to getString().sign_in_instance_detail_tab_local_timeline,
+                InstancesTab.LOCAL_TIMELINE to getString().sign_in_instance_detail_tab_local_timeline,
             )
         }
     }
@@ -102,7 +102,7 @@ internal class InstanceDetailScrollState private constructor(
     val tab get() = tabs[currentTabIndex.value].first
     val currentIndex get() = currentTabIndex.value
 
-    fun cacheScrollPosition(next: Instances.Tab) {
+    fun cacheScrollPosition(next: InstancesTab) {
         scrollPositions.value = scrollPositions.value.mapIndexed { index, state ->
             if (lazyListState.firstVisibleItemIndex > 0 && index == currentIndex) {
                 lazyListState.firstVisibleItemIndex to lazyListState.firstVisibleItemScrollOffset
@@ -114,7 +114,7 @@ internal class InstanceDetailScrollState private constructor(
         currentTabIndex.value = tabs.indexOfFirst { it.first == next }
     }
 
-    suspend fun restoreScrollPosition(tab: Instances.Tab) {
+    suspend fun restoreScrollPosition(tab: InstancesTab) {
         if (lazyListState.firstVisibleItemIndex == 0) {
             return
         }

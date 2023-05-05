@@ -5,6 +5,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
@@ -28,7 +29,7 @@ internal fun SearchInstanceQueryTextField(
 ) = Column(
     modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
 ) {
-    var query by remember { mutableStateOf("") }
+    var query by rememberSaveable { mutableStateOf("") }
     val suggestsLoadState by rememberMastodonInstanceSuggests(query)
 
     headline(suggestsLoadState.loading)

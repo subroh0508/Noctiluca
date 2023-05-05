@@ -174,9 +174,9 @@ private fun LazyListScope.InstanceTab(
     instance ?: return
 
     when (tabbedScrollState.tab) {
-        Instances.Tab.INFO -> item { InstanceInformationTab(instance) }
-        Instances.Tab.EXTENDED_DESCRIPTION -> item { InstanceExtendedDescriptionTab(instance) }
-        Instances.Tab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(instance, localTimelineState)
+        InstancesTab.INFO -> item { InstanceInformationTab(instance) }
+        InstancesTab.EXTENDED_DESCRIPTION -> item { InstanceExtendedDescriptionTab(instance) }
+        InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(instance, localTimelineState)
     }
 }
 

@@ -19,7 +19,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <data
-                    android:host="@string/sign_in_client_name"
+                    android:path="@string/sign_in_client_name_path"
                     android:scheme="@string/sign_in_oauth_scheme" />
             </intent-filter>
         </activity>

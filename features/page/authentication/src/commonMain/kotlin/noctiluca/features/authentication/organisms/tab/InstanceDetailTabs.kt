@@ -16,32 +16,41 @@ import noctiluca.instance.model.Instance
 internal fun InstanceDetailTabs(
     statusesScrollState: InstanceDetailScrollState,
     modifier: Modifier = Modifier,
-) = TabRow(
-    selectedTabIndex = statusesScrollState.currentIndex,
-    modifier = modifier,
 ) {
-    statusesScrollState.tabs.forEach { (tab, label) ->
-        Tab(
-            selected = tab == statusesScrollState.tab,
-            onClick = { statusesScrollState.cacheScrollPosition(tab) },
-        ) {
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier.height(48.dp),
-            ) { Text(label) }
+    if (statusesScrollState.tabs.isEmpty()) {
+        return
+    }
+
+    TabRow(
+        selectedTabIndex = statusesScrollState.currentIndex,
+        modifier = modifier,
+    ) {
+        statusesScrollState.tabs.forEach { (tab, label) ->
+            Tab(
+                selected = tab == statusesScrollState.tab,
+                onClick = { statusesScrollState.cacheScrollPosition(tab) },
+            ) {
+                Box(
+                    contentAlignment = Alignment.Center,
+                    modifier = Modifier.height(48.dp),
+                ) { Text(label) }
+            }
         }
     }
 }
 
 @Composable
 internal fun rememberTabbedInstanceDetailState(
-    instance: Instance,
+    instance: Instance?,
     initTabIndex: Int = 0,
 ): InstanceDetailScrollState {
     val scrollState = InstanceDetailScrollState(instance, initTabIndex)
 
     LaunchedEffect(initTabIndex) {
-        scrollState.restoreScrollPosition(scrollState.tabs[initTabIndex].first)
+        val (tab) = scrollState.tabs
+            .getOrNull(initTabIndex) ?: return@LaunchedEffect
+
+        scrollState.restoreScrollPosition(tab)
     }
     return scrollState
 }
@@ -55,20 +64,13 @@ internal class InstanceDetailScrollState private constructor(
     companion object {
         @Composable
         operator fun invoke(
-            instance: Instance,
+            instance: Instance?,
             initIndex: Int,
             lazyListState: LazyListState = rememberLazyListState(),
         ): InstanceDetailScrollState {
-            val tabTitles = listOfNotNull(
-                Instances.Tab.INFO to getString().sign_in_instance_detail_tab_info,
-                if ((instance.version?.major ?: 0) >= 4)
-                    Instances.Tab.EXTENDED_DESCRIPTION to getString().sign_in_instance_detail_tab_extended_description
-                else
-                    null,
-                Instances.Tab.LOCAL_TIMELINE to getString().sign_in_instance_detail_tab_local_timeline,
-            )
+            val tabTitles = buildTabTitles(instance)
 
-            return remember {
+            return remember(instance) {
                 InstanceDetailScrollState(
                     tabTitles,
                     lazyListState,
@@ -76,6 +78,24 @@ internal class InstanceDetailScrollState private constructor(
                     mutableStateOf(List(tabTitles.size) { 1 to 0 }),
                 )
             }
+        }
+
+        @Composable
+        private fun buildTabTitles(
+            instance: Instance?,
+        ): List<Pair<Instances.Tab, String>> {
+            instance ?: return listOf()
+
+            @Suppress("MagicNumber")
+            return listOfNotNull(
+                Instances.Tab.INFO to getString().sign_in_instance_detail_tab_info,
+                if ((instance.version?.major ?: 0) >= 4) {
+                    Instances.Tab.EXTENDED_DESCRIPTION to getString().sign_in_instance_detail_tab_extended_description
+                } else {
+                    null
+                },
+                Instances.Tab.LOCAL_TIMELINE to getString().sign_in_instance_detail_tab_local_timeline,
+            )
         }
     }
 

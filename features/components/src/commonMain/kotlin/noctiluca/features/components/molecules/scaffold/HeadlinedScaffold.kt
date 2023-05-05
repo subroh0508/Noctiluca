@@ -75,6 +75,7 @@ fun HeadlinedScaffold(
     tabComposeIndex: Int = Int.MAX_VALUE,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
     topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
+    loading: @Composable (PaddingValues) -> Unit = {},
     bottomBar: @Composable BoxScope.(Dp) -> Unit = {},
     tabs: @Composable () -> Unit = {},
     content: LazyListScope.(@Composable () -> Unit, Dp) -> Unit,
@@ -103,6 +104,8 @@ fun HeadlinedScaffold(
         }
 
         bottomBar(HeadlinedScaffoldHorizontalPadding)
+
+        loading(paddingValues)
     }
 }
 

@@ -12,7 +12,6 @@ import noctiluca.instance.model.Instance
 import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.status.infra.toEntity
-import noctiluca.status.model.Status
 import java.net.UnknownHostException
 
 internal class InstanceRepositoryImpl(

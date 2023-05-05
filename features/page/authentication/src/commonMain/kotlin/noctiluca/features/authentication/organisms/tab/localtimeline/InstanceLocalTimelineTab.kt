@@ -7,6 +7,7 @@ import noctiluca.features.components.molecules.list.items
 import noctiluca.features.shared.status.Status
 import noctiluca.instance.model.Instance
 
+@Suppress("FunctionNaming")
 internal fun LazyListScope.InstanceLocalTimelineTab(
     instance: Instance,
     localTimelineState: LocalTimelineState,

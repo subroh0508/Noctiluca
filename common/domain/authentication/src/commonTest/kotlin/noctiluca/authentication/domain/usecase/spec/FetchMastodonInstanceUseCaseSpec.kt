@@ -10,12 +10,12 @@ import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.api.mastodon.Api
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
-import noctiluca.authentication.domain.usecase.ShowMastodonInstanceUseCase
+import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
 import noctiluca.authentication.domain.usecase.json.JSON_INSTANCE
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.mock.MockHttpClientEngine
 
-class ShowMastodonInstanceUseCaseSpec : DescribeSpec({
+class FetchMastodonInstanceUseCaseSpec : DescribeSpec({
     describe("#execute") {
         context("when the server returns valid response") {
             val useCase = buildUseCase(
@@ -49,6 +49,6 @@ class ShowMastodonInstanceUseCaseSpec : DescribeSpec({
 
 private fun buildUseCase(
     engine: MockEngine,
-): ShowMastodonInstanceUseCase = TestAuthenticationUseCaseComponent(
+): FetchMastodonInstanceUseCase = TestAuthenticationUseCaseComponent(
     engine,
 ).scope.get()

@@ -5,7 +5,6 @@ import androidx.compose.ui.text.intl.Locale
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.LocalNavController
 import noctiluca.features.authentication.model.NavController
-import noctiluca.features.authentication.state.rememberMastodonInstancesState
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
 import noctiluca.features.components.FeatureComposable
@@ -17,10 +16,37 @@ internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
 
 @Composable
-fun SignInScreen(
+fun SearchInstanceSuggestsScreen(
+    koinComponent: KoinScopeComponent,
+    onNavigateToInstanceDetail: (String) -> Unit,
+) = SignInFeature(
+    authorizeResult = null,
+    koinComponent,
+) { SearchInstanceScaffold(onNavigateToInstanceDetail) }
+
+@Composable
+fun InstanceDetailScreen(
+    domain: String?,
     authorizeResult: AuthorizeResult?,
     koinComponent: KoinScopeComponent,
     onNavigateToTimeline: () -> Unit,
+    onBackPressed: () -> Unit,
+) = SignInFeature(
+    authorizeResult,
+    koinComponent,
+    onNavigateToTimeline,
+) {
+    domain ?: return@SignInFeature
+
+    InstanceDetailScaffold(domain, onBackPressed)
+}
+
+@Composable
+private fun SignInFeature(
+    authorizeResult: AuthorizeResult?,
+    koinComponent: KoinScopeComponent,
+    onNavigateToTimeline: () -> Unit = {},
+    content: @Composable () -> Unit,
 ) = FeatureComposable(koinComponent) { scope ->
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
@@ -30,17 +56,5 @@ fun SignInScreen(
             onNavigateToTimeline = onNavigateToTimeline,
             browser = scope.get(),
         ),
-    ) { SignInScaffold() }
-}
-
-@Composable
-private fun SignInScaffold() {
-    val instancesState = rememberMastodonInstancesState()
-
-    instancesState.instance.let {
-        when (it) {
-            null -> SearchInstanceScaffold(instancesState)
-            else -> InstanceDetailScaffold(it, onBackPressed = { instancesState.clearInstance() })
-        }
-    }
+    ) { content() }
 }

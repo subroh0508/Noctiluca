@@ -2,6 +2,6 @@ package noctiluca.authentication.domain.usecase
 
 import noctiluca.instance.model.Instance
 
-interface ShowMastodonInstanceUseCase {
+interface FetchMastodonInstanceUseCase {
     suspend fun execute(domain: String): Instance
 }

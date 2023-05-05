@@ -5,4 +5,12 @@ import noctiluca.features.authentication.getString
 import noctiluca.model.Uri
 
 @Composable
-fun buildRedirectUri() = Uri("${getString().sign_in_oauth_scheme}://${getString().sign_in_client_name}")
+fun buildRedirectUri(
+    domain: String,
+) = Uri(
+    buildString {
+        append("${getString().sign_in_oauth_scheme}://")
+        append(domain)
+        append("/${getString().sign_in_client_name}")
+    },
+)

@@ -40,8 +40,10 @@ data class V2InstanceJson(
     ) {
         @Serializable
         data class Versions(
-            val `@1x`: String,
-            val `@2x`: String,
+            @SerialName("@1x")
+            val x1: String,
+            @SerialName("@2x")
+            val x2: String,
         )
     }
 
@@ -57,8 +59,7 @@ data class V2InstanceJson(
     ) {
         @Serializable
         data class Urls(
-            @SerialName("streaming_api")
-            val streamingApi: String,
+            val streaming: String,
         )
 
         @Serializable

@@ -6,5 +6,5 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.InstanceRepositoriesModule() {
-    single<InstanceRepository> { InstanceRepositoryImpl(get(), get()) }
+    single<InstanceRepository> { InstanceRepositoryImpl(get(), get(), get()) }
 }

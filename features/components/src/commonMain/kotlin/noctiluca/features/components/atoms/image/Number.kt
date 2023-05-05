@@ -32,7 +32,7 @@ fun NumberCircle(
         .then(modifier)
 ) {
     Text(
-        (n + 1).toString(),
+        n.toString(),
         color = color,
         textAlign = TextAlign.Center,
     )

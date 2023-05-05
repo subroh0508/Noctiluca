@@ -2,14 +2,12 @@ package noctiluca.features.authentication.templates.scaffold
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -60,7 +58,7 @@ internal fun InstanceDetailScaffold(
 
         item {
             when (statusesScrollState.tab) {
-                Instances.Tab.INFO -> InstanceInformation(instance, horizontalPadding)
+                Instances.Tab.INFO -> InstanceInformation(instance)
                 Instances.Tab.EXTENDED_DESCRIPTION -> Unit
                 Instances.Tab.LOCAL_TIMELINE -> Unit
             }

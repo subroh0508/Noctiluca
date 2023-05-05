@@ -1,26 +1,24 @@
 package noctiluca.features.authentication.organisms.tab
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mail
 import androidx.compose.material3.*
-import androidx.compose.material3.ListItem
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.state.Instances
-import noctiluca.features.components.atoms.divider.Divider
 import noctiluca.features.components.atoms.image.AsyncImage
+import noctiluca.features.components.atoms.image.NumberCircle
+import noctiluca.features.components.atoms.list.LeadingAvatarContainerSize
+import noctiluca.features.components.atoms.list.Section
+import noctiluca.features.components.atoms.list.SectionItem
 import noctiluca.instance.model.Instance
 
 @Composable
@@ -44,27 +42,28 @@ internal fun InstanceDetailTabs(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun InstanceInformation(
     instance: Instance,
-    horizontalPadding: Dp,
 ) = Column {
-    Spacer(Modifier.height(16.dp))
+    AdministratorSection(instance.administrator)
+    RulesSection(instance.rules)
+    VersionSection(instance.version)
+}
 
-    Text(
-        getString().sign_in_instance_detail_info_administrator_label,
-        color = MaterialTheme.colorScheme.primary,
-        style = MaterialTheme.typography.titleSmall,
-        modifier = Modifier.padding(horizontal = horizontalPadding),
-    )
-    ListItem(
-        headlineText = { Text(instance.administrator.displayName) },
-        supportingText = { Text(instance.administrator.screen) },
+@Composable
+private fun AdministratorSection(
+    administrator: Instance.Administrator,
+) = Section(
+    getString().sign_in_instance_detail_info_administrator_label,
+) {
+    SectionItem(
+        headlineText = administrator.displayName,
+        supportingText = administrator.screen,
         leadingContent = {
             AsyncImage(
-                instance.administrator.avatar,
-                modifier = Modifier.size(40.dp)
+                administrator.avatar,
+                modifier = Modifier.size(LeadingAvatarContainerSize)
                     .clip(RoundedCornerShape(8.dp)),
             )
         },
@@ -78,56 +77,37 @@ internal fun InstanceInformation(
         },
         modifier = Modifier.padding(vertical = 8.dp),
     )
+}
 
-    Divider(Modifier.fillMaxWidth())
+@Composable
+private fun RulesSection(
+    rules: List<Instance.Rule>,
+) {
+    if (rules.isEmpty()) return
 
-    if (instance.rules.isNotEmpty()) {
-        Spacer(Modifier.height(16.dp))
-
-        Text(
-            getString().sign_in_instance_detail_info_instance_rule_label,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.padding(horizontal = horizontalPadding),
-        )
-
-        instance.rules.forEachIndexed { i, rule ->
-            ListItem(
-                headlineText = { Text(rule.text) },
-                leadingContent = {
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier.size(40.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.primary)
-                    ) {
-                        Text(
-                            (i + 1).toString(),
-                            color = MaterialTheme.colorScheme.onPrimary,
-                            textAlign = TextAlign.Center,
-                        )
-                    }
-                },
+    Section(
+        getString().sign_in_instance_detail_info_instance_rule_label,
+    ) {
+        rules.forEachIndexed { i, rule ->
+            SectionItem(
+                headlineText = rule.text,
+                leadingContent = { NumberCircle(i + 1) },
                 modifier = Modifier.padding(vertical = 8.dp),
             )
         }
-
-        Divider(Modifier.fillMaxWidth())
     }
+}
 
-    instance.version?.toString()?.let { version ->
-        Spacer(Modifier.height(16.dp))
+@Composable
+private fun VersionSection(
+    version: Instance.Version?,
+) {
+    version ?: return
 
-        Text(
-            getString().sign_in_instance_detail_info_instance_version_label,
-            color = MaterialTheme.colorScheme.primary,
-            style = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.padding(horizontal = horizontalPadding),
-        )
-
-        ListItem(headlineText = { Text("v$version") })
-
-        Divider(Modifier.fillMaxWidth())
+    Section(
+        getString().sign_in_instance_detail_info_instance_version_label,
+    ) {
+        SectionItem(headlineText = "v$version")
     }
 }
 

@@ -8,7 +8,7 @@ data class Instance(
     val description: String?,
     val thumbnail: Uri?,
     val languages: List<String>,
-    val activeUsers: Int?,
+    val activeUserCount: Int?,
     val administrator: Administrator,
     val rules: List<Rule>,
     val version: Version?,

@@ -13,6 +13,9 @@
     <string name="sign_in_instance_detail_tab_extended_description">詳細</string>
     <string name="sign_in_instance_detail_tab_local_timeline">ローカル</string>
     <string name="sign_in_instance_detail_info_administrator_label">管理者</string>
+    <string name="sign_in_instance_detail_info_instance_stats_label">サーバーの情報</string>
+    <string name="sign_in_instance_detail_info_instance_active_user_count">%,d人</string>
+    <string name="sign_in_instance_detail_info_instance_active_user_count_support">アクティブユーザー数</string>
     <string name="sign_in_instance_detail_info_instance_rule_label">サーバーのルール</string>
     <string name="sign_in_instance_detail_info_instance_version_label">Mastodonのバージョン</string>
 </resources>

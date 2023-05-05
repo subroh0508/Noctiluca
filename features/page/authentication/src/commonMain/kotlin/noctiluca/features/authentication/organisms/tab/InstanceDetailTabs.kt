@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mail
+import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -47,6 +48,7 @@ internal fun InstanceInformation(
     instance: Instance,
 ) = Column {
     AdministratorSection(instance.administrator)
+    StatsSection(instance)
     RulesSection(instance.rules)
     VersionSection(instance.version)
 }
@@ -77,6 +79,30 @@ private fun AdministratorSection(
         },
         modifier = Modifier.padding(vertical = 8.dp),
     )
+}
+
+@Composable
+private fun StatsSection(
+    instance: Instance,
+) {
+    val activeUserCount = instance.activeUserCount ?: return
+
+    Section(
+        getString().sign_in_instance_detail_info_instance_stats_label,
+    ) {
+        SectionItem(
+            headlineText = getString().sign_in_instance_detail_info_instance_active_user_count.format(activeUserCount),
+            supportingText = getString().sign_in_instance_detail_info_instance_active_user_count_support,
+            leadingContent = {
+                Icon(
+                    Icons.Default.Person,
+                    contentDescription = "ActiveUserCount",
+                    modifier = Modifier.size(LeadingAvatarContainerSize),
+                )
+            },
+            modifier = Modifier.padding(vertical = 8.dp),
+        )
+    }
 }
 
 @Composable

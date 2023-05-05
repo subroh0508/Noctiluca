@@ -9,6 +9,7 @@ import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.account.RelationshipJson
+import noctiluca.api.mastodon.json.extendeddescription.ExtendedDescriptionJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
 import noctiluca.repository.TokenCache
@@ -21,6 +22,14 @@ internal class MastodonApiV1Client(
         domain: String,
     ): V1InstanceJson = client.get(
         Api.V1.Instance(),
+        domain = domain,
+        skipAuthorization = true,
+    ).body()
+
+    override suspend fun getInstanceExtendedDescription(
+        domain: String,
+    ): ExtendedDescriptionJson = client.get(
+        Api.V1.Instance.ExtendedDescription(),
         domain = domain,
         skipAuthorization = true,
     ).body()

@@ -13,7 +13,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
-import noctiluca.features.authentication.organisms.tab.InstanceInformation
+import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
+import noctiluca.features.authentication.organisms.tab.info.InstanceInformationTab
 import noctiluca.features.authentication.organisms.tab.rememberTabbedInstanceDetailState
 import noctiluca.features.authentication.state.Instances
 import noctiluca.features.components.atoms.image.AsyncImage
@@ -30,7 +31,7 @@ internal fun InstanceDetailScaffold(
     instance: Instance,
     onBackPressed: () -> Unit,
 ) {
-    val statusesScrollState = rememberTabbedInstanceDetailState()
+    val statusesScrollState = rememberTabbedInstanceDetailState(instance)
 
     HeadlinedScaffold(
         statusesScrollState.lazyListState,
@@ -58,8 +59,8 @@ internal fun InstanceDetailScaffold(
 
         item {
             when (statusesScrollState.tab) {
-                Instances.Tab.INFO -> InstanceInformation(instance)
-                Instances.Tab.EXTENDED_DESCRIPTION -> Unit
+                Instances.Tab.INFO -> InstanceInformationTab(instance)
+                Instances.Tab.EXTENDED_DESCRIPTION -> InstanceExtendedDescriptionTab(instance)
                 Instances.Tab.LOCAL_TIMELINE -> Unit
             }
         }

@@ -11,6 +11,7 @@ data class Instance(
     val activeUserCount: Int?,
     val administrator: Administrator,
     val rules: List<Rule>,
+    val extendedDescription: String?,
     val version: Version?,
 ) {
     data class Suggest(

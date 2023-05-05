@@ -3,6 +3,7 @@ package noctiluca.api.mastodon
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.account.RelationshipJson
+import noctiluca.api.mastodon.json.extendeddescription.ExtendedDescriptionJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
 
@@ -10,6 +11,10 @@ interface MastodonApiV1 {
     suspend fun getInstance(
         domain: String,
     ): V1InstanceJson
+
+    suspend fun getInstanceExtendedDescription(
+        domain: String,
+    ): ExtendedDescriptionJson
 
     suspend fun getVerifyAccountsCredentials(
         domain: String,

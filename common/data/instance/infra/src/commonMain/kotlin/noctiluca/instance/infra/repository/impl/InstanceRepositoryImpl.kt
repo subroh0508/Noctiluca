@@ -34,7 +34,9 @@ internal class InstanceRepositoryImpl(
         val v1Instance = runCatching { v1.getInstance(domain) }.getOrNull()
 
         if (v1Instance == null || v1Instance.version.startsWith("4")) {
-            return v2.getInstance(domain).toValueObject()
+            val extendedDescription = v1.getInstanceExtendedDescription(domain).content
+
+            return v2.getInstance(domain).toValueObject(extendedDescription)
         }
 
         return v1Instance.toValueObject()
@@ -63,10 +65,11 @@ internal class InstanceRepositoryImpl(
         null,
         contactAccount.toAdministrator(),
         rules?.map { Instance.Rule(it.id, it.text) } ?: listOf(),
+        null,
         Instance.Version(version),
     )
 
-    private fun V2InstanceJson.toValueObject() = Instance(
+    private fun V2InstanceJson.toValueObject(extendedDescription: String) = Instance(
         title,
         domain,
         description,
@@ -75,6 +78,7 @@ internal class InstanceRepositoryImpl(
         usage.users.activeMonth,
         contact.account.toAdministrator(),
         rules.map { Instance.Rule(it.id, it.text) },
+        extendedDescription,
         Instance.Version(version),
     )
 

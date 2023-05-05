@@ -35,7 +35,11 @@ object Api {
 
         @Resource("instance")
         @Serializable
-        class Instance(val parent: V1 = V1())
+        class Instance(val parent: V1 = V1()) {
+            @Resource("extended_description")
+            @Serializable
+            class ExtendedDescription(val parent: Instance = Instance())
+        }
 
         @Resource("timelines")
         @Serializable

@@ -5,6 +5,10 @@ import kotlinx.serialization.Serializable
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.rule.RuleJson
 
+/**
+ *  ref. https://docs.joinmastodon.org/entities/Instance/
+ */
+
 @Serializable
 data class V2InstanceJson(
     val domain: String,

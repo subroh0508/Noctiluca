@@ -1,14 +1,17 @@
 package noctiluca.authentication.domain.usecase.json
 
+import io.ktor.http.*
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.URL_SAMPLE_COM
 
 const val V4_INSTANCE_NAME = "Instance Sample"
 const val V3_INSTANCE_NAME = "Old Instance Sample"
 
+const val DOMAIN_V3_INSTANCE = "v3.sample.com"
+val URL_V3_INSTANCE = "${URLProtocol.HTTPS.name}://$DOMAIN_V3_INSTANCE"
+
 const val INSTANCE_DOMAIN_SUGGESTION_1 = "sample.jp"
 const val INSTANCE_DOMAIN_SUGGESTION_2 = "sample.net"
-const val INSTANCE_DOMAIN_SUGGESTION_3 = "sample.org"
 
 val JSON_V4_INSTANCE_BY_V1_API = """
     {
@@ -424,14 +427,14 @@ val JSON_INSTANCES = """
         },
         {
           "id": "5aa7f72d1a1b3f1036f3d267",
-          "name": "$INSTANCE_DOMAIN_SUGGESTION_3",
+          "name": "$V3_INSTANCE_NAME",
           "added_at": "2019-04-01T00:00:00.000Z",
           "updated_at": "2019-04-01T00:00:00.000Z",
           "checked_at": "2019-04-01T00:00:00.000Z",
           "uptime": 1,
           "up": true,
           "dead": false,
-          "version": "4.1.1",
+          "version": "3.3.3",
           "ipv6": true,
           "https_score": 10,
           "https_rank": "E ",
@@ -461,10 +464,10 @@ val JSON_INSTANCES = """
               "games"
             ]
           },
-          "thumbnail": "https://$INSTANCE_DOMAIN_SUGGESTION_3/files/thumbnail.png",
-          "thumbnail_proxy": "https://$INSTANCE_DOMAIN_SUGGESTION_3/proxy",
+          "thumbnail": "$URL_V3_INSTANCE/files/thumbnail.png",
+          "thumbnail_proxy": "$URL_V3_INSTANCE/proxy",
           "active_users": 11,
-          "email": "admin@$INSTANCE_DOMAIN_SUGGESTION_3",
+          "email": "admin@$DOMAIN_V3_INSTANCE",
           "admin": "admin"
         }
       ],
@@ -476,21 +479,21 @@ val JSON_INSTANCES = """
 
 val JSON_V3_INSTANCE_BY_V1_API = """
     {
-      "uri": "$DOMAIN_SAMPLE_COM",
+      "uri": "$DOMAIN_V3_INSTANCE",
       "title": "$V3_INSTANCE_NAME",
       "short_description": "short description",
       "description": "description",
-      "email": "admin@$DOMAIN_SAMPLE_COM",
+      "email": "admin@$DOMAIN_V3_INSTANCE",
       "version": "3.3.3",
       "urls": {
-        "streaming_api": "wss://$DOMAIN_SAMPLE_COM"
+        "streaming_api": "wss://$DOMAIN_V3_INSTANCE"
       },
       "stats": {
         "user_count": 100,
         "status_count": 1000,
         "domain_count": 200
       },
-      "thumbnail": "$URL_SAMPLE_COM/files/thumbnail.png",
+      "thumbnail": "$URL_V3_INSTANCE/files/thumbnail.png",
       "languages": [
         "ja"
       ],
@@ -561,11 +564,11 @@ val JSON_V3_INSTANCE_BY_V1_API = """
         "group": false,
         "created_at": "2019-04-01T00:00:00.000Z",
         "note": "<p>note</p>",
-        "url": "$URL_SAMPLE_COM/@test1",
-        "avatar": "$URL_SAMPLE_COM/accounts/avatars/avater.png",
-        "avatar_static": "$URL_SAMPLE_COM/accounts/avatars/original/avater.png",
-        "header": "$URL_SAMPLE_COM/accounts/headers/header.png",
-        "header_static": "$URL_SAMPLE_COM/accounts/headers/original/header.png",
+        "url": "$URL_V3_INSTANCE/@test1",
+        "avatar": "$URL_V3_INSTANCE/accounts/avatars/avater.png",
+        "avatar_static": "$URL_V3_INSTANCE/accounts/avatars/original/avater.png",
+        "header": "$URL_V3_INSTANCE/accounts/headers/header.png",
+        "header_static": "$URL_V3_INSTANCE/accounts/headers/original/header.png",
         "followers_count": 100,
         "following_count": 100,
         "statuses_count": 1000,

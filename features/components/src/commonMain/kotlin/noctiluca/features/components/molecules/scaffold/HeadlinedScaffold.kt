@@ -22,7 +22,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.Job
 import noctiluca.features.components.atoms.image.AsyncImage
+import noctiluca.features.components.model.LoadState
+import noctiluca.features.components.model.LoadStateComposable
 import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.model.Uri
 
@@ -70,42 +73,69 @@ fun HeadlinedScaffold(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeadlinedScaffold(
+fun <T : Any> LoadStateHeadlinedScaffold(
+    loadState: LoadState,
     lazyListState: LazyListState,
     tabComposeIndex: Int = Int.MAX_VALUE,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
-    topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
-    loading: @Composable (PaddingValues) -> Unit = {},
-    bottomBar: @Composable BoxScope.(Dp) -> Unit = {},
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    topAppBar: @Composable (TopAppBarScrollBehavior, Job?, T?) -> Unit = { _, _, _ -> },
+    bottomBar: @Composable BoxScope.(T, Dp) -> Unit = { _, _ -> },
     tabs: @Composable () -> Unit = {},
-    content: LazyListScope.(@Composable () -> Unit, Dp) -> Unit,
+    fallback: @Composable (Throwable?, PaddingValues) -> Unit = { _, _ -> },
+    content: LazyListScope.(T, @Composable () -> Unit, Dp) -> Unit,
 ) = Scaffold(
-    topBar = { topAppBar(scrollBehavior) },
+    topBar = {
+        topAppBar(
+            scrollBehavior,
+            (loadState as? LoadState.Loading)?.job,
+            loadState.getValueOrNull(),
+        )
+    },
+    snackbarHost = { SnackbarHost(snackbarHostState) },
     modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
 ) { paddingValues ->
-    Box(modifier = Modifier.fillMaxSize()) {
-        LazyColumn(
-            state = lazyListState,
-            contentPadding = PaddingValues(
-                start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
-                top = paddingValues.calculateTopPadding(),
-                end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
-                bottom = 64.dp,
-            ),
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            content(tabs, HeadlinedScaffoldHorizontalPadding)
+    LoadStateComposable<T>(
+        loadState,
+        loading = {
+            LinearProgressIndicator(
+                modifier = Modifier.fillMaxWidth()
+                    .offset(y = paddingValues.calculateTopPadding()),
+            )
+        },
+        fallback = { error ->
+            fallback(
+                error,
+                PaddingValues(
+                    top = paddingValues.calculateTopPadding(),
+                    start = HeadlinedScaffoldHorizontalPadding,
+                    end = HeadlinedScaffoldHorizontalPadding,
+                ),
+            )
+        },
+    ) { data ->
+        Box(modifier = Modifier.fillMaxSize()) {
+            LazyColumn(
+                state = lazyListState,
+                contentPadding = PaddingValues(
+                    start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
+                    top = paddingValues.calculateTopPadding(),
+                    end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
+                    bottom = 64.dp,
+                ),
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                content(data, tabs, HeadlinedScaffoldHorizontalPadding)
+            }
+
+            if (lazyListState.firstVisibleItemIndex >= tabComposeIndex) {
+                Box(
+                    modifier = Modifier.offset(y = CollapsedTopAppBarHeight),
+                ) { tabs() }
+            }
+
+            bottomBar(data, HeadlinedScaffoldHorizontalPadding)
         }
-
-        if (lazyListState.firstVisibleItemIndex >= tabComposeIndex) {
-            Box(
-                modifier = Modifier.offset(y = CollapsedTopAppBarHeight),
-            ) { tabs() }
-        }
-
-        bottomBar(HeadlinedScaffoldHorizontalPadding)
-
-        loading(paddingValues)
     }
 }
 

@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.tab.InstanceDetailScrollState
@@ -24,11 +25,16 @@ import noctiluca.features.authentication.organisms.tab.rememberTabbedInstanceDet
 import noctiluca.features.authentication.state.*
 import noctiluca.features.authentication.state.rememberLocalTimelineState
 import noctiluca.features.authentication.state.rememberMastodonInstanceDetail
+import noctiluca.features.components.atoms.card.CardHeader
+import noctiluca.features.components.atoms.card.CardSupporting
+import noctiluca.features.components.atoms.card.FilledCard
 import noctiluca.features.components.atoms.image.AsyncImage
+import noctiluca.features.components.atoms.snackbar.showSnackbar
 import noctiluca.features.components.atoms.text.HtmlText
-import noctiluca.features.components.molecules.scaffold.HeadlineText
-import noctiluca.features.components.molecules.scaffold.HeadlineTopAppBar
-import noctiluca.features.components.molecules.scaffold.HeadlinedScaffold
+import noctiluca.features.components.getCommonString
+import noctiluca.features.components.molecules.scaffold.*
+import noctiluca.features.components.utils.description
+import noctiluca.features.components.utils.label
 import noctiluca.instance.model.Instance
 import noctiluca.model.Uri
 
@@ -40,30 +46,45 @@ internal fun InstanceDetailScaffold(
 ) {
     val instanceLoadState by rememberMastodonInstanceDetail(domain)
 
-    val instance: Instance? = instanceLoadState.getValueOrNull()
     val localTimelineState = rememberLocalTimelineState(domain)
-    val tabbedScrollState = rememberTabbedInstanceDetailState(instance)
+    val tabbedScrollState = rememberTabbedInstanceDetailState(instanceLoadState.getValueOrNull())
 
-    HeadlinedScaffold(
+    LoadStateHeadlinedScaffold<Instance>(
+        instanceLoadState,
         tabbedScrollState.lazyListState,
         tabComposeIndex = 3,
-        topAppBar = { scrollBehavior ->
+        topAppBar = { scrollBehavior, job, instance ->
             HeadlineTopAppBar(
                 title = {
                     InstanceHeaderText(
+                        domain,
                         instance,
                         tabbedScrollState,
                     )
                 },
-                onBackPressed = onBackPressed,
+                onBackPressed = {
+                    job?.cancel()
+                    onBackPressed()
+                },
                 scrollBehavior = scrollBehavior,
             )
         },
-        loading = { paddingValues -> InstanceLoading(instanceLoadState.loading, paddingValues) },
-        bottomBar = { horizontalPadding -> ActionButtons(instance, horizontalPadding) },
+        bottomBar = { instance, horizontalPadding ->
+            ActionButtons(
+                instance,
+                horizontalPadding,
+            )
+        },
         tabs = { InstanceDetailTabs(tabbedScrollState) },
-    ) { tabs, horizontalPadding ->
-        item { InstanceThumbnail(instance?.thumbnail, horizontalPadding) }
+        fallback = { error, paddingValues ->
+            Fallback(
+                error,
+                paddingValues,
+                onBackPressed,
+            )
+        },
+    ) { instance, tabs, horizontalPadding ->
+        item { InstanceThumbnail(instance.thumbnail, horizontalPadding) }
         item { InstanceName(instance, horizontalPadding) }
         item { InstanceDescription(instance, horizontalPadding) }
         item { tabs() }
@@ -73,30 +94,22 @@ internal fun InstanceDetailScaffold(
 
 @Composable
 private fun InstanceHeaderText(
+    domain: String,
     instance: Instance?,
     tabbedScrollState: InstanceDetailScrollState,
 ) {
-    instance ?: return
-
-    HeadlineText(
-        instance.name,
-        instance.domain,
-        tabbedScrollState.lazyListState.firstVisibleItemIndex > 1,
-    )
-}
-
-@Composable
-private fun InstanceLoading(
-    loading: Boolean,
-    paddingValues: PaddingValues,
-) {
-    if (!loading) {
+    if (instance != null) {
+        HeadlineText(
+            instance.name,
+            instance.domain,
+            tabbedScrollState.lazyListState.firstVisibleItemIndex > 1,
+        )
         return
     }
 
-    LinearProgressIndicator(
-        modifier = Modifier.fillMaxWidth()
-            .padding(top = paddingValues.calculateTopPadding()),
+    Text(
+        domain,
+        style = MaterialTheme.typography.titleLarge,
     )
 }
 
@@ -121,72 +134,58 @@ private fun InstanceThumbnail(
 
 @Composable
 private fun InstanceName(
-    instance: Instance?,
+    instance: Instance,
     horizontalPadding: Dp,
+) = Column(
+    modifier = Modifier.fillMaxWidth()
+        .padding(
+            vertical = 16.dp,
+            horizontal = horizontalPadding,
+        ),
 ) {
-    instance ?: return
+    Text(
+        instance.name,
+        style = MaterialTheme.typography.headlineSmall,
+    )
 
-    Column(
-        modifier = Modifier.fillMaxWidth()
-            .padding(
-                vertical = 16.dp,
-                horizontal = horizontalPadding,
-            ),
-    ) {
-        Text(
-            instance.name,
-            style = MaterialTheme.typography.headlineSmall,
-        )
-
-        Text(
-            instance.domain,
-            color = MaterialTheme.colorScheme.outline,
-            style = MaterialTheme.typography.bodyLarge,
-        )
-    }
+    Text(
+        instance.domain,
+        color = MaterialTheme.colorScheme.outline,
+        style = MaterialTheme.typography.bodyLarge,
+    )
 }
 
 @Composable
 private fun InstanceDescription(
-    instance: Instance?,
+    instance: Instance,
     horizontalPadding: Dp,
-) {
-    instance ?: return
-
-    HtmlText(
-        instance.description ?: "",
-        style = MaterialTheme.typography.bodyLarge,
-        modifier = Modifier.fillMaxWidth()
-            .padding(
-                bottom = 16.dp,
-                start = horizontalPadding,
-                end = horizontalPadding,
-            ),
-    )
-}
+) = HtmlText(
+    instance.description ?: "",
+    style = MaterialTheme.typography.bodyLarge,
+    modifier = Modifier.fillMaxWidth()
+        .padding(
+            bottom = 16.dp,
+            start = horizontalPadding,
+            end = horizontalPadding,
+        ),
+)
 
 @Suppress("FunctionNaming")
 private fun LazyListScope.InstanceTab(
-    instance: Instance?,
+    instance: Instance,
     tabbedScrollState: InstanceDetailScrollState,
     localTimelineState: LocalTimelineState,
-) {
-    instance ?: return
-
-    when (tabbedScrollState.tab) {
-        InstancesTab.INFO -> item { InstanceInformationTab(instance) }
-        InstancesTab.EXTENDED_DESCRIPTION -> item { InstanceExtendedDescriptionTab(instance) }
-        InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(instance, localTimelineState)
-    }
+) = when (tabbedScrollState.tab) {
+    InstancesTab.INFO -> item { InstanceInformationTab(instance) }
+    InstancesTab.EXTENDED_DESCRIPTION -> item { InstanceExtendedDescriptionTab(instance) }
+    InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(instance, localTimelineState)
 }
 
 @Composable
 private fun BoxScope.ActionButtons(
-    instance: Instance?,
+    instance: Instance,
     horizontalPadding: Dp,
 ) {
-    instance ?: return
-
     val authorizedUserState = rememberAuthorizedUser(instance.domain)
     val scope = rememberCoroutineScope()
 
@@ -212,3 +211,37 @@ private fun BoxScope.ActionButtons(
         }
     }
 }
+
+@Composable
+private fun Fallback(
+    error: Throwable?,
+    paddingValues: PaddingValues,
+    onBackPressed: () -> Unit,
+) {
+    error ?: return
+
+    FilledCard(
+        headline = { CardHeader(error.label()) },
+        supporting = { CardSupporting(error.description()) },
+        actions = {
+            Button(onClick = onBackPressed) {
+                Text(getCommonString().back)
+            }
+        },
+        modifier = Modifier.padding(
+            top = paddingValues.calculateTopPadding(),
+            start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
+            end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
+        ),
+    )
+}
+
+@Composable
+private fun Snackbar(
+    error: Throwable,
+) = showSnackbar(
+    buildString {
+        append(getString().sign_in_request_authentication_error)
+        append(error.message ?: "")
+    },
+)

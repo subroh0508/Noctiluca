@@ -1,5 +1,6 @@
 package noctiluca.features.authentication
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import noctiluca.features.authentication.model.AuthorizeResult
@@ -8,6 +9,7 @@ import noctiluca.features.authentication.model.NavController
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
 import noctiluca.features.components.FeatureComposable
+import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
 import noctiluca.features.components.di.getKoinRootScope
 import org.koin.core.component.KoinScopeComponent
 
@@ -56,5 +58,6 @@ private fun SignInFeature(
             onNavigateToTimeline = onNavigateToTimeline,
             browser = scope.get(),
         ),
+        LocalSnackbarHostState provides remember { SnackbarHostState() },
     ) { content() }
 }

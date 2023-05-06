@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
+    <string name="back">戻る</string>
+
     <string name="time_now">今</string>
     <string name="time_seconds">%d秒前</string>
     <string name="time_minutes">%d分前</string>
@@ -7,4 +9,9 @@
     <string name="time_days">%d日前</string>
 
     <string name="amount">%,d</string>
+
+    <string name="error_unknown">予期せぬエラーが発生しました。</string>
+    <string name="error_timeout">リクエストがタイムアウトしました。時間をおいて再度お試しいただくか、サーバー管理者にお問い合わせください。</string>
+    <string name="error_4xx">リクエストに誤りがあります。開発者にお問い合わせください。</string>
+    <string name="error_5xx">サーバーでエラーが発生しました。時間をおいて再度お試しいただくか、サーバー管理者にお問い合わせください。</string>
 </resources>

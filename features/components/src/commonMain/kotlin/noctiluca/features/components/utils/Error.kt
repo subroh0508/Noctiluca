@@ -10,6 +10,7 @@ fun Throwable.label() = when (this) {
     else -> this::class.simpleName ?: "UnknownException"
 }
 
+@Suppress("MagicNumber")
 @Composable
 fun Throwable.description(): String {
     if (this is SocketTimeoutException) {

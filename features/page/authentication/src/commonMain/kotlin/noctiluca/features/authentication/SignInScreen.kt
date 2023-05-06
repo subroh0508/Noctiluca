@@ -38,7 +38,10 @@ fun InstanceDetailScreen(
     koinComponent,
     onNavigateToTimeline,
 ) {
-    domain ?: return@SignInFeature
+    if (domain == null) {
+        onBackPressed()
+        return@SignInFeature
+    }
 
     InstanceDetailScaffold(domain, onBackPressed)
 }

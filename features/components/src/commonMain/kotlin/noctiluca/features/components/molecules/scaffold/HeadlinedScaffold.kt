@@ -41,45 +41,69 @@ private val HeadlinedScaffoldHorizontalPadding = 16.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeadlinedScaffold(
+fun <T : Any> LoadStateLargeHeadlinedScaffold(
+    loadState: LoadState,
     lazyListState: LazyListState,
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
-    topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
-    header: @Composable (TopAppBarScrollBehavior) -> Unit = {},
-    avatar: (@Composable (TopAppBarScrollBehavior) -> Unit)? = null,
+    tabComposeIndex: Int = Int.MAX_VALUE,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    topAppBar: @Composable (TopAppBarScrollBehavior, Job?, T?) -> Unit = { _, _, _ -> },
+    header: @Composable (TopAppBarScrollBehavior, T) -> Unit = { _, _ -> },
+    avatar: (@Composable (TopAppBarScrollBehavior, T) -> Unit) = { _, _ -> },
+    bottomBar: @Composable BoxScope.(T, Dp) -> Unit = { _, _ -> },
     tabs: @Composable () -> Unit = {},
-    content: LazyListScope.(@Composable () -> Unit, Dp) -> Unit,
-) = Scaffold(
-    topBar = { topAppBar(scrollBehavior) },
-    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-) { paddingValues ->
-    LazyColumn(
-        state = lazyListState,
-        contentPadding = paddingValues,
-        modifier = Modifier.fillMaxSize(),
-    ) { content(tabs, HeadlinedScaffoldHorizontalPadding) }
-
-    header(scrollBehavior)
-    avatar?.let { it(scrollBehavior) }
-
-    if (lazyListState.firstVisibleItemIndex > 0) {
-        Box(
-            modifier = Modifier.offset(y = CollapsedTopAppBarHeight),
-        ) {
-            tabs()
-        }
-    }
-}
+    fallback: @Composable (Throwable?, PaddingValues) -> Unit = { _, _ -> },
+    content: LazyListScope.(T, @Composable () -> Unit, Dp) -> Unit,
+) = LoadStateHeadlinedScaffold(
+    loadState,
+    lazyListState,
+    tabComposeIndex,
+    TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
+    snackbarHostState,
+    topAppBar,
+    header,
+    avatar,
+    bottomBar,
+    tabs,
+    fallback,
+    content,
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun <T : Any> LoadStateHeadlinedScaffold(
+fun <T : Any> LoadStateSmallHeadlinedScaffold(
+    loadState: LoadState,
+    lazyListState: LazyListState,
+    tabComposeIndex: Int = Int.MAX_VALUE,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    topAppBar: @Composable (TopAppBarScrollBehavior, Job?, T?) -> Unit = { _, _, _ -> },
+    bottomBar: @Composable BoxScope.(T, Dp) -> Unit = { _, _ -> },
+    tabs: @Composable () -> Unit = {},
+    fallback: @Composable (Throwable?, PaddingValues) -> Unit = { _, _ -> },
+    content: LazyListScope.(T, @Composable () -> Unit, Dp) -> Unit,
+) = LoadStateHeadlinedScaffold(
+    loadState,
+    lazyListState,
+    tabComposeIndex,
+    TopAppBarDefaults.pinnedScrollBehavior(),
+    snackbarHostState,
+    topAppBar,
+    bottomBar = bottomBar,
+    tabs = tabs,
+    fallback = fallback,
+    content = content,
+)
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun <T : Any> LoadStateHeadlinedScaffold(
     loadState: LoadState,
     lazyListState: LazyListState,
     tabComposeIndex: Int = Int.MAX_VALUE,
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     topAppBar: @Composable (TopAppBarScrollBehavior, Job?, T?) -> Unit = { _, _, _ -> },
+    header: @Composable (TopAppBarScrollBehavior, T) -> Unit = { _, _ -> },
+    avatar: (@Composable (TopAppBarScrollBehavior, T) -> Unit) = { _, _ -> },
     bottomBar: @Composable BoxScope.(T, Dp) -> Unit = { _, _ -> },
     tabs: @Composable () -> Unit = {},
     fallback: @Composable (Throwable?, PaddingValues) -> Unit = { _, _ -> },
@@ -127,6 +151,9 @@ fun <T : Any> LoadStateHeadlinedScaffold(
             ) {
                 content(data, tabs, HeadlinedScaffoldHorizontalPadding)
             }
+
+            header(scrollBehavior, data)
+            avatar(scrollBehavior, data)
 
             if (lazyListState.firstVisibleItemIndex >= tabComposeIndex) {
                 Box(

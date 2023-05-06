@@ -2,11 +2,13 @@ package noctiluca.features.accountdetail.state
 
 import androidx.compose.runtime.*
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.LocalScope
 import noctiluca.features.components.di.getKoinRootScope
+import noctiluca.features.components.model.LoadState
 import noctiluca.features.components.state.AuthorizedComposeState
 import noctiluca.features.components.state.rememberAuthorizedComposeState
 import noctiluca.features.components.state.runCatchingWithAuth
@@ -15,9 +17,11 @@ import noctiluca.status.model.Status
 import org.koin.core.scope.Scope
 
 internal data class AccountDetail(
-    val attributes: AccountAttributes? = null,
+    val loadState: LoadState = LoadState.Initial,
     val status: List<Status> = listOf(),
-)
+) {
+    val attributes: AccountAttributes? get() = loadState.getValueOrNull()
+}
 
 internal class AccountDetailState(
     private val id: AccountId,
@@ -37,11 +41,14 @@ internal class AccountDetailState(
     )
 
     fun load(scope: CoroutineScope) {
-        scope.launch {
+        val job = scope.launch(start = CoroutineStart.LAZY) {
             runCatchingWithAuth { fetchAccountAttributesUseCase.execute(id) }
-                .onSuccess { detail.value = detail.value.copy(attributes = it) }
-                .onFailure { /* back to previous page */ }
+                .onSuccess { detail.value = detail.value.copy(loadState = LoadState.Loaded(it)) }
+                .onFailure { detail.value = detail.value.copy(loadState = LoadState.Error(it)) }
         }
+
+        detail.value = detail.value.copy(loadState = LoadState.Loading(job))
+        job.start()
     }
 }
 

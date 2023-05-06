@@ -42,7 +42,7 @@ internal fun InstanceDetailScaffold(
 
     SnackbarForAuthorizationError()
 
-    LoadStateHeadlinedScaffold<Instance>(
+    LoadStateSmallHeadlinedScaffold<Instance>(
         instanceLoadState,
         tabbedScrollState.lazyListState,
         tabComposeIndex = 3,

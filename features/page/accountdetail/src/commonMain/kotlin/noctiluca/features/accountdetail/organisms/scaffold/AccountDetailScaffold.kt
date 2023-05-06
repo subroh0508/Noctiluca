@@ -21,7 +21,7 @@ import noctiluca.features.components.molecules.list.infiniteScrollFooter
 import noctiluca.features.components.molecules.list.items
 import noctiluca.features.components.molecules.scaffold.HeadlineAvatar
 import noctiluca.features.components.molecules.scaffold.HeadlineHeader
-import noctiluca.features.components.molecules.scaffold.HeadlinedScaffold
+import noctiluca.features.components.molecules.scaffold.LoadStateLargeHeadlinedScaffold
 import noctiluca.features.components.utils.format
 import noctiluca.features.components.utils.toYearMonthDay
 import noctiluca.features.shared.account.AccountName
@@ -35,30 +35,30 @@ fun AccountDetailScaffold(
     id: AccountId,
     onBackToPreviousScreen: () -> Unit,
 ) {
-    val detail by rememberAccountDetail(id)
+    val accountDetailLoadState by rememberAccountDetail(id)
     val statuses = rememberAccountStatuses(id)
     val statusesScrollState = rememberTabbedAccountStatusesState(statuses.value.tab)
 
-    val (attributes) = detail
-
-    HeadlinedScaffold(
+    LoadStateLargeHeadlinedScaffold<AccountAttributes>(
+        accountDetailLoadState.loadState,
         statusesScrollState.lazyListState,
-        topAppBar = { scrollBehavior ->
+        tabComposeIndex = 1,
+        topAppBar = { scrollBehavior, _, attributes ->
             AccountHeaderTopAppBar(
                 attributes,
                 scrollBehavior,
                 onBackPressed = { onBackToPreviousScreen() },
             )
         },
-        header = { scrollBehavior ->
+        header = { scrollBehavior, attributes ->
             HeadlineHeader(
-                attributes?.header,
+                attributes.header,
                 scrollBehavior,
             )
         },
-        avatar = { scrollBehavior ->
+        avatar = { scrollBehavior, attributes ->
             HeadlineAvatar(
-                attributes?.avatar,
+                attributes.avatar,
                 scrollBehavior,
             )
         },
@@ -68,7 +68,7 @@ fun AccountDetailScaffold(
                 statusesScrollState,
             )
         },
-    ) { tabs, horizontalPadding ->
+    ) { attributes, tabs, horizontalPadding ->
         item {
             AccountDetailCaption(
                 attributes,

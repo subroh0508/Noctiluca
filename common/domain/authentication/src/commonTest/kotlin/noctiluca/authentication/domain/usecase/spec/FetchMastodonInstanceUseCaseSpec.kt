@@ -11,7 +11,9 @@ import io.ktor.http.*
 import noctiluca.api.mastodon.Api
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
-import noctiluca.authentication.domain.usecase.json.JSON_INSTANCE
+import noctiluca.authentication.domain.usecase.json.JSON_EXTENDED_DESCRIPTION
+import noctiluca.authentication.domain.usecase.json.JSON_V4_INSTANCE_BY_V1_API
+import noctiluca.authentication.domain.usecase.json.JSON_V4_INSTANCE_BY_V2_API
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.mock.MockHttpClientEngine
 
@@ -20,7 +22,9 @@ class FetchMastodonInstanceUseCaseSpec : DescribeSpec({
         context("when the server returns valid response") {
             val useCase = buildUseCase(
                 MockHttpClientEngine
-                    .mock(Api.V1.Instance(), JSON_INSTANCE)
+                    .mock(Api.V1.Instance(), JSON_V4_INSTANCE_BY_V1_API)
+                    .mock(Api.V2.Instance(), JSON_V4_INSTANCE_BY_V2_API)
+                    .mock(Api.V1.Instance.ExtendedDescription(), JSON_EXTENDED_DESCRIPTION)
                     .build(),
             )
 
@@ -35,6 +39,7 @@ class FetchMastodonInstanceUseCaseSpec : DescribeSpec({
             val useCase = buildUseCase(
                 MockHttpClientEngine
                     .mock(Api.V1.Instance(), HttpStatusCode.BadRequest)
+                    .mock(Api.V1.Instance.ExtendedDescription(), HttpStatusCode.BadRequest)
                     .build(),
             )
 

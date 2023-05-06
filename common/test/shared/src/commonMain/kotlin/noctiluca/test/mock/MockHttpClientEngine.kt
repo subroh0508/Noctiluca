@@ -33,7 +33,7 @@ object MockHttpClientEngine {
 
         fun build() = MockEngine { request ->
             valid.forEach { (url, expected) ->
-                if (request.url.toString().contains(url)) {
+                if (isMatchedUrl(request, url)) {
                     return@MockEngine respond(
                         content = ByteReadChannel(expected),
                         status = HttpStatusCode.OK,
@@ -43,7 +43,7 @@ object MockHttpClientEngine {
             }
 
             invalid.forEach { (url, expected) ->
-                if (request.url.toString().contains(url)) {
+                if (isMatchedUrl(request, url)) {
                     return@MockEngine respond(
                         content = ByteReadChannel("\"error\":\"${expected.description}\""),
                         status = expected,
@@ -53,13 +53,18 @@ object MockHttpClientEngine {
             }
 
             error.forEach { (url, exception) ->
-                if (request.url.toString().contains(url)) {
+                if (isMatchedUrl(request, url)) {
                     throw exception
                 }
             }
 
             mockError()
         }
+
+        private fun isMatchedUrl(
+            request: HttpRequestData,
+            expected: String,
+        ) = request.url.toString().split("?")[0].endsWith(expected)
     }
 
     inline fun <reified T> mock(resource: T, expected: String) = Builder().mock(resource, expected)

@@ -25,7 +25,9 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
         context("when the server returns valid response") {
             val useCase = buildUseCase(
                 MockHttpClientEngine
-                    .mock(Api.V1.Instance(), JSON_INSTANCE)
+                    .mock(Api.V1.Instance(), JSON_V4_INSTANCE_BY_V1_API)
+                    .mock(Api.V2.Instance(), JSON_V4_INSTANCE_BY_V2_API)
+                    .mock(Api.V1.Instance.ExtendedDescription(), JSON_EXTENDED_DESCRIPTION)
                     .build(),
             )
 
@@ -41,6 +43,7 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
             val useCase = buildUseCase(
                 MockHttpClientEngine
                     .mock(Api.V1.Instance(), HttpStatusCode.BadRequest)
+                    .mock(Api.V1.Instance.ExtendedDescription(), HttpStatusCode.BadRequest)
                     .build(),
             )
 
@@ -58,7 +61,7 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
                 val useCase = buildUseCase(
                     MockHttpClientEngine
                         .mock(Api.V1.Instance(), UnknownHostException())
-                        .mock(InstancesSocialApi.Instances(), JSON_INSTANCES)
+                        .mock(InstancesSocialApi.Instances.Search(), JSON_INSTANCES)
                         .build(),
                 )
 
@@ -79,7 +82,7 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
                 val useCase = buildUseCase(
                     MockHttpClientEngine
                         .mock(Api.V1.Instance(), UnknownHostException())
-                        .mock(InstancesSocialApi.Instances(), HttpStatusCode.BadRequest)
+                        .mock(InstancesSocialApi.Instances.Search(), HttpStatusCode.BadRequest)
                         .build(),
                 )
 

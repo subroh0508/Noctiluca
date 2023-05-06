@@ -40,7 +40,13 @@ internal class InstanceRepositoryImpl(
     }
 
     private suspend fun getInstance(domain: String): Instance {
-        val v1Instance = runCatching { v1.getInstance(domain) }.getOrNull()
+        val result = runCatching { v1.getInstance(domain) }
+        val exception = result.exceptionOrNull()
+        if (exception is UnknownHostException) {
+            throw exception
+        }
+
+        val v1Instance = result.getOrNull()
 
         if (v1Instance == null || v1Instance.version.startsWith("4")) {
             val extendedDescription = v1.getInstanceExtendedDescription(domain).content

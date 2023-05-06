@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.organisms.scaffold
+package noctiluca.features.accountdetail.templates.scaffold
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

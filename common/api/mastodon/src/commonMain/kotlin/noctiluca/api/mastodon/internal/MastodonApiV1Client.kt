@@ -9,18 +9,27 @@ import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.account.RelationshipJson
+import noctiluca.api.mastodon.json.extendeddescription.ExtendedDescriptionJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
 import noctiluca.repository.TokenCache
 
 internal class MastodonApiV1Client(
-    private val token: TokenCache,
-    private val client: HttpClient,
-) : MastodonApiV1 {
+    override val token: TokenCache,
+    override val client: HttpClient,
+) : MastodonApiV1, AbstractMastodonApiClient() {
     override suspend fun getInstance(
         domain: String,
     ): V1InstanceJson = client.get(
         Api.V1.Instance(),
+        domain = domain,
+        skipAuthorization = true,
+    ).body()
+
+    override suspend fun getInstanceExtendedDescription(
+        domain: String,
+    ): ExtendedDescriptionJson = client.get(
+        Api.V1.Instance.ExtendedDescription(),
         domain = domain,
         skipAuthorization = true,
     ).body()
@@ -51,6 +60,21 @@ internal class MastodonApiV1Client(
         parameter("max_id", maxId)
         parameter("since_id", sinceId)
         parameter("min_id", minId)
+        parameter("limit", limit.toString())
+    }.body()
+
+    override suspend fun getTimelinesPublic(
+        domain: String,
+        maxId: String?,
+        limit: Int,
+    ): List<StatusJson> = client.get(
+        Api.V1.Timelines.Public(),
+        domain = domain,
+        skipAuthorization = true,
+    ) {
+        parameter("local", true)
+        parameter("only_media", false)
+        parameter("max_id", maxId)
         parameter("limit", limit.toString())
     }.body()
 
@@ -133,53 +157,4 @@ internal class MastodonApiV1Client(
         parameter("exclude_reblogs", false)
         parameter("limit", limit.toString())
     }.body()
-
-    private suspend inline fun <reified T : Any> HttpClient.get(
-        resource: T,
-        domain: String? = null,
-        accessToken: String? = null,
-        skipAuthorization: Boolean = false,
-        httpRequestBuilder: HttpRequestBuilder.() -> Unit = {},
-    ) = get(resource, builder = {
-        setAccessTokenAndHost(domain, accessToken, skipAuthorization)
-        httpRequestBuilder()
-    })
-
-    private suspend inline fun <reified T : Any> HttpClient.post(
-        resource: T,
-        domain: String? = null,
-        skipAuthorization: Boolean = false,
-    ) = post(resource) {
-        setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
-    }
-
-    private suspend inline fun <reified T : Any, reified E : Any> HttpClient.post(
-        resource: T,
-        body: E,
-        domain: String? = null,
-        skipAuthorization: Boolean = false,
-    ) = post(resource) {
-        setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
-        setBody(body)
-    }
-
-    private suspend fun HttpRequestBuilder.setAccessTokenAndHost(
-        domain: String? = null,
-        accessToken: String? = null,
-        skipAuthorization: Boolean = false,
-    ) {
-        val token = accessToken ?: getCurrentAccessToken()
-        val host = domain ?: getCurrentDomain()
-
-        if (host != null) {
-            this.host = host
-        }
-
-        if (token != null && !skipAuthorization) {
-            bearerAuth(token)
-        }
-    }
-
-    private suspend fun getCurrentAccessToken() = token.getCurrentAccessToken()
-    private suspend fun getCurrentDomain() = token.getCurrentDomain()
 }

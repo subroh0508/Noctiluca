@@ -15,6 +15,8 @@ fun Routing(
     signIn(
         browser,
         onNavigateToTimeline = { navController.navigateToTimeline() },
+        onNavigateToInstanceDetail = { navController.navigateToInstanceDetail(it) },
+        onBackPressed = { navController.popBackStack() },
     )
 
     timeline(

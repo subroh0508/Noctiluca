@@ -1,18 +1,22 @@
 package noctiluca.authentication.domain.usecase.json
 
+import io.ktor.http.*
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.URL_SAMPLE_COM
 
-const val INSTANCE_NAME = "Instance Sample"
+const val V4_INSTANCE_NAME = "Instance Sample"
+const val V3_INSTANCE_NAME = "Old Instance Sample"
+
+const val DOMAIN_V3_INSTANCE = "v3.sample.com"
+val URL_V3_INSTANCE = "${URLProtocol.HTTPS.name}://$DOMAIN_V3_INSTANCE"
 
 const val INSTANCE_DOMAIN_SUGGESTION_1 = "sample.jp"
 const val INSTANCE_DOMAIN_SUGGESTION_2 = "sample.net"
-const val INSTANCE_DOMAIN_SUGGESTION_3 = "sample.org"
 
-val JSON_INSTANCE = """
+val JSON_V4_INSTANCE_BY_V1_API = """
     {
       "uri": "$DOMAIN_SAMPLE_COM",
-      "title": "$INSTANCE_NAME",
+      "title": "$V4_INSTANCE_NAME",
       "short_description": "short description",
       "description": "description",
       "email": "admin@$DOMAIN_SAMPLE_COM",
@@ -146,6 +150,146 @@ val JSON_INSTANCE = """
           "text": "ルール2"
         }
       ]
+    }
+""".trim()
+
+val JSON_V4_INSTANCE_BY_V2_API = """
+    {
+      "domain": "$DOMAIN_SAMPLE_COM",
+      "title": "$V4_INSTANCE_NAME",
+      "version": "4.0.2",
+      "source_url": "https://github.com/sample/sample",
+      "description": "description",
+      "usage": {
+        "users": {
+          "active_month": 123
+        }
+      },
+      "thumbnail": {
+        "url": "$URL_SAMPLE_COM/files/thumbnail.png",
+        "blurhash": "LEHV6nWB2yk8pyo0adR*.7kCMdnj",
+        "versions": {
+          "@1x": "$URL_SAMPLE_COM/site_uploads/files/000/000/001/@1x/57c12f441d083cde.png",
+          "@2x": "$URL_SAMPLE_COM/site_uploads/files/000/000/001/@2x/57c12f441d083cde.png"
+        }
+      },
+      "languages": [
+        "ja"
+      ],
+      "configuration": {
+        "urls": {
+          "streaming": "wss://$DOMAIN_SAMPLE_COM"
+        },
+        "accounts": {
+          "max_featured_tags": 10
+        },
+        "statuses": {
+          "max_characters": 500,
+          "max_media_attachments": 4,
+          "characters_reserved_per_url": 23
+        },
+        "media_attachments": {
+          "supported_mime_types": [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/heic",
+            "image/heif",
+            "image/webp",
+            "image/avif",
+            "video/webm",
+            "video/mp4",
+            "video/quicktime",
+            "video/ogg",
+            "audio/wave",
+            "audio/wav",
+            "audio/x-wav",
+            "audio/x-pn-wave",
+            "audio/vnd.wave",
+            "audio/ogg",
+            "audio/vorbis",
+            "audio/mpeg",
+            "audio/mp3",
+            "audio/webm",
+            "audio/flac",
+            "audio/aac",
+            "audio/m4a",
+            "audio/x-m4a",
+            "audio/mp4",
+            "audio/3gpp",
+            "video/x-ms-asf"
+          ],
+          "image_size_limit": 10485760,
+          "image_matrix_limit": 16777216,
+          "video_size_limit": 41943040,
+          "video_frame_rate_limit": 60,
+          "video_matrix_limit": 2304000
+        },
+        "polls": {
+            "max_options": 4,
+            "max_characters_per_option": 50,
+            "min_expiration": 300,
+            "max_expiration": 2629746
+        },
+        "translation": {
+          "enabled": true
+        }
+      },
+      "registrations": {
+        "enabled": true,
+        "approval_required": false,
+        "message": null
+      },
+      "contact": {
+        "email": "admin@$DOMAIN_SAMPLE_COM",
+        "account": {
+          "id": "1",
+          "username": "test1",
+          "acct": "test1",
+          "display_name": "サンプル太郎",
+          "locked": false,
+          "bot": false,
+          "discoverable": false,
+          "group": false,
+          "created_at": "2019-04-01T00:00:00.000Z",
+          "note": "<p>note</p>",
+          "url": "$URL_SAMPLE_COM/@test1",
+          "avatar": "$URL_SAMPLE_COM/accounts/avatars/avater.png",
+          "avatar_static": "$URL_SAMPLE_COM/accounts/avatars/original/avater.png",
+          "header": "$URL_SAMPLE_COM/accounts/headers/header.png",
+          "header_static": "$URL_SAMPLE_COM/accounts/headers/original/header.png",
+          "followers_count": 100,
+          "following_count": 100,
+          "statuses_count": 1000,
+          "last_status_at": "2022-12-31",
+          "noindex": false,
+          "emojis": [],
+          "fields": [
+            {
+              "name": "フィールド1",
+              "value": "ほげほげ",
+              "verified_at": null
+            }
+          ]
+        }
+      },
+      "rules": [
+        {
+          "id": "1",
+          "text": "ルール1"
+        },
+        {
+          "id": "2",
+          "text": "ルール2"
+        }
+      ]
+    }
+""".trim()
+
+val JSON_EXTENDED_DESCRIPTION = """
+    {
+      "updated_at": "2019-04-01T00:00:00.000Z",
+      "content": "Extended Description"
     }
 """.trim()
 
@@ -283,14 +427,14 @@ val JSON_INSTANCES = """
         },
         {
           "id": "5aa7f72d1a1b3f1036f3d267",
-          "name": "$INSTANCE_DOMAIN_SUGGESTION_3",
+          "name": "$V3_INSTANCE_NAME",
           "added_at": "2019-04-01T00:00:00.000Z",
           "updated_at": "2019-04-01T00:00:00.000Z",
           "checked_at": "2019-04-01T00:00:00.000Z",
           "uptime": 1,
           "up": true,
           "dead": false,
-          "version": "4.1.1",
+          "version": "3.3.3",
           "ipv6": true,
           "https_score": 10,
           "https_rank": "E ",
@@ -320,15 +464,155 @@ val JSON_INSTANCES = """
               "games"
             ]
           },
-          "thumbnail": "https://$INSTANCE_DOMAIN_SUGGESTION_3/files/thumbnail.png",
-          "thumbnail_proxy": "https://$INSTANCE_DOMAIN_SUGGESTION_3/proxy",
+          "thumbnail": "$URL_V3_INSTANCE/files/thumbnail.png",
+          "thumbnail_proxy": "$URL_V3_INSTANCE/proxy",
           "active_users": 11,
-          "email": "admin@$INSTANCE_DOMAIN_SUGGESTION_3",
+          "email": "admin@$DOMAIN_V3_INSTANCE",
           "admin": "admin"
         }
       ],
       "pagination": {
         "total": 4
       }
+    }
+""".trim()
+
+val JSON_V3_INSTANCE_BY_V1_API = """
+    {
+      "uri": "$DOMAIN_V3_INSTANCE",
+      "title": "$V3_INSTANCE_NAME",
+      "short_description": "short description",
+      "description": "description",
+      "email": "admin@$DOMAIN_V3_INSTANCE",
+      "version": "3.3.3",
+      "urls": {
+        "streaming_api": "wss://$DOMAIN_V3_INSTANCE"
+      },
+      "stats": {
+        "user_count": 100,
+        "status_count": 1000,
+        "domain_count": 200
+      },
+      "thumbnail": "$URL_V3_INSTANCE/files/thumbnail.png",
+      "languages": [
+        "ja"
+      ],
+      "registrations": true,
+      "approval_required": false,
+      "invites_enabled": false,
+      "configuration": {
+        "accounts": {
+          "max_featured_tags": 10
+        },
+        "statuses": {
+          "max_characters": 500,
+          "max_media_attachments": 4,
+          "characters_reserved_per_url": 23
+        },
+        "media_attachments": {
+          "supported_mime_types": [
+            "image/jpeg",
+            "image/png",
+            "image/gif",
+            "image/heic",
+            "image/heif",
+            "image/webp",
+            "image/avif",
+            "video/webm",
+            "video/mp4",
+            "video/quicktime",
+            "video/ogg",
+            "audio/wave",
+            "audio/wav",
+            "audio/x-wav",
+            "audio/x-pn-wave",
+            "audio/vnd.wave",
+            "audio/ogg",
+            "audio/vorbis",
+            "audio/mpeg",
+            "audio/mp3",
+            "audio/webm",
+            "audio/flac",
+            "audio/aac",
+            "audio/m4a",
+            "audio/x-m4a",
+            "audio/mp4",
+            "audio/3gpp",
+            "video/x-ms-asf"
+          ],
+          "image_size_limit": 10485760,
+          "image_matrix_limit": 16777216,
+          "video_size_limit": 41943040,
+          "video_frame_rate_limit": 60,
+          "video_matrix_limit": 2304000
+        },
+        "polls": {
+            "max_options": 4,
+            "max_characters_per_option": 50,
+            "min_expiration": 300,
+            "max_expiration": 2629746
+        }
+      },
+      "contact_account": {
+        "id": "1",
+        "username": "test1",
+        "acct": "test1",
+        "display_name": "サンプル太郎",
+        "locked": false,
+        "bot": false,
+        "discoverable": false,
+        "group": false,
+        "created_at": "2019-04-01T00:00:00.000Z",
+        "note": "<p>note</p>",
+        "url": "$URL_V3_INSTANCE/@test1",
+        "avatar": "$URL_V3_INSTANCE/accounts/avatars/avater.png",
+        "avatar_static": "$URL_V3_INSTANCE/accounts/avatars/original/avater.png",
+        "header": "$URL_V3_INSTANCE/accounts/headers/header.png",
+        "header_static": "$URL_V3_INSTANCE/accounts/headers/original/header.png",
+        "followers_count": 100,
+        "following_count": 100,
+        "statuses_count": 1000,
+        "last_status_at": "2022-12-31",
+        "noindex": false,
+        "source": {
+          "privacy": "public",
+          "sensitive": false,
+          "language": null,
+          "note": "note",
+          "fields": [
+            {
+              "name": "フィールド1",
+              "value": "ほげほげ",
+              "verified_at": null
+            }
+          ],
+          "follow_requests_count": 0
+        },
+        "emojis": [],
+        "fields": [
+          {
+            "name": "フィールド1",
+            "value": "ほげほげ",
+            "verified_at": null
+          }
+        ],
+        "role": {
+          "id": "-99",
+          "name": "",
+          "permissions": "0",
+          "color": "",
+          "highlighted": false
+        }
+      },
+      "rules": [
+        {
+          "id": "1",
+          "text": "ルール1"
+        },
+        {
+          "id": "2",
+          "text": "ルール2"
+        }
+      ]
     }
 """.trim()

@@ -21,11 +21,13 @@ import java.net.UnknownHostException
 import noctiluca.api.instancessocial.Api as InstancesSocialApi
 
 class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
-    describe("#execute") {
+    describe("#execute: for v4") {
         context("when the server returns valid response") {
             val useCase = buildUseCase(
                 MockHttpClientEngine
-                    .mock(Api.V1.Instance(), JSON_INSTANCE)
+                    .mock(Api.V1.Instance(), JSON_V4_INSTANCE_BY_V1_API)
+                    .mock(Api.V2.Instance(), JSON_V4_INSTANCE_BY_V2_API)
+                    .mock(Api.V1.Instance.ExtendedDescription(), JSON_EXTENDED_DESCRIPTION)
                     .build(),
             )
 
@@ -41,6 +43,7 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
             val useCase = buildUseCase(
                 MockHttpClientEngine
                     .mock(Api.V1.Instance(), HttpStatusCode.BadRequest)
+                    .mock(Api.V1.Instance.ExtendedDescription(), HttpStatusCode.BadRequest)
                     .build(),
             )
 
@@ -58,7 +61,7 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
                 val useCase = buildUseCase(
                     MockHttpClientEngine
                         .mock(Api.V1.Instance(), UnknownHostException())
-                        .mock(InstancesSocialApi.Instances(), JSON_INSTANCES)
+                        .mock(InstancesSocialApi.Instances.Search(), JSON_INSTANCES)
                         .build(),
                 )
 
@@ -69,7 +72,7 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
                             DOMAIN_SAMPLE_COM,
                             INSTANCE_DOMAIN_SUGGESTION_1,
                             INSTANCE_DOMAIN_SUGGESTION_2,
-                            INSTANCE_DOMAIN_SUGGESTION_3,
+                            V3_INSTANCE_NAME,
                         )
                     }
                 }
@@ -79,7 +82,79 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
                 val useCase = buildUseCase(
                     MockHttpClientEngine
                         .mock(Api.V1.Instance(), UnknownHostException())
-                        .mock(InstancesSocialApi.Instances(), HttpStatusCode.BadRequest)
+                        .mock(InstancesSocialApi.Instances.Search(), HttpStatusCode.BadRequest)
+                        .build(),
+                )
+
+                it("raises ClientRequestException") {
+                    shouldThrowExactly<ClientRequestException> {
+                        runBlocking { useCase.execute(query) }
+                    }
+                }
+            }
+        }
+    }
+
+    describe("#execute: for v3") {
+        context("when the server returns valid response") {
+            val useCase = buildUseCase(
+                MockHttpClientEngine
+                    .mock(Api.V1.Instance(), JSON_V3_INSTANCE_BY_V1_API)
+                    .build(),
+            )
+
+            it("returns instance information for suggestion") {
+                runBlocking { useCase.execute(DOMAIN_V3_INSTANCE) }.also {
+                    it should haveSize(1)
+                    it.first().domain should be(DOMAIN_V3_INSTANCE)
+                }
+            }
+        }
+
+        context("when the server returns invalid response") {
+            val useCase = buildUseCase(
+                MockHttpClientEngine
+                    .mock(Api.V1.Instance(), HttpStatusCode.BadRequest)
+                    .mock(Api.V1.Instance.ExtendedDescription(), HttpStatusCode.NotFound)
+                    .build(),
+            )
+
+            it("raises ClientRequestException") {
+                shouldThrowExactly<ClientRequestException> {
+                    runBlocking { useCase.execute(DOMAIN_V3_INSTANCE) }
+                }
+            }
+        }
+
+        val query = "sample"
+
+        context("when the client raises UnknownHostException") {
+            context("and the instances.social api returns valid response") {
+                val useCase = buildUseCase(
+                    MockHttpClientEngine
+                        .mock(Api.V1.Instance(), UnknownHostException())
+                        .mock(InstancesSocialApi.Instances.Search(), JSON_INSTANCES)
+                        .build(),
+                )
+
+                it("returns instances information for suggestion") {
+                    runBlocking { useCase.execute(query) }.also {
+                        it should haveSize(4)
+                        it.map(Instance.Suggest::domain) should containExactlyInAnyOrder(
+                            DOMAIN_SAMPLE_COM,
+                            INSTANCE_DOMAIN_SUGGESTION_1,
+                            INSTANCE_DOMAIN_SUGGESTION_2,
+                            V3_INSTANCE_NAME,
+                        )
+                    }
+                }
+            }
+
+            context("and the instances.social api returns invalid response") {
+                val useCase = buildUseCase(
+                    MockHttpClientEngine
+                        .mock(Api.V1.Instance(), UnknownHostException())
+                        .mock(InstancesSocialApi.Instances.Search(), HttpStatusCode.BadRequest)
                         .build(),
                 )
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="sign_in_client_name" translatable="false">noctiluca</string>
+    <string name="sign_in_client_name_path" translatable="false">/noctiluca</string>
     <string name="sign_in_oauth_scheme" translatable="false">oauth2redirect</string>
 
     <string name="sign_in_page_title">ようこそ</string>
@@ -8,5 +9,14 @@
     <string name="sign_in_search_instance_hint">ドメイン名を入力</string>
     <string name="sign_in_search_instances_empty">インスタンスが見つかりません</string>
     <string name="sign_in_request_authentication">ログイン</string>
-    <string name="sign_in_request_authentication_error">ログインエラー: </string>
+    <string name="sign_in_request_authentication_error">ログインエラー:</string>
+    <string name="sign_in_instance_detail_tab_info">概要</string>
+    <string name="sign_in_instance_detail_tab_extended_description">詳細</string>
+    <string name="sign_in_instance_detail_tab_local_timeline">ローカル</string>
+    <string name="sign_in_instance_detail_info_administrator_label">管理者</string>
+    <string name="sign_in_instance_detail_info_instance_stats_label">サーバーの情報</string>
+    <string name="sign_in_instance_detail_info_instance_active_user_count">%,d人</string>
+    <string name="sign_in_instance_detail_info_instance_active_user_count_support">アクティブユーザー数</string>
+    <string name="sign_in_instance_detail_info_instance_rule_label">サーバーのルール</string>
+    <string name="sign_in_instance_detail_info_instance_version_label">Mastodonのバージョン</string>
 </resources>

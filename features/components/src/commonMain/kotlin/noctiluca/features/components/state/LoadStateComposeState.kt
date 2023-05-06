@@ -15,7 +15,6 @@ interface LoadStateComposeState<T : Any> : MutableState<LoadState> {
     val loading get() = value is LoadState.Loading
     val loaded get() = value !is LoadState.Initial && value !is LoadState.Loading
 
-    @Suppress("UNCHECKED_CAST")
     fun getValueOrNull(): T? = value.getValueOrNull()
     fun getErrorOrNull() = value.getErrorOrNull()
     fun cancel() = value.cancel()

@@ -10,6 +10,8 @@ kotlin {
                 implementation(project(":common:api:instancessocial"))
                 implementation(project(":common:api:mastodon"))
                 implementation(project(":common:data:instance:model"))
+                implementation(project(":common:data:status:model"))
+                implementation(project(":common:data:status:infra"))
 
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.kotlinx.serialization)

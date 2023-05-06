@@ -1,21 +1,37 @@
 package noctiluca.features.components.atoms.text
 
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
 
 @Composable
 fun HtmlText(
     text: String,
     modifier: Modifier = Modifier,
+    urlColor: Color = MaterialTheme.colorScheme.primary,
+    color: Color = Color.Unspecified,
+    overflow: TextOverflow = TextOverflow.Clip,
     style: TextStyle = LocalTextStyle.current,
-) = ExpectHtmlText(removeInvisibleTags(text), modifier, style)
+) = ExpectHtmlText(
+    removeInvisibleTags(text),
+    modifier,
+    urlColor,
+    color,
+    overflow,
+    style,
+)
 
 @Composable
 internal expect fun ExpectHtmlText(
     text: String,
     modifier: Modifier,
+    urlColor: Color,
+    color: Color,
+    overflow: TextOverflow,
     style: TextStyle,
 )
 

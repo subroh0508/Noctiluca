@@ -49,7 +49,7 @@ internal fun TimelineScaffold(
         bottomBar = {
             TootCard(
                 modifier = Modifier.fillMaxWidth()
-                    .padding(8.dp)
+                    .padding(16.dp)
                     .align(Alignment.BottomCenter)
             )
         },

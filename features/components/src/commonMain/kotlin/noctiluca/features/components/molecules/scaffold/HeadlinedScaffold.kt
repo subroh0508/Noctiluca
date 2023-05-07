@@ -169,12 +169,12 @@ private fun <T : Any> LoadStateHeadlinedScaffold(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeadlineTopAppBar(
-    title: @Composable () -> Unit,
+    title: @Composable (TopAppBarState) -> Unit,
     onBackPressed: () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
 ) = TopAppBar(
-    { title() },
+    { title(scrollBehavior.state) },
     navigationIcon = {
         IconButton(onClick = onBackPressed) {
             Icon(
@@ -193,19 +193,17 @@ fun HeadlineTopAppBar(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeadlineTopAppBar(
-    title: @Composable (Boolean) -> Unit,
-    contentScrollOffset: Float,
+fun LargeHeadlineTopAppBar(
+    title: @Composable (TopAppBarState) -> Unit,
     modifier: Modifier = Modifier,
     onBackPressed: () -> Unit = {},
     actions: @Composable RowScope.() -> Unit = {},
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
 ) {
-    val isScrolled by remember { derivedStateOf { scrollBehavior.state.contentOffset < contentScrollOffset } }
     val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
 
     LargeTopAppBar(
-        { title(isScrolled) },
+        { title(scrollBehavior.state) },
         modifier = modifier.background(
             Brush.verticalGradient(
                 colors = listOf(

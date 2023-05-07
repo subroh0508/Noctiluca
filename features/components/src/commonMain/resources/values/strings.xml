@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="back">戻る</string>
+    <string name="close">閉じる</string>
 
     <string name="time_now">今</string>
     <string name="time_seconds">%d秒前</string>
@@ -14,4 +15,16 @@
     <string name="error_timeout">リクエストがタイムアウトしました。時間をおいて再度お試しいただくか、サーバー管理者にお問い合わせください。</string>
     <string name="error_4xx">リクエストに誤りがあります。開発者にお問い合わせください。</string>
     <string name="error_5xx">サーバーでエラーが発生しました。時間をおいて再度お試しいただくか、サーバー管理者にお問い合わせください。</string>
+
+    <string name="visibility_public">公開</string>
+    <string name="visibility_unlisted">未収載</string>
+    <string name="visibility_private">フォロワーのみ</string>
+    <string name="visibility_direct">指定された相手のみ</string>
+    <string name="visibility_public_support_text">誰でも閲覧可</string>
+    <string name="visibility_unlisted_support_text">誰でも閲覧可、サイレント</string>
+    <string name="visibility_private_support_text">フォロワーのみ閲覧可</string>
+    <string name="visibility_direct_support_text">指定された相手のみ閲覧可</string>
+
+    <string name="toot_support_text">今なにしてる？</string>
+    <string name="toot_warning_support_text">警告文</string>
 </resources>

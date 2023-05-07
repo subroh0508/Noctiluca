@@ -13,6 +13,7 @@ fun TabbedScaffold(
     scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
+    bottomBar: @Composable BoxScope.() -> Unit = {},
     tabs: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit,
 ) = Scaffold(
@@ -25,7 +26,11 @@ fun TabbedScaffold(
             .padding(paddingValues),
     ) {
         tabs()
-        content(paddingValues)
+
+        Box(Modifier.weight(1f)) {
+            content(paddingValues)
+            bottomBar()
+        }
     }
 
     Box(Modifier.offset(y = paddingValues.calculateTopPadding())) {

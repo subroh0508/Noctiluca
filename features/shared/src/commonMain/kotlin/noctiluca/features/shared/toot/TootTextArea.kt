@@ -1,7 +1,6 @@
 package noctiluca.features.shared.toot
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Attachment
 import androidx.compose.material.icons.filled.Send
@@ -11,7 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.divider.Divider
 import noctiluca.features.components.atoms.textfield.TextArea
@@ -35,23 +35,29 @@ fun TootTextArea(
     modifier: Modifier = Modifier,
 ) {
     var isContentWarning by remember { mutableStateOf(false) }
-
     val leastCount by remember(content, warning) {
         derivedStateOf {
             MAX_CONTENT_LENGTH - content.length - (warning ?: "").length
         }
     }
 
+    val focusManager = LocalFocusManager.current
+
     Column(modifier) {
         WarningTextField(
             warning,
             isContentWarning,
+            focusManager,
             onChangeWarningText,
         )
 
         TextArea(
             content,
             onValueChange = { onChangeContent(it) },
+            onClickClear = {
+                focusManager.clearFocus()
+                onChangeContent(null)
+            },
             supportingText = getCommonString().toot_support_text,
             modifier = Modifier.fillMaxWidth()
                 .padding(TootAreaPadding),
@@ -93,6 +99,7 @@ fun TootTextArea(
 private fun WarningTextField(
     warning: String?,
     isContentWarning: Boolean,
+    focusManager: FocusManager,
     onValueChange: (String?) -> Unit,
 ) {
     if (!isContentWarning) {
@@ -102,6 +109,10 @@ private fun WarningTextField(
     TextArea(
         warning ?: "",
         onValueChange = { onValueChange(it) },
+        onClickClear = {
+            focusManager.clearFocus()
+            onValueChange(null)
+        },
         supportingText = getCommonString().toot_warning_support_text,
         modifier = Modifier.fillMaxWidth()
             .padding(TootAreaPadding),

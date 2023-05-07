@@ -10,8 +10,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.FocusManager
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.divider.Divider
 import noctiluca.features.components.atoms.textfield.TextArea
@@ -41,23 +39,16 @@ fun TootTextArea(
         }
     }
 
-    val focusManager = LocalFocusManager.current
-
     Column(modifier) {
         WarningTextField(
             warning,
             isContentWarning,
-            focusManager,
             onChangeWarningText,
         )
 
         TextArea(
             content,
             onValueChange = { onChangeContent(it) },
-            onClickClear = {
-                focusManager.clearFocus()
-                onChangeContent(null)
-            },
             supportingText = getCommonString().toot_support_text,
             modifier = Modifier.fillMaxWidth()
                 .padding(TootAreaPadding),
@@ -99,7 +90,6 @@ fun TootTextArea(
 private fun WarningTextField(
     warning: String?,
     isContentWarning: Boolean,
-    focusManager: FocusManager,
     onValueChange: (String?) -> Unit,
 ) {
     if (!isContentWarning) {
@@ -109,10 +99,6 @@ private fun WarningTextField(
     TextArea(
         warning ?: "",
         onValueChange = { onValueChange(it) },
-        onClickClear = {
-            focusManager.clearFocus()
-            onValueChange(null)
-        },
         supportingText = getCommonString().toot_warning_support_text,
         modifier = Modifier.fillMaxWidth()
             .padding(TootAreaPadding),

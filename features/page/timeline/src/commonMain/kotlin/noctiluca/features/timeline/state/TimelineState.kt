@@ -48,6 +48,8 @@ internal class TimelineListState(
         koinScope.get(),
     )
 
+    val currentTabIndex get() = value.indexOfFirst { it.foreground }
+
     fun findForeground() = value.find { it.foreground }
     fun setForeground(index: Int) {
         if (value[index].foreground) {

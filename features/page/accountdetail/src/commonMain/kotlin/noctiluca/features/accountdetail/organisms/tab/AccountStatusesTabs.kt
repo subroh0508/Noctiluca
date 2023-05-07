@@ -1,19 +1,13 @@
 package noctiluca.features.accountdetail.organisms.tab
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.Text
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.state.AccountStatuses
 import noctiluca.features.accountdetail.state.AccountStatusesState
+import noctiluca.features.components.atoms.tab.PrimaryTabs
 
 @Composable
 internal fun AccountStatusesTabs(
@@ -23,25 +17,16 @@ internal fun AccountStatusesTabs(
 ) {
     val (currentTab) = state.value
 
-    TabRow(
-        selectedTabIndex = currentTab.ordinal,
+    PrimaryTabs(
+        statusesScrollState.tabs,
+        currentTab.ordinal,
+        onClick = { _, (tab, _) ->
+            statusesScrollState.cacheScrollPosition(currentTab)
+            state.switch(tab)
+        },
+        transform = { (_, label) -> label },
         modifier = modifier,
-    ) {
-        statusesScrollState.tabs.forEach { (tab, title) ->
-            Tab(
-                tab == currentTab,
-                onClick = {
-                    statusesScrollState.cacheScrollPosition(currentTab)
-                    state.switch(tab)
-                },
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.height(48.dp),
-                ) { Text(title) }
-            }
-        }
-    }
+    )
 }
 
 @Composable

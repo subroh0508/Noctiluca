@@ -1,18 +1,13 @@
 package noctiluca.features.accountdetail.organisms.topappbar
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.components.atoms.appbar.HeadlineTopAppBar
+import noctiluca.features.components.molecules.scaffold.HeadlineText
+import noctiluca.features.components.molecules.scaffold.LargeHeadlineTopAppBar
 
 private const val CONTENT_SCROLL_OFFSET = -400F
 
@@ -22,66 +17,40 @@ fun AccountHeaderTopAppBar(
     detail: AccountAttributes?,
     scrollBehavior: TopAppBarScrollBehavior,
     onBackPressed: () -> Unit,
-) {
-    val isScrolled by remember { derivedStateOf { scrollBehavior.state.contentOffset < CONTENT_SCROLL_OFFSET } }
-    val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
-
-    HeadlineTopAppBar(
-        { HeadlineText(detail?.displayName, detail?.statusesCount, isScrolled) },
-        onBackPressed = onBackPressed,
-        actions = {
-            IconButton(onClick = {}) {
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = "Edit",
-                )
-            }
-        },
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = Color.Transparent,
-            scrolledContainerColor = Color.Transparent,
-        ),
-        scrollBehavior = scrollBehavior,
-        modifier = Modifier.background(
-            Brush.verticalGradient(
-                colors = listOf(
-                    Color.Black.copy(alpha = 0.75F),
-                    Color.Black.copy(alpha = alpha),
-                ),
-            ),
-        ),
-    )
-}
+) = LargeHeadlineTopAppBar(
+    { appAppBarState ->
+        HeadlineText(
+            detail,
+            appAppBarState,
+        )
+    },
+    onBackPressed = onBackPressed,
+    actions = {
+        IconButton(onClick = {}) {
+            Icon(
+                Icons.Default.Edit,
+                contentDescription = "Edit",
+            )
+        }
+    },
+    scrollBehavior = scrollBehavior,
+)
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Suppress("MagicNumber")
-private fun rememberScrolledContainerColorAlpha(
-    scrollBehavior: TopAppBarScrollBehavior,
-): State<Float> = remember {
-    derivedStateOf { scrollBehavior.state.collapsedFraction * 0.75F }
-}
-
-@Composable
 private fun HeadlineText(
-    screen: String?,
-    statusesCount: Int?,
-    isScrolled: Boolean,
+    attributes: AccountAttributes?,
+    topAppBarState: TopAppBarState,
 ) {
-    if (screen != null && statusesCount != null && isScrolled) {
-        Column {
-            Text(
-                screen,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    fontWeight = FontWeight.Medium,
-                ),
-            )
-            Text(
-                getString().account_detail_statuses.format(statusesCount),
-                style = MaterialTheme.typography.titleSmall.copy(
-                    fontWeight = FontWeight.Normal,
-                ),
-            )
-        }
+    attributes ?: return
+
+    val isHiddenHeadlineText by remember {
+        derivedStateOf { topAppBarState.contentOffset < CONTENT_SCROLL_OFFSET }
     }
+
+    HeadlineText(
+        attributes.displayName,
+        getString().account_detail_statuses.format(attributes.statusesCount),
+        isHiddenHeadlineText,
+    )
 }

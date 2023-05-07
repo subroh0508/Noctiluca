@@ -1,15 +1,12 @@
 package noctiluca.features.authentication.organisms.tab
 
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.state.InstancesTab
+import noctiluca.features.components.atoms.tab.PrimaryTabs
 import noctiluca.instance.model.Instance
 
 @Composable
@@ -21,22 +18,13 @@ internal fun InstanceDetailTabs(
         return
     }
 
-    TabRow(
-        selectedTabIndex = statusesScrollState.currentIndex,
+    PrimaryTabs(
+        statusesScrollState.tabs,
+        statusesScrollState.currentIndex,
+        onClick = { _, (tab, _) -> statusesScrollState.cacheScrollPosition(tab) },
+        transform = { (_, label) -> label },
         modifier = modifier,
-    ) {
-        statusesScrollState.tabs.forEach { (tab, label) ->
-            Tab(
-                selected = tab == statusesScrollState.tab,
-                onClick = { statusesScrollState.cacheScrollPosition(tab) },
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier.height(48.dp),
-                ) { Text(label) }
-            }
-        }
-    }
+    )
 }
 
 @Composable

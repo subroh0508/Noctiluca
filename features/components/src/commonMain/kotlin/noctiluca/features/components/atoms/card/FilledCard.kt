@@ -2,6 +2,9 @@ package noctiluca.features.components.atoms.card
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardColors
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CardElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -34,5 +37,11 @@ fun FilledCard(
 @Composable
 fun FilledCard(
     modifier: Modifier = Modifier,
+    colors: CardColors = CardDefaults.cardColors(),
+    elevation: CardElevation = CardDefaults.cardElevation(),
     content: @Composable ColumnScope.() -> Unit,
-) = Card(modifier) { content() }
+) = Card(
+    modifier,
+    colors = colors,
+    elevation = elevation,
+) { content() }

@@ -90,6 +90,7 @@ private fun StatusHeader(
         trailing = { baselineModifier ->
             VisibilityIcon(
                 visibility,
+                tint = MaterialTheme.colorScheme.outline,
                 modifier = Modifier.size(MaterialTheme.typography.titleSmall.fontSize.toDp())
                     .baseline(Alignment.Bottom, topOffset = 8)
                     .then(baselineModifier),
@@ -106,8 +107,9 @@ private fun StatusHeader(
 }
 
 @Composable
-private fun VisibilityIcon(
+internal fun VisibilityIcon(
     visibility: Status.Visibility,
+    tint: Color = LocalContentColor.current,
     modifier: Modifier = Modifier,
 ) {
     val icon = when (visibility) {
@@ -121,7 +123,7 @@ private fun VisibilityIcon(
         icon,
         contentDescription = visibility.name,
         modifier,
-        tint = MaterialTheme.colorScheme.outline,
+        tint = tint,
     )
 }
 

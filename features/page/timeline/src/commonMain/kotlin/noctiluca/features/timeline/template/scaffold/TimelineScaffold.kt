@@ -5,6 +5,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -17,6 +18,7 @@ import noctiluca.features.components.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.LocalTimelineListState
 import noctiluca.features.timeline.getString
+import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.tab.TimelineTabs
 import noctiluca.features.timeline.state.CurrentAuthorizedAccount
@@ -35,9 +37,26 @@ internal fun TimelineScaffold(
 
     TabbedScaffold(
         scrollBehavior,
-        topAppBar = { CurrentInstanceTopAppBar(account.value, scrollBehavior) { scope.launch { drawerState.open() } } },
+        topAppBar = {
+            CurrentInstanceTopAppBar(
+                account.value,
+                scrollBehavior,
+                onClickNavigationIcon = {
+                    scope.launch { drawerState.open() }
+                },
+            )
+        },
+        bottomBar = {
+            TootCard(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(8.dp)
+                    .align(Alignment.BottomCenter)
+            )
+        },
         tabs = { TimelineTabs() },
-    ) { TimelineLanes(scrollBehavior) }
+    ) {
+        TimelineLanes(scrollBehavior)
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

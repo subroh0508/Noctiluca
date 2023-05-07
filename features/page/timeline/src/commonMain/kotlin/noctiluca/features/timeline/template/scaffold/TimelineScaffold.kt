@@ -21,11 +21,11 @@ import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 @Composable
 internal fun TimelineScaffold(
     onReload: () -> Unit,
+    drawerState: DrawerState,
     bottomBar: @Composable () -> Unit,
     content: @Composable (PaddingValues, TopAppBarScrollBehavior) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     val account = rememberCurrentAuthorizedAccountStatus(onReload)

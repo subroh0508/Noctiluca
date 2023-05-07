@@ -31,33 +31,26 @@ fun TimelineScreen(
     onNavigateToAccountDetail: (String) -> Unit,
     onReload: () -> Unit,
     onBackToSignIn: () -> Unit,
-) = AuthorizedFeatureComposable(component, onReload, onBackToSignIn) { scope ->
-    val timeline = rememberTimelineStatus(scope)
-
-    CompositionLocalProvider(
-        LocalResources provides Resources(Locale.current.language),
-        LocalScope provides scope,
-        LocalTimelineListState provides timeline,
-    ) {
-        TimelineNavigationDrawer(
-            rememberCurrentAuthorizedAccountStatus(onReload),
-            onClickTopAccount = { onNavigateToAccountDetail(it.id.value) },
-            onClickDrawerMenu = { menu ->
-                handleOnClickDrawerItem(
-                    menu,
-                    onBackToSignIn,
-                )
-            },
-        ) {
-            TimelineScaffold(
-                onReload,
-                bottomBar = { TimelineNavigationBar() },
-            ) { paddingValues, scrollBehavior ->
-                TimelineLanes(
-                    paddingValues,
-                    scrollBehavior,
-                )
-            }
+) = TimelineFeature(component, onReload, onBackToSignIn) {
+    TimelineNavigationDrawer(
+        rememberCurrentAuthorizedAccountStatus(onReload),
+        onClickTopAccount = { onNavigateToAccountDetail(it.id.value) },
+        onClickDrawerMenu = { menu ->
+            handleOnClickDrawerItem(
+                menu,
+                onBackToSignIn,
+            )
+        },
+    ) { drawerState ->
+        TimelineScaffold(
+            onReload,
+            drawerState,
+            bottomBar = { TimelineNavigationBar() },
+        ) { paddingValues, scrollBehavior ->
+            TimelineLanes(
+                paddingValues,
+                scrollBehavior,
+            )
         }
     }
 }
@@ -91,6 +84,20 @@ private fun TimelineLanes(
             ),
         )
     }
+}
+
+@Composable
+private fun TimelineFeature(
+    component: KoinScopeComponent,
+    onReload: () -> Unit,
+    onBackToSignIn: () -> Unit,
+    content: @Composable () -> Unit,
+) = AuthorizedFeatureComposable(component, onReload, onBackToSignIn) { scope ->
+    CompositionLocalProvider(
+        LocalResources provides Resources(Locale.current.language),
+        LocalScope provides scope,
+        LocalTimelineListState provides rememberTimelineStatus(scope),
+    ) { content() }
 }
 
 private fun handleOnClickDrawerItem(

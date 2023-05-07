@@ -21,7 +21,7 @@ internal fun TimelineNavigationDrawer(
     authorizedAccountState: CurrentAuthorizedAccountState,
     onClickTopAccount: (Account) -> Unit,
     onClickDrawerMenu: (TimelineDrawerMenu) -> Unit,
-    content: @Composable () -> Unit,
+    content: @Composable (DrawerState) -> Unit,
 ) {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
 
@@ -35,7 +35,7 @@ internal fun TimelineNavigationDrawer(
             )
         },
         drawerState = drawerState,
-    ) { content() }
+    ) { content(drawerState) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

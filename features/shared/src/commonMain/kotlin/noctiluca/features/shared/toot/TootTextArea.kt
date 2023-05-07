@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.divider.Divider
+import noctiluca.features.components.atoms.textfield.TextArea
 import noctiluca.features.components.getCommonString
 import noctiluca.features.shared.status.VisibilityIcon
 import noctiluca.status.model.Status
@@ -76,17 +77,7 @@ fun TootTextArea(
 
             Spacer(Modifier.weight(1f))
 
-            Text(
-                leastCount.toString(),
-                color = if (leastCount > 0) {
-                    MaterialTheme.colorScheme.onSurfaceVariant
-                } else {
-                    MaterialTheme.colorScheme.error
-                },
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(end = 8.dp)
-                    .align(Alignment.CenterVertically),
-            )
+            LeastTextCount(leastCount)
 
             IconButton(onClick = { }) {
                 Icon(
@@ -117,47 +108,6 @@ private fun WarningTextField(
     )
 
     Divider(Modifier.padding(horizontal = TootAreaPadding))
-}
-
-@Composable
-private fun TextArea(
-    value: String?,
-    onValueChange: (String?) -> Unit,
-    supportingText: String? = null,
-    modifier: Modifier = Modifier,
-) = BasicTextField(
-    value ?: "",
-    onValueChange = { onValueChange(it.takeIf(String::isNotBlank)) },
-    modifier = modifier,
-    textStyle = LocalTextStyle.current.copy(
-        color = MaterialTheme.colorScheme.onSurface,
-    ),
-    cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
-    decorationBox = { innerTextField ->
-        TextAreaDecorationBox(
-            value,
-            supportingText,
-            innerTextField,
-        )
-    }
-)
-
-@Composable
-private fun TextAreaDecorationBox(
-    text: String?,
-    supportingText: String?,
-    innerTextField: @Composable () -> Unit,
-) = Box {
-    if (text.isNullOrBlank() && !supportingText.isNullOrBlank()) {
-        Text(
-            supportingText,
-            style = LocalTextStyle.current.copy(
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            ),
-        )
-    }
-
-    innerTextField()
 }
 
 @Composable
@@ -203,6 +153,21 @@ private fun OptionButtons(
         }
     }
 }
+
+@Composable
+private fun RowScope.LeastTextCount(
+    leastCount: Int,
+) = Text(
+    leastCount.toString(),
+    color = if (leastCount > 0) {
+        MaterialTheme.colorScheme.onSurfaceVariant
+    } else {
+        MaterialTheme.colorScheme.error
+    },
+    style = MaterialTheme.typography.bodySmall,
+    modifier = Modifier.padding(end = 8.dp)
+        .align(Alignment.CenterVertically),
+)
 
 @Composable
 private fun VisibleDropdownMenu(

@@ -233,9 +233,9 @@ fun LargeHeadlineTopAppBar(
 fun HeadlineText(
     text: String,
     supportingText: String,
-    isScrolled: Boolean,
+    isHiddenHeadlineText: Boolean,
 ) {
-    if (!isScrolled) {
+    if (!isHiddenHeadlineText) {
         return
     }
 

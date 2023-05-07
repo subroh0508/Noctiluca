@@ -9,21 +9,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import noctiluca.features.components.atoms.appbar.NavigateIconSize
 import noctiluca.features.components.atoms.appbar.TopAppBar
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.state.CurrentAuthorizedAccount
-import noctiluca.features.timeline.state.CurrentAuthorizedAccountState
 import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TimelineScaffold(
     onReload: () -> Unit,
-    drawerContent: @Composable (CoroutineScope, DrawerState, CurrentAuthorizedAccountState) -> Unit,
     bottomBar: @Composable () -> Unit,
     content: @Composable (PaddingValues, TopAppBarScrollBehavior) -> Unit,
 ) {
@@ -33,21 +30,16 @@ internal fun TimelineScaffold(
 
     val account = rememberCurrentAuthorizedAccountStatus(onReload)
 
-    ModalNavigationDrawer(
-        drawerContent = { drawerContent(scope, drawerState, account) },
-        drawerState = drawerState,
-    ) {
-        Scaffold(
-            topBar = {
-                CurrentInstanceTopAppBar(
-                    account.value,
-                    scrollBehavior,
-                ) { scope.launch { drawerState.open() } }
-            },
-            bottomBar = bottomBar,
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        ) { content(it, scrollBehavior) }
-    }
+    Scaffold(
+        topBar = {
+            CurrentInstanceTopAppBar(
+                account.value,
+                scrollBehavior,
+            ) { scope.launch { drawerState.open() } }
+        },
+        bottomBar = bottomBar,
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) { content(it, scrollBehavior) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

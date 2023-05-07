@@ -6,19 +6,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 import noctiluca.features.components.AuthorizedFeatureComposable
 import noctiluca.features.components.atoms.appbar.scrollToTop
 import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.navigationbar.TimelineNavigationBar
-import noctiluca.features.timeline.template.scaffold.TimelineScaffold
 import noctiluca.features.timeline.state.TimelineListState
+import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 import noctiluca.features.timeline.state.rememberTimelineStatus
-import noctiluca.features.timeline.template.drawer.TimelineDrawerSheet
+import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
+import noctiluca.features.timeline.template.scaffold.TimelineScaffold
 import org.koin.core.component.KoinScopeComponent
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
@@ -40,35 +39,26 @@ fun TimelineScreen(
         LocalScope provides scope,
         LocalTimelineListState provides timeline,
     ) {
-        TimelineScaffold(
-            onReload,
-            drawerContent = { scope, drawerState, account ->
-                TimelineDrawerSheet(
-                    account.value,
-                    onClickTopAccount = {
-                        scope.launch {
-                            drawerState.close()
-                            onNavigateToAccountDetail(it.id.value)
-                        }
-                    },
-                    onClickAccountList = { clicked ->
-                        scope.launch {
-                            drawerState.close()
-                            account.switch(this, clicked)
-                        }
-                    },
-                    onClickDrawerMenu = { menu ->
-                        handleOnClickDrawerItem(
-                            menu,
-                            scope,
-                            drawerState,
-                            onBackToSignIn,
-                        )
-                    },
+        TimelineNavigationDrawer(
+            rememberCurrentAuthorizedAccountStatus(onReload),
+            onClickTopAccount = { onNavigateToAccountDetail(it.id.value) },
+            onClickDrawerMenu = { menu ->
+                handleOnClickDrawerItem(
+                    menu,
+                    onBackToSignIn,
                 )
             },
-            bottomBar = { TimelineNavigationBar() },
-        ) { paddingValues, scrollBehavior -> TimelineLanes(paddingValues, scrollBehavior) }
+        ) {
+            TimelineScaffold(
+                onReload,
+                bottomBar = { TimelineNavigationBar() },
+            ) { paddingValues, scrollBehavior ->
+                TimelineLanes(
+                    paddingValues,
+                    scrollBehavior,
+                )
+            }
+        }
     }
 }
 
@@ -103,17 +93,10 @@ private fun TimelineLanes(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,
-    scope: CoroutineScope,
-    drawerState: DrawerState,
     onBackToSignIn: () -> Unit,
-) {
-    when (item) {
-        is TimelineDrawerMenu.NewAccount -> onBackToSignIn()
-        is TimelineDrawerMenu.Settings -> Unit
-    }
-
-    scope.launch { drawerState.close() }
+) = when (item) {
+    is TimelineDrawerMenu.NewAccount -> onBackToSignIn()
+    is TimelineDrawerMenu.Settings -> Unit
 }

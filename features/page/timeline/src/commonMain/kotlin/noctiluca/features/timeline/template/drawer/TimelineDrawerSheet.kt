@@ -1,4 +1,4 @@
-package noctiluca.features.timeline.template
+package noctiluca.features.timeline.template.drawer
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -7,10 +7,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.account.model.Account
 import noctiluca.features.timeline.state.CurrentAuthorizedAccount
-import noctiluca.features.timeline.template.drawer.AuthorizedAccountsList
-import noctiluca.features.timeline.template.drawer.CurrentAuthorizedAccountHeader
-import noctiluca.features.timeline.template.drawer.TimelineDrawerMenu
-import noctiluca.features.timeline.template.drawer.TimelineDrawerMenus
+import noctiluca.features.timeline.template.drawer.menu.AuthorizedAccountsList
+import noctiluca.features.timeline.template.drawer.header.CurrentAuthorizedAccountHeader
+import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
+import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenus
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

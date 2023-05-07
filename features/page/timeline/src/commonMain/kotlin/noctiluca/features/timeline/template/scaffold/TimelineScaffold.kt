@@ -1,4 +1,4 @@
-package noctiluca.features.timeline.organisms.scaffold
+package noctiluca.features.timeline.template.scaffold
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape

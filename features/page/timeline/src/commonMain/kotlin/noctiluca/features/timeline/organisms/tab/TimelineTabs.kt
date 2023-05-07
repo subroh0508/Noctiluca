@@ -1,6 +1,5 @@
 package noctiluca.features.timeline.organisms.tab
 
-import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import noctiluca.features.components.atoms.tab.PrimaryTabs

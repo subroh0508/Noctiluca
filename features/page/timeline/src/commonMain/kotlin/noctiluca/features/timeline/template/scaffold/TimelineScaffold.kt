@@ -7,13 +7,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import noctiluca.features.components.atoms.appbar.NavigateIconSize
 import noctiluca.features.components.atoms.appbar.TopAppBar
+import noctiluca.features.components.atoms.appbar.scrollToTop
 import noctiluca.features.components.atoms.image.AsyncImage
+import noctiluca.features.components.molecules.scaffold.TabbedScaffold
+import noctiluca.features.shared.status.Action
+import noctiluca.features.timeline.LocalTimelineListState
 import noctiluca.features.timeline.getString
+import noctiluca.features.timeline.organisms.list.TimelineLane
+import noctiluca.features.timeline.organisms.tab.TimelineTabs
 import noctiluca.features.timeline.state.CurrentAuthorizedAccount
 import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 
@@ -22,24 +27,17 @@ import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 internal fun TimelineScaffold(
     onReload: () -> Unit,
     drawerState: DrawerState,
-    bottomBar: @Composable () -> Unit,
-    content: @Composable (PaddingValues, TopAppBarScrollBehavior) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
     val account = rememberCurrentAuthorizedAccountStatus(onReload)
 
-    Scaffold(
-        topBar = {
-            CurrentInstanceTopAppBar(
-                account.value,
-                scrollBehavior,
-            ) { scope.launch { drawerState.open() } }
-        },
-        bottomBar = bottomBar,
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) { content(it, scrollBehavior) }
+    TabbedScaffold(
+        scrollBehavior,
+        topAppBar = { CurrentInstanceTopAppBar(account.value, scrollBehavior) { scope.launch { drawerState.open() } } },
+        tabs = { TimelineTabs() },
+    ) { TimelineLanes(scrollBehavior) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -65,3 +63,29 @@ private fun CurrentInstanceTopAppBar(
     },
     scrollBehavior = topAppBarScrollBehavior,
 )
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun TimelineLanes(
+    scrollBehavior: TopAppBarScrollBehavior,
+) {
+    val timelineListState = LocalTimelineListState.current
+
+    timelineListState.value.forEachIndexed { index, timelineState ->
+        TimelineLane(
+            timelineState,
+            onLoad = { timelineListState.load(this, it) },
+            onExecuteAction = { timeline, status, action ->
+                when (action) {
+                    Action.FAVOURITE -> timelineListState.favourite(this, timeline, status)
+                    Action.BOOST -> timelineListState.boost(this, timeline, status)
+                    else -> Unit
+                }
+            },
+            onScrollToTop = {
+                timelineListState.scrolledToTop(index)
+                scrollBehavior.scrollToTop()
+            },
+        )
+    }
+}

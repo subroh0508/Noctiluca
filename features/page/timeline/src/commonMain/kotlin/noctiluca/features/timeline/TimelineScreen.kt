@@ -1,17 +1,10 @@
 package noctiluca.features.timeline
 
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.intl.Locale
 import noctiluca.features.components.AuthorizedFeatureComposable
-import noctiluca.features.components.atoms.appbar.scrollToTop
 import noctiluca.features.components.di.getKoinRootScope
-import noctiluca.features.shared.status.Action
-import noctiluca.features.timeline.organisms.list.TimelineLane
-import noctiluca.features.timeline.organisms.navigationbar.TimelineNavigationBar
 import noctiluca.features.timeline.state.TimelineListState
 import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 import noctiluca.features.timeline.state.rememberTimelineStatus
@@ -45,43 +38,6 @@ fun TimelineScreen(
         TimelineScaffold(
             onReload,
             drawerState,
-            bottomBar = { TimelineNavigationBar() },
-        ) { paddingValues, scrollBehavior ->
-            TimelineLanes(
-                paddingValues,
-                scrollBehavior,
-            )
-        }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun TimelineLanes(
-    paddingValues: PaddingValues,
-    scrollBehavior: TopAppBarScrollBehavior,
-) {
-    val timelineListState = LocalTimelineListState.current
-
-    timelineListState.value.forEachIndexed { index, timelineState ->
-        TimelineLane(
-            timelineState,
-            onLoad = { timelineListState.load(this, it) },
-            onExecuteAction = { timeline, status, action ->
-                when (action) {
-                    Action.FAVOURITE -> timelineListState.favourite(this, timeline, status)
-                    Action.BOOST -> timelineListState.boost(this, timeline, status)
-                    else -> Unit
-                }
-            },
-            onScrollToTop = {
-                timelineListState.scrolledToTop(index)
-                scrollBehavior.scrollToTop()
-            },
-            modifier = Modifier.padding(
-                top = paddingValues.calculateTopPadding(),
-                bottom = paddingValues.calculateBottomPadding(),
-            ),
         )
     }
 }

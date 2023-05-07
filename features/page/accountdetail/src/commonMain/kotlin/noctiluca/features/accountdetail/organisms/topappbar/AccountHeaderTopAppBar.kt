@@ -6,8 +6,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.components.molecules.scaffold.LargeHeadlineTopAppBar
 import noctiluca.features.components.molecules.scaffold.HeadlineText
+import noctiluca.features.components.molecules.scaffold.LargeHeadlineTopAppBar
 
 private const val CONTENT_SCROLL_OFFSET = -400F
 

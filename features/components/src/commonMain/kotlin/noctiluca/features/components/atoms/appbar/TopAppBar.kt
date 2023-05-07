@@ -1,8 +1,5 @@
 package noctiluca.features.components.atoms.appbar
 
-import androidx.compose.foundation.layout.RowScope
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,31 +18,10 @@ fun TopAppBar(
     { Text(title) },
     modifier,
     navigationIcon,
-    scrollBehavior = scrollBehavior,
-)
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun HeadlineTopAppBar(
-    title: @Composable () -> Unit,
-    modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {},
-    colors: TopAppBarColors = TopAppBarDefaults.largeTopAppBarColors(),
-    scrollBehavior: TopAppBarScrollBehavior? = null,
-) = LargeTopAppBar(
-    title,
-    modifier,
-    {
-        IconButton(onClick = onBackPressed) {
-            Icon(
-                Icons.Filled.ArrowBack,
-                contentDescription = "Back",
-            )
-        }
-    },
-    actions,
-    colors = colors,
+    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.surface,
+        scrolledContainerColor = MaterialTheme.colorScheme.surface,
+    ),
     scrollBehavior = scrollBehavior,
 )
 

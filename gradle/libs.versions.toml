@@ -8,7 +8,7 @@ detekt = "1.22.0"
 androidx-core = "1.10.0"
 androidx-appcompat = "1.6.1"
 androidx-browser = "1.5.0"
-androidx-activity = "1.7.1"
+androidx-activity = "1.7.2"
 androidx-navigation = "2.5.3"
 androidx-datastore = "1.0.0"
 

@@ -14,7 +14,7 @@ import noctiluca.features.components.atoms.image.AsyncImage
 @Composable
 fun AccountHeader(
     account: Account,
-    onClickAccountIcon: () -> Unit,
+    onClickAccountIcon: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     IconButton(onClick = onClickAccountIcon) {

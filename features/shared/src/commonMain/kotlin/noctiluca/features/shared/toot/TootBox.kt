@@ -25,7 +25,8 @@ fun TootBox(
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     Row(
-        modifier = Modifier.padding(horizontal = TootAreaPadding),
+        modifier = Modifier.fillMaxWidth()
+            .padding(horizontal = TootAreaPadding),
     ) {
         TootBy(
             account,

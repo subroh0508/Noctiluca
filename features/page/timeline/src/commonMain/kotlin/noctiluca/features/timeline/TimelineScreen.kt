@@ -13,6 +13,7 @@ import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
 import org.koin.core.component.KoinScopeComponent
 
+internal val LocalNavigation = compositionLocalOf<TimelineNavigation?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 internal val LocalTimelineListState = compositionLocalOf { TimelineListState() }
@@ -32,12 +33,7 @@ fun TimelineScreen(
                 navigation,
             )
         },
-    ) { drawerState ->
-        TimelineScaffold(
-            navigation,
-            drawerState,
-        )
-    }
+    ) { drawerState -> TimelineScaffold(drawerState) }
 }
 
 @Composable
@@ -49,6 +45,7 @@ private fun TimelineFeature(
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalScope provides scope,
+        LocalNavigation provides navigation,
         LocalTimelineListState provides rememberTimelineStatus(scope),
     ) { content() }
 }

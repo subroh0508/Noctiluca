@@ -93,7 +93,7 @@ internal class AuthorizedUserState(
 internal fun rememberAuthorizedUser(
     domain: String,
     result: AuthorizeResult? = LocalAuthorizeResult.current,
-    navigation: SignInNavigation? = LocalNavController.current,
+    navigation: SignInNavigation? = LocalNavigation.current,
     scope: Scope = LocalScope.current,
 ): AuthorizedUserState {
     val clientName = getString().sign_in_client_name

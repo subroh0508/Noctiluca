@@ -12,7 +12,6 @@ import noctiluca.features.accountdetail.state.rememberAccountDetail
 import noctiluca.features.accountdetail.state.rememberAccountStatuses
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.AccountDetailCaption
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.StatuseTab
-import noctiluca.features.components.Navigation
 import noctiluca.features.components.molecules.scaffold.HeadlineAvatar
 import noctiluca.features.components.molecules.scaffold.HeadlineHeader
 import noctiluca.features.components.molecules.scaffold.LoadStateLargeHeadlinedScaffold
@@ -20,10 +19,7 @@ import noctiluca.model.AccountId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountDetailScaffold(
-    id: AccountId,
-    navigation: Navigation,
-) {
+fun AccountDetailScaffold(id: AccountId) {
     val accountDetailLoadState by rememberAccountDetail(id)
     val statuses = rememberAccountStatuses(id)
     val statusesScrollState = rememberTabbedAccountStatusesState(statuses.value.tab)
@@ -36,7 +32,6 @@ fun AccountDetailScaffold(
             AccountHeaderTopAppBar(
                 attributes,
                 scrollBehavior,
-                navigation,
             )
         },
         header = { scrollBehavior, attributes ->

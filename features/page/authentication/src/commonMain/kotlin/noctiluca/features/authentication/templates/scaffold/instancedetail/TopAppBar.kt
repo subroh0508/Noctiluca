@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.Job
-import noctiluca.features.authentication.SignInNavigation
+import noctiluca.features.authentication.LocalNavigation
 import noctiluca.features.authentication.organisms.tab.InstanceDetailScrollState
 import noctiluca.features.components.molecules.scaffold.HeadlineText
 import noctiluca.features.components.molecules.scaffold.HeadlineTopAppBar
@@ -20,21 +20,24 @@ internal fun InstanceDetailTopAppBar(
     job: Job?,
     tabbedScrollState: InstanceDetailScrollState,
     scrollBehavior: TopAppBarScrollBehavior,
-    navigation: SignInNavigation,
-) = HeadlineTopAppBar(
-    title = {
-        InstanceHeaderText(
-            domain,
-            instance,
-            tabbedScrollState,
-        )
-    },
-    onBackPressed = {
-        job?.cancel()
-        navigation.backPressed()
-    },
-    scrollBehavior = scrollBehavior,
-)
+) {
+    val navigation = LocalNavigation.current
+
+    HeadlineTopAppBar(
+        title = {
+            InstanceHeaderText(
+                domain,
+                instance,
+                tabbedScrollState,
+            )
+        },
+        onBackPressed = {
+            job?.cancel()
+            navigation?.backPressed()
+        },
+        scrollBehavior = scrollBehavior,
+    )
+}
 
 @Composable
 private fun InstanceHeaderText(

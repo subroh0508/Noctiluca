@@ -80,7 +80,7 @@ internal class CurrentAuthorizedAccountState(
 
 @Composable
 internal fun rememberCurrentAuthorizedAccountStatus(
-    navigation: Navigation,
+    navigation: Navigation?,
     scope: Scope = LocalScope.current,
 ): CurrentAuthorizedAccountState {
     val authorizationState = rememberAuthorizedComposeState()
@@ -88,7 +88,7 @@ internal fun rememberCurrentAuthorizedAccountStatus(
         CurrentAuthorizedAccountState(
             authorizationState,
             scope,
-        ) { navigation.reopenApp() }
+        ) { navigation?.reopenApp() }
     }
 
     LaunchedEffect(Unit) {

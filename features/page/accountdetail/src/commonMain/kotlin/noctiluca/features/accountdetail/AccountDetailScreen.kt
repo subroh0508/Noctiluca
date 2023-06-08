@@ -11,6 +11,7 @@ import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.model.AccountId
 import org.koin.core.component.KoinScopeComponent
 
+internal val LocalNavigation = compositionLocalOf<Navigation?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 
@@ -23,10 +24,6 @@ fun AccountDetailScreen(
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalScope provides scope,
-    ) {
-        AccountDetailScaffold(
-            AccountId(id),
-            navigation,
-        )
-    }
+        LocalNavigation provides navigation,
+    ) { AccountDetailScaffold(AccountId(id)) }
 }

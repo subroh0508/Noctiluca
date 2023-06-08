@@ -1,33 +1,15 @@
 package app.noctiluca
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import app.noctiluca.navigation.*
-import noctiluca.features.components.utils.Browser
 
 @Composable
 fun Routing(
-    browser: Browser,
-    navController: NavHostController,
+    navigation: AndroidNavigation,
     startDestination: String = RouteTimeline,
-) = NavHost(navController, startDestination = startDestination) {
-    signIn(
-        browser,
-        onNavigateToTimeline = { navController.navigateToTimeline() },
-        onNavigateToInstanceDetail = { navController.navigateToInstanceDetail(it) },
-        onBackPressed = { navController.popBackStack() },
-    )
-
-    timeline(
-        onNavigateToAccountDetail = { navController.navigateToAccountDetail(it) },
-        onReload = { navController.reload() },
-        onBackToSignIn = { navController.backToSignIn() },
-    )
-
-    accountDetail(
-        onBackToPreviousScreen = { navController.popBackStack() },
-        onReload = { navController.reload() },
-        onBackToSignIn = { navController.backToSignIn() },
-    )
+) = NavHost(navigation.navHostController, startDestination = startDestination) {
+    signIn(navigation)
+    timeline(navigation)
+    accountDetail(navigation)
 }

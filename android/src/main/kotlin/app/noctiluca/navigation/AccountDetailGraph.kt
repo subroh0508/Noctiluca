@@ -1,31 +1,21 @@
 package app.noctiluca.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import noctiluca.features.accountdetail.AccountDetailScreen
 import noctiluca.features.accountdetail.di.AccountDetailComponent
+import noctiluca.features.components.Navigation
 
 const val RouteAccountDetail = "AccountDetail"
 
 fun NavGraphBuilder.accountDetail(
-    onBackToPreviousScreen: () -> Unit,
-    onReload: () -> Unit,
-    onBackToSignIn: () -> Unit,
-) {
-    composable("$RouteAccountDetail/{id}") { navBackStackEntry ->
-        val id = navBackStackEntry.arguments?.getString("id") ?: return@composable
+    navigation: Navigation,
+) = composable("$RouteAccountDetail/{id}") { navBackStackEntry ->
+    val id = navBackStackEntry.arguments?.getString("id") ?: return@composable
 
-        AccountDetailScreen(
-            id,
-            AccountDetailComponent(),
-            onBackToPreviousScreen,
-            onReload,
-            onBackToSignIn,
-        )
-    }
-}
-
-fun NavController.navigateToAccountDetail(id: String) {
-    navigate("$RouteAccountDetail/$id")
+    AccountDetailScreen(
+        id,
+        AccountDetailComponent(),
+        navigation,
+    )
 }

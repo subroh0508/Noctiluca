@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import noctiluca.features.authentication.LocalAuthorizeResult
+import noctiluca.features.authentication.LocalNavigation
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
 import noctiluca.features.authentication.organisms.tab.info.InstanceInformationTab
@@ -31,10 +32,7 @@ import noctiluca.instance.model.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun InstanceDetailScaffold(
-    domain: String,
-    onBackPressed: () -> Unit,
-) {
+internal fun InstanceDetailScaffold(domain: String) {
     val instanceLoadState by rememberMastodonInstanceDetail(domain)
 
     val localTimelineState = rememberLocalTimelineState(domain)
@@ -54,7 +52,6 @@ internal fun InstanceDetailScaffold(
                 job,
                 tabbedScrollState,
                 scrollBehavior,
-                onBackPressed,
             )
         },
         bottomBar = { instance, horizontalPadding ->
@@ -68,7 +65,6 @@ internal fun InstanceDetailScaffold(
             Fallback(
                 error,
                 paddingValues,
-                onBackPressed,
             )
         },
     ) { instance, tabs, horizontalPadding ->
@@ -85,15 +81,18 @@ internal fun InstanceDetailScaffold(
 private fun Fallback(
     error: Throwable?,
     paddingValues: PaddingValues,
-    onBackPressed: () -> Unit,
 ) {
     error ?: return
+
+    val navigation = LocalNavigation.current
 
     FilledCard(
         headline = { CardHeader(error.label()) },
         supporting = { CardSupporting(error.description()) },
         actions = {
-            Button(onClick = onBackPressed) {
+            Button(
+                onClick = { navigation?.backPressed() },
+            ) {
                 Text(getCommonString().back)
             }
         },

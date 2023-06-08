@@ -19,10 +19,7 @@ import noctiluca.model.AccountId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountDetailScaffold(
-    id: AccountId,
-    onBackToPreviousScreen: () -> Unit,
-) {
+fun AccountDetailScaffold(id: AccountId) {
     val accountDetailLoadState by rememberAccountDetail(id)
     val statuses = rememberAccountStatuses(id)
     val statusesScrollState = rememberTabbedAccountStatusesState(statuses.value.tab)
@@ -35,7 +32,6 @@ fun AccountDetailScaffold(
             AccountHeaderTopAppBar(
                 attributes,
                 scrollBehavior,
-                onBackPressed = { onBackToPreviousScreen() },
             )
         },
         header = { scrollBehavior, attributes ->

@@ -5,6 +5,7 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import noctiluca.accountdetail.model.AccountAttributes
+import noctiluca.features.accountdetail.LocalNavigation
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.components.molecules.scaffold.HeadlineText
 import noctiluca.features.components.molecules.scaffold.LargeHeadlineTopAppBar
@@ -16,25 +17,28 @@ private const val CONTENT_SCROLL_OFFSET = -400F
 fun AccountHeaderTopAppBar(
     detail: AccountAttributes?,
     scrollBehavior: TopAppBarScrollBehavior,
-    onBackPressed: () -> Unit,
-) = LargeHeadlineTopAppBar(
-    { appAppBarState ->
-        HeadlineText(
-            detail,
-            appAppBarState,
-        )
-    },
-    onBackPressed = onBackPressed,
-    actions = {
-        IconButton(onClick = {}) {
-            Icon(
-                Icons.Default.Edit,
-                contentDescription = "Edit",
+) {
+    val navigation = LocalNavigation.current
+
+    LargeHeadlineTopAppBar(
+        { appAppBarState ->
+            HeadlineText(
+                detail,
+                appAppBarState,
             )
-        }
-    },
-    scrollBehavior = scrollBehavior,
-)
+        },
+        onBackPressed = { navigation?.backPressed() },
+        actions = {
+            IconButton(onClick = {}) {
+                Icon(
+                    Icons.Default.Edit,
+                    contentDescription = "Edit",
+                )
+            }
+        },
+        scrollBehavior = scrollBehavior,
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

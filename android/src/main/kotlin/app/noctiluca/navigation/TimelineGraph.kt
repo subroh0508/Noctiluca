@@ -1,36 +1,18 @@
 package app.noctiluca.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import noctiluca.features.timeline.TimelineNavigation
 import noctiluca.features.timeline.TimelineScreen
 import noctiluca.features.timeline.di.TimelineComponent
 
 const val RouteTimeline = "Timeline"
 
 fun NavGraphBuilder.timeline(
-    onNavigateToAccountDetail: (String) -> Unit,
-    onReload: () -> Unit,
-    onBackToSignIn: () -> Unit,
-) {
-    composable(RouteTimeline) {
-        TimelineScreen(
-            TimelineComponent(),
-            onNavigateToAccountDetail,
-            onReload,
-            onBackToSignIn,
-        )
-    }
-}
-
-fun NavController.reload() {
-    navigate(RouteTimeline) {
-        popUpTo(RouteTimeline) { inclusive = true }
-    }
-}
-
-fun NavController.backToSignIn() {
-    navigate(RouteSignIn) {
-        popUpTo(RouteTimeline) { inclusive = true }
-    }
+    navigation: TimelineNavigation,
+) = composable(RouteTimeline) {
+    TimelineScreen(
+        TimelineComponent(),
+        navigation,
+    )
 }

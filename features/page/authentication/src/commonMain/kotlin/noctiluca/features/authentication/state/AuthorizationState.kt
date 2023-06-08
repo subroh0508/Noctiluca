@@ -6,9 +6,9 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
+import noctiluca.features.authentication.*
 import noctiluca.features.authentication.LocalAuthorizeResult
 import noctiluca.features.authentication.LocalScope
-import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.*
 import noctiluca.features.components.model.LoadState
 import noctiluca.features.components.state.LoadStateComposeState
@@ -21,7 +21,7 @@ import org.koin.core.scope.Scope
 internal class AuthorizedUserState(
     private val clientName: String,
     private val redirectUri: Uri,
-    private val navController: NavController,
+    private val navigation: SignInNavigation?,
     private val requestAppCredentialUseCase: RequestAppCredentialUseCase,
     private val requestRequestAccessTokenUseCase: RequestAccessTokenUseCase,
     private val state: MutableState<LoadState> = mutableStateOf(LoadState.Initial),
@@ -29,12 +29,12 @@ internal class AuthorizedUserState(
     constructor(
         clientName: String,
         redirectUri: Uri,
-        navController: NavController,
+        navigation: SignInNavigation?,
         koinScope: Scope,
     ) : this(
         clientName,
         redirectUri,
-        navController,
+        navigation,
         koinScope.get(),
         koinScope.get(),
     )
@@ -47,7 +47,7 @@ internal class AuthorizedUserState(
 
         val job = scope.launch(start = CoroutineStart.LAZY) {
             runCatching { requestAppCredentialUseCase.execute(domain, clientName, redirectUri) }
-                .onSuccess { navController.openBrowser(it) }
+                .onSuccess { navigation?.openBrowser(it) }
                 .onFailure { value = LoadState.Error(it) }
         }
 
@@ -75,7 +75,7 @@ internal class AuthorizedUserState(
             runCatching { requestRequestAccessTokenUseCase.execute(code, redirectUri) }
                 .onSuccess {
                     if (it != null) {
-                        navController.navigateToTimeline()
+                        navigation?.navigateToTimeline()
                         return@onSuccess
                     }
 
@@ -93,7 +93,7 @@ internal class AuthorizedUserState(
 internal fun rememberAuthorizedUser(
     domain: String,
     result: AuthorizeResult? = LocalAuthorizeResult.current,
-    navController: NavController = LocalNavController.current,
+    navigation: SignInNavigation? = LocalNavController.current,
     scope: Scope = LocalScope.current,
 ): AuthorizedUserState {
     val clientName = getString().sign_in_client_name
@@ -103,7 +103,7 @@ internal fun rememberAuthorizedUser(
         AuthorizedUserState(
             clientName,
             redirectUri,
-            navController,
+            navigation,
             scope,
         )
     }

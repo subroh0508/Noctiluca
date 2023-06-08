@@ -1,6 +1,5 @@
 package app.noctiluca.navigation
 
-import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import noctiluca.features.accountdetail.AccountDetailScreen
@@ -21,8 +20,4 @@ fun NavGraphBuilder.accountDetail(
             navController,
         )
     }
-}
-
-fun NavController.navigateToAccountDetail(id: String) {
-    navigate("$RouteAccountDetail/$id")
 }

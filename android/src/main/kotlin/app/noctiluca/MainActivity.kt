@@ -5,17 +5,17 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.rememberNavController
-import app.noctiluca.navigation.AndroidNavigationController
+import app.noctiluca.navigation.AndroidNavigation
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var navigation: AndroidNavigationController
+    private lateinit var navigation: AndroidNavigation
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            navigation = AndroidNavigationController(
+            navigation = AndroidNavigation(
                 rememberNavController(),
                 this,
             )

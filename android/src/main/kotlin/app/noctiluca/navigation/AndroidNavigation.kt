@@ -10,7 +10,7 @@ import noctiluca.features.timeline.TimelineNavigation
 import noctiluca.model.Uri
 import android.net.Uri as AndroidUri
 
-class AndroidNavigationController private constructor(
+class AndroidNavigation private constructor(
     val navHostController: NavHostController,
     private val browser: Browser,
 ) : Navigation, SignInNavigation, TimelineNavigation {

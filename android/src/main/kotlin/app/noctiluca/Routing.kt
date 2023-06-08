@@ -6,10 +6,10 @@ import app.noctiluca.navigation.*
 
 @Composable
 fun Routing(
-    navController: AndroidNavigationController,
+    navigation: AndroidNavigationController,
     startDestination: String = RouteTimeline,
-) = NavHost(navController.navHostController, startDestination = startDestination) {
-    signIn(navController)
-    timeline(navController)
-    accountDetail(navController)
+) = NavHost(navigation.navHostController, startDestination = startDestination) {
+    signIn(navigation)
+    timeline(navigation)
+    accountDetail(navigation)
 }

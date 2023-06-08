@@ -15,7 +15,7 @@ const val ComposableInstanceDetail = "InstanceDetail"
 const val RouteSignIn = "SignIn"
 
 fun NavGraphBuilder.signIn(
-    navController: SignInNavigation,
+    navigation: SignInNavigation,
 ) = navigation(
     startDestination = ComposableSearchInstance,
     route = RouteSignIn,
@@ -23,7 +23,7 @@ fun NavGraphBuilder.signIn(
     composable(ComposableSearchInstance) {
         SearchInstanceSuggestsScreen(
             SignInComponent(),
-            navController,
+            navigation,
         )
     }
     composable("$ComposableInstanceDetail?${AuthorizeResult.Query}") { navBackStackEntry ->
@@ -34,7 +34,7 @@ fun NavGraphBuilder.signIn(
             domain,
             result,
             SignInComponent(),
-            navController,
+            navigation,
         )
     }
 }

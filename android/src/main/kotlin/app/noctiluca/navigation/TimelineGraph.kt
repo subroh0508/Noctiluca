@@ -9,10 +9,10 @@ import noctiluca.features.timeline.di.TimelineComponent
 const val RouteTimeline = "Timeline"
 
 fun NavGraphBuilder.timeline(
-    navController: TimelineNavigation,
+    navigation: TimelineNavigation,
 ) = composable(RouteTimeline) {
     TimelineScreen(
         TimelineComponent(),
-        navController,
+        navigation,
     )
 }

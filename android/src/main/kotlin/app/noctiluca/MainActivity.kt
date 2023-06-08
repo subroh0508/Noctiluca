@@ -9,19 +9,19 @@ import app.noctiluca.navigation.AndroidNavigationController
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var navController: AndroidNavigationController
+    private lateinit var navigation: AndroidNavigationController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            navController = AndroidNavigationController(
+            navigation = AndroidNavigationController(
                 rememberNavController(),
                 this,
             )
 
             NoctilucaTheme {
-                Routing(navController)
+                Routing(navigation)
             }
         }
     }
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val uri = intent?.data ?: return
 
         when (uri.scheme) {
-            getString(R.string.sign_in_oauth_scheme) -> navController.redirectToSignIn(uri)
+            getString(R.string.sign_in_oauth_scheme) -> navigation.redirectToSignIn(uri)
         }
     }
 }

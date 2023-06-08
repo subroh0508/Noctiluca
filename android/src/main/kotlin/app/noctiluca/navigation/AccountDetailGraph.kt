@@ -9,13 +9,13 @@ import noctiluca.features.components.Navigation
 const val RouteAccountDetail = "AccountDetail"
 
 fun NavGraphBuilder.accountDetail(
-    navController: Navigation,
+    navigation: Navigation,
 ) = composable("$RouteAccountDetail/{id}") { navBackStackEntry ->
     val id = navBackStackEntry.arguments?.getString("id") ?: return@composable
 
     AccountDetailScreen(
         id,
         AccountDetailComponent(),
-        navController,
+        navigation,
     )
 }

@@ -10,14 +10,12 @@ const val RouteAccountDetail = "AccountDetail"
 
 fun NavGraphBuilder.accountDetail(
     navController: Navigation,
-) {
-    composable("$RouteAccountDetail/{id}") { navBackStackEntry ->
-        val id = navBackStackEntry.arguments?.getString("id") ?: return@composable
+) = composable("$RouteAccountDetail/{id}") { navBackStackEntry ->
+    val id = navBackStackEntry.arguments?.getString("id") ?: return@composable
 
-        AccountDetailScreen(
-            id,
-            AccountDetailComponent(),
-            navController,
-        )
-    }
+    AccountDetailScreen(
+        id,
+        AccountDetailComponent(),
+        navController,
+    )
 }

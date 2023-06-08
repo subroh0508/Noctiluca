@@ -10,11 +10,9 @@ const val RouteTimeline = "Timeline"
 
 fun NavGraphBuilder.timeline(
     navController: TimelineNavigation,
-) {
-    composable(RouteTimeline) {
-        TimelineScreen(
-            TimelineComponent(),
-            navController,
-        )
-    }
+) = composable(RouteTimeline) {
+    TimelineScreen(
+        TimelineComponent(),
+        navController,
+    )
 }

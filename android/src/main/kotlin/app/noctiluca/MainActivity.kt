@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.rememberNavController
 import app.noctiluca.navigation.AndroidNavigationController
-import noctiluca.features.components.utils.Browser
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {
@@ -22,7 +21,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             NoctilucaTheme {
-                Routing(Browser(this), navController)
+                Routing(navController)
             }
         }
     }

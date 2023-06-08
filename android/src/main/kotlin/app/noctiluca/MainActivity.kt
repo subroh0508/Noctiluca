@@ -4,20 +4,22 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import app.noctiluca.navigation.redirectToSignIn
+import app.noctiluca.navigation.AndroidNavigationController
 import noctiluca.features.components.utils.Browser
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var navController: NavHostController
+    private lateinit var navController: AndroidNavigationController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            navController = rememberNavController()
+            navController = AndroidNavigationController(
+                rememberNavController(),
+                this,
+            )
 
             NoctilucaTheme {
                 Routing(Browser(this), navController)

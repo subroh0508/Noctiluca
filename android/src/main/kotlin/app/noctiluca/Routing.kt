@@ -9,25 +9,10 @@ import noctiluca.features.components.utils.Browser
 @Composable
 fun Routing(
     browser: Browser,
-    navController: NavHostController,
+    navController: AndroidNavigationController,
     startDestination: String = RouteTimeline,
-) = NavHost(navController, startDestination = startDestination) {
-    signIn(
-        browser,
-        onNavigateToTimeline = { navController.navigateToTimeline() },
-        onNavigateToInstanceDetail = { navController.navigateToInstanceDetail(it) },
-        onBackPressed = { navController.popBackStack() },
-    )
-
-    timeline(
-        onNavigateToAccountDetail = { navController.navigateToAccountDetail(it) },
-        onReload = { navController.reload() },
-        onBackToSignIn = { navController.backToSignIn() },
-    )
-
-    accountDetail(
-        onBackToPreviousScreen = { navController.popBackStack() },
-        onReload = { navController.reload() },
-        onBackToSignIn = { navController.backToSignIn() },
-    )
+) = NavHost(navController.navHostController, startDestination = startDestination) {
+    signIn(browser, navController)
+    timeline(navController)
+    accountDetail(navController)
 }

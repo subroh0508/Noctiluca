@@ -1,10 +1,10 @@
 package app.noctiluca.navigation
 
-import android.net.Uri
 import androidx.navigation.*
 import androidx.navigation.compose.composable
 import noctiluca.features.authentication.InstanceDetailScreen
 import noctiluca.features.authentication.SearchInstanceSuggestsScreen
+import noctiluca.features.authentication.SignInNavigation
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.invoke
@@ -17,9 +17,7 @@ const val RouteSignIn = "SignIn"
 
 fun NavGraphBuilder.signIn(
     browser: Browser,
-    onNavigateToTimeline: () -> Unit,
-    onNavigateToInstanceDetail: (String) -> Unit,
-    onBackPressed: () -> Unit,
+    navController: SignInNavigation,
 ) {
     navigation(
         startDestination = ComposableSearchInstance,
@@ -28,7 +26,7 @@ fun NavGraphBuilder.signIn(
         composable(ComposableSearchInstance) {
             SearchInstanceSuggestsScreen(
                 SignInComponent(browser),
-                onNavigateToInstanceDetail,
+                navController,
             )
         }
         composable("$ComposableInstanceDetail?${AuthorizeResult.Query}") { navBackStackEntry ->
@@ -39,33 +37,8 @@ fun NavGraphBuilder.signIn(
                 domain,
                 result,
                 SignInComponent(browser),
-                onNavigateToTimeline,
-                onBackPressed,
+                navController,
             )
         }
-    }
-}
-
-fun NavController.navigateToTimeline() {
-    navigate(RouteTimeline) {
-        popUpTo(RouteSignIn) { inclusive = true }
-    }
-}
-
-fun NavController.navigateToInstanceDetail(domain: String) {
-    navigate("$ComposableInstanceDetail?${AuthorizeResult.QUERY_DOMAIN}=$domain")
-}
-
-fun NavController.redirectToSignIn(uri: Uri?) {
-    uri ?: return
-
-    navigate(
-        buildString {
-            append("$ComposableInstanceDetail?")
-            append("${AuthorizeResult.QUERY_DOMAIN}=${uri.host}&")
-            append(uri.query)
-        },
-    ) {
-        launchSingleTop = true
     }
 }

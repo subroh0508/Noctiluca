@@ -7,6 +7,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import noctiluca.features.authentication.LocalAuthorizeResult
+import noctiluca.features.authentication.SignInNavigation
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
 import noctiluca.features.authentication.organisms.tab.info.InstanceInformationTab
@@ -33,7 +34,7 @@ import noctiluca.instance.model.Instance
 @Composable
 internal fun InstanceDetailScaffold(
     domain: String,
-    onBackPressed: () -> Unit,
+    navigation: SignInNavigation,
 ) {
     val instanceLoadState by rememberMastodonInstanceDetail(domain)
 
@@ -54,7 +55,7 @@ internal fun InstanceDetailScaffold(
                 job,
                 tabbedScrollState,
                 scrollBehavior,
-                onBackPressed,
+                navigation,
             )
         },
         bottomBar = { instance, horizontalPadding ->
@@ -68,7 +69,7 @@ internal fun InstanceDetailScaffold(
             Fallback(
                 error,
                 paddingValues,
-                onBackPressed,
+                navigation,
             )
         },
     ) { instance, tabs, horizontalPadding ->
@@ -85,7 +86,7 @@ internal fun InstanceDetailScaffold(
 private fun Fallback(
     error: Throwable?,
     paddingValues: PaddingValues,
-    onBackPressed: () -> Unit,
+    navigation: SignInNavigation,
 ) {
     error ?: return
 
@@ -93,7 +94,9 @@ private fun Fallback(
         headline = { CardHeader(error.label()) },
         supporting = { CardSupporting(error.description()) },
         actions = {
-            Button(onClick = onBackPressed) {
+            Button(
+                onClick = { navigation.backPressed() },
+            ) {
                 Text(getCommonString().back)
             }
         },

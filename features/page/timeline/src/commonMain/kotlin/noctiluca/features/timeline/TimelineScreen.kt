@@ -21,22 +21,20 @@ internal val LocalTimelineListState = compositionLocalOf { TimelineListState() }
 @Composable
 fun TimelineScreen(
     component: KoinScopeComponent,
-    onNavigateToAccountDetail: (String) -> Unit,
-    onReload: () -> Unit,
-    onBackToSignIn: () -> Unit,
-) = TimelineFeature(component, onReload, onBackToSignIn) {
+    navigation: TimelineNavigation,
+) = TimelineFeature(component, navigation) {
     TimelineNavigationDrawer(
-        rememberCurrentAuthorizedAccountStatus(onReload),
-        onClickTopAccount = { onNavigateToAccountDetail(it.id.value) },
+        rememberCurrentAuthorizedAccountStatus(navigation),
+        onClickTopAccount = { navigation.navigateToAccountDetail(it.id.value) },
         onClickDrawerMenu = { menu ->
             handleOnClickDrawerItem(
                 menu,
-                onBackToSignIn,
+                navigation,
             )
         },
     ) { drawerState ->
         TimelineScaffold(
-            onReload,
+            navigation,
             drawerState,
         )
     }
@@ -45,10 +43,9 @@ fun TimelineScreen(
 @Composable
 private fun TimelineFeature(
     component: KoinScopeComponent,
-    onReload: () -> Unit,
-    onBackToSignIn: () -> Unit,
+    navigation: TimelineNavigation,
     content: @Composable () -> Unit,
-) = AuthorizedFeatureComposable(component, onReload, onBackToSignIn) { scope ->
+) = AuthorizedFeatureComposable(component, navigation) { scope ->
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalScope provides scope,
@@ -58,8 +55,8 @@ private fun TimelineFeature(
 
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,
-    onBackToSignIn: () -> Unit,
+    navigation: TimelineNavigation,
 ) = when (item) {
-    is TimelineDrawerMenu.NewAccount -> onBackToSignIn()
+    is TimelineDrawerMenu.NewAccount -> navigation.backToSignIn()
     is TimelineDrawerMenu.Settings -> Unit
 }

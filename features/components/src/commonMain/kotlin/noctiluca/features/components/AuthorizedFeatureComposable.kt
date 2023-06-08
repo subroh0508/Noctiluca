@@ -14,23 +14,20 @@ internal val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedE
 @Composable
 fun AuthorizedFeatureComposable(
     component: KoinScopeComponent,
-    onReload: () -> Unit,
-    onBackToSignIn: () -> Unit,
+    navigation: Navigation,
     content: @Composable (Scope) -> Unit,
 ) = FeatureComposable(component) {
     CompositionLocalProvider(
         LocalCoroutineExceptionHandler provides UnauthorizedExceptionHandler(
             it.get(),
-            onReload,
-            onBackToSignIn,
+            navigation,
         ),
     ) { content(it) }
 }
 
 class UnauthorizedExceptionHandler(
     private val tokenProvider: TokenProvider? = null,
-    private val navigateToTimeline: () -> Unit = {},
-    private val navigateToSignIn: () -> Unit = {},
+    private val navigation: Navigation? = null,
 ) {
     fun handleException(exception: Throwable) {
         exception.printStackTrace()
@@ -56,10 +53,10 @@ class UnauthorizedExceptionHandler(
         }
 
         if (nextAuthorizedUser != null) {
-            navigateToTimeline()
+            navigation?.reopenApp()
             return
         }
 
-        navigateToSignIn()
+        navigation?.backToSignIn()
     }
 }

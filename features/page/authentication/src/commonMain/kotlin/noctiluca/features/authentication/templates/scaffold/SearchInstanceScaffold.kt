@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import noctiluca.features.authentication.SignInNavigation
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
@@ -17,7 +18,7 @@ private val HorizontalPadding = 16.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SearchInstanceScaffold(
-    onNavigateToInstanceDetail: (String) -> Unit,
+    navigation: SignInNavigation,
 ) = Scaffold(
     topBar = { TopAppBar(getString().sign_in_page_title) },
 ) { paddingValues ->
@@ -28,7 +29,7 @@ internal fun SearchInstanceScaffold(
         listContent = { suggests ->
             InstanceSuggestsList(
                 suggests,
-                onSelect = { onNavigateToInstanceDetail(it.domain) },
+                onSelect = { navigation.navigateToInstanceDetail(it.domain) },
             )
         },
     )

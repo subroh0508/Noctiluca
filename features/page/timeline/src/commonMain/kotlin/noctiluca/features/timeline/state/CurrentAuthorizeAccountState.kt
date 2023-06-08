@@ -4,6 +4,7 @@ import androidx.compose.runtime.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import noctiluca.account.model.Account
+import noctiluca.features.components.Navigation
 import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.components.state.*
 import noctiluca.features.timeline.LocalScope
@@ -79,12 +80,15 @@ internal class CurrentAuthorizedAccountState(
 
 @Composable
 internal fun rememberCurrentAuthorizedAccountStatus(
-    reload: () -> Unit,
+    navigation: Navigation,
     scope: Scope = LocalScope.current,
 ): CurrentAuthorizedAccountState {
     val authorizationState = rememberAuthorizedComposeState()
     val currentAuthorizedAccount = remember {
-        CurrentAuthorizedAccountState(authorizationState, scope, reload)
+        CurrentAuthorizedAccountState(
+            authorizationState,
+            scope,
+        ) { navigation.reopenApp() }
     }
 
     LaunchedEffect(Unit) {

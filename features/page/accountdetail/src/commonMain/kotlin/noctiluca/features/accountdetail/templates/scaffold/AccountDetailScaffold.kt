@@ -12,6 +12,7 @@ import noctiluca.features.accountdetail.state.rememberAccountDetail
 import noctiluca.features.accountdetail.state.rememberAccountStatuses
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.AccountDetailCaption
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.StatuseTab
+import noctiluca.features.components.Navigation
 import noctiluca.features.components.molecules.scaffold.HeadlineAvatar
 import noctiluca.features.components.molecules.scaffold.HeadlineHeader
 import noctiluca.features.components.molecules.scaffold.LoadStateLargeHeadlinedScaffold
@@ -21,7 +22,7 @@ import noctiluca.model.AccountId
 @Composable
 fun AccountDetailScaffold(
     id: AccountId,
-    onBackToPreviousScreen: () -> Unit,
+    navigation: Navigation,
 ) {
     val accountDetailLoadState by rememberAccountDetail(id)
     val statuses = rememberAccountStatuses(id)
@@ -35,7 +36,7 @@ fun AccountDetailScaffold(
             AccountHeaderTopAppBar(
                 attributes,
                 scrollBehavior,
-                onBackPressed = { onBackToPreviousScreen() },
+                navigation,
             )
         },
         header = { scrollBehavior, attributes ->

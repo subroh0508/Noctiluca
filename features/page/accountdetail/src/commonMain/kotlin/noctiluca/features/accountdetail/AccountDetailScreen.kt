@@ -6,6 +6,7 @@ import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.ui.text.intl.Locale
 import noctiluca.features.accountdetail.templates.scaffold.AccountDetailScaffold
 import noctiluca.features.components.AuthorizedFeatureComposable
+import noctiluca.features.components.Navigation
 import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.model.AccountId
 import org.koin.core.component.KoinScopeComponent
@@ -17,17 +18,15 @@ internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 fun AccountDetailScreen(
     id: String,
     component: KoinScopeComponent,
-    onBackToPreviousScreen: () -> Unit,
-    onReload: () -> Unit,
-    onBackToSignIn: () -> Unit,
-) = AuthorizedFeatureComposable(component, onReload, onBackToSignIn) { scope ->
+    navigation: Navigation,
+) = AuthorizedFeatureComposable(component, navigation) { scope ->
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalScope provides scope,
     ) {
         AccountDetailScaffold(
             AccountId(id),
-            onBackToPreviousScreen = onBackToPreviousScreen,
+            navigation,
         )
     }
 }

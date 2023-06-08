@@ -17,6 +17,7 @@ import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.LocalTimelineListState
+import noctiluca.features.timeline.TimelineNavigation
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
@@ -27,13 +28,13 @@ import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TimelineScaffold(
-    onReload: () -> Unit,
+    navigation: TimelineNavigation,
     drawerState: DrawerState,
 ) {
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
 
-    val account = rememberCurrentAuthorizedAccountStatus(onReload)
+    val account = rememberCurrentAuthorizedAccountStatus(navigation)
 
     TabbedScaffold(
         scrollBehavior,

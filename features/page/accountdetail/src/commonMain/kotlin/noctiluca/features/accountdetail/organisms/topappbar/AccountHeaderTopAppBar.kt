@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
+import noctiluca.features.components.Navigation
 import noctiluca.features.components.molecules.scaffold.HeadlineText
 import noctiluca.features.components.molecules.scaffold.LargeHeadlineTopAppBar
 
@@ -16,7 +17,7 @@ private const val CONTENT_SCROLL_OFFSET = -400F
 fun AccountHeaderTopAppBar(
     detail: AccountAttributes?,
     scrollBehavior: TopAppBarScrollBehavior,
-    onBackPressed: () -> Unit,
+    navigation: Navigation,
 ) = LargeHeadlineTopAppBar(
     { appAppBarState ->
         HeadlineText(
@@ -24,7 +25,7 @@ fun AccountHeaderTopAppBar(
             appAppBarState,
         )
     },
-    onBackPressed = onBackPressed,
+    onBackPressed = { navigation.backPressed() },
     actions = {
         IconButton(onClick = {}) {
             Icon(

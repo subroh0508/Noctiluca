@@ -22,6 +22,7 @@ class DrawableResources(packageName: String) : Resources {
     }
 
     private fun createGetDrawableMethod() = FunSpec.builder("getDrawableResources")
+        .returns(drawableResourcesClass)
         .addStatement("return DrawableResources")
         .build()
 

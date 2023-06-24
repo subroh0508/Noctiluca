@@ -17,6 +17,8 @@ enum class Event(val value: String) {
     ENCRYPTED_MESSAGE("encrypted_message");
 
     companion object {
-        fun findEvent(event: String) = values().find { it.value == event } ?: throw IllegalArgumentException("Not found: $event")
+        fun findEvent(event: String) = values().find {
+            it.value == event
+        } ?: throw IllegalArgumentException("Not found: $event")
     }
 }

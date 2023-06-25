@@ -37,20 +37,21 @@ internal fun TootTextArea(
     }
 
     Column(modifier) {
-        WarningTextField(
-            warning,
-            isContentWarning,
-            onChangeWarningText,
-        )
+        Column(textAreaModifier) {
+            WarningTextField(
+                warning,
+                isContentWarning,
+                onChangeWarningText,
+            )
 
-        TextArea(
-            content,
-            onValueChange = { onChangeContent(it) },
-            supportingText = getCommonString().toot_support_text,
-            modifier = Modifier.then(textAreaModifier)
-                .fillMaxWidth()
-                .padding(TootAreaPadding),
-        )
+            TextArea(
+                content,
+                onValueChange = { onChangeContent(it) },
+                supportingText = getCommonString().toot_support_text,
+                modifier = Modifier.fillMaxWidth()
+                    .padding(TootAreaPadding),
+            )
+        }
 
         Divider(Modifier.padding(horizontal = TootAreaPadding))
 

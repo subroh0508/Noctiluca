@@ -20,7 +20,7 @@ internal val LocalTimelineListState = compositionLocalOf { TimelineListState() }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimelineScreen(
+fun TimelinesScreen(
     component: KoinScopeComponent,
     navigation: TimelineNavigation,
 ) = TimelineFeature(component, navigation) {

@@ -75,7 +75,7 @@ internal class AuthorizedUserState(
             runCatching { requestRequestAccessTokenUseCase.execute(code, redirectUri) }
                 .onSuccess {
                     if (it != null) {
-                        navigation?.navigateToTimeline()
+                        navigation?.navigateToTimelines()
                         return@onSuccess
                     }
 

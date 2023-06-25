@@ -26,6 +26,7 @@ internal fun TootTextArea(
     warning: String? = null,
     onChangeContent: (String?) -> Unit,
     onChangeWarningText: (String?) -> Unit,
+    textAreaModifier: Modifier = Modifier,
     modifier: Modifier = Modifier,
 ) {
     var isContentWarning by remember { mutableStateOf(false) }
@@ -46,7 +47,8 @@ internal fun TootTextArea(
             content,
             onValueChange = { onChangeContent(it) },
             supportingText = getCommonString().toot_support_text,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.then(textAreaModifier)
+                .fillMaxWidth()
                 .padding(TootAreaPadding),
         )
 

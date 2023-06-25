@@ -19,6 +19,7 @@ fun FloatingTootCard(
     warning: MutableState<String?>,
     visibility: MutableState<Status.Visibility>,
     expanded: MutableState<Boolean>,
+    onClickOpenFullScreen: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) = FilledCard(
     modifier,
@@ -39,7 +40,7 @@ fun FloatingTootCard(
         Spacer(Modifier.weight(1F))
 
         IconButton(
-            onClick = {},
+            onClick = onClickOpenFullScreen,
         ) {
             Icon(
                 Icons.Default.Launch,

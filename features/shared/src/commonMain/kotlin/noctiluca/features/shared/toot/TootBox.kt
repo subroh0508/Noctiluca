@@ -3,7 +3,9 @@ package noctiluca.features.shared.toot
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
@@ -21,26 +23,21 @@ fun TootBox(
     account: Account?,
     content: MutableState<String?>,
     warning: MutableState<String?>,
-    visibility: MutableState<Status.Visibility>,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
-    Row(
+    TootBy(
+        account,
         modifier = Modifier.fillMaxWidth()
             .padding(horizontal = TootAreaPadding),
-    ) {
-        TootBy(
-            account,
-            modifier = Modifier.weight(1f),
-        )
-        VisibilityChip(visibility)
-    }
+    )
 
     TootTextArea(
         content.value ?: "",
         warning.value ?: "",
         onChangeContent = { content.value = it },
         onChangeWarningText = { warning.value = it },
-        modifier = Modifier.fillMaxWidth(),
+        textAreaModifier = Modifier.weight(1F),
+        modifier = Modifier.fillMaxSize(),
     )
 }
 
@@ -64,7 +61,12 @@ private fun TootBy(
                     .clip(RoundedCornerShape(8.dp)),
             )
         }
-
-        AccountName(account)
+        Spacer(Modifier.width(8.dp))
+        AccountName(
+            account,
+            displayNameStyle = MaterialTheme.typography.titleMedium,
+            usernameStyle = MaterialTheme.typography.titleSmall,
+            modifier = Modifier.align(Alignment.CenterVertically),
+        )
     }
 }

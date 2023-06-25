@@ -7,4 +7,6 @@
 
     <string name="timeline_new_account">アカウントを追加</string>
     <string name="timeline_settings">設定</string>
+
+    <string name="timeline_status">投稿</string>
 </resources>

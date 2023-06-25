@@ -10,7 +10,7 @@ import noctiluca.features.authentication.LocalNavigation
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
-import noctiluca.features.components.atoms.appbar.TopAppBar
+import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.components.molecules.HeadlineWithProgress
 
 private val HorizontalPadding = 16.dp
@@ -21,7 +21,7 @@ internal fun SearchInstanceScaffold() {
     val navigation = LocalNavigation.current
 
     Scaffold(
-        topBar = { TopAppBar(getString().sign_in_page_title) },
+        topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
     ) { paddingValues ->
         SearchInstanceQueryTextField(
             paddingValues = paddingValues,

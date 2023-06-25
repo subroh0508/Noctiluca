@@ -9,20 +9,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.toot.FloatingTootCard
+import noctiluca.features.timeline.LocalNavigation
 import noctiluca.status.model.Status
 
 @Composable
 internal fun BoxScope.TootCard(
     modifier: Modifier = Modifier,
 ) {
+    val navigation = LocalNavigation.current
+
     val expanded = remember { mutableStateOf(false) }
+
+    val content = remember { mutableStateOf<String?>(null) }
+    val warning = remember { mutableStateOf<String?>(null) }
+    val visibility = remember { mutableStateOf(Status.Visibility.PUBLIC) }
 
     if (expanded.value) {
         FloatingTootCard(
-            remember { mutableStateOf(null) },
-            remember { mutableStateOf(null) },
-            remember { mutableStateOf(Status.Visibility.PUBLIC) },
+            content,
+            warning,
+            visibility,
             expanded,
+            onClickOpenFullScreen = { navigation?.navigateToToot() },
             modifier = modifier,
         )
 

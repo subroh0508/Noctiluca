@@ -29,19 +29,19 @@ class AndroidNavigation private constructor(
     override fun openBrowser(uri: Uri) = browser.open(uri)
 
     override fun reopenApp() {
-        navHostController.navigate(RouteTimelines) {
-            popUpTo(RouteTimelines) { inclusive = true }
+        navHostController.navigate(RouteTimeline) {
+            popUpTo(RouteTimeline) { inclusive = true }
         }
     }
 
     override fun backToSignIn() {
         navHostController.navigate(RouteSignIn) {
-            popUpTo(RouteTimelines) { inclusive = true }
+            popUpTo(RouteTimeline) { inclusive = true }
         }
     }
 
     override fun navigateToTimelines() {
-        navHostController.navigate(RouteTimelines) {
+        navHostController.navigate(RouteTimeline) {
             popUpTo(RouteSignIn) { inclusive = true }
         }
     }
@@ -55,7 +55,7 @@ class AndroidNavigation private constructor(
     }
 
     override fun navigateToToot() {
-        navHostController.navigate(RouteToot)
+        navHostController.navigate(ComposableToot)
     }
 
     fun redirectToSignIn(uri: AndroidUri?) {

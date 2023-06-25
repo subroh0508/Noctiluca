@@ -9,7 +9,7 @@ import noctiluca.status.model.Status
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun VisibilityChip(
+fun VisibilityChip(
     visibility: MutableState<Status.Visibility>,
 ) {
     var expandedVisibilityMenu by remember { mutableStateOf(false) }

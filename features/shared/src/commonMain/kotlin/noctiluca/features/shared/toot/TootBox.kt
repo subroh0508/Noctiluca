@@ -15,8 +15,6 @@ import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.toot.internal.TootAreaPadding
 import noctiluca.features.shared.toot.internal.TootTextArea
-import noctiluca.features.shared.toot.internal.VisibilityChip
-import noctiluca.status.model.Status
 
 @Composable
 fun TootBox(

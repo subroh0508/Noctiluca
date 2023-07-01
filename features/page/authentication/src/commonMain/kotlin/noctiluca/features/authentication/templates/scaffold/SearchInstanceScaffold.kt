@@ -8,24 +8,30 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
-import noctiluca.features.authentication.LocalNavigation
+import com.arkivanov.essenty.lifecycle.destroy
+import com.arkivanov.essenty.lifecycle.resume
+import noctiluca.features.authentication.LocalContext
+import noctiluca.features.authentication.di.SignInFeatureContext
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.components.molecules.HeadlineWithProgress
+import noctiluca.instance.model.Instance
 
 private val HorizontalPadding = 16.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SearchInstanceScaffold(
-    context: ComponentContext,
+    context: SignInFeatureContext.Child.MastodonInstanceList,
+    suggests: List<Instance.Suggest>,
 ) {
-    val navigation = LocalNavigation.current
+    val navigation = LocalContext.current
     val lifecycleRegistry = remember { LifecycleRegistry() }
     val viewModel = MastodonInstanceListViewModel.Factory(
+        suggests,
         lifecycleRegistry,
         context,
     )
@@ -41,7 +47,12 @@ internal fun SearchInstanceScaffold(
             listContent = { suggests ->
                 InstanceSuggestsList(
                     suggests,
-                    onSelect = { navigation?.navigateToInstanceDetail(it.domain) },
+                    onSelect = {
+                        navigation?.navigateToInstanceDetail(
+                            suggests,
+                            it.domain,
+                        )
+                    },
                 )
             },
         )

@@ -4,19 +4,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 import noctiluca.features.authentication.LocalScope
+import noctiluca.features.authentication.di.SignInFeatureContext
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
 import noctiluca.instance.model.Instance
 
 class MastodonInstanceListViewModel private constructor(
     private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
+    suggests: List<Instance.Suggest>,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
     componentContext: ComponentContext,
@@ -24,7 +25,7 @@ class MastodonInstanceListViewModel private constructor(
     private val mutableUiModel by lazy { MutableValue(UiModel()) }
 
     private val mutableInstanceSuggests by lazy {
-        MutableValue<LoadState>(LoadState.Initial).also {
+        MutableValue<LoadState>(LoadState.Loaded(suggests)).also {
             it.subscribe { loadState ->
                 mutableUiModel.value = uiModel.value.copy(suggests = loadState)
             }
@@ -64,24 +65,17 @@ class MastodonInstanceListViewModel private constructor(
     companion object Factory {
         @Composable
         operator fun invoke(
+            suggests: List<Instance.Suggest>,
             lifecycleRegistry: LifecycleRegistry,
             context: ComponentContext,
         ): MastodonInstanceListViewModel {
             val koinScope = LocalScope.current
             val coroutineScope = rememberCoroutineScope()
-            /*
-            val childContext = remember {
-                context.childContext(
-                    "MastodonInstanceList",
-                    lifecycleRegistry,
-                )
-            }
-             */
-
 
             return remember {
                 MastodonInstanceListViewModel(
                     koinScope.get(),
+                    suggests,
                     coroutineScope,
                     lifecycleRegistry,
                     context,

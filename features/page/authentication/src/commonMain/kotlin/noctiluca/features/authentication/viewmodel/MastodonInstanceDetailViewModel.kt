@@ -4,7 +4,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
@@ -93,14 +92,6 @@ class MastodonInstanceDetailViewModel private constructor(
         ): MastodonInstanceDetailViewModel {
             val koinScope = LocalScope.current
             val coroutineScope = rememberCoroutineScope()
-            /*
-            val childContext = remember {
-                context.childContext(
-                    "MastodonInstanceDetail",
-                    lifecycleRegistry,
-                )
-            }
-            */
 
             return remember(domain) {
                 MastodonInstanceDetailViewModel(

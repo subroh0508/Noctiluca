@@ -3,7 +3,10 @@ package noctiluca.features.authentication
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
+import com.arkivanov.decompose.Child
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import com.arkivanov.decompose.value.getValue
 import noctiluca.features.authentication.di.SignInFeatureContext
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
@@ -13,7 +16,7 @@ import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
 import noctiluca.features.components.di.getKoinRootScope
 import org.koin.core.component.KoinScopeComponent
 
-internal val LocalNavigation = compositionLocalOf<SignInNavigation?> { null }
+internal val LocalContext = compositionLocalOf<SignInFeatureContext?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
@@ -30,14 +33,23 @@ fun SignInScreen(
     SignInFeature(
         authorizeResult,
         context,
-        navigation,
+        context,
     ) {
-        if (domain == null) {
-            SearchInstanceScaffold(context)
-            return@SignInFeature
-        }
+        val child by context.childStack.subscribeAsState()
 
-        InstanceDetailScaffold(domain, context)
+        child.active.instance.let {
+            when (it) {
+                is SignInFeatureContext.Child.MastodonInstanceList -> SearchInstanceScaffold(
+                    it,
+                    context.restoreSuggests() ?: listOf(),
+                )
+
+                is SignInFeatureContext.Child.MastodonInstanceDetail -> InstanceDetailScaffold(
+                    domain ?: it.domain,
+                    it,
+                )
+            }
+        }
     }
 }
 
@@ -45,14 +57,14 @@ fun SignInScreen(
 private fun SignInFeature(
     authorizeResult: AuthorizeResult?,
     koinComponent: KoinScopeComponent,
-    navigation: SignInNavigation,
+    context: SignInFeatureContext,
     content: @Composable () -> Unit,
 ) = FeatureComposable(koinComponent) { scope ->
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalScope provides scope,
         LocalAuthorizeResult provides authorizeResult,
-        LocalNavigation provides navigation,
+        LocalContext provides context,
         LocalSnackbarHostState provides remember { SnackbarHostState() },
     ) { content() }
 }

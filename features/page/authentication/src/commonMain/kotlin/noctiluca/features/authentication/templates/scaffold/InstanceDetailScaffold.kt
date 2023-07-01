@@ -12,15 +12,13 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import noctiluca.features.authentication.LocalAuthorizeResult
-import noctiluca.features.authentication.LocalNavigation
+import noctiluca.features.authentication.LocalContext
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
 import noctiluca.features.authentication.organisms.tab.info.InstanceInformationTab
 import noctiluca.features.authentication.organisms.tab.localtimeline.InstanceLocalTimelineTab
 import noctiluca.features.authentication.organisms.tab.rememberTabbedInstanceDetailState
 import noctiluca.features.authentication.state.*
-import noctiluca.features.authentication.state.rememberLocalTimelineState
-import noctiluca.features.authentication.state.rememberMastodonInstanceDetail
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailActionButtons
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailHeader
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailTopAppBar
@@ -103,7 +101,7 @@ private fun Fallback(
 ) {
     error ?: return
 
-    val navigation = LocalNavigation.current
+    val navigation = LocalContext.current
 
     FilledCard(
         headline = { CardHeader(error.label()) },

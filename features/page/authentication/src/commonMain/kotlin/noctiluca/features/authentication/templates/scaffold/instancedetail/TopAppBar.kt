@@ -6,7 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import kotlinx.coroutines.Job
-import noctiluca.features.authentication.LocalNavigation
+import noctiluca.features.authentication.LocalContext
 import noctiluca.features.authentication.organisms.tab.InstanceDetailScrollState
 import noctiluca.features.components.molecules.scaffold.HeadlineText
 import noctiluca.features.components.molecules.scaffold.HeadlineTopAppBar
@@ -21,7 +21,7 @@ internal fun InstanceDetailTopAppBar(
     tabbedScrollState: InstanceDetailScrollState,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
-    val navigation = LocalNavigation.current
+    val navigation = LocalContext.current
 
     HeadlineTopAppBar(
         title = {

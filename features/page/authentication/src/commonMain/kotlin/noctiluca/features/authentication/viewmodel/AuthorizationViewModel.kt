@@ -8,11 +8,9 @@ import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
-import noctiluca.features.authentication.LocalNavigation
+import noctiluca.features.authentication.LocalContext
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.SignInNavigation
 import noctiluca.features.authentication.getString
@@ -42,7 +40,7 @@ class AuthorizationViewModel(
 
         val job = launchLazy {
             runCatching { requestAppCredentialUseCase.execute(domain, clientName, redirectUri) }
-                .onSuccess { navigation?.openBrowser(it) }
+                .onSuccess { /*navigation?.openBrowser(it)*/ }
                 .onFailure { authorizationLoadState.value = LoadState.Error(it) }
         }
 
@@ -88,12 +86,12 @@ class AuthorizationViewModel(
             context: ComponentContext,
         ): AuthorizationViewModel {
             val koinScope = LocalScope.current
-            val navigation = LocalNavigation.current
+            val navigation = LocalContext.current
 
             return AuthorizationViewModel(
                 getString().sign_in_client_name,
                 buildRedirectUri(domain),
-                navigation,
+                null, /*navigation*/
                 remember { koinScope.get() },
                 remember { koinScope.get() },
                 rememberCoroutineScope(),

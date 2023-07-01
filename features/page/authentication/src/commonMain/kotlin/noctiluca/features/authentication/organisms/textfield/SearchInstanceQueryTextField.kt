@@ -10,8 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.state.rememberMastodonInstanceSuggests
+import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.atoms.list.OneLineListItem
 import noctiluca.features.components.atoms.textfield.DebouncedTextForm
 import noctiluca.features.components.atoms.textfield.SingleLineTextField
@@ -22,6 +23,7 @@ private const val DEBOUNCE_TIME_MILLIS = 500L
 
 @Composable
 internal fun SearchInstanceQueryTextField(
+    viewModel: MastodonInstanceListViewModel,
     paddingValues: PaddingValues,
     modifier: Modifier = Modifier,
     headline: @Composable (Boolean) -> Unit = {},
@@ -30,14 +32,14 @@ internal fun SearchInstanceQueryTextField(
     modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
 ) {
     var query by rememberSaveable { mutableStateOf("") }
-    val suggestsLoadState by rememberMastodonInstanceSuggests(query)
+    val uiModel by viewModel.uiModel.subscribeAsState()
 
-    headline(suggestsLoadState.loading)
+    headline(uiModel.suggests.loading)
 
     DebouncedTextForm(
         query,
         DEBOUNCE_TIME_MILLIS,
-        onDebouncedChange = { query = it },
+        onDebouncedChange = { viewModel.search(it) },
     ) { textState ->
         Box(
             modifier = modifier.padding(bottom = 8.dp),
@@ -58,7 +60,7 @@ internal fun SearchInstanceQueryTextField(
         }
     }
 
-    SearchResultList(suggestsLoadState) { listContent(it) }
+    SearchResultList(uiModel.suggests) { listContent(it) }
 }
 
 @Composable

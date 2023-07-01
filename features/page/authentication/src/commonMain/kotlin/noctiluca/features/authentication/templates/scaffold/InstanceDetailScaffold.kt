@@ -42,9 +42,10 @@ internal fun InstanceDetailScaffold(
     domain: String,
     context: ComponentContext,
 ) {
+    val lifecycleRegistry = remember { LifecycleRegistry() }
     val viewModel = MastodonInstanceDetailViewModel.Factory(
         domain,
-        LifecycleRegistry(),
+        lifecycleRegistry,
         context,
     )
 

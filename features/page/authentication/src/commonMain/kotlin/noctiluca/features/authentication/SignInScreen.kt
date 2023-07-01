@@ -33,7 +33,7 @@ fun SignInScreen(
         navigation,
     ) {
         if (domain == null) {
-            SearchInstanceScaffold()
+            SearchInstanceScaffold(context)
             return@SignInFeature
         }
 

@@ -26,11 +26,7 @@ class MastodonInstanceListViewModel private constructor(
     private val mutableInstanceSuggests by lazy {
         MutableValue<LoadState>(LoadState.Initial).also {
             it.subscribe { loadState ->
-                mutableUiModel.value = uiModel.value.copy(
-                    suggests = loadState.getValueOrNull() ?: listOf(),
-                    loading = loadState.loading,
-                    error = loadState.getErrorOrNull(),
-                )
+                mutableUiModel.value = uiModel.value.copy(suggests = loadState)
             }
         }
     }
@@ -62,28 +58,35 @@ class MastodonInstanceListViewModel private constructor(
 
     data class UiModel(
         val query: String = "",
-        val suggests: List<Instance.Suggest> = listOf(),
-        val loading: Boolean = false,
-        val error: Throwable? = null,
+        val suggests: LoadState = LoadState.Initial,
     )
 
     companion object Factory {
         @Composable
-        fun invoke(
+        operator fun invoke(
             lifecycleRegistry: LifecycleRegistry,
             context: ComponentContext,
         ): MastodonInstanceListViewModel {
             val koinScope = LocalScope.current
-
-            return MastodonInstanceListViewModel(
-                remember { koinScope.get() },
-                rememberCoroutineScope(),
-                lifecycleRegistry,
+            val coroutineScope = rememberCoroutineScope()
+            /*
+            val childContext = remember {
                 context.childContext(
                     "MastodonInstanceList",
                     lifecycleRegistry,
                 )
-            )
+            }
+             */
+
+
+            return remember {
+                MastodonInstanceListViewModel(
+                    koinScope.get(),
+                    coroutineScope,
+                    lifecycleRegistry,
+                    context,
+                )
+            }
         }
     }
 }

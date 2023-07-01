@@ -93,6 +93,14 @@ class MastodonInstanceDetailViewModel private constructor(
         ): MastodonInstanceDetailViewModel {
             val koinScope = LocalScope.current
             val coroutineScope = rememberCoroutineScope()
+            /*
+            val childContext = remember {
+                context.childContext(
+                    "MastodonInstanceDetail",
+                    lifecycleRegistry,
+                )
+            }
+            */
 
             return remember(domain) {
                 MastodonInstanceDetailViewModel(
@@ -101,10 +109,7 @@ class MastodonInstanceDetailViewModel private constructor(
                     koinScope.get(),
                     coroutineScope,
                     lifecycleRegistry,
-                    context.childContext(
-                        "MastodonInstanceDetail",
-                        lifecycleRegistry,
-                    )
+                    context,
                 )
             }
         }

@@ -6,10 +6,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import noctiluca.features.authentication.LocalNavigation
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
+import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.components.molecules.HeadlineWithProgress
 
@@ -17,13 +20,21 @@ private val HorizontalPadding = 16.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SearchInstanceScaffold() {
+internal fun SearchInstanceScaffold(
+    context: ComponentContext,
+) {
     val navigation = LocalNavigation.current
+    val lifecycleRegistry = remember { LifecycleRegistry() }
+    val viewModel = MastodonInstanceListViewModel.Factory(
+        lifecycleRegistry,
+        context,
+    )
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
     ) { paddingValues ->
         SearchInstanceQueryTextField(
+            viewModel = viewModel,
             paddingValues = paddingValues,
             modifier = Modifier.padding(horizontal = HorizontalPadding),
             headline = { loading -> Headline(loading) },

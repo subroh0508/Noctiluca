@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.components.atoms.appbar.NavigateIconSize
-import noctiluca.features.components.atoms.appbar.TopAppBar
 import noctiluca.features.components.atoms.appbar.scrollToTop
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.molecules.scaffold.TabbedScaffold
@@ -63,7 +63,7 @@ private fun CurrentInstanceTopAppBar(
     account: CurrentAuthorizedAccount,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     onClickNavigationIcon: () -> Unit,
-) = TopAppBar(
+) = CenterAlignedTopAppBar(
     account.domain?.value ?: getString().timeline_page_title,
     navigationIcon = {
         IconButton(

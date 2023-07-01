@@ -11,6 +11,7 @@ import noctiluca.features.timeline.state.rememberTimelineStatus
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
+import noctiluca.features.timeline.template.scaffold.TootScaffold
 import org.koin.core.component.KoinScopeComponent
 
 internal val LocalNavigation = compositionLocalOf<TimelineNavigation?> { null }
@@ -20,7 +21,7 @@ internal val LocalTimelineListState = compositionLocalOf { TimelineListState() }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimelineScreen(
+fun TimelinesScreen(
     component: KoinScopeComponent,
     navigation: TimelineNavigation,
 ) = TimelineFeature(component, navigation) {
@@ -34,6 +35,14 @@ fun TimelineScreen(
             )
         },
     ) { drawerState -> TimelineScaffold(drawerState) }
+}
+
+@Composable
+fun TootScreen(
+    component: KoinScopeComponent,
+    navigation: TimelineNavigation,
+) = TimelineFeature(component, navigation) {
+    TootScaffold()
 }
 
 @Composable

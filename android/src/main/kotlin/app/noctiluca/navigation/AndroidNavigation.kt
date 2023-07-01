@@ -40,7 +40,7 @@ class AndroidNavigation private constructor(
         }
     }
 
-    override fun navigateToTimeline() {
+    override fun navigateToTimelines() {
         navHostController.navigate(RouteTimeline) {
             popUpTo(RouteSignIn) { inclusive = true }
         }
@@ -52,6 +52,10 @@ class AndroidNavigation private constructor(
 
     override fun navigateToAccountDetail(id: String) {
         navHostController.navigate("$RouteAccountDetail/$id")
+    }
+
+    override fun navigateToToot() {
+        navHostController.navigate(ComposableToot)
     }
 
     fun redirectToSignIn(uri: AndroidUri?) {

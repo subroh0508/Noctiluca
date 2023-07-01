@@ -47,7 +47,7 @@ class AndroidNavigation private constructor(
     }
 
     override fun navigateToInstanceDetail(domain: String) {
-        navHostController.navigate("$ComposableInstanceDetail?${AuthorizeResult.QUERY_DOMAIN}=$domain")
+        navHostController.navigate("$RouteSignIn?${AuthorizeResult.QUERY_DOMAIN}=$domain")
     }
 
     override fun navigateToAccountDetail(id: String) {
@@ -63,7 +63,7 @@ class AndroidNavigation private constructor(
 
         navHostController.navigate(
             buildString {
-                append("$ComposableInstanceDetail?")
+                append("$RouteSignIn?")
                 append("${AuthorizeResult.QUERY_DOMAIN}=${uri.host}&")
                 append(uri.query)
             },

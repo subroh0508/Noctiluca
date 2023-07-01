@@ -5,11 +5,14 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.rememberNavController
+import app.noctiluca.decompose.DefaultRootComponent
 import app.noctiluca.navigation.AndroidNavigation
+import com.arkivanov.decompose.defaultComponentContext
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navigation: AndroidNavigation
+    private val root by lazy { DefaultRootComponent(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,7 +24,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             NoctilucaTheme {
-                Routing(navigation)
+                Routing(root, navigation)
             }
         }
     }

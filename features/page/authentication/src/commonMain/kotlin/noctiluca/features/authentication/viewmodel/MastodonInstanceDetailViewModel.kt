@@ -7,16 +7,14 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.childContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.lifecycle.Lifecycle
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
-import noctiluca.instance.model.Instance
+import noctiluca.model.StatusId
 import noctiluca.status.model.Status
 
 class MastodonInstanceDetailViewModel private constructor(
@@ -31,20 +29,14 @@ class MastodonInstanceDetailViewModel private constructor(
     private val instanceLoadState by lazy {
         MutableValue<LoadState>(LoadState.Initial).also {
             it.subscribe { loadState ->
-                mutableUiModel.value = uiModel.value.copy(
-                    instance = loadState.getValueOrNull(),
-                    loading = loadState.loading,
-                    error = loadState.getErrorOrNull(),
-                )
+                mutableUiModel.value = uiModel.value.copy(instance = loadState)
             }
         }
     }
-    private val statusesLoadState by lazy {
+    private val statuses by lazy {
         MutableValue(listOf<Status>()).also {
             it.subscribe { statuses ->
-                mutableUiModel.value = uiModel.value.copy(
-                    statuses = statuses,
-                )
+                mutableUiModel.value = uiModel.value.copy(statuses = statuses)
             }
         }
     }
@@ -55,6 +47,8 @@ class MastodonInstanceDetailViewModel private constructor(
         loadInstanceDetail()
         loadLocalTimeline()
     }
+
+    fun loadMore() = loadLocalTimeline(uiModel.value.statuses.lastOrNull()?.id)
 
     private fun loadInstanceDetail() {
         val job = launchLazy {
@@ -67,41 +61,52 @@ class MastodonInstanceDetailViewModel private constructor(
         job.start()
     }
 
-    private fun loadLocalTimeline() {
+    private fun loadLocalTimeline(maxId: StatusId? = null) {
+        if (maxId == null && uiModel.value.statuses.isNotEmpty()) {
+            return
+        }
+
         launch {
-            runCatching { fetchLocalTimelineUseCase.execute(domain) }
-                .onSuccess { statusesLoadState.value = it }
-                .onFailure { statusesLoadState.value = listOf() }
+            runCatching { fetchLocalTimelineUseCase.execute(domain, maxId) }
+                .onSuccess {
+                    statuses.value =
+                        if (maxId == null)
+                            it
+                        else
+                            statuses.value + it
+                }
+                .onFailure { statuses.value = listOf() }
         }
     }
 
     data class UiModel(
-        val instance: Instance? = null,
+        val instance: LoadState = LoadState.Initial,
         val statuses: List<Status> = listOf(),
-        val loading: Boolean = false,
-        val error: Throwable? = null,
     )
 
     companion object Factory {
         @Composable
-        fun invoke(
+        operator fun invoke(
             domain: String,
             lifecycleRegistry: LifecycleRegistry,
             context: ComponentContext,
         ): MastodonInstanceDetailViewModel {
             val koinScope = LocalScope.current
+            val coroutineScope = rememberCoroutineScope()
 
-            return MastodonInstanceDetailViewModel(
-                domain,
-                remember { koinScope.get() },
-                remember { koinScope.get() },
-                rememberCoroutineScope(),
-                lifecycleRegistry,
-                context.childContext(
-                    "MastodonInstanceDetail",
+            return remember(domain) {
+                MastodonInstanceDetailViewModel(
+                    domain,
+                    koinScope.get(),
+                    koinScope.get(),
+                    coroutineScope,
                     lifecycleRegistry,
+                    context.childContext(
+                        "MastodonInstanceDetail",
+                        lifecycleRegistry,
+                    )
                 )
-            )
+            }
         }
     }
 }

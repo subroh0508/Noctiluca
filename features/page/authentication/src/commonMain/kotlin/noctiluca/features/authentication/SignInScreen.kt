@@ -3,6 +3,8 @@ package noctiluca.features.authentication
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
+import com.arkivanov.decompose.ComponentContext
+import noctiluca.features.authentication.di.SignInFeatureContext
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
@@ -17,32 +19,26 @@ internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
 
 @Composable
-fun SearchInstanceSuggestsScreen(
-    koinComponent: KoinScopeComponent,
-    navigation: SignInNavigation,
-) = SignInFeature(
-    authorizeResult = null,
-    koinComponent,
-    navigation,
-) { SearchInstanceScaffold() }
-
-@Composable
-fun InstanceDetailScreen(
+fun SignInScreen(
     domain: String?,
     authorizeResult: AuthorizeResult?,
-    koinComponent: KoinScopeComponent,
+    rootContext: ComponentContext,
     navigation: SignInNavigation,
-) = SignInFeature(
-    authorizeResult,
-    koinComponent,
-    navigation,
 ) {
-    if (domain == null) {
-        navigation.backPressed()
-        return@SignInFeature
-    }
+    val context = remember { SignInFeatureContext.Factory(rootContext) }
 
-    InstanceDetailScaffold(domain)
+    SignInFeature(
+        authorizeResult,
+        context,
+        navigation,
+    ) {
+        if (domain == null) {
+            SearchInstanceScaffold()
+            return@SignInFeature
+        }
+
+        InstanceDetailScaffold(domain, context)
+    }
 }
 
 @Composable

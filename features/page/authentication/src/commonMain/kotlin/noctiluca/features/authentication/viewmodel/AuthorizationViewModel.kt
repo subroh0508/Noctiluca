@@ -12,6 +12,7 @@ import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
+import noctiluca.features.authentication.LocalNavigation
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.SignInNavigation
 import noctiluca.features.authentication.getString
@@ -81,13 +82,13 @@ class AuthorizationViewModel(
 
     companion object Factory {
         @Composable
-        fun invoke(
+        operator fun invoke(
             domain: String,
-            navigation: SignInNavigation?,
             lifecycleRegistry: LifecycleRegistry,
             context: ComponentContext,
         ): AuthorizationViewModel {
             val koinScope = LocalScope.current
+            val navigation = LocalNavigation.current
 
             return AuthorizationViewModel(
                 getString().sign_in_client_name,

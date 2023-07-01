@@ -3,9 +3,14 @@ package noctiluca.features.authentication.templates.scaffold
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import noctiluca.features.authentication.LocalAuthorizeResult
 import noctiluca.features.authentication.LocalNavigation
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
@@ -19,6 +24,7 @@ import noctiluca.features.authentication.state.rememberMastodonInstanceDetail
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailActionButtons
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailHeader
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailTopAppBar
+import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.components.atoms.card.CardHeader
 import noctiluca.features.components.atoms.card.CardSupporting
 import noctiluca.features.components.atoms.card.FilledCard
@@ -32,16 +38,25 @@ import noctiluca.instance.model.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun InstanceDetailScaffold(domain: String) {
-    val instanceLoadState by rememberMastodonInstanceDetail(domain)
+internal fun InstanceDetailScaffold(
+    domain: String,
+    context: ComponentContext,
+) {
+    val viewModel = MastodonInstanceDetailViewModel.Factory(
+        domain,
+        LifecycleRegistry(),
+        context,
+    )
 
-    val localTimelineState = rememberLocalTimelineState(domain)
-    val tabbedScrollState = rememberTabbedInstanceDetailState(instanceLoadState.getValueOrNull())
+    LaunchedEffect(domain) { viewModel.load() }
+
+    val uiModel by viewModel.uiModel.subscribeAsState()
+    val tabbedScrollState = rememberTabbedInstanceDetailState(uiModel.instance.getValueOrNull())
 
     SnackbarForAuthorizationError()
 
     LoadStateSmallHeadlinedScaffold<Instance>(
-        instanceLoadState,
+        uiModel.instance,
         tabbedScrollState.lazyListState,
         tabComposeIndex = 3,
         snackbarHostState = LocalSnackbarHostState.current,
@@ -72,7 +87,10 @@ internal fun InstanceDetailScaffold(domain: String) {
         when (tabbedScrollState.tab) {
             InstancesTab.INFO -> item { InstanceInformationTab(instance) }
             InstancesTab.EXTENDED_DESCRIPTION -> item { InstanceExtendedDescriptionTab(instance) }
-            InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(instance, localTimelineState)
+            InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(
+                uiModel.statuses,
+                loadMore = { viewModel.loadMore() }
+            )
         }
     }
 }

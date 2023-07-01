@@ -20,6 +20,9 @@ kotlin {
 
                 implementation(libs.coroutinesCore)
 
+                implementation(libs.decomposeCore)
+                implementation(libs.decomposeComposeJetbrains)
+
                 implementation(libs.koinCore)
             }
         }

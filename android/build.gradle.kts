@@ -33,6 +33,8 @@ dependencies {
     implementation(libs.bundles.ktor.client.jvm)
     implementation(libs.kotlinx.serialization)
 
+    implementation(libs.decompose.core)
+
     implementation(libs.koin.core)
     implementation(libs.koin.android)
 

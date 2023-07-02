@@ -2,23 +2,22 @@ package noctiluca.features.authentication.templates.scaffold
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.LocalAuthorizeResult
-import noctiluca.features.authentication.LocalNavigation
+import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
+import noctiluca.features.authentication.organisms.tab.InstancesTab
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
 import noctiluca.features.authentication.organisms.tab.info.InstanceInformationTab
 import noctiluca.features.authentication.organisms.tab.localtimeline.InstanceLocalTimelineTab
 import noctiluca.features.authentication.organisms.tab.rememberTabbedInstanceDetailState
-import noctiluca.features.authentication.state.*
-import noctiluca.features.authentication.state.rememberLocalTimelineState
-import noctiluca.features.authentication.state.rememberMastodonInstanceDetail
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailActionButtons
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailHeader
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailTopAppBar
+import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.components.atoms.card.CardHeader
 import noctiluca.features.components.atoms.card.CardSupporting
 import noctiluca.features.components.atoms.card.FilledCard
@@ -32,22 +31,27 @@ import noctiluca.instance.model.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun InstanceDetailScaffold(domain: String) {
-    val instanceLoadState by rememberMastodonInstanceDetail(domain)
+internal fun InstanceDetailScaffold(
+    viewModel: MastodonInstanceDetailViewModel,
+) {
+    val authorizeResult = LocalAuthorizeResult.current
 
-    val localTimelineState = rememberLocalTimelineState(domain)
-    val tabbedScrollState = rememberTabbedInstanceDetailState(instanceLoadState.getValueOrNull())
+    LaunchedEffect(authorizeResult) { viewModel.fetchAccessToken(authorizeResult) }
+    LaunchedEffect(viewModel.domain) { viewModel.load() }
+
+    val uiModel by viewModel.uiModel.subscribeAsState()
+    val tabbedScrollState = rememberTabbedInstanceDetailState(uiModel.instance.getValueOrNull())
 
     SnackbarForAuthorizationError()
 
     LoadStateSmallHeadlinedScaffold<Instance>(
-        instanceLoadState,
+        uiModel.instance,
         tabbedScrollState.lazyListState,
         tabComposeIndex = 3,
         snackbarHostState = LocalSnackbarHostState.current,
         topAppBar = { scrollBehavior, job, instance ->
             InstanceDetailTopAppBar(
-                domain,
+                viewModel.domain,
                 instance,
                 job,
                 tabbedScrollState,
@@ -57,8 +61,9 @@ internal fun InstanceDetailScaffold(domain: String) {
         bottomBar = { instance, horizontalPadding ->
             InstanceDetailActionButtons(
                 instance,
+                authorizeResult?.getCodeOrNull() != null && viewModel.loading,
                 horizontalPadding,
-            )
+            ) { viewModel.requestAuthorize(it) }
         },
         tabs = { InstanceDetailTabs(tabbedScrollState) },
         fallback = { error, paddingValues ->
@@ -72,7 +77,10 @@ internal fun InstanceDetailScaffold(domain: String) {
         when (tabbedScrollState.tab) {
             InstancesTab.INFO -> item { InstanceInformationTab(instance) }
             InstancesTab.EXTENDED_DESCRIPTION -> item { InstanceExtendedDescriptionTab(instance) }
-            InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(instance, localTimelineState)
+            InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(
+                uiModel.statuses,
+                loadMore = { viewModel.loadMore() }
+            )
         }
     }
 }
@@ -84,14 +92,14 @@ private fun Fallback(
 ) {
     error ?: return
 
-    val navigation = LocalNavigation.current
+    val navigator = LocalNavigator.current
 
     FilledCard(
         headline = { CardHeader(error.label()) },
         supporting = { CardSupporting(error.description()) },
         actions = {
             Button(
-                onClick = { navigation?.backPressed() },
+                onClick = { navigator?.backPressed() },
             ) {
                 Text(getCommonString().back)
             }

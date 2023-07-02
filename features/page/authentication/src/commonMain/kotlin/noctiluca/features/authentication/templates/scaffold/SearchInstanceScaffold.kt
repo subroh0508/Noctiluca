@@ -6,10 +6,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import noctiluca.features.authentication.LocalNavigation
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
+import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.components.molecules.HeadlineWithProgress
 
@@ -17,20 +19,27 @@ private val HorizontalPadding = 16.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SearchInstanceScaffold() {
-    val navigation = LocalNavigation.current
+internal fun SearchInstanceScaffold(
+    viewModel: MastodonInstanceListViewModel,
+) {
+    val navigator = LocalNavigator.current
+    val uiModel by viewModel.uiModel.subscribeAsState()
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
     ) { paddingValues ->
         SearchInstanceQueryTextField(
+            uiModel = uiModel,
             paddingValues = paddingValues,
+            onDebouncedTextChange = { viewModel.search(it) },
             modifier = Modifier.padding(horizontal = HorizontalPadding),
             headline = { loading -> Headline(loading) },
             listContent = { suggests ->
                 InstanceSuggestsList(
                     suggests,
-                    onSelect = { navigation?.navigateToInstanceDetail(it.domain) },
+                    onSelect = {
+                        navigator?.navigateToInstanceDetail(it.domain)
+                    },
                 )
             },
         )

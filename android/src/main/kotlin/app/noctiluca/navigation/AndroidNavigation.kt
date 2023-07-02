@@ -35,6 +35,10 @@ class AndroidNavigation private constructor(
     }
 
     override fun backToSignIn() {
+        if (navHostController.currentBackStackEntry?.destination?.route?.startsWith(RouteSignIn) == true) {
+            return
+        }
+
         navHostController.navigate(RouteSignIn) {
             popUpTo(RouteTimeline) { inclusive = true }
         }
@@ -44,10 +48,6 @@ class AndroidNavigation private constructor(
         navHostController.navigate(RouteTimeline) {
             popUpTo(RouteSignIn) { inclusive = true }
         }
-    }
-
-    override fun navigateToInstanceDetail(domain: String) {
-        navHostController.navigate("$ComposableInstanceDetail?${AuthorizeResult.QUERY_DOMAIN}=$domain")
     }
 
     override fun navigateToAccountDetail(id: String) {
@@ -63,7 +63,7 @@ class AndroidNavigation private constructor(
 
         navHostController.navigate(
             buildString {
-                append("$ComposableInstanceDetail?")
+                append("$RouteSignIn?")
                 append("${AuthorizeResult.QUERY_DOMAIN}=${uri.host}&")
                 append(uri.query)
             },

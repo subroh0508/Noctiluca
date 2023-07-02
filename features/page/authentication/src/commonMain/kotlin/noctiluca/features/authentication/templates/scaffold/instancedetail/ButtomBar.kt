@@ -4,20 +4,19 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import noctiluca.features.authentication.LocalAuthorizeResult
 import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.state.rememberAuthorizedUser
 import noctiluca.instance.model.Instance
 
 @Composable
 internal fun BoxScope.InstanceDetailActionButtons(
     instance: Instance,
+    isSignInProgress: Boolean,
     horizontalPadding: Dp,
+    onClickAuthorize: (Instance) -> Unit,
 ) = Column(
     modifier = Modifier.fillMaxWidth()
         .align(Alignment.BottomCenter)
@@ -32,17 +31,15 @@ internal fun BoxScope.InstanceDetailActionButtons(
                 horizontal = horizontalPadding,
             ),
         horizontalArrangement = Arrangement.End
-    ) { AuthorizeButton(instance) }
+    ) { AuthorizeButton(instance, isSignInProgress, onClickAuthorize) }
 }
 
 @Composable
 private fun AuthorizeButton(
     instance: Instance,
+    isSignInProgress: Boolean,
+    onClickAuthorize: (Instance) -> Unit,
 ) {
-    val authorizedUserState = rememberAuthorizedUser(instance.domain)
-    val isSignInProgress = LocalAuthorizeResult.current
-        ?.getCodeOrNull() != null && authorizedUserState.loading
-
     if (isSignInProgress) {
         OutlinedButton(
             onClick = {},
@@ -52,9 +49,7 @@ private fun AuthorizeButton(
         return
     }
 
-    val scope = rememberCoroutineScope()
-
     Button(
-        onClick = { authorizedUserState.requestAuthorize(scope, instance) },
+        onClick = { onClickAuthorize(instance) },
     ) { Text(getString().sign_in_request_authentication) }
 }

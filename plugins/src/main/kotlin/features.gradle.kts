@@ -3,6 +3,7 @@ import extension.*
 plugins {
     id("multiplatform-library")
     id("org.jetbrains.compose")
+    id("kotlin-parcelize")
 }
 
 kotlin {
@@ -19,6 +20,9 @@ kotlin {
                 implementation(compose.preview)
 
                 implementation(libs.coroutinesCore)
+
+                implementation(libs.decomposeCore)
+                implementation(libs.decomposeComposeJetbrains)
 
                 implementation(libs.koinCore)
             }

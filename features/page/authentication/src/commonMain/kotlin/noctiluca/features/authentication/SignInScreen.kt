@@ -7,7 +7,6 @@ import com.arkivanov.decompose.Child
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.arkivanov.decompose.value.getValue
-import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
@@ -30,35 +29,40 @@ fun SignInScreen(
     authorizeResult: AuthorizeResult?,
     rootContext: ComponentContext,
     navigation: SignInNavigation,
-) {
-    val context = remember { SignInFeatureContext.Factory(rootContext) }
+) = SignInFeature(
+    authorizeResult,
+    SignInFeatureContext.Factory(rootContext),
+) { page ->
+    when (page) {
+        is SignInFeatureContext.Child.MastodonInstanceList -> SearchInstanceScaffold(
+            MastodonInstanceListViewModel.Provider(page),
+        )
 
-    SignInFeature(
-        authorizeResult,
-        context,
-        context,
+        is SignInFeatureContext.Child.MastodonInstanceDetail -> InstanceDetailScaffold(
+            MastodonInstanceDetailViewModel.Provider(
+                domain ?: page.domain,
+                navigation,
+                page,
+            )
+        )
+    }
+}
+
+@Composable
+private fun SignInFeature(
+    authorizeResult: AuthorizeResult?,
+    context: SignInFeatureContext,
+    content: @Composable (SignInFeatureContext.Child) -> Unit,
+) = FeatureComposable(context) {
+    CompositionLocalProvider(
+        LocalResources provides Resources(Locale.current.language),
+        LocalAuthorizeResult provides authorizeResult,
+        LocalContext provides context,
+        LocalSnackbarHostState provides remember { SnackbarHostState() },
     ) {
-        val child by context.childStack.subscribeAsState()
+        val page by context.childStack.subscribeAsState()
 
-        child.active.instance.let {
-            when (it) {
-                is SignInFeatureContext.Child.MastodonInstanceList -> SearchInstanceScaffold(
-                    MastodonInstanceListViewModel.Provider(
-                        remember { LifecycleRegistry() },
-                        it,
-                    ),
-                )
-
-                is SignInFeatureContext.Child.MastodonInstanceDetail -> InstanceDetailScaffold(
-                    MastodonInstanceDetailViewModel.Provider(
-                        domain ?: it.domain,
-                        navigation,
-                        remember { LifecycleRegistry() },
-                        it,
-                    )
-                )
-            }
-        }
+        content(page.active.instance)
     }
 }
 

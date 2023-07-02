@@ -1,19 +1,24 @@
 package noctiluca.features.authentication.viewmodel.context
 
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.*
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import noctiluca.authentication.domain.di.AuthenticationDomainModule
+import noctiluca.features.components.PageContext
 import noctiluca.features.components.di.FeatureComponent
 import org.koin.core.component.KoinScopeComponent
 import org.koin.dsl.module
 
 class SignInFeatureContext private constructor(
-    rootContext: ComponentContext,
+    lifecycleRegistry: LifecycleRegistry,
+    componentContext: ComponentContext,
     koinScopeComponent: KoinScopeComponent,
-) : ComponentContext by rootContext, KoinScopeComponent by koinScopeComponent {
+) : PageContext(KEY, lifecycleRegistry, componentContext, koinScopeComponent) {
     class SignInComponent : FeatureComponent({ scope ->
         module {
             scope(scope.scopeQualifier) {
@@ -75,11 +80,21 @@ class SignInFeatureContext private constructor(
     }
 
     companion object Factory {
+        private const val KEY = "SignInFeatureContext"
+
+        @Composable
         operator fun invoke(
             rootContext: ComponentContext,
-        ) = SignInFeatureContext(
-            rootContext,
-            SignInComponent(),
-        )
+        ): SignInFeatureContext {
+            val lifecycleRegistry = remember { LifecycleRegistry() }
+
+            return remember {
+                SignInFeatureContext(
+                    lifecycleRegistry,
+                    rootContext,
+                    SignInComponent(),
+                )
+            }
+        }
     }
 }

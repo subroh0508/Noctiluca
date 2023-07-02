@@ -37,6 +37,8 @@ interface AuthorizeViewModel {
         )
     }
 
+    val loading: Boolean
+
     fun requestAuthorize(instance: Instance)
     fun fetchAccessToken(result: AuthorizeResult?)
 
@@ -51,6 +53,8 @@ interface AuthorizeViewModel {
         context: SignInFeatureContext.Child.MastodonInstanceDetail,
     ) : AuthorizeViewModel, ViewModel(coroutineScope, lifecycleRegistry, context) {
         private val authorizationLoadState by lazy { MutableValue<LoadState>(LoadState.Initial) }
+
+        override val loading get() = authorizationLoadState.value.loading
 
         override fun requestAuthorize(instance: Instance) {
             val domain = Domain(instance.domain)

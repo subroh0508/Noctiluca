@@ -34,6 +34,9 @@ import noctiluca.instance.model.Instance
 internal fun InstanceDetailScaffold(
     viewModel: MastodonInstanceDetailViewModel,
 ) {
+    val authorizeResult = LocalAuthorizeResult.current
+
+    LaunchedEffect(authorizeResult) { viewModel.fetchAccessToken(authorizeResult) }
     LaunchedEffect(viewModel.domain) { viewModel.load() }
 
     val uiModel by viewModel.uiModel.subscribeAsState()
@@ -58,8 +61,9 @@ internal fun InstanceDetailScaffold(
         bottomBar = { instance, horizontalPadding ->
             InstanceDetailActionButtons(
                 instance,
+                authorizeResult?.getCodeOrNull() != null && viewModel.loading,
                 horizontalPadding,
-            )
+            ) { viewModel.requestAuthorize(it) }
         },
         tabs = { InstanceDetailTabs(tabbedScrollState) },
         fallback = { error, paddingValues ->

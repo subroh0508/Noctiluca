@@ -80,10 +80,10 @@ class MastodonInstanceListViewModel private constructor(
 
         @Composable
         operator fun invoke(
-            lifecycleRegistry: LifecycleRegistry,
             context: SignInFeatureContext.Child.MastodonInstanceList,
         ): MastodonInstanceListViewModel {
             val coroutineScope = rememberCoroutineScope()
+            val lifecycleRegistry = remember { LifecycleRegistry() }
 
             return remember {
                 MastodonInstanceListViewModel(

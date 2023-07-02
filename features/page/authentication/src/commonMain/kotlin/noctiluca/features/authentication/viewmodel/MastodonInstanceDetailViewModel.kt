@@ -46,12 +46,12 @@ class MastodonInstanceDetailViewModel private constructor(
         operator fun invoke(
             domain: String,
             navigation: SignInNavigation?,
-            lifecycleRegistry: LifecycleRegistry,
             context: SignInFeatureContext.Child.MastodonInstanceDetail,
         ): MastodonInstanceDetailViewModel {
             val clientName = getString().sign_in_client_name
             val redirectUri = buildRedirectUri(domain)
             val coroutineScope = rememberCoroutineScope()
+            val lifecycleRegistry = remember { LifecycleRegistry() }
 
             return remember {
                 MastodonInstanceDetailViewModel(

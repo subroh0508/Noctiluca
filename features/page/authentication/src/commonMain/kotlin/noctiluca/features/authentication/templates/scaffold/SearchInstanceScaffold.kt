@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
@@ -22,13 +23,15 @@ internal fun SearchInstanceScaffold(
     viewModel: MastodonInstanceListViewModel,
 ) {
     val navigator = LocalNavigator.current
+    val uiModel by viewModel.uiModel.subscribeAsState()
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
     ) { paddingValues ->
         SearchInstanceQueryTextField(
-            viewModel = viewModel,
+            uiModel = uiModel,
             paddingValues = paddingValues,
+            onDebouncedTextChange = { viewModel.search(it) },
             modifier = Modifier.padding(horizontal = HorizontalPadding),
             headline = { loading -> Headline(loading) },
             listContent = { suggests ->

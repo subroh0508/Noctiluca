@@ -51,8 +51,8 @@ class MastodonInstanceListViewModel private constructor(
             return
         }
 
+        mutableUiModel.value = uiModel.value.copy(query = query)
         if (query.isBlank()) {
-            mutableUiModel.value = uiModel.value.copy(query = query)
             mutableInstanceSuggests.value = LoadState.Initial
             return
         }

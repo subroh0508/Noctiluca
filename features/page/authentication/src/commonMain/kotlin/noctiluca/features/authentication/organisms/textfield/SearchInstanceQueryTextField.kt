@@ -23,23 +23,23 @@ private const val DEBOUNCE_TIME_MILLIS = 500L
 
 @Composable
 internal fun SearchInstanceQueryTextField(
-    viewModel: MastodonInstanceListViewModel,
+    uiModel: MastodonInstanceListViewModel.UiModel,
     paddingValues: PaddingValues,
+    onDebouncedTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     headline: @Composable (Boolean) -> Unit = {},
     listContent: @Composable (List<Instance.Suggest>) -> Unit,
 ) = Column(
     modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
 ) {
-    var query by rememberSaveable { mutableStateOf("") }
-    val uiModel by viewModel.uiModel.subscribeAsState()
+    var query by remember(uiModel.query) { mutableStateOf(uiModel.query) }
 
     headline(uiModel.suggests.loading)
 
     DebouncedTextForm(
         query,
         DEBOUNCE_TIME_MILLIS,
-        onDebouncedChange = { viewModel.search(it) },
+        onDebouncedChange = onDebouncedTextChange,
     ) { textState ->
         Box(
             modifier = modifier.padding(bottom = 8.dp),

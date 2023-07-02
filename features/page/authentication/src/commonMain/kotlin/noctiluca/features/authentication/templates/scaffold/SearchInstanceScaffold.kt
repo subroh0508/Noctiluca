@@ -6,7 +6,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import noctiluca.features.authentication.LocalContext
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
@@ -20,27 +19,23 @@ private val HorizontalPadding = 16.dp
 @Composable
 internal fun SearchInstanceScaffold(
     viewModel: MastodonInstanceListViewModel,
-) {
-    val navigation = LocalContext.current
-
-    Scaffold(
-        topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
-    ) { paddingValues ->
-        SearchInstanceQueryTextField(
-            viewModel = viewModel,
-            paddingValues = paddingValues,
-            modifier = Modifier.padding(horizontal = HorizontalPadding),
-            headline = { loading -> Headline(loading) },
-            listContent = { suggests ->
-                InstanceSuggestsList(
-                    suggests,
-                    onSelect = {
-                        navigation?.navigateToInstanceDetail(it.domain)
-                    },
-                )
-            },
-        )
-    }
+) = Scaffold(
+    topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
+) { paddingValues ->
+    SearchInstanceQueryTextField(
+        viewModel = viewModel,
+        paddingValues = paddingValues,
+        modifier = Modifier.padding(horizontal = HorizontalPadding),
+        headline = { loading -> Headline(loading) },
+        listContent = { suggests ->
+            InstanceSuggestsList(
+                suggests,
+                onSelect = {
+                    viewModel.navigator.navigateToInstanceDetail(it.domain)
+                },
+            )
+        },
+    )
 }
 
 @Composable

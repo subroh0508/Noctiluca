@@ -57,7 +57,7 @@ interface AuthorizeViewModel {
 
             val job = launchLazy {
                 runCatching { requestAppCredentialUseCase.execute(domain, clientName, redirectUri) }
-                    .onSuccess { context.openBrowser(it) }
+                    .onSuccess { context.navigator.openBrowser(it) }
                     .onFailure { authorizationLoadState.value = LoadState.Error(it) }
             }
 
@@ -82,7 +82,7 @@ interface AuthorizeViewModel {
                 runCatching { requestRequestAccessTokenUseCase.execute(code, redirectUri) }
                     .onSuccess {
                         if (it != null) {
-                            context.navigateToTimelines()
+                            context.navigator.navigateToTimelines()
                             return@onSuccess
                         }
 

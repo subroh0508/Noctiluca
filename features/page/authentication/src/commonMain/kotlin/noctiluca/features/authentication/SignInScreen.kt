@@ -15,9 +15,7 @@ import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
 import noctiluca.features.components.di.getKoinRootScope
 import org.koin.core.component.KoinScopeComponent
 
-internal val LocalContext = compositionLocalOf<SignInNavigator?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
-internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
 
 @Composable
@@ -53,27 +51,10 @@ private fun SignInFeature(
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalAuthorizeResult provides authorizeResult,
-        LocalContext provides context,
         LocalSnackbarHostState provides remember { SnackbarHostState() },
     ) {
         val page by context.childStack.subscribeAsState()
 
         content(page.active.instance)
     }
-}
-
-@Composable
-private fun SignInFeature(
-    authorizeResult: AuthorizeResult?,
-    koinComponent: KoinScopeComponent,
-    context: SignInNavigator,
-    content: @Composable () -> Unit,
-) = FeatureComposable(koinComponent) { scope ->
-    CompositionLocalProvider(
-        LocalResources provides Resources(Locale.current.language),
-        LocalScope provides scope,
-        LocalAuthorizeResult provides authorizeResult,
-        LocalContext provides context,
-        LocalSnackbarHostState provides remember { SnackbarHostState() },
-    ) { content() }
 }

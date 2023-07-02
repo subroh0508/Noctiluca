@@ -16,9 +16,9 @@ import org.koin.core.component.get
 
 class MastodonInstanceListViewModel private constructor(
     private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
+    private val context: SignInNavigator.Child.MastodonInstanceList,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
-    context: SignInNavigator.Child.MastodonInstanceList,
 ) : ViewModel(coroutineScope, lifecycleRegistry, context) {
     private val mutableUiModel by lazy {
         MutableValue(cachedUiModel ?: UiModel()).also {
@@ -87,11 +87,13 @@ class MastodonInstanceListViewModel private constructor(
             return remember {
                 MastodonInstanceListViewModel(
                     context.get(),
+                    context,
                     coroutineScope,
                     lifecycleRegistry,
-                    context,
                 )
             }
         }
     }
+
+    val navigator get() = context.navigator
 }

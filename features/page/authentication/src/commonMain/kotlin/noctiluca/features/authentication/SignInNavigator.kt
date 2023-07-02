@@ -44,20 +44,15 @@ interface SignInNavigator : LifecycleRegistry, ComponentContext, KoinScopeCompon
 
     sealed class Child {
         class MastodonInstanceList(
-            private val navigator: SignInNavigator,
+            val navigator: SignInNavigator,
             childContext: ComponentContext,
-        ) : Child(), ComponentContext by childContext, KoinScopeComponent by navigator {
-            fun navigateToInstanceDetail(domain: String) = navigator.navigateToInstanceDetail(domain)
-        }
+        ) : Child(), ComponentContext by childContext, KoinScopeComponent by navigator
 
         class MastodonInstanceDetail(
             val domain: String,
-            private val navigator: SignInNavigator,
+            val navigator: SignInNavigator,
             childContext: ComponentContext,
-        ) : Child(), ComponentContext by childContext, KoinScopeComponent by navigator {
-            fun openBrowser(uri: Uri) = navigator.openBrowser(uri)
-            fun navigateToTimelines() = navigator.navigateToTimelines()
-        }
+        ) : Child(), ComponentContext by childContext, KoinScopeComponent by navigator
     }
 
     private sealed class Config : Parcelable {

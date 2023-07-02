@@ -15,11 +15,11 @@ import noctiluca.model.Uri
 
 class MastodonInstanceDetailViewModel private constructor(
     val domain: String,
+    private val context: SignInNavigator.Child.MastodonInstanceDetail,
     clientName: String,
     redirectUri: Uri,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
-    context: SignInNavigator.Child.MastodonInstanceDetail,
 ) : ViewModel(
     coroutineScope,
     lifecycleRegistry,
@@ -52,13 +52,15 @@ class MastodonInstanceDetailViewModel private constructor(
             return remember {
                 MastodonInstanceDetailViewModel(
                     domain,
+                    context,
                     clientName,
                     redirectUri,
                     coroutineScope,
                     lifecycleRegistry,
-                    context,
                 )
             }
         }
     }
+
+    val navigator get() = context.navigator
 }

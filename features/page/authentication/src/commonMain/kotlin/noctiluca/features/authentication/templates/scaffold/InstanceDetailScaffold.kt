@@ -7,13 +7,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.LocalAuthorizeResult
-import noctiluca.features.authentication.LocalContext
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
+import noctiluca.features.authentication.organisms.tab.InstancesTab
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
 import noctiluca.features.authentication.organisms.tab.info.InstanceInformationTab
 import noctiluca.features.authentication.organisms.tab.localtimeline.InstanceLocalTimelineTab
 import noctiluca.features.authentication.organisms.tab.rememberTabbedInstanceDetailState
-import noctiluca.features.authentication.state.*
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailActionButtons
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailHeader
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailTopAppBar
@@ -53,9 +52,12 @@ internal fun InstanceDetailScaffold(
             InstanceDetailTopAppBar(
                 viewModel.domain,
                 instance,
-                job,
                 tabbedScrollState,
                 scrollBehavior,
+                onBackPressed = {
+                    job?.cancel()
+                    viewModel.navigator.backPressed()
+                },
             )
         },
         bottomBar = { instance, horizontalPadding ->
@@ -70,6 +72,7 @@ internal fun InstanceDetailScaffold(
             Fallback(
                 error,
                 paddingValues,
+                onBackPressed = { viewModel.navigator.backPressed() },
             )
         },
     ) { instance, tabs, horizontalPadding ->
@@ -89,17 +92,16 @@ internal fun InstanceDetailScaffold(
 private fun Fallback(
     error: Throwable?,
     paddingValues: PaddingValues,
+    onBackPressed: () -> Unit,
 ) {
     error ?: return
-
-    val navigation = LocalContext.current
 
     FilledCard(
         headline = { CardHeader(error.label()) },
         supporting = { CardSupporting(error.description()) },
         actions = {
             Button(
-                onClick = { navigation?.backPressed() },
+                onClick = onBackPressed,
             ) {
                 Text(getCommonString().back)
             }

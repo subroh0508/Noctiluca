@@ -3,14 +3,12 @@ package noctiluca.features.authentication.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
-import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState

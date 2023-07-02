@@ -7,7 +7,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.rememberNavController
 import app.noctiluca.decompose.DefaultRootComponent
 import app.noctiluca.navigation.AndroidNavigation
-import com.arkivanov.decompose.defaultComponentContext
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {

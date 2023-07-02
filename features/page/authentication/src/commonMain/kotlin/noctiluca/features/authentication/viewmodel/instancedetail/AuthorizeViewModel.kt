@@ -1,6 +1,5 @@
 package noctiluca.features.authentication.viewmodel.instancedetail
 
-import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
@@ -9,7 +8,6 @@ import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
 import noctiluca.features.authentication.SignInNavigation
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.UnknownException
-import noctiluca.features.authentication.viewmodel.AuthorizationViewModel
 import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState

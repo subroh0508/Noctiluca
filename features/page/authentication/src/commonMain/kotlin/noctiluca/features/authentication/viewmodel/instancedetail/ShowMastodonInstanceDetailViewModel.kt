@@ -1,13 +1,11 @@
 package noctiluca.features.authentication.viewmodel.instancedetail
 
-import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
-import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
@@ -95,9 +93,9 @@ interface ShowMastodonInstanceDetailViewModel {
                 runCatching { fetchLocalTimelineUseCase.execute(domain, maxId) }
                     .onSuccess {
                         statuses.value =
-                            if (maxId == null)
+                            if (maxId == null) {
                                 it
-                            else
+                            } else
                                 statuses.value + it
                     }
                     .onFailure { statuses.value = listOf() }

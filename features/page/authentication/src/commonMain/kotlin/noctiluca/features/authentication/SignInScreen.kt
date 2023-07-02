@@ -7,10 +7,13 @@ import com.arkivanov.decompose.Child
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import com.arkivanov.decompose.value.getValue
-import noctiluca.features.authentication.di.SignInFeatureContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
+import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
+import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
+import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
 import noctiluca.features.components.FeatureComposable
 import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
 import noctiluca.features.components.di.getKoinRootScope
@@ -40,13 +43,19 @@ fun SignInScreen(
         child.active.instance.let {
             when (it) {
                 is SignInFeatureContext.Child.MastodonInstanceList -> SearchInstanceScaffold(
-                    it,
-                    context.restoreSuggests() ?: listOf(),
+                    MastodonInstanceListViewModel.Provider(
+                        remember { LifecycleRegistry() },
+                        it,
+                    ),
                 )
 
                 is SignInFeatureContext.Child.MastodonInstanceDetail -> InstanceDetailScaffold(
-                    domain ?: it.domain,
-                    it,
+                    MastodonInstanceDetailViewModel.Provider(
+                        domain ?: it.domain,
+                        navigation,
+                        remember { LifecycleRegistry() },
+                        it,
+                    )
                 )
             }
         }

@@ -9,8 +9,8 @@ import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
 import noctiluca.features.authentication.*
 import noctiluca.features.authentication.LocalAuthorizeResult
 import noctiluca.features.authentication.LocalScope
-import noctiluca.features.authentication.di.SignInFeatureContext
 import noctiluca.features.authentication.model.*
+import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
 import noctiluca.features.components.model.LoadState
 import noctiluca.features.components.state.LoadStateComposeState
 import noctiluca.instance.model.Instance

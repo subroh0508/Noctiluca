@@ -2,10 +2,7 @@ package noctiluca.features.authentication.templates.scaffold
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import com.arkivanov.decompose.ComponentContext
@@ -37,17 +34,9 @@ import noctiluca.instance.model.Instance
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun InstanceDetailScaffold(
-    domain: String,
-    context: ComponentContext,
+    viewModel: MastodonInstanceDetailViewModel,
 ) {
-    val lifecycleRegistry = remember { LifecycleRegistry() }
-    val viewModel = MastodonInstanceDetailViewModel.Factory(
-        domain,
-        lifecycleRegistry,
-        context,
-    )
-
-    LaunchedEffect(domain) { viewModel.load() }
+    LaunchedEffect(viewModel.domain) { viewModel.load() }
 
     val uiModel by viewModel.uiModel.subscribeAsState()
     val tabbedScrollState = rememberTabbedInstanceDetailState(uiModel.instance.getValueOrNull())
@@ -61,7 +50,7 @@ internal fun InstanceDetailScaffold(
         snackbarHostState = LocalSnackbarHostState.current,
         topAppBar = { scrollBehavior, job, instance ->
             InstanceDetailTopAppBar(
-                domain,
+                viewModel.domain,
                 instance,
                 job,
                 tabbedScrollState,

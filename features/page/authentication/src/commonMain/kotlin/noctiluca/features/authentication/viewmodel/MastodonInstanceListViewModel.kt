@@ -6,26 +6,37 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
+import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 import noctiluca.features.authentication.LocalScope
-import noctiluca.features.authentication.di.SignInFeatureContext
+import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
 import noctiluca.instance.model.Instance
+import org.koin.core.component.get
 
 class MastodonInstanceListViewModel private constructor(
     private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
-    suggests: List<Instance.Suggest>,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
-    componentContext: ComponentContext,
-) : ViewModel(coroutineScope, lifecycleRegistry, componentContext) {
-    private val mutableUiModel by lazy { MutableValue(UiModel()) }
+    context: SignInFeatureContext.Child.MastodonInstanceList,
+) : ViewModel(coroutineScope, lifecycleRegistry, context) {
+    private val mutableUiModel by lazy {
+        MutableValue(cachedUiModel ?: UiModel()).also {
+            it.subscribe { model ->
+                if (cachedUiModel != null) {
+                    instanceKeeper.remove(UI_MODEL_KEEPER)
+                }
+
+                instanceKeeper.put(UI_MODEL_KEEPER, model)
+            }
+        }
+    }
 
     private val mutableInstanceSuggests by lazy {
-        MutableValue<LoadState>(LoadState.Loaded(suggests)).also {
+        MutableValue(cachedUiModel?.suggests ?: LoadState.Initial).also {
             it.subscribe { loadState ->
                 mutableUiModel.value = uiModel.value.copy(suggests = loadState)
             }
@@ -33,6 +44,8 @@ class MastodonInstanceListViewModel private constructor(
     }
 
     val uiModel: Value<UiModel> = mutableUiModel
+
+    private val cachedUiModel get() = instanceKeeper.get(UI_MODEL_KEEPER) as? UiModel
 
     fun search(query: String) {
         val prevQuery = uiModel.value.query
@@ -60,22 +73,23 @@ class MastodonInstanceListViewModel private constructor(
     data class UiModel(
         val query: String = "",
         val suggests: LoadState = LoadState.Initial,
-    )
+    ) : InstanceKeeper.Instance {
+        override fun onDestroy() = Unit
+    }
 
-    companion object Factory {
+    companion object Provider {
+        private const val UI_MODEL_KEEPER = "MastodonInstanceListViewModel.UiModel"
+
         @Composable
         operator fun invoke(
-            suggests: List<Instance.Suggest>,
             lifecycleRegistry: LifecycleRegistry,
-            context: ComponentContext,
+            context: SignInFeatureContext.Child.MastodonInstanceList,
         ): MastodonInstanceListViewModel {
-            val koinScope = LocalScope.current
             val coroutineScope = rememberCoroutineScope()
 
             return remember {
                 MastodonInstanceListViewModel(
-                    koinScope.get(),
-                    suggests,
+                    context.get(),
                     coroutineScope,
                     lifecycleRegistry,
                     context,

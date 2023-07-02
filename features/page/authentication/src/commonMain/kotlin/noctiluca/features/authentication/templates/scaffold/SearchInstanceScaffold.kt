@@ -25,16 +25,9 @@ private val HorizontalPadding = 16.dp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SearchInstanceScaffold(
-    context: SignInFeatureContext.Child.MastodonInstanceList,
-    suggests: List<Instance.Suggest>,
+    viewModel: MastodonInstanceListViewModel,
 ) {
     val navigation = LocalContext.current
-    val lifecycleRegistry = remember { LifecycleRegistry() }
-    val viewModel = MastodonInstanceListViewModel.Factory(
-        suggests,
-        lifecycleRegistry,
-        context,
-    )
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
@@ -48,10 +41,7 @@ internal fun SearchInstanceScaffold(
                 InstanceSuggestsList(
                     suggests,
                     onSelect = {
-                        navigation?.navigateToInstanceDetail(
-                            suggests,
-                            it.domain,
-                        )
+                        navigation?.navigateToInstanceDetail(it.domain)
                     },
                 )
             },

@@ -11,93 +11,61 @@ import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
 import noctiluca.features.authentication.LocalScope
+import noctiluca.features.authentication.SignInNavigation
+import noctiluca.features.authentication.getString
+import noctiluca.features.authentication.model.buildRedirectUri
+import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
+import noctiluca.features.authentication.viewmodel.instancedetail.AuthorizeViewModel
+import noctiluca.features.authentication.viewmodel.instancedetail.ShowMastodonInstanceDetailViewModel
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
 import noctiluca.model.StatusId
+import noctiluca.model.Uri
 import noctiluca.status.model.Status
 
 class MastodonInstanceDetailViewModel private constructor(
-    private val domain: String,
-    private val fetchMastodonInstanceUseCase: FetchMastodonInstanceUseCase,
-    private val fetchLocalTimelineUseCase: FetchLocalTimelineUseCase,
+    val domain: String,
+    clientName: String,
+    redirectUri: Uri,
+    navigation: SignInNavigation?,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
-    componentContext: ComponentContext,
-) : ViewModel(coroutineScope, lifecycleRegistry, componentContext) {
-    private val mutableUiModel by lazy { MutableValue(UiModel()) }
-    private val instanceLoadState by lazy {
-        MutableValue<LoadState>(LoadState.Initial).also {
-            it.subscribe { loadState ->
-                mutableUiModel.value = uiModel.value.copy(instance = loadState)
-            }
-        }
-    }
-    private val statuses by lazy {
-        MutableValue(listOf<Status>()).also {
-            it.subscribe { statuses ->
-                mutableUiModel.value = uiModel.value.copy(statuses = statuses)
-            }
-        }
-    }
-
-    val uiModel: Value<UiModel> = mutableUiModel
-
-    fun load() {
-        loadInstanceDetail()
-        loadLocalTimeline()
-    }
-
-    fun loadMore() = loadLocalTimeline(uiModel.value.statuses.lastOrNull()?.id)
-
-    private fun loadInstanceDetail() {
-        val job = launchLazy {
-            runCatching { fetchMastodonInstanceUseCase.execute(domain) }
-                .onSuccess { instanceLoadState.value = LoadState.Loaded(it) }
-                .onFailure { instanceLoadState.value = LoadState.Error(it) }
-        }
-
-        instanceLoadState.value = LoadState.Loading(job)
-        job.start()
-    }
-
-    private fun loadLocalTimeline(maxId: StatusId? = null) {
-        if (maxId == null && uiModel.value.statuses.isNotEmpty()) {
-            return
-        }
-
-        launch {
-            runCatching { fetchLocalTimelineUseCase.execute(domain, maxId) }
-                .onSuccess {
-                    statuses.value =
-                        if (maxId == null)
-                            it
-                        else
-                            statuses.value + it
-                }
-                .onFailure { statuses.value = listOf() }
-        }
-    }
-
-    data class UiModel(
-        val instance: LoadState = LoadState.Initial,
-        val statuses: List<Status> = listOf(),
-    )
-
-    companion object Factory {
+    context: SignInFeatureContext.Child.MastodonInstanceDetail,
+) : ViewModel(
+    coroutineScope,
+    lifecycleRegistry,
+    context,
+), AuthorizeViewModel by AuthorizeViewModel(
+    clientName,
+    redirectUri,
+    navigation,
+    coroutineScope,
+    lifecycleRegistry,
+    context,
+), ShowMastodonInstanceDetailViewModel by ShowMastodonInstanceDetailViewModel(
+    domain,
+    coroutineScope,
+    lifecycleRegistry,
+    context,
+) {
+    companion object Provider {
         @Composable
         operator fun invoke(
             domain: String,
+            navigation: SignInNavigation?,
             lifecycleRegistry: LifecycleRegistry,
-            context: ComponentContext,
+            context: SignInFeatureContext.Child.MastodonInstanceDetail,
         ): MastodonInstanceDetailViewModel {
-            val koinScope = LocalScope.current
+            val clientName = getString().sign_in_client_name
+            val redirectUri = buildRedirectUri(domain)
             val coroutineScope = rememberCoroutineScope()
 
-            return remember(domain) {
+            return remember {
                 MastodonInstanceDetailViewModel(
                     domain,
-                    koinScope.get(),
-                    koinScope.get(),
+                    clientName,
+                    redirectUri,
+                    navigation,
                     coroutineScope,
                     lifecycleRegistry,
                     context,

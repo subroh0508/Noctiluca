@@ -1,4 +1,4 @@
-package noctiluca.features.authentication.di
+package noctiluca.features.authentication.viewmodel.context
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.*
@@ -9,7 +9,6 @@ import com.arkivanov.essenty.parcelable.Parcelize
 import noctiluca.authentication.domain.di.AuthenticationDomainModule
 import noctiluca.features.components.di.FeatureComponent
 import noctiluca.instance.model.Instance
-import noctiluca.model.Uri
 import org.koin.core.component.KoinScopeComponent
 import org.koin.dsl.module
 
@@ -26,12 +25,16 @@ class SignInFeatureContext private constructor(
     })
 
     sealed class Child {
-        class MastodonInstanceList(rootContext: ComponentContext) : Child(), ComponentContext by rootContext
+        class MastodonInstanceList(
+            childContext: ComponentContext,
+            koinScopeComponent: KoinScopeComponent,
+        ) : Child(), ComponentContext by childContext, KoinScopeComponent by koinScopeComponent
 
         class MastodonInstanceDetail(
-            rootContext: ComponentContext,
             val domain: String,
-        ) : Child(), ComponentContext by rootContext
+            childContext: ComponentContext,
+            koinScopeComponent: KoinScopeComponent,
+        ) : Child(), ComponentContext by childContext, KoinScopeComponent by koinScopeComponent
     }
 
     private sealed class Config : Parcelable {
@@ -40,12 +43,6 @@ class SignInFeatureContext private constructor(
 
         @Parcelize
         data class MastodonInstanceDetail(val domain: String) : Config()
-    }
-
-    private class MastodonInstanceListState(
-        val suggests: List<Instance.Suggest>,
-    ) : InstanceKeeper.Instance {
-        override fun onDestroy() = Unit
     }
 
     private val navigation = StackNavigation<Config>()
@@ -57,17 +54,11 @@ class SignInFeatureContext private constructor(
         childFactory = ::createChild,
     )
 
-    fun restoreSuggests() = (instanceKeeper.remove(KEY) as? MastodonInstanceListState)?.suggests
-
     fun backPressed() = navigation.pop()
 
     fun navigateToInstanceDetail(
-        suggests: List<Instance.Suggest>,
         domain: String,
-    ) {
-        instanceKeeper.put(KEY, MastodonInstanceListState(suggests))
-        navigation.push(Config.MastodonInstanceDetail(domain))
-    }
+    ) = navigation.push(Config.MastodonInstanceDetail(domain))
 
     private fun createChild(
         config: Config,
@@ -75,17 +66,17 @@ class SignInFeatureContext private constructor(
     ): Child = when (config) {
         is Config.MastodonInstanceList -> Child.MastodonInstanceList(
             componentContext,
+            this,
         )
 
         is Config.MastodonInstanceDetail -> Child.MastodonInstanceDetail(
-            componentContext,
             config.domain,
+            componentContext,
+            this,
         )
     }
 
     companion object Factory {
-        private const val KEY = "SignInFeatureContext"
-
         operator fun invoke(
             rootContext: ComponentContext,
         ) = SignInFeatureContext(

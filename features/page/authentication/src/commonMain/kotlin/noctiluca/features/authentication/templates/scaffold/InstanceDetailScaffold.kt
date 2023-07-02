@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.LocalAuthorizeResult
+import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
 import noctiluca.features.authentication.organisms.tab.InstancesTab
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
@@ -52,12 +53,9 @@ internal fun InstanceDetailScaffold(
             InstanceDetailTopAppBar(
                 viewModel.domain,
                 instance,
+                job,
                 tabbedScrollState,
                 scrollBehavior,
-                onBackPressed = {
-                    job?.cancel()
-                    viewModel.navigator.backPressed()
-                },
             )
         },
         bottomBar = { instance, horizontalPadding ->
@@ -72,7 +70,6 @@ internal fun InstanceDetailScaffold(
             Fallback(
                 error,
                 paddingValues,
-                onBackPressed = { viewModel.navigator.backPressed() },
             )
         },
     ) { instance, tabs, horizontalPadding ->
@@ -92,16 +89,17 @@ internal fun InstanceDetailScaffold(
 private fun Fallback(
     error: Throwable?,
     paddingValues: PaddingValues,
-    onBackPressed: () -> Unit,
 ) {
     error ?: return
+
+    val navigator = LocalNavigator.current
 
     FilledCard(
         headline = { CardHeader(error.label()) },
         supporting = { CardSupporting(error.description()) },
         actions = {
             Button(
-                onClick = onBackPressed,
+                onClick = { navigator?.backPressed() },
             ) {
                 Text(getCommonString().back)
             }

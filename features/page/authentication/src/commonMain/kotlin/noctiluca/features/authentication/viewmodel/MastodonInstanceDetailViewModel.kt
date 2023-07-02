@@ -5,6 +5,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
+import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.SignInNavigator
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.buildRedirectUri
@@ -15,11 +16,12 @@ import noctiluca.model.Uri
 
 class MastodonInstanceDetailViewModel private constructor(
     val domain: String,
-    private val context: SignInNavigator.Child.MastodonInstanceDetail,
     clientName: String,
     redirectUri: Uri,
+    navigator: SignInNavigator?,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
+    context: SignInNavigator.Child.MastodonInstanceDetail,
 ) : ViewModel(
     coroutineScope,
     lifecycleRegistry,
@@ -28,6 +30,7 @@ class MastodonInstanceDetailViewModel private constructor(
     AuthorizeViewModel by AuthorizeViewModel(
         clientName,
         redirectUri,
+        navigator,
         coroutineScope,
         lifecycleRegistry,
         context,
@@ -46,21 +49,21 @@ class MastodonInstanceDetailViewModel private constructor(
         ): MastodonInstanceDetailViewModel {
             val clientName = getString().sign_in_client_name
             val redirectUri = buildRedirectUri(domain)
+            val navigator = LocalNavigator.current
             val coroutineScope = rememberCoroutineScope()
             val lifecycleRegistry = remember { LifecycleRegistry() }
 
             return remember {
                 MastodonInstanceDetailViewModel(
                     domain,
-                    context,
                     clientName,
                     redirectUri,
+                    navigator,
                     coroutineScope,
                     lifecycleRegistry,
+                    context,
                 )
             }
         }
     }
-
-    val navigator get() = context.navigator
 }

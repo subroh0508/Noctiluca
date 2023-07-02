@@ -35,6 +35,10 @@ class AndroidNavigation private constructor(
     }
 
     override fun backToSignIn() {
+        if (navHostController.currentBackStackEntry?.destination?.route?.startsWith(RouteSignIn) == true) {
+            return
+        }
+
         navHostController.navigate(RouteSignIn) {
             popUpTo(RouteTimeline) { inclusive = true }
         }

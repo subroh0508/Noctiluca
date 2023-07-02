@@ -12,9 +12,8 @@ import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewMod
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.FeatureComposable
 import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
-import noctiluca.features.components.di.getKoinRootScope
-import org.koin.core.component.KoinScopeComponent
 
+internal val LocalNavigator = compositionLocalOf<SignInNavigator?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
 
@@ -26,7 +25,8 @@ fun SignInScreen(
     navigation: SignInNavigation,
 ) = SignInFeature(
     authorizeResult,
-    SignInNavigator(navigation, rootContext),
+    rootContext,
+    navigation,
 ) { page ->
     when (page) {
         is SignInNavigator.Child.MastodonInstanceList -> SearchInstanceScaffold(
@@ -45,16 +45,22 @@ fun SignInScreen(
 @Composable
 private fun SignInFeature(
     authorizeResult: AuthorizeResult?,
-    context: SignInNavigator,
+    rootContext: ComponentContext,
+    navigation: SignInNavigation,
     content: @Composable (SignInNavigator.Child) -> Unit,
-) = FeatureComposable(context) {
-    CompositionLocalProvider(
-        LocalResources provides Resources(Locale.current.language),
-        LocalAuthorizeResult provides authorizeResult,
-        LocalSnackbarHostState provides remember { SnackbarHostState() },
-    ) {
-        val page by context.childStack.subscribeAsState()
+) {
+    val navigator = SignInNavigator(navigation, rootContext)
 
-        content(page.active.instance)
+    FeatureComposable(navigator) {
+        CompositionLocalProvider(
+            LocalResources provides Resources(Locale.current.language),
+            LocalNavigator provides navigator,
+            LocalAuthorizeResult provides authorizeResult,
+            LocalSnackbarHostState provides remember { SnackbarHostState() },
+        ) {
+            val page by navigator.childStack.subscribeAsState()
+
+            content(page.active.instance)
+        }
     }
 }

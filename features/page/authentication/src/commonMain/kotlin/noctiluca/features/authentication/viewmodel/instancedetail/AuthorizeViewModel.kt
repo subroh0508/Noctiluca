@@ -20,12 +20,14 @@ interface AuthorizeViewModel {
         operator fun invoke(
             clientName: String,
             redirectUri: Uri,
+            navigator: SignInNavigator?,
             coroutineScope: CoroutineScope,
             lifecycleRegistry: LifecycleRegistry,
             context: SignInNavigator.Child.MastodonInstanceDetail,
         ): AuthorizeViewModel = Impl(
             clientName,
             redirectUri,
+            navigator,
             context.get(),
             context.get(),
             coroutineScope,
@@ -42,11 +44,12 @@ interface AuthorizeViewModel {
     private class Impl(
         private val clientName: String,
         private val redirectUri: Uri,
+        private val navigator: SignInNavigator?,
         private val requestAppCredentialUseCase: RequestAppCredentialUseCase,
         private val requestRequestAccessTokenUseCase: RequestAccessTokenUseCase,
         coroutineScope: CoroutineScope,
         lifecycleRegistry: LifecycleRegistry,
-        private val context: SignInNavigator.Child.MastodonInstanceDetail,
+        context: SignInNavigator.Child.MastodonInstanceDetail,
     ) : AuthorizeViewModel, ViewModel(coroutineScope, lifecycleRegistry, context) {
         private val authorizationLoadState by lazy { MutableValue<LoadState>(LoadState.Initial) }
 
@@ -57,7 +60,7 @@ interface AuthorizeViewModel {
 
             val job = launchLazy {
                 runCatching { requestAppCredentialUseCase.execute(domain, clientName, redirectUri) }
-                    .onSuccess { context.navigator.openBrowser(it) }
+                    .onSuccess { navigator?.openBrowser(it) }
                     .onFailure { authorizationLoadState.value = LoadState.Error(it) }
             }
 
@@ -82,7 +85,7 @@ interface AuthorizeViewModel {
                 runCatching { requestRequestAccessTokenUseCase.execute(code, redirectUri) }
                     .onSuccess {
                         if (it != null) {
-                            context.navigator.navigateToTimelines()
+                            navigator?.navigateToTimelines()
                             return@onSuccess
                         }
 

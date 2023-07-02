@@ -44,13 +44,13 @@ interface SignInNavigator : LifecycleRegistry, ComponentContext, KoinScopeCompon
 
     sealed class Child {
         class MastodonInstanceList(
-            val navigator: SignInNavigator,
+            navigator: SignInNavigator,
             childContext: ComponentContext,
         ) : Child(), ComponentContext by childContext, KoinScopeComponent by navigator
 
         class MastodonInstanceDetail(
             val domain: String,
-            val navigator: SignInNavigator,
+            navigator: SignInNavigator,
             childContext: ComponentContext,
         ) : Child(), ComponentContext by childContext, KoinScopeComponent by navigator
     }

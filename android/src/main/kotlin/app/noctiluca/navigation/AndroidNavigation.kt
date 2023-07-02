@@ -46,10 +46,6 @@ class AndroidNavigation private constructor(
         }
     }
 
-    override fun navigateToInstanceDetail(domain: String) {
-        navHostController.navigate("$RouteSignIn?${AuthorizeResult.QUERY_DOMAIN}=$domain")
-    }
-
     override fun navigateToAccountDetail(id: String) {
         navHostController.navigate("$RouteAccountDetail/$id")
     }

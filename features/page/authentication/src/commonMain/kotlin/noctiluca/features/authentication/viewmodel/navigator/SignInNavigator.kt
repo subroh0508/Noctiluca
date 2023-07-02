@@ -1,4 +1,4 @@
-package noctiluca.features.authentication.viewmodel.context
+package noctiluca.features.authentication.viewmodel.navigator
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -14,7 +14,7 @@ import noctiluca.features.components.di.FeatureComponent
 import org.koin.core.component.KoinScopeComponent
 import org.koin.dsl.module
 
-class SignInFeatureContext private constructor(
+class SignInNavigator private constructor(
     lifecycleRegistry: LifecycleRegistry,
     componentContext: ComponentContext,
     koinScopeComponent: KoinScopeComponent,
@@ -80,16 +80,16 @@ class SignInFeatureContext private constructor(
     }
 
     companion object Factory {
-        private const val KEY = "SignInFeatureContext"
+        private const val KEY = "SignInPage"
 
         @Composable
         operator fun invoke(
             rootContext: ComponentContext,
-        ): SignInFeatureContext {
+        ): SignInNavigator {
             val lifecycleRegistry = remember { LifecycleRegistry() }
 
             return remember {
-                SignInFeatureContext(
+                SignInNavigator(
                     lifecycleRegistry,
                     rootContext,
                     SignInComponent(),

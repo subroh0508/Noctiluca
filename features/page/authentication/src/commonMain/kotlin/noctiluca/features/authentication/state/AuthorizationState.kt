@@ -10,7 +10,6 @@ import noctiluca.features.authentication.*
 import noctiluca.features.authentication.LocalAuthorizeResult
 import noctiluca.features.authentication.LocalScope
 import noctiluca.features.authentication.model.*
-import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
 import noctiluca.features.components.model.LoadState
 import noctiluca.features.components.state.LoadStateComposeState
 import noctiluca.instance.model.Instance
@@ -94,7 +93,7 @@ internal class AuthorizedUserState(
 internal fun rememberAuthorizedUser(
     domain: String,
     result: AuthorizeResult? = LocalAuthorizeResult.current,
-    navigation: SignInFeatureContext? = LocalContext.current,
+    navigation: SignInNavigator? = LocalContext.current,
     scope: Scope = LocalScope.current,
 ): AuthorizedUserState {
     val clientName = getString().sign_in_client_name

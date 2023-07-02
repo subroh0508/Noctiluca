@@ -5,10 +5,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
-import noctiluca.features.authentication.SignInNavigation
+import noctiluca.features.authentication.SignInNavigator
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.buildRedirectUri
-import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
 import noctiluca.features.authentication.viewmodel.instancedetail.AuthorizeViewModel
 import noctiluca.features.authentication.viewmodel.instancedetail.ShowMastodonInstanceDetailViewModel
 import noctiluca.features.components.ViewModel
@@ -18,10 +17,9 @@ class MastodonInstanceDetailViewModel private constructor(
     val domain: String,
     clientName: String,
     redirectUri: Uri,
-    navigation: SignInNavigation?,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
-    context: SignInFeatureContext.Child.MastodonInstanceDetail,
+    context: SignInNavigator.Child.MastodonInstanceDetail,
 ) : ViewModel(
     coroutineScope,
     lifecycleRegistry,
@@ -30,7 +28,6 @@ class MastodonInstanceDetailViewModel private constructor(
     AuthorizeViewModel by AuthorizeViewModel(
         clientName,
         redirectUri,
-        navigation,
         coroutineScope,
         lifecycleRegistry,
         context,
@@ -45,8 +42,7 @@ class MastodonInstanceDetailViewModel private constructor(
         @Composable
         operator fun invoke(
             domain: String,
-            navigation: SignInNavigation?,
-            context: SignInFeatureContext.Child.MastodonInstanceDetail,
+            context: SignInNavigator.Child.MastodonInstanceDetail,
         ): MastodonInstanceDetailViewModel {
             val clientName = getString().sign_in_client_name
             val redirectUri = buildRedirectUri(domain)
@@ -58,7 +54,6 @@ class MastodonInstanceDetailViewModel private constructor(
                     domain,
                     clientName,
                     redirectUri,
-                    navigation,
                     coroutineScope,
                     lifecycleRegistry,
                     context,

@@ -6,7 +6,7 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
-import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
+import noctiluca.features.authentication.SignInNavigator
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
 import noctiluca.model.StatusId
@@ -19,7 +19,7 @@ interface ShowMastodonInstanceDetailViewModel {
             domain: String,
             coroutineScope: CoroutineScope,
             lifecycleRegistry: LifecycleRegistry,
-            context: SignInFeatureContext.Child.MastodonInstanceDetail,
+            context: SignInNavigator.Child.MastodonInstanceDetail,
         ): ShowMastodonInstanceDetailViewModel = Impl(
             domain,
             context.get(),
@@ -46,7 +46,7 @@ interface ShowMastodonInstanceDetailViewModel {
         private val fetchLocalTimelineUseCase: FetchLocalTimelineUseCase,
         coroutineScope: CoroutineScope,
         lifecycleRegistry: LifecycleRegistry,
-        context: SignInFeatureContext.Child.MastodonInstanceDetail,
+        context: SignInNavigator.Child.MastodonInstanceDetail,
     ) : ShowMastodonInstanceDetailViewModel, ViewModel(coroutineScope, lifecycleRegistry, context) {
         private val mutableUiModel by lazy { MutableValue(UiModel()) }
         private val instanceLoadState by lazy {

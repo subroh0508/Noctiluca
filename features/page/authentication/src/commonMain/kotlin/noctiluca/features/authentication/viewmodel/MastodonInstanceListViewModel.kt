@@ -9,17 +9,16 @@ import com.arkivanov.essenty.instancekeeper.InstanceKeeper
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
-import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
+import noctiluca.features.authentication.SignInNavigator
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
-import noctiluca.instance.model.Instance
 import org.koin.core.component.get
 
 class MastodonInstanceListViewModel private constructor(
     private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
-    context: SignInFeatureContext.Child.MastodonInstanceList,
+    context: SignInNavigator.Child.MastodonInstanceList,
 ) : ViewModel(coroutineScope, lifecycleRegistry, context) {
     private val mutableUiModel by lazy {
         MutableValue(cachedUiModel ?: UiModel()).also {
@@ -80,7 +79,7 @@ class MastodonInstanceListViewModel private constructor(
 
         @Composable
         operator fun invoke(
-            context: SignInFeatureContext.Child.MastodonInstanceList,
+            context: SignInNavigator.Child.MastodonInstanceList,
         ): MastodonInstanceListViewModel {
             val coroutineScope = rememberCoroutineScope()
             val lifecycleRegistry = remember { LifecycleRegistry() }

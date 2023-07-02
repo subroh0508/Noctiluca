@@ -5,10 +5,9 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
-import noctiluca.features.authentication.SignInNavigation
+import noctiluca.features.authentication.SignInNavigator
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.UnknownException
-import noctiluca.features.authentication.viewmodel.context.SignInFeatureContext
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
 import noctiluca.instance.model.Instance
@@ -21,14 +20,12 @@ interface AuthorizeViewModel {
         operator fun invoke(
             clientName: String,
             redirectUri: Uri,
-            navigation: SignInNavigation?,
             coroutineScope: CoroutineScope,
             lifecycleRegistry: LifecycleRegistry,
-            context: SignInFeatureContext.Child.MastodonInstanceDetail,
+            context: SignInNavigator.Child.MastodonInstanceDetail,
         ): AuthorizeViewModel = Impl(
             clientName,
             redirectUri,
-            navigation,
             context.get(),
             context.get(),
             coroutineScope,
@@ -45,12 +42,11 @@ interface AuthorizeViewModel {
     private class Impl(
         private val clientName: String,
         private val redirectUri: Uri,
-        private val navigation: SignInNavigation?,
         private val requestAppCredentialUseCase: RequestAppCredentialUseCase,
         private val requestRequestAccessTokenUseCase: RequestAccessTokenUseCase,
         coroutineScope: CoroutineScope,
         lifecycleRegistry: LifecycleRegistry,
-        context: SignInFeatureContext.Child.MastodonInstanceDetail,
+        private val context: SignInNavigator.Child.MastodonInstanceDetail,
     ) : AuthorizeViewModel, ViewModel(coroutineScope, lifecycleRegistry, context) {
         private val authorizationLoadState by lazy { MutableValue<LoadState>(LoadState.Initial) }
 
@@ -61,7 +57,7 @@ interface AuthorizeViewModel {
 
             val job = launchLazy {
                 runCatching { requestAppCredentialUseCase.execute(domain, clientName, redirectUri) }
-                    .onSuccess { /*navigation?.openBrowser(it)*/ }
+                    .onSuccess { context.openBrowser(it) }
                     .onFailure { authorizationLoadState.value = LoadState.Error(it) }
             }
 
@@ -86,7 +82,7 @@ interface AuthorizeViewModel {
                 runCatching { requestRequestAccessTokenUseCase.execute(code, redirectUri) }
                     .onSuccess {
                         if (it != null) {
-                            navigation?.navigateToTimelines()
+                            context.navigateToTimelines()
                             return@onSuccess
                         }
 

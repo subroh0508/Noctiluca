@@ -9,7 +9,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class ViewModel(
-    private val coroutineScope: CoroutineScope,
+    protected val coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
     componentContext: ComponentContext,
 ) : ComponentContext by componentContext, LifecycleRegistry by lifecycleRegistry {

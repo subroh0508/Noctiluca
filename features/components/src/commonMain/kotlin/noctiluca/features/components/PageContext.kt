@@ -6,31 +6,36 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.subscribe
 import org.koin.core.component.KoinScopeComponent
 
-abstract class PageContext private constructor(
-    private val lifecycleRegistry: LifecycleRegistry,
-    componentContext: ComponentContext,
-    koinScopeComponent: KoinScopeComponent,
-) : LifecycleRegistry by lifecycleRegistry,
-    ComponentContext by componentContext,
-    KoinScopeComponent by koinScopeComponent {
-
-    constructor(
-        key: String,
-        lifecycleRegistry: LifecycleRegistry,
-        rootComponentContext: ComponentContext,
-        koinScopeComponent: KoinScopeComponent,
-    ) : this(
-        lifecycleRegistry,
-        rootComponentContext.childContext(
-            key,
+interface PageContext : LifecycleRegistry, ComponentContext, KoinScopeComponent {
+    companion object {
+        operator fun invoke(
+            key: String,
+            lifecycleRegistry: LifecycleRegistry,
+            rootComponentContext: ComponentContext,
+            koinScopeComponent: KoinScopeComponent,
+        ): PageContext = Impl(
             lifecycleRegistry,
-        ),
-        koinScopeComponent,
-    )
-
-    init {
-        lifecycleRegistry.subscribe(
-            onDestroy = { scope.close() },
+            rootComponentContext.childContext(
+                key,
+                lifecycleRegistry,
+            ),
+            koinScopeComponent,
         )
+    }
+
+    private class Impl(
+        lifecycleRegistry: LifecycleRegistry,
+        componentContext: ComponentContext,
+        koinScopeComponent: KoinScopeComponent,
+    ) : PageContext,
+        LifecycleRegistry by lifecycleRegistry,
+        ComponentContext by componentContext,
+        KoinScopeComponent by koinScopeComponent {
+
+        init {
+            lifecycleRegistry.subscribe(
+                onDestroy = { scope.close() },
+            )
+        }
     }
 }

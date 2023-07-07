@@ -9,7 +9,7 @@ import noctiluca.repository.TokenProvider
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.scope.Scope
 
-internal val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedExceptionHandler() }
+val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedExceptionHandler() }
 
 @Composable
 fun AuthorizedFeatureComposable(

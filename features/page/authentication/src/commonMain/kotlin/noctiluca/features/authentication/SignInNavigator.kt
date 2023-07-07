@@ -9,11 +9,12 @@ import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
 import noctiluca.features.authentication.di.SignInComponent
+import noctiluca.features.components.Navigator
 import noctiluca.features.components.PageContext
 import noctiluca.model.Uri
 import org.koin.core.component.KoinScopeComponent
 
-interface SignInNavigator : LifecycleRegistry, ComponentContext, KoinScopeComponent {
+interface SignInNavigator : PageContext, Navigator {
     companion object {
         private const val KEY = "SignInNavigator"
 
@@ -27,6 +28,7 @@ interface SignInNavigator : LifecycleRegistry, ComponentContext, KoinScopeCompon
             return remember {
                 Impl(
                     nav = nav,
+                    StackNavigation(),
                     lifecycleRegistry,
                     rootContext,
                     SignInComponent(),
@@ -37,7 +39,6 @@ interface SignInNavigator : LifecycleRegistry, ComponentContext, KoinScopeCompon
 
     val childStack: Value<ChildStack<*, Child>>
 
-    fun backPressed()
     fun openBrowser(uri: Uri)
     fun navigateToTimelines()
     fun navigateToInstanceDetail(domain: String)
@@ -65,12 +66,20 @@ interface SignInNavigator : LifecycleRegistry, ComponentContext, KoinScopeCompon
 
     private class Impl(
         private val nav: SignInNavigation,
+        private val navigation: StackNavigation<Config>,
         lifecycleRegistry: LifecycleRegistry,
         componentContext: ComponentContext,
         koinScopeComponent: KoinScopeComponent,
-    ) : SignInNavigator, PageContext(KEY, lifecycleRegistry, componentContext, koinScopeComponent) {
-        private val navigation = StackNavigation<Config>()
-
+    ) : PageContext by PageContext(
+        KEY,
+        lifecycleRegistry,
+        componentContext,
+        koinScopeComponent,
+    ),
+        Navigator by Navigator(
+            navigation,
+        ),
+        SignInNavigator {
         override val childStack: Value<ChildStack<*, Child>> = childStack(
             source = navigation,
             initialConfiguration = Config.MastodonInstanceList,

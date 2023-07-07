@@ -51,7 +51,7 @@ private fun SignInFeature(
 ) {
     val navigator = SignInNavigator(navigation, rootContext)
 
-    FeatureComposable(navigator) {
+    FeatureComposable(context = navigator) {
         CompositionLocalProvider(
             LocalResources provides Resources(Locale.current.language),
             LocalNavigator provides navigator,

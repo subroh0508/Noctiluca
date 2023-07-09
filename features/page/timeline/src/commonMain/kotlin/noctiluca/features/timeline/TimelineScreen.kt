@@ -10,43 +10,37 @@ import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
 import noctiluca.features.timeline.template.scaffold.TootScaffold
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
-import org.koin.core.component.KoinScopeComponent
 
-internal val LocalNavigation = compositionLocalOf<TimelinesNavigator?> { null }
+internal val LocalNavigation = compositionLocalOf<TimelineNavigator.Screen?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TimelineScreen(
-    component: KoinScopeComponent,
-    navigation: TimelineNavigation,
+    screen: TimelineNavigator.Screen,
 ) = TimelineFeature(
-    component,
-    navigation,
+    screen,
 ) { page ->
     when (page) {
-        is TimelinesNavigator.Child.Timelines -> {
-            val viewModel = TimelinesViewModel.Provider(
-                page,
-                reload = { navigation.reopenApp() },
-            )
+        is TimelineNavigator.Screen.Child.Timelines -> {
+            val viewModel = TimelinesViewModel.Provider(screen)
 
             val uiModel by viewModel.uiModel.subscribeAsState()
 
-            LaunchedEffect(Unit) {
+            LaunchedEffect(uiModel.account.current) {
                 viewModel.loadCurrentAuthorizedAccount()
             }
 
             TimelineNavigationDrawer(
                 uiModel.account,
-                onClickTopAccount = { navigation.navigateToAccountDetail(it.id.value) },
+                onClickTopAccount = { screen.navigateToAccountDetail(it.id.value) },
                 onClickOtherAccount = { account ->
                     viewModel.switch(account)
                 },
                 onClickDrawerMenu = { menu ->
                     handleOnClickDrawerItem(
                         menu,
-                        navigation,
+                        screen,
                     )
                 },
             ) { drawerState ->
@@ -57,25 +51,19 @@ fun TimelineScreen(
             }
         }
 
-        is TimelinesNavigator.Child.Toot -> TootScaffold(
-            TimelinesViewModel.Provider(
-                page,
-                reload = { navigation.reopenApp() },
-            ),
+        is TimelineNavigator.Screen.Child.Toot -> TootScaffold(
+            TimelinesViewModel.Provider(screen),
         )
-
-        is TimelinesNavigator.Child.AccountDetail -> Unit
     }
 }
 
 @Composable
 private fun TimelineFeature(
-    component: KoinScopeComponent,
-    navigation: TimelineNavigation,
-    content: @Composable (TimelinesNavigator.Child) -> Unit,
+    screen: TimelineNavigator.Screen,
+    content: @Composable (TimelineNavigator.Screen.Child) -> Unit,
 ) = AuthorizedFeatureComposable(
-    context = TimelinesNavigator(),
-    navigation,
+    context = screen,
+    navigator = screen,
 ) { navigator ->
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
@@ -89,8 +77,8 @@ private fun TimelineFeature(
 
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,
-    navigation: TimelineNavigation,
+    screen: TimelineNavigator.Screen,
 ) = when (item) {
-    is TimelineDrawerMenu.NewAccount -> navigation.backToSignIn()
+    is TimelineDrawerMenu.NewAccount -> screen.backToSignIn()
     is TimelineDrawerMenu.Settings -> Unit
 }

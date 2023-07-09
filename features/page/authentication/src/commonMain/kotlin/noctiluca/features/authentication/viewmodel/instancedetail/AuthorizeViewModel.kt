@@ -1,7 +1,6 @@
 package noctiluca.features.authentication.viewmodel.instancedetail
 
 import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
@@ -22,8 +21,7 @@ interface AuthorizeViewModel {
             redirectUri: Uri,
             navigator: SignInNavigator?,
             coroutineScope: CoroutineScope,
-            lifecycleRegistry: LifecycleRegistry,
-            context: SignInNavigator.Child.MastodonInstanceDetail,
+            context: SignInNavigator.Screen,
         ): AuthorizeViewModel = Impl(
             clientName,
             redirectUri,
@@ -31,8 +29,6 @@ interface AuthorizeViewModel {
             context.get(),
             context.get(),
             coroutineScope,
-            lifecycleRegistry,
-            context,
         )
     }
 
@@ -48,9 +44,7 @@ interface AuthorizeViewModel {
         private val requestAppCredentialUseCase: RequestAppCredentialUseCase,
         private val requestRequestAccessTokenUseCase: RequestAccessTokenUseCase,
         coroutineScope: CoroutineScope,
-        lifecycleRegistry: LifecycleRegistry,
-        context: SignInNavigator.Child.MastodonInstanceDetail,
-    ) : AuthorizeViewModel, ViewModel(coroutineScope, lifecycleRegistry, context) {
+    ) : AuthorizeViewModel, ViewModel(coroutineScope) {
         private val authorizationLoadState by lazy { MutableValue<LoadState>(LoadState.Initial) }
 
         override val loading get() = authorizationLoadState.value.loading

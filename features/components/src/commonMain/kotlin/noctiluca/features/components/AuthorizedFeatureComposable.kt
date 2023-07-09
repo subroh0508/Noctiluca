@@ -6,43 +6,27 @@ import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.repository.TokenProvider
-import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.get
-import org.koin.core.scope.Scope
 
 val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedExceptionHandler() }
 
 @Composable
-fun <T : PageContext> AuthorizedFeatureComposable(
+fun <T : Navigator.Screen> AuthorizedFeatureComposable(
     context: T,
-    navigation: Navigation,
+    navigator: Navigator,
     content: @Composable (T) -> Unit,
 ) = FeatureComposable(context = context) {
     CompositionLocalProvider(
         LocalCoroutineExceptionHandler provides UnauthorizedExceptionHandler(
             it.get(),
-            navigation,
-        ),
-    ) { content(it) }
-}
-
-@Composable
-fun AuthorizedFeatureComposable(
-    component: KoinScopeComponent,
-    navigation: Navigation,
-    content: @Composable (Scope) -> Unit,
-) = FeatureComposable(component) {
-    CompositionLocalProvider(
-        LocalCoroutineExceptionHandler provides UnauthorizedExceptionHandler(
-            it.get(),
-            navigation,
+            navigator,
         ),
     ) { content(it) }
 }
 
 class UnauthorizedExceptionHandler(
     private val tokenProvider: TokenProvider? = null,
-    private val navigation: Navigation? = null,
+    private val navigator: Navigator? = null,
 ) {
     fun handleException(exception: Throwable) {
         exception.printStackTrace()
@@ -68,10 +52,10 @@ class UnauthorizedExceptionHandler(
         }
 
         if (nextAuthorizedUser != null) {
-            navigation?.reopenApp()
+            navigator?.reopenApp()
             return
         }
 
-        navigation?.backToSignIn()
+        navigator?.backToSignIn()
     }
 }

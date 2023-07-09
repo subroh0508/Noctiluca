@@ -5,7 +5,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
@@ -25,15 +24,8 @@ class AccountDetailViewModel private constructor(
     private val fetchAccountAttributesUseCase: FetchAccountAttributesUseCase,
     private val fetchAccountStatusesUseCase: FetchAccountStatusesUseCase,
     coroutineScope: CoroutineScope,
-    lifecycleRegistry: LifecycleRegistry,
-    context: AccountDetailNavigator.Child.AccountDetail,
     exceptionHandler: UnauthorizedExceptionHandler,
-) : AuthorizedViewModel(
-    coroutineScope,
-    lifecycleRegistry,
-    context,
-    exceptionHandler,
-) {
+) : AuthorizedViewModel(coroutineScope, exceptionHandler) {
     private val mutableUiModel by lazy { MutableValue(UiModel()) }
 
     private val tab by lazy {
@@ -136,10 +128,9 @@ class AccountDetailViewModel private constructor(
     companion object Provider {
         @Composable
         operator fun invoke(
-            context: AccountDetailNavigator.Child.AccountDetail,
+            context: AccountDetailNavigator.Screen,
         ): AccountDetailViewModel {
             val coroutineScope = rememberCoroutineScope()
-            val lifecycleRegistry = remember { LifecycleRegistry() }
             val handler = LocalCoroutineExceptionHandler.current
 
             return remember {
@@ -148,8 +139,6 @@ class AccountDetailViewModel private constructor(
                     context.get(),
                     context.get(),
                     coroutineScope,
-                    lifecycleRegistry,
-                    context,
                     handler,
                 )
             }

@@ -3,7 +3,6 @@ package noctiluca.features.authentication.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.SignInNavigator
@@ -20,38 +19,30 @@ class MastodonInstanceDetailViewModel private constructor(
     redirectUri: Uri,
     navigator: SignInNavigator?,
     coroutineScope: CoroutineScope,
-    lifecycleRegistry: LifecycleRegistry,
-    context: SignInNavigator.Child.MastodonInstanceDetail,
-) : ViewModel(
-    coroutineScope,
-    lifecycleRegistry,
-    context,
-),
+    context: SignInNavigator.Screen,
+) : ViewModel(coroutineScope),
     AuthorizeViewModel by AuthorizeViewModel(
         clientName,
         redirectUri,
         navigator,
         coroutineScope,
-        lifecycleRegistry,
         context,
     ),
     ShowMastodonInstanceDetailViewModel by ShowMastodonInstanceDetailViewModel(
         domain,
         coroutineScope,
-        lifecycleRegistry,
         context,
     ) {
     companion object Provider {
         @Composable
         operator fun invoke(
             domain: String,
-            context: SignInNavigator.Child.MastodonInstanceDetail,
+            context: SignInNavigator.Screen,
         ): MastodonInstanceDetailViewModel {
             val clientName = getString().sign_in_client_name
             val redirectUri = buildRedirectUri(domain)
             val navigator = LocalNavigator.current
             val coroutineScope = rememberCoroutineScope()
-            val lifecycleRegistry = remember { LifecycleRegistry() }
 
             return remember {
                 MastodonInstanceDetailViewModel(
@@ -60,7 +51,6 @@ class MastodonInstanceDetailViewModel private constructor(
                     redirectUri,
                     navigator,
                     coroutineScope,
-                    lifecycleRegistry,
                     context,
                 )
             }

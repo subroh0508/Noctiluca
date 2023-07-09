@@ -1,20 +1,38 @@
 package noctiluca.features.components
 
-import com.arkivanov.decompose.router.stack.StackNavigation
-import com.arkivanov.decompose.router.stack.pop
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
+import noctiluca.model.Uri
+import org.koin.core.component.KoinScopeComponent
 
 interface Navigator {
-    companion object {
-        operator fun <C : Any> invoke(
-            navigation: StackNavigation<C>,
-        ): Navigator = Impl(navigation)
+    interface Destination
+    interface Config
+    interface Screen : LifecycleRegistry, ComponentContext, KoinScopeComponent {
+        private class Impl(
+            componentContext: ComponentContext,
+            koinScopeComponent: KoinScopeComponent,
+            lifecycleRegistry: LifecycleRegistry,
+        ) : Screen,
+            ComponentContext by componentContext,
+            KoinScopeComponent by koinScopeComponent,
+            LifecycleRegistry by lifecycleRegistry
+
+        companion object {
+            operator fun invoke(
+                koinScopeComponent: KoinScopeComponent,
+                lifecycleRegistry: LifecycleRegistry,
+            ): Screen = Impl(
+                DefaultComponentContext(lifecycleRegistry),
+                koinScopeComponent,
+                lifecycleRegistry,
+            )
+        }
     }
 
     fun backPressed()
-
-    private class Impl<C : Any>(
-        private val navigation: StackNavigation<C>,
-    ) : Navigator {
-        override fun backPressed() = navigation.pop()
-    }
+    fun openBrowser(uri: Uri)
+    fun reopenApp()
+    fun backToSignIn()
 }

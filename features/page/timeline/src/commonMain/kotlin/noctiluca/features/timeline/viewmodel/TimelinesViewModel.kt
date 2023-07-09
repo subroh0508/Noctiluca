@@ -3,14 +3,13 @@ package noctiluca.features.timeline.viewmodel
 import androidx.compose.runtime.*
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import noctiluca.account.model.Account
 import noctiluca.features.components.AuthorizedViewModel
 import noctiluca.features.components.LocalCoroutineExceptionHandler
 import noctiluca.features.components.UnauthorizedExceptionHandler
-import noctiluca.features.timeline.TimelinesNavigator
+import noctiluca.features.timeline.TimelineNavigator
 import noctiluca.model.Domain
 import noctiluca.repository.TokenProvider
 import noctiluca.status.model.Status
@@ -28,17 +27,9 @@ class TimelinesViewModel private constructor(
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
     private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
-    private val reload: () -> Unit,
     coroutineScope: CoroutineScope,
-    lifecycleRegistry: LifecycleRegistry,
-    context: TimelinesNavigator.Child,
     exceptionHandler: UnauthorizedExceptionHandler,
-) : AuthorizedViewModel(
-    coroutineScope,
-    lifecycleRegistry,
-    context,
-    exceptionHandler,
-) {
+) : AuthorizedViewModel(coroutineScope, exceptionHandler) {
     private val mutableUiModel by lazy { MutableValue(UiModel()) }
 
     val uiModel: Value<UiModel> = mutableUiModel
@@ -46,7 +37,7 @@ class TimelinesViewModel private constructor(
     fun switch(account: Account) {
         launch {
             tokenProvider.switch(account.id)
-            reload()
+            mutableUiModel.value = UiModel()
         }
     }
 
@@ -218,11 +209,9 @@ class TimelinesViewModel private constructor(
 
         @Composable
         operator fun invoke(
-            context: TimelinesNavigator.Child,
-            reload: () -> Unit,
+            context: TimelineNavigator.Screen,
         ): TimelinesViewModel {
             val coroutineScope = rememberCoroutineScope()
-            val lifecycleRegistry = remember { LifecycleRegistry() }
             val handler = LocalCoroutineExceptionHandler.current
 
             return remember {
@@ -233,10 +222,7 @@ class TimelinesViewModel private constructor(
                     context.get(),
                     context.get(),
                     context.get(),
-                    reload,
                     coroutineScope = coroutineScope,
-                    lifecycleRegistry = lifecycleRegistry,
-                    context = context,
                     exceptionHandler = handler,
                 )
             }

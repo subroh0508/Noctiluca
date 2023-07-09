@@ -5,6 +5,7 @@ plugins {
     kotlin("android")
     id("org.jetbrains.compose")
     id("com.android.application")
+    id("kotlin-parcelize")
 }
 
 android {

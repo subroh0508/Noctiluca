@@ -28,12 +28,12 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.bundles.ktor.client.jvm)
     implementation(libs.kotlinx.serialization)
 
     implementation(libs.decompose.core)
+    implementation(libs.decompose.compose.jetbrains)
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)

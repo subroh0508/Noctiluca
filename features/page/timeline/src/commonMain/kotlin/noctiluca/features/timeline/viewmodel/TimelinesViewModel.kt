@@ -3,7 +3,6 @@ package noctiluca.features.timeline.viewmodel
 import androidx.compose.runtime.*
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import noctiluca.account.model.Account
@@ -30,15 +29,8 @@ class TimelinesViewModel private constructor(
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     private val reload: () -> Unit,
     coroutineScope: CoroutineScope,
-    lifecycleRegistry: LifecycleRegistry,
-    context: TimelineNavigator.Screen,
     exceptionHandler: UnauthorizedExceptionHandler,
-) : AuthorizedViewModel(
-    coroutineScope,
-    lifecycleRegistry,
-    context,
-    exceptionHandler,
-) {
+) : AuthorizedViewModel(coroutineScope, exceptionHandler) {
     private val mutableUiModel by lazy { MutableValue(UiModel()) }
 
     val uiModel: Value<UiModel> = mutableUiModel
@@ -222,7 +214,6 @@ class TimelinesViewModel private constructor(
             reload: () -> Unit,
         ): TimelinesViewModel {
             val coroutineScope = rememberCoroutineScope()
-            val lifecycleRegistry = remember { LifecycleRegistry() }
             val handler = LocalCoroutineExceptionHandler.current
 
             return remember {
@@ -235,8 +226,6 @@ class TimelinesViewModel private constructor(
                     context.get(),
                     reload,
                     coroutineScope = coroutineScope,
-                    lifecycleRegistry = lifecycleRegistry,
-                    context = context,
                     exceptionHandler = handler,
                 )
             }

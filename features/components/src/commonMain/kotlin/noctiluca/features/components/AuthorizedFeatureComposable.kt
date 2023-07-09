@@ -6,9 +6,7 @@ import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.repository.TokenProvider
-import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.get
-import org.koin.core.scope.Scope
 
 val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedExceptionHandler() }
 

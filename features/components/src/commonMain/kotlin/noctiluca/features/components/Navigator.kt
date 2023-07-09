@@ -2,8 +2,6 @@ package noctiluca.features.components
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.DefaultComponentContext
-import com.arkivanov.decompose.router.stack.StackNavigation
-import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import noctiluca.model.Uri
 import org.koin.core.component.KoinScopeComponent

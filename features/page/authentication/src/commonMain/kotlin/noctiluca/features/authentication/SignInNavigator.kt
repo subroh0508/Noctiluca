@@ -19,7 +19,8 @@ interface SignInNavigator : Navigator {
     ) : Navigator.Screen by Navigator.Screen(
         SignInComponent(),
         lifecycleRegistry,
-    ), SignInNavigator by navigator {
+    ),
+        SignInNavigator by navigator {
         private val stackNavigation by lazy { StackNavigation<Config>() }
 
         val childStack: Value<ChildStack<*, Child>> = childStack(

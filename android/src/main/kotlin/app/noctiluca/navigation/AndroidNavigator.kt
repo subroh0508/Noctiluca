@@ -1,10 +1,8 @@
 package app.noctiluca.navigation
 
-import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import app.noctiluca.decompose.DefaultRootComponent
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.router.stack.*
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.parcelable.Parcelable
@@ -17,7 +15,6 @@ import noctiluca.features.timeline.TimelineNavigator
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
 import android.net.Uri as AndroidUri
-import org.koin.core.scope.Scope
 
 class AndroidNavigator(
     private val rootComponentContext: ComponentContext,

@@ -2,7 +2,6 @@ package noctiluca.features.accountdetail
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import noctiluca.features.accountdetail.di.AccountDetailComponent
 import noctiluca.features.components.Navigator
@@ -16,7 +15,8 @@ interface AccountDetailNavigator : Navigator {
     ) : Navigator.Screen by Navigator.Screen(
         AccountDetailComponent(),
         lifecycleRegistry,
-    ), AccountDetailNavigator by navigator {
+    ),
+        AccountDetailNavigator by navigator {
         companion object {
             @Composable
             operator fun invoke(

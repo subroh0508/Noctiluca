@@ -4,11 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.navigation.compose.rememberNavController
-import app.noctiluca.decompose.DefaultRootComponent
-import app.noctiluca.navigation.AndroidNavigation
 import app.noctiluca.navigation.AndroidNavigator
-import noctiluca.features.components.utils.Browser
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {

@@ -19,7 +19,8 @@ interface TimelineNavigator : Navigator {
     ) : Navigator.Screen by Navigator.Screen(
         TimelineComponent(),
         lifecycleRegistry,
-    ), TimelineNavigator by navigator {
+    ),
+        TimelineNavigator by navigator {
         private val stackNavigation by lazy { StackNavigation<Config>() }
 
         val childStack: Value<ChildStack<*, Child>> = childStack(

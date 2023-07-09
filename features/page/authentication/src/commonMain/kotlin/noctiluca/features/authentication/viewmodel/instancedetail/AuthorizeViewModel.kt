@@ -1,7 +1,6 @@
 package noctiluca.features.authentication.viewmodel.instancedetail
 
 import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase

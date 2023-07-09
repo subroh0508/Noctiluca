@@ -1,6 +1,5 @@
 package noctiluca.features.authentication.model
 
-import android.os.Bundle
 import noctiluca.features.authentication.model.AuthorizeResult.Companion.QUERY_CODE
 import noctiluca.features.authentication.model.AuthorizeResult.Companion.QUERY_ERROR
 import noctiluca.features.authentication.model.AuthorizeResult.Companion.QUERY_ERROR_DESCRIPTION

@@ -10,7 +10,6 @@ import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffo
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.FeatureComposable
-import noctiluca.features.components.Navigator
 import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
 
 internal val LocalNavigator = compositionLocalOf<SignInNavigator.Screen?> { null }

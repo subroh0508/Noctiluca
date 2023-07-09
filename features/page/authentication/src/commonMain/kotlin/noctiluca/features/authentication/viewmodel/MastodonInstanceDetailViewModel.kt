@@ -3,7 +3,6 @@ package noctiluca.features.authentication.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.SignInNavigator
@@ -21,17 +20,19 @@ class MastodonInstanceDetailViewModel private constructor(
     navigator: SignInNavigator?,
     coroutineScope: CoroutineScope,
     context: SignInNavigator.Screen,
-) : ViewModel(coroutineScope), AuthorizeViewModel by AuthorizeViewModel(
-    clientName,
-    redirectUri,
-    navigator,
-    coroutineScope,
-    context,
-), ShowMastodonInstanceDetailViewModel by ShowMastodonInstanceDetailViewModel(
-    domain,
-    coroutineScope,
-    context,
-) {
+) : ViewModel(coroutineScope),
+    AuthorizeViewModel by AuthorizeViewModel(
+        clientName,
+        redirectUri,
+        navigator,
+        coroutineScope,
+        context,
+    ),
+    ShowMastodonInstanceDetailViewModel by ShowMastodonInstanceDetailViewModel(
+        domain,
+        coroutineScope,
+        context,
+    ) {
     companion object Provider {
         @Composable
         operator fun invoke(

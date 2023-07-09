@@ -31,12 +31,12 @@ internal fun TimelineScaffold(
     viewModel: TimelinesViewModel,
     drawerState: DrawerState,
 ) {
-    LaunchedEffect(Unit) {
+    val uiModel by viewModel.uiModel.subscribeAsState()
+
+    LaunchedEffect(uiModel.account.current) {
         viewModel.subscribeAll()
         viewModel.loadAll()
     }
-
-    val uiModel by viewModel.uiModel.subscribeAsState()
 
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()

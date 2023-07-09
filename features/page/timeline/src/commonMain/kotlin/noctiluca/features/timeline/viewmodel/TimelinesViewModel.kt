@@ -27,7 +27,6 @@ class TimelinesViewModel private constructor(
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
     private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
-    private val reload: () -> Unit,
     coroutineScope: CoroutineScope,
     exceptionHandler: UnauthorizedExceptionHandler,
 ) : AuthorizedViewModel(coroutineScope, exceptionHandler) {
@@ -38,7 +37,7 @@ class TimelinesViewModel private constructor(
     fun switch(account: Account) {
         launch {
             tokenProvider.switch(account.id)
-            reload()
+            mutableUiModel.value = UiModel()
         }
     }
 
@@ -211,7 +210,6 @@ class TimelinesViewModel private constructor(
         @Composable
         operator fun invoke(
             context: TimelineNavigator.Screen,
-            reload: () -> Unit,
         ): TimelinesViewModel {
             val coroutineScope = rememberCoroutineScope()
             val handler = LocalCoroutineExceptionHandler.current
@@ -224,7 +222,6 @@ class TimelinesViewModel private constructor(
                     context.get(),
                     context.get(),
                     context.get(),
-                    reload,
                     coroutineScope = coroutineScope,
                     exceptionHandler = handler,
                 )

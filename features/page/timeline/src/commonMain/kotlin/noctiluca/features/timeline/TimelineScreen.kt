@@ -23,14 +23,11 @@ fun TimelineScreen(
 ) { page ->
     when (page) {
         is TimelineNavigator.Screen.Child.Timelines -> {
-            val viewModel = TimelinesViewModel.Provider(
-                screen,
-                reload = { screen.reopenApp() },
-            )
+            val viewModel = TimelinesViewModel.Provider(screen)
 
             val uiModel by viewModel.uiModel.subscribeAsState()
 
-            LaunchedEffect(Unit) {
+            LaunchedEffect(uiModel.account.current) {
                 viewModel.loadCurrentAuthorizedAccount()
             }
 
@@ -55,10 +52,7 @@ fun TimelineScreen(
         }
 
         is TimelineNavigator.Screen.Child.Toot -> TootScaffold(
-            TimelinesViewModel.Provider(
-                screen,
-                reload = { screen.reopenApp() },
-            ),
+            TimelinesViewModel.Provider(screen),
         )
     }
 }

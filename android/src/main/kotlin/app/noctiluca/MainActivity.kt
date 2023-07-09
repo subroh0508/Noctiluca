@@ -7,23 +7,19 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.compose.rememberNavController
 import app.noctiluca.decompose.DefaultRootComponent
 import app.noctiluca.navigation.AndroidNavigation
+import app.noctiluca.navigation.AndroidNavigator
+import noctiluca.features.components.utils.Browser
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var navigation: AndroidNavigation
-    private val root by lazy { DefaultRootComponent(this) }
+    private val navigator by lazy { AndroidNavigator(this) }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
-            navigation = AndroidNavigation(
-                rememberNavController(),
-                this,
-            )
-
             NoctilucaTheme {
-                Routing(root, navigation)
+                Routing(navigator)
             }
         }
     }
@@ -34,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         val uri = intent?.data ?: return
 
         when (uri.scheme) {
-            getString(R.string.sign_in_oauth_scheme) -> navigation.redirectToSignIn(uri)
+            getString(R.string.sign_in_oauth_scheme) -> navigator.redirectToSignIn(uri)
         }
     }
 }

@@ -1,6 +1,7 @@
 package noctiluca.features.components
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
@@ -10,9 +11,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class ViewModel(
     protected val coroutineScope: CoroutineScope,
-    lifecycleRegistry: LifecycleRegistry,
-    componentContext: ComponentContext,
-) : ComponentContext by componentContext, LifecycleRegistry by lifecycleRegistry {
+) {
     protected fun launch(
         context: CoroutineContext = EmptyCoroutineContext,
         start: CoroutineStart = CoroutineStart.DEFAULT,

@@ -20,38 +20,28 @@ class MastodonInstanceDetailViewModel private constructor(
     redirectUri: Uri,
     navigator: SignInNavigator?,
     coroutineScope: CoroutineScope,
-    lifecycleRegistry: LifecycleRegistry,
-    context: SignInNavigator.Child.MastodonInstanceDetail,
-) : ViewModel(
+    context: SignInNavigator.Screen,
+) : ViewModel(coroutineScope), AuthorizeViewModel by AuthorizeViewModel(
+    clientName,
+    redirectUri,
+    navigator,
     coroutineScope,
-    lifecycleRegistry,
     context,
-),
-    AuthorizeViewModel by AuthorizeViewModel(
-        clientName,
-        redirectUri,
-        navigator,
-        coroutineScope,
-        lifecycleRegistry,
-        context,
-    ),
-    ShowMastodonInstanceDetailViewModel by ShowMastodonInstanceDetailViewModel(
-        domain,
-        coroutineScope,
-        lifecycleRegistry,
-        context,
-    ) {
+), ShowMastodonInstanceDetailViewModel by ShowMastodonInstanceDetailViewModel(
+    domain,
+    coroutineScope,
+    context,
+) {
     companion object Provider {
         @Composable
         operator fun invoke(
             domain: String,
-            context: SignInNavigator.Child.MastodonInstanceDetail,
+            context: SignInNavigator.Screen,
         ): MastodonInstanceDetailViewModel {
             val clientName = getString().sign_in_client_name
             val redirectUri = buildRedirectUri(domain)
             val navigator = LocalNavigator.current
             val coroutineScope = rememberCoroutineScope()
-            val lifecycleRegistry = remember { LifecycleRegistry() }
 
             return remember {
                 MastodonInstanceDetailViewModel(
@@ -60,7 +50,6 @@ class MastodonInstanceDetailViewModel private constructor(
                     redirectUri,
                     navigator,
                     coroutineScope,
-                    lifecycleRegistry,
                     context,
                 )
             }

@@ -1,4 +1,4 @@
-package noctiluca.features.authentication
+package noctiluca.features.timeline
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -7,29 +7,29 @@ import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.parcelable.Parcelable
 import com.arkivanov.essenty.parcelable.Parcelize
-import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.components.Navigator
+import noctiluca.features.timeline.di.TimelineComponent
 
-interface SignInNavigator : Navigator {
-    fun navigateToTimelines()
+interface TimelineNavigator : Navigator {
+    fun navigateToAccountDetail(id: String)
 
     class Screen(
-        private val navigator: SignInNavigator,
+        private val navigator: TimelineNavigator,
         lifecycleRegistry: LifecycleRegistry,
     ) : Navigator.Screen by Navigator.Screen(
-        SignInComponent(),
+        TimelineComponent(),
         lifecycleRegistry,
-    ), SignInNavigator by navigator {
+    ), TimelineNavigator by navigator {
         private val stackNavigation by lazy { StackNavigation<Config>() }
 
         val childStack: Value<ChildStack<*, Child>> = childStack(
             source = stackNavigation,
-            initialConfiguration = Config.MastodonInstanceList,
+            initialConfiguration = Config.Timelines,
             handleBackButton = true,
             childFactory = { config, _ ->
                 when (config) {
-                    is Config.MastodonInstanceList -> Child.MastodonInstanceList
-                    is Config.MastodonInstanceDetail -> Child.MastodonInstanceDetail(config.domain)
+                    is Config.Timelines -> Child.Timelines
+                    is Config.Toot -> Child.Toot
                 }
             },
         )
@@ -42,27 +42,27 @@ interface SignInNavigator : Navigator {
             }
         }
 
-        fun navigateToInstanceDetail(
-            domain: String,
-        ) = stackNavigation.push(Config.MastodonInstanceDetail(domain))
+        fun navigateToToot() {
+            stackNavigation.push(Config.Toot)
+        }
 
         sealed class Child : Navigator.Destination {
-            object MastodonInstanceList : Child()
-            class MastodonInstanceDetail(val domain: String) : Child()
+            object Timelines : Child()
+            object Toot : Child()
         }
 
         private sealed class Config : Navigator.Config, Parcelable {
             @Parcelize
-            object MastodonInstanceList : Config()
+            object Timelines : Config()
 
             @Parcelize
-            data class MastodonInstanceDetail(val domain: String) : Config()
+            object Toot : Config()
         }
 
         companion object {
             @Composable
             operator fun invoke(
-                navigator: SignInNavigator,
+                navigator: TimelineNavigator,
             ): Screen {
                 val lifecycleRegistry = remember { LifecycleRegistry() }
 

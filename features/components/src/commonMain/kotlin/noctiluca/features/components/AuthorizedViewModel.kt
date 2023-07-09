@@ -9,11 +9,7 @@ abstract class AuthorizedViewModel(
     lifecycleRegistry: LifecycleRegistry,
     componentContext: ComponentContext,
     val exceptionHandler: UnauthorizedExceptionHandler,
-) : ViewModel(
-    coroutineScope,
-    lifecycleRegistry,
-    componentContext,
-) {
+) : ViewModel(coroutineScope) {
     inline fun <R> runCatchingWithAuth(
         block: () -> R,
     ) = runCatching(block).apply {

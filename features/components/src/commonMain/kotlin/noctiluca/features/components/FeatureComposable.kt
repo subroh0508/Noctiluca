@@ -22,7 +22,7 @@ fun FeatureComposable(
 }
 
 @Composable
-fun <T : PageContext> FeatureComposable(
+fun <T : Navigator.Screen> FeatureComposable(
     context: T,
     content: @Composable (T) -> Unit,
 ) {

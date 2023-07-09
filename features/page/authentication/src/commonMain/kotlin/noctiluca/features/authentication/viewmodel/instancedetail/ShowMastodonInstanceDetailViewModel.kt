@@ -18,15 +18,12 @@ interface ShowMastodonInstanceDetailViewModel {
         operator fun invoke(
             domain: String,
             coroutineScope: CoroutineScope,
-            lifecycleRegistry: LifecycleRegistry,
-            context: SignInNavigator.Child.MastodonInstanceDetail,
+            context: SignInNavigator.Screen,
         ): ShowMastodonInstanceDetailViewModel = Impl(
             domain,
             context.get(),
             context.get(),
             coroutineScope,
-            lifecycleRegistry,
-            context,
         )
     }
 
@@ -45,9 +42,7 @@ interface ShowMastodonInstanceDetailViewModel {
         private val fetchMastodonInstanceUseCase: FetchMastodonInstanceUseCase,
         private val fetchLocalTimelineUseCase: FetchLocalTimelineUseCase,
         coroutineScope: CoroutineScope,
-        lifecycleRegistry: LifecycleRegistry,
-        context: SignInNavigator.Child.MastodonInstanceDetail,
-    ) : ShowMastodonInstanceDetailViewModel, ViewModel(coroutineScope, lifecycleRegistry, context) {
+    ) : ShowMastodonInstanceDetailViewModel, ViewModel(coroutineScope) {
         private val mutableUiModel by lazy { MutableValue(UiModel()) }
         private val instanceLoadState by lazy {
             MutableValue<LoadState>(LoadState.Initial).also {

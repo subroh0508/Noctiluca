@@ -34,6 +34,7 @@ dependencies {
     implementation(libs.kotlinx.serialization)
 
     implementation(libs.decompose.core)
+    implementation(libs.decompose.compose.jetbrains)
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)

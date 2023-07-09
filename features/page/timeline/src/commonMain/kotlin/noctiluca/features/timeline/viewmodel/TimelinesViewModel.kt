@@ -10,7 +10,7 @@ import noctiluca.account.model.Account
 import noctiluca.features.components.AuthorizedViewModel
 import noctiluca.features.components.LocalCoroutineExceptionHandler
 import noctiluca.features.components.UnauthorizedExceptionHandler
-import noctiluca.features.timeline.TimelinesNavigator
+import noctiluca.features.timeline.TimelineNavigator
 import noctiluca.model.Domain
 import noctiluca.repository.TokenProvider
 import noctiluca.status.model.Status
@@ -31,7 +31,7 @@ class TimelinesViewModel private constructor(
     private val reload: () -> Unit,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
-    context: TimelinesNavigator.Child,
+    context: TimelineNavigator.Screen,
     exceptionHandler: UnauthorizedExceptionHandler,
 ) : AuthorizedViewModel(
     coroutineScope,
@@ -218,7 +218,7 @@ class TimelinesViewModel private constructor(
 
         @Composable
         operator fun invoke(
-            context: TimelinesNavigator.Child,
+            context: TimelineNavigator.Screen,
             reload: () -> Unit,
         ): TimelinesViewModel {
             val coroutineScope = rememberCoroutineScope()

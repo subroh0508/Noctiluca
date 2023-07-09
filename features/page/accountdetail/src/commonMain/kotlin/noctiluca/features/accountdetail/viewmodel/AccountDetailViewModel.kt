@@ -26,7 +26,7 @@ class AccountDetailViewModel private constructor(
     private val fetchAccountStatusesUseCase: FetchAccountStatusesUseCase,
     coroutineScope: CoroutineScope,
     lifecycleRegistry: LifecycleRegistry,
-    context: AccountDetailNavigator.Child.AccountDetail,
+    context: AccountDetailNavigator.Screen,
     exceptionHandler: UnauthorizedExceptionHandler,
 ) : AuthorizedViewModel(
     coroutineScope,
@@ -136,7 +136,7 @@ class AccountDetailViewModel private constructor(
     companion object Provider {
         @Composable
         operator fun invoke(
-            context: AccountDetailNavigator.Child.AccountDetail,
+            context: AccountDetailNavigator.Screen,
         ): AccountDetailViewModel {
             val coroutineScope = rememberCoroutineScope()
             val lifecycleRegistry = remember { LifecycleRegistry() }

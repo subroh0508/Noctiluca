@@ -3,6 +3,7 @@ package noctiluca.features.authentication.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
@@ -17,9 +18,8 @@ import org.koin.core.component.get
 class MastodonInstanceListViewModel private constructor(
     private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
     coroutineScope: CoroutineScope,
-    lifecycleRegistry: LifecycleRegistry,
-    context: SignInNavigator.Child.MastodonInstanceList,
-) : ViewModel(coroutineScope, lifecycleRegistry, context) {
+    screen: SignInNavigator.Screen,
+) : ViewModel(coroutineScope), ComponentContext by screen {
     private val mutableUiModel by lazy {
         MutableValue(cachedUiModel ?: UiModel()).also {
             it.subscribe { model ->
@@ -79,16 +79,14 @@ class MastodonInstanceListViewModel private constructor(
 
         @Composable
         operator fun invoke(
-            context: SignInNavigator.Child.MastodonInstanceList,
+            context: SignInNavigator.Screen,
         ): MastodonInstanceListViewModel {
             val coroutineScope = rememberCoroutineScope()
-            val lifecycleRegistry = remember { LifecycleRegistry() }
 
             return remember {
                 MastodonInstanceListViewModel(
                     context.get(),
                     coroutineScope,
-                    lifecycleRegistry,
                     context,
                 )
             }

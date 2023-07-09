@@ -10,9 +10,10 @@ import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffo
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.FeatureComposable
+import noctiluca.features.components.Navigator
 import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
 
-internal val LocalNavigator = compositionLocalOf<SignInNavigator?> { null }
+internal val LocalNavigator = compositionLocalOf<SignInNavigator.Screen?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
 
@@ -20,21 +21,18 @@ internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null 
 fun SignInScreen(
     domain: String?,
     authorizeResult: AuthorizeResult?,
-    navigation: SignInNavigation,
+    screen: SignInNavigator.Screen,
 ) = SignInFeature(
     authorizeResult,
-    navigation,
+    screen,
 ) { page ->
     when (page) {
-        is SignInNavigator.Child.MastodonInstanceList -> SearchInstanceScaffold(
-            MastodonInstanceListViewModel.Provider(page),
+        is SignInNavigator.Screen.Child.MastodonInstanceList -> SearchInstanceScaffold(
+            MastodonInstanceListViewModel.Provider(screen),
         )
 
-        is SignInNavigator.Child.MastodonInstanceDetail -> InstanceDetailScaffold(
-            MastodonInstanceDetailViewModel.Provider(
-                domain ?: page.domain,
-                page,
-            )
+        is SignInNavigator.Screen.Child.MastodonInstanceDetail -> InstanceDetailScaffold(
+            MastodonInstanceDetailViewModel.Provider(domain ?: page.domain, screen)
         )
     }
 }
@@ -42,21 +40,17 @@ fun SignInScreen(
 @Composable
 private fun SignInFeature(
     authorizeResult: AuthorizeResult?,
-    navigation: SignInNavigation,
-    content: @Composable (SignInNavigator.Child) -> Unit,
-) {
-    val navigator = SignInNavigator(navigation)
+    screen: SignInNavigator.Screen,
+    content: @Composable (SignInNavigator.Screen.Child) -> Unit,
+) = FeatureComposable(context = screen) {
+    CompositionLocalProvider(
+        LocalResources provides Resources(Locale.current.language),
+        LocalNavigator provides screen,
+        LocalAuthorizeResult provides authorizeResult,
+        LocalSnackbarHostState provides remember { SnackbarHostState() },
+    ) {
+        val page by screen.childStack.subscribeAsState()
 
-    FeatureComposable(context = navigator) {
-        CompositionLocalProvider(
-            LocalResources provides Resources(Locale.current.language),
-            LocalNavigator provides navigator,
-            LocalAuthorizeResult provides authorizeResult,
-            LocalSnackbarHostState provides remember { SnackbarHostState() },
-        ) {
-            val page by navigator.childStack.subscribeAsState()
-
-            content(page.active.instance)
-        }
+        content(page.active.instance)
     }
 }

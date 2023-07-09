@@ -16,5 +16,5 @@ fun Routing(
 ) {
     signIn(rootComponent, navigation)
     timeline(navigation)
-    accountDetail(navigation)
+    accountDetail(rootComponent, navigation)
 }

@@ -13,6 +13,7 @@ import com.arkivanov.essenty.parcelable.Parcelize
 import noctiluca.features.accountdetail.di.AccountDetailComponent
 import noctiluca.features.components.Navigator
 import noctiluca.features.components.PageContext
+import noctiluca.model.AccountId
 import org.koin.core.component.KoinScopeComponent
 
 interface AccountDetailNavigator : PageContext, Navigator {
@@ -21,12 +22,14 @@ interface AccountDetailNavigator : PageContext, Navigator {
 
         @Composable
         operator fun invoke(
+            id: String,
             rootContext: ComponentContext,
         ): AccountDetailNavigator {
             val lifecycleRegistry = remember { LifecycleRegistry() }
 
             return remember {
                 Impl(
+                    id,
                     StackNavigation(),
                     lifecycleRegistry,
                     rootContext,
@@ -40,6 +43,7 @@ interface AccountDetailNavigator : PageContext, Navigator {
 
     sealed class Child {
         class AccountDetail(
+            val id: AccountId,
             navigator: AccountDetailNavigator,
             childContext: ComponentContext,
         ) : Child(), ComponentContext by childContext, KoinScopeComponent by navigator
@@ -47,10 +51,11 @@ interface AccountDetailNavigator : PageContext, Navigator {
 
     private sealed class Config : Parcelable {
         @Parcelize
-        object AccountDetail : Config()
+        data class AccountDetail(val id: String) : Config()
     }
 
     private class Impl(
+        private val id: String,
         private val navigation: StackNavigation<Config>,
         lifecycleRegistry: LifecycleRegistry,
         componentContext: ComponentContext,
@@ -67,10 +72,14 @@ interface AccountDetailNavigator : PageContext, Navigator {
         AccountDetailNavigator {
         override val childStack: Value<ChildStack<*, Child>> = childStack(
             source = navigation,
-            initialConfiguration = Config.AccountDetail,
+            initialConfiguration = Config.AccountDetail(id),
             handleBackButton = true,
             childFactory = { _, componentContext ->
-                Child.AccountDetail(this, componentContext)
+                Child.AccountDetail(
+                    AccountId(id),
+                    this,
+                    componentContext,
+                )
             },
         )
     }

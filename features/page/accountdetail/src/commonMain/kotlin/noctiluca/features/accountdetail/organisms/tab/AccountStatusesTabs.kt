@@ -5,33 +5,29 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.accountdetail.state.AccountStatuses
-import noctiluca.features.accountdetail.state.AccountStatusesState
+import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.components.atoms.tab.PrimaryTabs
 
 @Composable
 internal fun AccountStatusesTabs(
-    state: AccountStatusesState,
+    currentTab: AccountDetailViewModel.UiModel.Tab,
     statusesScrollState: AccountStatusesScrollState,
+    onSwitch: (AccountDetailViewModel.UiModel.Tab) -> Unit = {},
     modifier: Modifier = Modifier,
-) {
-    val (currentTab) = state.value
-
-    PrimaryTabs(
-        statusesScrollState.tabs,
-        currentTab.ordinal,
-        onClick = { _, (tab, _) ->
-            statusesScrollState.cacheScrollPosition(currentTab)
-            state.switch(tab)
-        },
-        transform = { (_, label) -> label },
-        modifier = modifier,
-    )
-}
+) = PrimaryTabs(
+    statusesScrollState.tabs,
+    currentTab.ordinal,
+    onClick = { _, (tab, _) ->
+        statusesScrollState.cacheScrollPosition(currentTab)
+        onSwitch(tab)
+    },
+    transform = { (_, label) -> label },
+    modifier = modifier,
+)
 
 @Composable
 internal fun rememberTabbedAccountStatusesState(
-    tab: AccountStatuses.Tab,
+    tab: AccountDetailViewModel.UiModel.Tab,
 ): AccountStatusesScrollState {
     val scrollState = AccountStatusesScrollState()
 
@@ -40,7 +36,7 @@ internal fun rememberTabbedAccountStatusesState(
 }
 
 internal class AccountStatusesScrollState private constructor(
-    val tabs: List<Pair<AccountStatuses.Tab, String>>,
+    val tabs: List<Pair<AccountDetailViewModel.UiModel.Tab, String>>,
     val lazyListState: LazyListState,
     private val scrollPositions: MutableState<List<Pair<Int, Int>>>,
 ) {
@@ -50,9 +46,9 @@ internal class AccountStatusesScrollState private constructor(
             lazyListState: LazyListState = rememberLazyListState(),
         ): AccountStatusesScrollState {
             val tabTitles = listOf(
-                AccountStatuses.Tab.STATUSES to getString().account_detail_tab_statuses,
-                AccountStatuses.Tab.STATUSES_AND_REPLIES to getString().account_detail_tab_statuses_and_replies,
-                AccountStatuses.Tab.MEDIA to getString().account_detail_tab_media,
+                AccountDetailViewModel.UiModel.Tab.STATUSES to getString().account_detail_tab_statuses,
+                AccountDetailViewModel.UiModel.Tab.STATUSES_AND_REPLIES to getString().account_detail_tab_statuses_and_replies,
+                AccountDetailViewModel.UiModel.Tab.MEDIA to getString().account_detail_tab_media,
             )
 
             val scrollPositions = remember {
@@ -69,7 +65,7 @@ internal class AccountStatusesScrollState private constructor(
         }
     }
 
-    fun cacheScrollPosition(prev: AccountStatuses.Tab) {
+    fun cacheScrollPosition(prev: AccountDetailViewModel.UiModel.Tab) {
         scrollPositions.value = scrollPositions.value.mapIndexed { index, state ->
             if (lazyListState.firstVisibleItemIndex > 0 && index == prev.ordinal) {
                 lazyListState.firstVisibleItemIndex to lazyListState.firstVisibleItemScrollOffset
@@ -79,7 +75,7 @@ internal class AccountStatusesScrollState private constructor(
         }
     }
 
-    suspend fun restoreScrollPosition(tab: AccountStatuses.Tab) {
+    suspend fun restoreScrollPosition(tab: AccountDetailViewModel.UiModel.Tab) {
         if (lazyListState.firstVisibleItemIndex == 0) {
             return
         }

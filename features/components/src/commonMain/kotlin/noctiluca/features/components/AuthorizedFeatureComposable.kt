@@ -7,9 +7,24 @@ import kotlinx.coroutines.runBlocking
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.repository.TokenProvider
 import org.koin.core.component.KoinScopeComponent
+import org.koin.core.component.get
 import org.koin.core.scope.Scope
 
-internal val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedExceptionHandler() }
+val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedExceptionHandler() }
+
+@Composable
+fun <T : PageContext> AuthorizedFeatureComposable(
+    context: T,
+    navigation: Navigation,
+    content: @Composable (T) -> Unit,
+) = FeatureComposable(context = context) {
+    CompositionLocalProvider(
+        LocalCoroutineExceptionHandler provides UnauthorizedExceptionHandler(
+            it.get(),
+            navigation,
+        ),
+    ) { content(it) }
+}
 
 @Composable
 fun AuthorizedFeatureComposable(

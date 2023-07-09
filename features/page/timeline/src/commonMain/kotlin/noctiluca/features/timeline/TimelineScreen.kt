@@ -5,8 +5,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.components.AuthorizedFeatureComposable
-import noctiluca.features.components.di.getKoinRootScope
-import noctiluca.features.timeline.state.TimelineListState
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
@@ -16,8 +14,6 @@ import org.koin.core.component.KoinScopeComponent
 
 internal val LocalNavigation = compositionLocalOf<TimelinesNavigator?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
-internal val LocalScope = compositionLocalOf { getKoinRootScope() }
-internal val LocalTimelineListState = compositionLocalOf { TimelineListState() }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +80,6 @@ private fun TimelineFeature(
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
         LocalNavigation provides navigator,
-        //LocalTimelineListState provides rememberTimelineStatus(scope),
     ) {
         val page by navigator.childStack.subscribeAsState()
 

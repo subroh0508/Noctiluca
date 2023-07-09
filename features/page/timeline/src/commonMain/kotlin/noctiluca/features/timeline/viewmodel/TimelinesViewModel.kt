@@ -20,6 +20,7 @@ import noctiluca.timeline.domain.usecase.*
 import noctiluca.timeline.model.StreamEvent
 import org.koin.core.component.get
 
+@Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel private constructor(
     private val tokenProvider: TokenProvider,
     private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,

@@ -9,7 +9,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import noctiluca.account.model.Account
-import noctiluca.features.timeline.state.CurrentAuthorizedAccountState
 import noctiluca.features.timeline.template.drawer.header.CurrentAuthorizedAccountHeader
 import noctiluca.features.timeline.template.drawer.menu.AuthorizedAccountsList
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu

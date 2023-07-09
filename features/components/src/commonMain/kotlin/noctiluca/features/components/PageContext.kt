@@ -1,7 +1,7 @@
 package noctiluca.features.components
 
 import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.childContext
+import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.subscribe
 import org.koin.core.component.KoinScopeComponent
@@ -9,16 +9,12 @@ import org.koin.core.component.KoinScopeComponent
 interface PageContext : LifecycleRegistry, ComponentContext, KoinScopeComponent {
     companion object {
         operator fun invoke(
-            key: String,
             lifecycleRegistry: LifecycleRegistry,
-            rootComponentContext: ComponentContext,
             koinScopeComponent: KoinScopeComponent,
+            componentContext: ComponentContext = DefaultComponentContext(lifecycleRegistry),
         ): PageContext = Impl(
             lifecycleRegistry,
-            rootComponentContext.childContext(
-                key,
-                lifecycleRegistry,
-            ),
+            componentContext,
             koinScopeComponent,
         )
     }

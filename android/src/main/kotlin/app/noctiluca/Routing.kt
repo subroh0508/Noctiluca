@@ -14,7 +14,7 @@ fun Routing(
     navigation.navHostController,
     startDestination = startDestination,
 ) {
-    signIn(rootComponent, navigation)
+    signIn(navigation)
     timeline(navigation)
-    accountDetail(rootComponent, navigation)
+    accountDetail(navigation)
 }

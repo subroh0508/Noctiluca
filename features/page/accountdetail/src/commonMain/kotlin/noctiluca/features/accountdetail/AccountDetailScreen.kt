@@ -5,7 +5,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.compositionLocalOf
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.text.intl.Locale
-import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.accountdetail.templates.scaffold.AccountDetailScaffold
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
@@ -20,11 +19,9 @@ internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 @Composable
 fun AccountDetailScreen(
     id: String,
-    rootContext: ComponentContext,
     navigation: Navigation,
 ) = AccountDetailFeature(
     id,
-    rootContext,
     navigation,
 ) { page ->
     when (page) {
@@ -37,11 +34,10 @@ fun AccountDetailScreen(
 @Composable
 private fun AccountDetailFeature(
     id: String,
-    rootContext: ComponentContext,
     navigation: Navigation,
     content: @Composable (AccountDetailNavigator.Child) -> Unit,
 ) = AuthorizedFeatureComposable(
-    context = AccountDetailNavigator(id, rootContext),
+    context = AccountDetailNavigator(id),
     navigation,
 ) { navigator ->
     CompositionLocalProvider(

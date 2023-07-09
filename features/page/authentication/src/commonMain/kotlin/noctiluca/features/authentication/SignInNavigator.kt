@@ -16,12 +16,9 @@ import org.koin.core.component.KoinScopeComponent
 
 interface SignInNavigator : PageContext, Navigator {
     companion object {
-        private const val KEY = "SignInNavigator"
-
         @Composable
         operator fun invoke(
             nav: SignInNavigation,
-            rootContext: ComponentContext,
         ): SignInNavigator {
             val lifecycleRegistry = remember { LifecycleRegistry() }
 
@@ -30,7 +27,6 @@ interface SignInNavigator : PageContext, Navigator {
                     nav = nav,
                     StackNavigation(),
                     lifecycleRegistry,
-                    rootContext,
                     SignInComponent(),
                 )
             }
@@ -68,12 +64,9 @@ interface SignInNavigator : PageContext, Navigator {
         private val nav: SignInNavigation,
         private val navigation: StackNavigation<Config>,
         lifecycleRegistry: LifecycleRegistry,
-        componentContext: ComponentContext,
         koinScopeComponent: KoinScopeComponent,
     ) : PageContext by PageContext(
-        KEY,
         lifecycleRegistry,
-        componentContext,
         koinScopeComponent,
     ),
         Navigator by Navigator(

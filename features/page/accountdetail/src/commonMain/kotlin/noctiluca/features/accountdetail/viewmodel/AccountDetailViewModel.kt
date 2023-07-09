@@ -36,14 +36,6 @@ class AccountDetailViewModel private constructor(
 ) {
     private val mutableUiModel by lazy { MutableValue(UiModel()) }
 
-    private val accountDetailLoadState by lazy {
-        MutableValue<LoadState>(LoadState.Initial).also {
-            it.subscribe { loadState ->
-                mutableUiModel.value = uiModel.value.copy(account = loadState)
-            }
-        }
-    }
-
     private val tab by lazy {
         MutableValue(UiModel.Tab.STATUSES).also {
             it.subscribe { tab ->
@@ -68,11 +60,11 @@ class AccountDetailViewModel private constructor(
     fun load() {
         val job = launchLazy {
             runCatchingWithAuth { fetchAccountAttributesUseCase.execute(id) }
-                .onSuccess { accountDetailLoadState.value = LoadState.Loaded(it) }
-                .onFailure { accountDetailLoadState.value = LoadState.Error(it) }
+                .onSuccess { mutableUiModel.value = uiModel.value.copy(account = LoadState.Loaded(it)) }
+                .onFailure { mutableUiModel.value = uiModel.value.copy(account = LoadState.Error(it)) }
         }
 
-        accountDetailLoadState.value = LoadState.Loading(job)
+        mutableUiModel.value = uiModel.value.copy(account = LoadState.Loading(job))
         job.start()
     }
 

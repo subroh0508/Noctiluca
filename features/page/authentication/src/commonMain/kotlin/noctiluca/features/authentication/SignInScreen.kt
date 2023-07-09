@@ -3,7 +3,6 @@ package noctiluca.features.authentication
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
-import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
@@ -21,11 +20,9 @@ internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null 
 fun SignInScreen(
     domain: String?,
     authorizeResult: AuthorizeResult?,
-    rootContext: ComponentContext,
     navigation: SignInNavigation,
 ) = SignInFeature(
     authorizeResult,
-    rootContext,
     navigation,
 ) { page ->
     when (page) {
@@ -45,11 +42,10 @@ fun SignInScreen(
 @Composable
 private fun SignInFeature(
     authorizeResult: AuthorizeResult?,
-    rootContext: ComponentContext,
     navigation: SignInNavigation,
     content: @Composable (SignInNavigator.Child) -> Unit,
 ) {
-    val navigator = SignInNavigator(navigation, rootContext)
+    val navigator = SignInNavigator(navigation)
 
     FeatureComposable(context = navigator) {
         CompositionLocalProvider(

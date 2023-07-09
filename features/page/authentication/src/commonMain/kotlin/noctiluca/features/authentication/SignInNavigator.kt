@@ -80,8 +80,6 @@ interface SignInNavigator : PageContext, Navigator {
             childFactory = ::createChild,
         )
 
-        override fun backPressed() = navigation.pop()
-
         override fun openBrowser(uri: Uri) = nav.openBrowser(uri)
 
         override fun navigateToInstanceDetail(

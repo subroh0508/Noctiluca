@@ -11,11 +11,11 @@ import noctiluca.account.model.Account
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.list.TwoLineListItem
 import noctiluca.features.components.molecules.list.LazyColumn
-import noctiluca.features.timeline.state.CurrentAuthorizedAccount
+import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 
 @Composable
 internal fun AuthorizedAccountsList(
-    account: CurrentAuthorizedAccount,
+    account: TimelinesViewModel.CurrentAuthorizedAccount,
     onClick: (Account) -> Unit,
 ) = LazyColumn(
     account.others,

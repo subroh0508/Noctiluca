@@ -28,7 +28,6 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.core)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.navigation.compose)
 
     implementation(libs.bundles.ktor.client.jvm)
     implementation(libs.kotlinx.serialization)

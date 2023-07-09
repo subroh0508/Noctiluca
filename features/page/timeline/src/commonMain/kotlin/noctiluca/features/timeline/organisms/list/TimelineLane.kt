@@ -18,12 +18,13 @@ import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.state.TimelineState
+import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.status.model.Status
 import noctiluca.timeline.domain.model.Timeline
 
 @Composable
 internal fun TimelineLane(
-    timelineState: TimelineState,
+    timelineState: TimelinesViewModel.TimelineState,
     onLoad: suspend CoroutineScope.(Timeline) -> Unit,
     onExecuteAction: CoroutineScope.(Timeline, Status, Action) -> Unit,
     onScrollToTop: () -> Unit,
@@ -70,7 +71,7 @@ internal fun TimelineLane(
 
 @Composable
 private fun TimelineFooter(
-    foreground: TimelineState,
+    foreground: TimelinesViewModel.TimelineState,
     onLoad: suspend CoroutineScope.(Timeline) -> Unit,
     height: Dp = 64.dp,
 ) {

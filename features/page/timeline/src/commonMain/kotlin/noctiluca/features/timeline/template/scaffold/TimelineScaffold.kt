@@ -4,11 +4,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import kotlinx.coroutines.launch
 import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.components.atoms.appbar.NavigateIconSize
@@ -16,28 +19,33 @@ import noctiluca.features.components.atoms.appbar.scrollToTop
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
-import noctiluca.features.timeline.LocalNavigation
-import noctiluca.features.timeline.LocalTimelineListState
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.tab.TimelineTabs
-import noctiluca.features.timeline.state.CurrentAuthorizedAccount
-import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
+import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TimelineScaffold(drawerState: DrawerState) {
+internal fun TimelineScaffold(
+    viewModel: TimelinesViewModel,
+    drawerState: DrawerState,
+) {
+    LaunchedEffect(Unit) {
+        viewModel.subscribeAll()
+        viewModel.loadAll()
+    }
+
+    val uiModel by viewModel.uiModel.subscribeAsState()
+
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-
-    val account = rememberCurrentAuthorizedAccountStatus(LocalNavigation.current)
 
     TabbedScaffold(
         scrollBehavior,
         topAppBar = {
             CurrentInstanceTopAppBar(
-                account.value,
+                uiModel.account,
                 scrollBehavior,
                 onClickNavigationIcon = {
                     scope.launch { drawerState.open() }
@@ -51,16 +59,25 @@ internal fun TimelineScaffold(drawerState: DrawerState) {
                     .align(Alignment.BottomCenter)
             )
         },
-        tabs = { TimelineTabs() },
+        tabs = {
+            TimelineTabs(
+                uiModel,
+                onClickTab = { viewModel.setForeground(it) },
+            )
+        },
     ) {
-        TimelineLanes(scrollBehavior)
+        TimelineLanes(
+            viewModel,
+            uiModel.timelines,
+            scrollBehavior,
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CurrentInstanceTopAppBar(
-    account: CurrentAuthorizedAccount,
+    account: TimelinesViewModel.CurrentAuthorizedAccount,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     onClickNavigationIcon: () -> Unit,
 ) = CenterAlignedTopAppBar(
@@ -84,23 +101,23 @@ private fun CurrentInstanceTopAppBar(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimelineLanes(
+    viewModel: TimelinesViewModel,
+    timelines: List<TimelinesViewModel.TimelineState>,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
-    val timelineListState = LocalTimelineListState.current
-
-    timelineListState.value.forEachIndexed { index, timelineState ->
+    timelines.forEachIndexed { index, timelineState ->
         TimelineLane(
             timelineState,
-            onLoad = { timelineListState.load(this, it) },
+            onLoad = { viewModel.load(it) },
             onExecuteAction = { timeline, status, action ->
                 when (action) {
-                    Action.FAVOURITE -> timelineListState.favourite(this, timeline, status)
-                    Action.BOOST -> timelineListState.boost(this, timeline, status)
+                    Action.FAVOURITE -> viewModel.favourite(timeline, status)
+                    Action.BOOST -> viewModel.boost(timeline, status)
                     else -> Unit
                 }
             },
             onScrollToTop = {
-                timelineListState.scrolledToTop(index)
+                viewModel.scrolledToTop(index)
                 scrollBehavior.scrollToTop()
             },
         )

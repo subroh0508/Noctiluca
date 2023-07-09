@@ -3,60 +3,93 @@ package noctiluca.features.timeline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
+import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.components.AuthorizedFeatureComposable
 import noctiluca.features.components.di.getKoinRootScope
 import noctiluca.features.timeline.state.TimelineListState
-import noctiluca.features.timeline.state.rememberCurrentAuthorizedAccountStatus
-import noctiluca.features.timeline.state.rememberTimelineStatus
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
 import noctiluca.features.timeline.template.scaffold.TootScaffold
+import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import org.koin.core.component.KoinScopeComponent
 
-internal val LocalNavigation = compositionLocalOf<TimelineNavigation?> { null }
+internal val LocalNavigation = compositionLocalOf<TimelinesNavigator?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 internal val LocalScope = compositionLocalOf { getKoinRootScope() }
 internal val LocalTimelineListState = compositionLocalOf { TimelineListState() }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TimelinesScreen(
+fun TimelineScreen(
     component: KoinScopeComponent,
     navigation: TimelineNavigation,
-) = TimelineFeature(component, navigation) {
-    TimelineNavigationDrawer(
-        rememberCurrentAuthorizedAccountStatus(navigation),
-        onClickTopAccount = { navigation.navigateToAccountDetail(it.id.value) },
-        onClickDrawerMenu = { menu ->
-            handleOnClickDrawerItem(
-                menu,
-                navigation,
+) = TimelineFeature(
+    component,
+    navigation,
+) { page ->
+    when (page) {
+        is TimelinesNavigator.Child.Timelines -> {
+            val viewModel = TimelinesViewModel.Provider(
+                page,
+                reload = { navigation.reopenApp() },
             )
-        },
-    ) { drawerState -> TimelineScaffold(drawerState) }
-}
 
-@Composable
-fun TootScreen(
-    component: KoinScopeComponent,
-    navigation: TimelineNavigation,
-) = TimelineFeature(component, navigation) {
-    TootScaffold()
+            val uiModel by viewModel.uiModel.subscribeAsState()
+
+            LaunchedEffect(Unit) {
+                viewModel.loadCurrentAuthorizedAccount()
+            }
+
+            TimelineNavigationDrawer(
+                uiModel.account,
+                onClickTopAccount = { navigation.navigateToAccountDetail(it.id.value) },
+                onClickOtherAccount = { account ->
+                    viewModel.switch(account)
+                },
+                onClickDrawerMenu = { menu ->
+                    handleOnClickDrawerItem(
+                        menu,
+                        navigation,
+                    )
+                },
+            ) { drawerState ->
+                TimelineScaffold(
+                    viewModel,
+                    drawerState,
+                )
+            }
+        }
+
+        is TimelinesNavigator.Child.Toot -> TootScaffold(
+            TimelinesViewModel.Provider(
+                page,
+                reload = { navigation.reopenApp() },
+            ),
+        )
+
+        is TimelinesNavigator.Child.AccountDetail -> Unit
+    }
 }
 
 @Composable
 private fun TimelineFeature(
     component: KoinScopeComponent,
     navigation: TimelineNavigation,
-    content: @Composable () -> Unit,
-) = AuthorizedFeatureComposable(component, navigation) { scope ->
+    content: @Composable (TimelinesNavigator.Child) -> Unit,
+) = AuthorizedFeatureComposable(
+    context = TimelinesNavigator(),
+    navigation,
+) { navigator ->
     CompositionLocalProvider(
         LocalResources provides Resources(Locale.current.language),
-        LocalScope provides scope,
-        LocalNavigation provides navigation,
-        LocalTimelineListState provides rememberTimelineStatus(scope),
-    ) { content() }
+        LocalNavigation provides navigator,
+        //LocalTimelineListState provides rememberTimelineStatus(scope),
+    ) {
+        val page by navigator.childStack.subscribeAsState()
+
+        content(page.active.instance)
+    }
 }
 
 private fun handleOnClickDrawerItem(

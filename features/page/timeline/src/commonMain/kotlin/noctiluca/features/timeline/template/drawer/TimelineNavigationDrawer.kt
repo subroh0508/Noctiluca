@@ -14,12 +14,14 @@ import noctiluca.features.timeline.template.drawer.header.CurrentAuthorizedAccou
 import noctiluca.features.timeline.template.drawer.menu.AuthorizedAccountsList
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenus
+import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TimelineNavigationDrawer(
-    authorizedAccountState: CurrentAuthorizedAccountState,
+    account: TimelinesViewModel.CurrentAuthorizedAccount,
     onClickTopAccount: (Account) -> Unit,
+    onClickOtherAccount: (Account) -> Unit,
     onClickDrawerMenu: (TimelineDrawerMenu) -> Unit,
     content: @Composable (DrawerState) -> Unit,
 ) {
@@ -28,9 +30,10 @@ internal fun TimelineNavigationDrawer(
     ModalNavigationDrawer(
         drawerContent = {
             TimelineDrawerSheet(
-                authorizedAccountState,
+                account,
                 drawerState,
                 onClickTopAccount,
+                onClickOtherAccount,
                 onClickDrawerMenu,
             )
         },
@@ -41,13 +44,13 @@ internal fun TimelineNavigationDrawer(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimelineDrawerSheet(
-    authorizedAccountState: CurrentAuthorizedAccountState,
+    account: TimelinesViewModel.CurrentAuthorizedAccount,
     drawerState: DrawerState,
     onClickTopAccount: (Account) -> Unit,
+    onClickOtherAccount: (Account) -> Unit,
     onClickDrawerMenu: (TimelineDrawerMenu) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    val account = authorizedAccountState.value
 
     ModalDrawerSheet(
         Modifier.fillMaxHeight(),
@@ -76,7 +79,7 @@ private fun TimelineDrawerSheet(
                 account,
                 onClick = {
                     scope.handleOnClick(drawerState) {
-                        authorizedAccountState.switch(scope, it)
+                        onClickOtherAccount(it)
                     }
                 },
             )

@@ -20,7 +20,7 @@ kotlinx-serialization = "1.5.1"
 
 ktor = "2.3.3"
 
-decompose = "2.0.0"
+decompose = "2.0.1"
 
 koin = "3.4.3"
 

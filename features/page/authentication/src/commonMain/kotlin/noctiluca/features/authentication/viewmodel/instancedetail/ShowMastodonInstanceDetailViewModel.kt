@@ -89,8 +89,9 @@ interface ShowMastodonInstanceDetailViewModel {
                         statuses.value =
                             if (maxId == null) {
                                 it
-                            } else
+                            } else {
                                 statuses.value + it
+                            }
                     }
                     .onFailure { statuses.value = listOf() }
             }

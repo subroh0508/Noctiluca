@@ -22,7 +22,7 @@ ktor = "2.3.2"
 
 decompose = "2.0.0"
 
-koin = "3.4.2"
+koin = "3.4.3"
 
 okhttp3 = "4.11.0"
 

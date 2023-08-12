@@ -10,12 +10,6 @@ kotlin {
                 implementation(project(":features:shared"))
             }
         }
-
-        androidMain {
-            dependencies {
-                implementation(libs.androidx.navigation.compose)
-            }
-        }
     }
 }
 

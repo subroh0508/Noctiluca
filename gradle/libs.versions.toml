@@ -9,7 +9,6 @@ androidx-core = "1.10.1"
 androidx-appcompat = "1.6.1"
 androidx-browser = "1.6.0"
 androidx-activity = "1.7.2"
-androidx-navigation = "2.6.0"
 androidx-datastore = "1.0.0"
 
 android-desugarjdk = "2.0.3"
@@ -65,7 +64,6 @@ androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-cor
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-datastore-core = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
 

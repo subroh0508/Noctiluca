@@ -33,7 +33,6 @@ fun Section(
     Divider(Modifier.fillMaxWidth())
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionItem(
     headlineText: String,
@@ -44,12 +43,11 @@ fun SectionItem(
 ) = MaterialListItem(
     { Text(headlineText) },
     modifier,
-    supportingText = supportingText?.let { { Text(it) } },
+    supportingContent = supportingText?.let { { Text(it) } },
     leadingContent = leadingContent,
     trailingContent = trailingContent,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OneLineListItem(
     headlineText: String,
@@ -61,7 +59,6 @@ fun OneLineListItem(
     leadingContent = leadingContent,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TwoLineListItem(
     headlineText: String,
@@ -71,11 +68,10 @@ fun TwoLineListItem(
 ) = MaterialListItem(
     { Text(headlineText) },
     modifier,
-    supportingText = { Text(supportingText) },
+    supportingContent = { Text(supportingText) },
     leadingContent = leadingContent,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThreeLineListItem(
     headlineText: String,
@@ -85,7 +81,7 @@ fun ThreeLineListItem(
 ) = MaterialListItem(
     { Text(headlineText) },
     modifier,
-    supportingText = { Text(supportingText) },
-    overlineText = {},
+    supportingContent = { Text(supportingText) },
+    overlineContent = {},
     leadingContent = leadingContent,
 )

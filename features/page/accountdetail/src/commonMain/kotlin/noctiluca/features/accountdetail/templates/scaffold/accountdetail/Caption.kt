@@ -109,13 +109,12 @@ private fun CustomFields(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CustomField(
     field: AccountAttributes.Field,
 ) = ListItem(
-    overlineText = { Text(field.name) },
-    headlineText = { HtmlText(field.value) },
+    overlineContent = { Text(field.name) },
+    headlineContent = { HtmlText(field.value) },
     colors = ListItemDefaults.colors(
         containerColor = MaterialTheme.colorScheme.surfaceVariant,
     ),

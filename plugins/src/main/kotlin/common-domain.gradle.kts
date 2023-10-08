@@ -33,7 +33,7 @@ kotlin {
                 implementation(libs.koinAndroid)
             }
         }
-        named("androidTest") {
+        named("androidUnitTest") {
             dependencies {
                 implementation(libs.kotestRunnerJunit5)
             }

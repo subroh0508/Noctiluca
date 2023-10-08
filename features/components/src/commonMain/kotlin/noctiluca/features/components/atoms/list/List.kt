@@ -2,7 +2,6 @@ package noctiluca.features.components.atoms.list
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Divider
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,7 +32,6 @@ fun Section(
     Divider(Modifier.fillMaxWidth())
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SectionItem(
     headlineText: String,
@@ -44,12 +42,11 @@ fun SectionItem(
 ) = MaterialListItem(
     { Text(headlineText) },
     modifier,
-    supportingText = supportingText?.let { { Text(it) } },
+    supportingContent = supportingText?.let { { Text(it) } },
     leadingContent = leadingContent,
     trailingContent = trailingContent,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun OneLineListItem(
     headlineText: String,
@@ -61,7 +58,6 @@ fun OneLineListItem(
     leadingContent = leadingContent,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TwoLineListItem(
     headlineText: String,
@@ -71,11 +67,10 @@ fun TwoLineListItem(
 ) = MaterialListItem(
     { Text(headlineText) },
     modifier,
-    supportingText = { Text(supportingText) },
+    supportingContent = { Text(supportingText) },
     leadingContent = leadingContent,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThreeLineListItem(
     headlineText: String,
@@ -85,7 +80,7 @@ fun ThreeLineListItem(
 ) = MaterialListItem(
     { Text(headlineText) },
     modifier,
-    supportingText = { Text(supportingText) },
-    overlineText = {},
+    supportingContent = { Text(supportingText) },
+    overlineContent = {},
     leadingContent = leadingContent,
 )

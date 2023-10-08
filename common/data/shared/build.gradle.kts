@@ -30,7 +30,7 @@ kotlin {
             }
         }
 
-        androidTest {
+        androidUnitTest {
             dependencies {
                 implementation(kotlin("test-junit"))
                 implementation(libs.kotest.runner.junit5)

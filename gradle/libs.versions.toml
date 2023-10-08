@@ -13,7 +13,7 @@ androidx-datastore = "1.0.0"
 
 android-desugarjdk = "2.0.3"
 
-kotlinx-datetime = "0.4.0"
+kotlinx-datetime = "0.4.1"
 kotlinx-coroutines = "1.7.3"
 kotlinx-serialization = "1.5.1"
 

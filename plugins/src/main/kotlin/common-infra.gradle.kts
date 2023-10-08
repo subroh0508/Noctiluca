@@ -24,7 +24,7 @@ kotlin {
                 implementation(libs.koinAndroid)
             }
         }
-        named("androidTest")
+        named("androidUnitTest")
         named("desktopMain")
         named("desktopTest")
     }

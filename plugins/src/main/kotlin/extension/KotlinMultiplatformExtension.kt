@@ -16,7 +16,7 @@ fun KotlinMultiplatformExtension.targets(vararg target: Target) {
 private fun KotlinMultiplatformExtension.desktop() {
     jvm("desktop") {
         compilations.all {
-            kotlinOptions.jvmTarget = "11"
+            kotlinOptions.jvmTarget = "17"
         }
     }
 }

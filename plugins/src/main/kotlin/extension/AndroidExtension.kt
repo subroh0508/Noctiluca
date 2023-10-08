@@ -42,15 +42,15 @@ fun ApplicationExtension.proguardApplicationConfig() {
     }
 }
 
-private fun CommonExtension<*, *, *, *>.androidConfig() {
+private fun CommonExtension<*, *, *, *, *>.androidConfig() {
     defaultConfig {
         compileSdk = Packages.compileSdk
         minSdk = Packages.minSdk
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     // @see: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-debug/

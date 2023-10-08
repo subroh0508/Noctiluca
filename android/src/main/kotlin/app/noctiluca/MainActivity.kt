@@ -5,6 +5,7 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import app.noctiluca.navigation.AndroidNavigator
+import noctiluca.features.authentication.R
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {

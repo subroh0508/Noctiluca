@@ -9,7 +9,6 @@ dependencies {
     implementation(project(":core:datastore"))
     implementation(project(":core:data"))
     implementation(project(":core:data:instance:infra"))
-    implementation(project(":core:data:timeline:infra"))
 
     implementation(project(":features:theme"))
     implementation(project(":features:components"))

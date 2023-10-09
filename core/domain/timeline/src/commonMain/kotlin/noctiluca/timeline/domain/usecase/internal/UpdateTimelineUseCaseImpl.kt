@@ -1,9 +1,9 @@
 package noctiluca.timeline.domain.usecase.internal
 
-import noctiluca.status.model.StatusList
+import noctiluca.data.timeline.TimelineRepository
+import noctiluca.model.status.StatusList
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.UpdateTimelineUseCase
-import noctiluca.timeline.infra.repository.TimelineRepository
 
 internal class UpdateTimelineUseCaseImpl(
     private val repository: TimelineRepository,

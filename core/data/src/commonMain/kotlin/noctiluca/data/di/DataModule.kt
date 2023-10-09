@@ -4,7 +4,9 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.DataModule() {
-    DataAuthenticationModule()
     DataAccountModule()
     DataAccountDetailModule()
+    DataAuthenticationModule()
+    DataStatusModule()
+    DataTimelineModule()
 }

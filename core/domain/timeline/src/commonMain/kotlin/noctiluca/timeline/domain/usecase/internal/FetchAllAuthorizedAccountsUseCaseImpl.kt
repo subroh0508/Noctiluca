@@ -1,7 +1,7 @@
 package noctiluca.timeline.domain.usecase.internal
 
 import kotlinx.coroutines.flow.flow
-import noctiluca.account.infra.repository.AuthorizedAccountRepository
+import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.timeline.domain.usecase.FetchAllAuthorizedAccountsUseCase
 
 internal class FetchAllAuthorizedAccountsUseCaseImpl(

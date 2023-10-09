@@ -29,8 +29,6 @@ include(
     ":core:data",
     ":core:data:instance:model",
     ":core:data:instance:infra",
-    ":core:data:timeline:model",
-    ":core:data:timeline:infra",
     ":core:test:shared",
     ":core:model",
     ":core:domain:accountdetail",

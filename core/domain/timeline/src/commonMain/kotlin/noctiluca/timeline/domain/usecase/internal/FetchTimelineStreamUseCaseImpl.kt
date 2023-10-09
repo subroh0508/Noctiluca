@@ -1,9 +1,9 @@
 package noctiluca.timeline.domain.usecase.internal
 
 import kotlinx.coroutines.flow.flow
+import noctiluca.data.timeline.TimelineRepository
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.FetchTimelineStreamUseCase
-import noctiluca.timeline.infra.repository.TimelineRepository
 
 internal class FetchTimelineStreamUseCaseImpl(
     private val repository: TimelineRepository,

@@ -16,7 +16,7 @@ import noctiluca.status.model.Status
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.*
-import noctiluca.timeline.model.StreamEvent
+import noctiluca.data.timeline.StreamEvent
 import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")

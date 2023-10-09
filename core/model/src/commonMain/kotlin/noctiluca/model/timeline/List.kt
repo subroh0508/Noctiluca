@@ -1,4 +1,4 @@
-package noctiluca.timeline.model
+package noctiluca.model.timeline
 
 data class List(
     val id: ListId,

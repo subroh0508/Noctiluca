@@ -1,7 +1,7 @@
-package noctiluca.timeline.model
+package noctiluca.model.timeline
 
 import noctiluca.model.StatusId
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 sealed class StreamEvent {
     data class Updated(val status: Status) : StreamEvent()

@@ -1,4 +1,4 @@
-package noctiluca.timeline.infra.repository.impl
+package noctiluca.data.timeline.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
@@ -7,16 +7,16 @@ import noctiluca.api.mastodon.MastodonStream
 import noctiluca.api.mastodon.json.streaming.Stream
 import noctiluca.api.mastodon.json.streaming.StreamEventJson
 import noctiluca.api.mastodon.json.streaming.StreamingType
+import noctiluca.data.status.toEntity
+import noctiluca.datastore.TokenDataStore
 import noctiluca.model.StatusId
-import noctiluca.repository.TokenProvider
-import noctiluca.status.infra.toEntity
-import noctiluca.timeline.infra.repository.TimelineRepository
-import noctiluca.timeline.model.StreamEvent
+import noctiluca.data.timeline.TimelineRepository
+import noctiluca.model.timeline.StreamEvent
 
 internal class TimelineRepositoryImpl(
     private val api: MastodonApiV1,
     private val webSocket: MastodonStream,
-    private val tokenProvider: TokenProvider,
+    private val tokenDataStore: TokenDataStore,
 ) : TimelineRepository {
     override suspend fun fetchGlobal(
         onlyRemote: Boolean,
@@ -26,7 +26,7 @@ internal class TimelineRepositoryImpl(
         remote = onlyRemote,
         onlyMedia = onlyMedia,
         maxId = maxId?.value,
-    ).map { it.toEntity(tokenProvider.getCurrent()?.id) }
+    ).map { it.toEntity(tokenDataStore.getCurrent()?.id) }
 
     override suspend fun fetchLocal(
         onlyMedia: Boolean,
@@ -35,13 +35,13 @@ internal class TimelineRepositoryImpl(
         local = true,
         onlyMedia = onlyMedia,
         maxId = maxId?.value,
-    ).map { it.toEntity(tokenProvider.getCurrent()?.id) }
+    ).map { it.toEntity(tokenDataStore.getCurrent()?.id) }
 
     override suspend fun fetchHome(
         maxId: StatusId?,
     ) = api.getTimelinesHome(
         maxId = maxId?.value,
-    ).map { it.toEntity(tokenProvider.getCurrent()?.id) }
+    ).map { it.toEntity(tokenDataStore.getCurrent()?.id) }
 
     override suspend fun buildGlobalStream(
         onlyRemote: Boolean,
@@ -79,10 +79,10 @@ internal class TimelineRepositoryImpl(
     private suspend fun StreamEventJson.toValueObject() = payload?.let {
         when (it) {
             is StreamEventJson.Payload.Updated -> StreamEvent.Updated(
-                it.status.toEntity(tokenProvider.getCurrent()?.id),
+                it.status.toEntity(tokenDataStore.getCurrent()?.id),
             )
             is StreamEventJson.Payload.StatusEdited -> StreamEvent.StatusEdited(
-                it.status.toEntity(tokenProvider.getCurrent()?.id),
+                it.status.toEntity(tokenDataStore.getCurrent()?.id),
             )
             is StreamEventJson.Payload.Deleted -> StreamEvent.Deleted(StatusId(it.id))
             else -> null

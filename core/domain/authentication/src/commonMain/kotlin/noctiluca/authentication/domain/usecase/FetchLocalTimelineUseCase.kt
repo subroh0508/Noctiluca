@@ -1,7 +1,7 @@
 package noctiluca.authentication.domain.usecase
 
 import noctiluca.model.StatusId
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 interface FetchLocalTimelineUseCase {
     suspend fun execute(

@@ -1,6 +1,6 @@
 package noctiluca.timeline.domain.usecase
 
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 import noctiluca.timeline.domain.model.StatusAction
 
 interface ExecuteStatusActionUseCase {

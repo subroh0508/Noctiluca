@@ -8,8 +8,6 @@ kotlin {
             dependencies {
                 implementation(project(":core:data"))
                 implementation(project(":core:model"))
-                api(project(":core:data:timeline:model"))
-                implementation(project(":core:data:timeline:infra"))
 
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.kotlinx.coroutines.core)

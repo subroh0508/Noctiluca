@@ -7,12 +7,12 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import noctiluca.account.model.Account
 import noctiluca.api.mastodon.Api
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.Uri
-import noctiluca.status.model.Status
+import noctiluca.model.account.Account
+import noctiluca.model.status.Status
 import noctiluca.test.DOMAIN_MASTODON_JP
 import noctiluca.test.URL_MASTODON_JP
 import noctiluca.test.mock.MockHttpClientEngine

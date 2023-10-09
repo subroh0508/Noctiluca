@@ -1,7 +1,7 @@
 package noctiluca.timeline.domain.usecase.internal
 
-import noctiluca.status.infra.repository.StatusRepository
-import noctiluca.status.model.Status
+import noctiluca.data.status.StatusRepository
+import noctiluca.model.status.Status
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.usecase.ExecuteStatusActionUseCase
 

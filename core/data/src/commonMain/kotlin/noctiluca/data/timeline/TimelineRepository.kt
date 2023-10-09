@@ -1,9 +1,9 @@
-package noctiluca.timeline.infra.repository
+package noctiluca.data.timeline
 
 import kotlinx.coroutines.flow.Flow
 import noctiluca.model.StatusId
-import noctiluca.status.model.Status
-import noctiluca.timeline.model.StreamEvent
+import noctiluca.model.status.Status
+import noctiluca.model.timeline.StreamEvent
 
 interface TimelineRepository {
     suspend fun fetchGlobal(

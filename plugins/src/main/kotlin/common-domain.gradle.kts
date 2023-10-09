@@ -17,7 +17,7 @@ kotlin {
             dependencies {
                 implementation(project(":core:api:mastodon"))
                 implementation(project(":core:api:token"))
-                implementation(project(":core:data:shared"))
+                implementation(project(":core:data"))
                 implementation(project(":core:test:shared"))
 
                 implementation(kotlin("test"))

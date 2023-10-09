@@ -28,7 +28,7 @@ include(
     ":core:api:instancessocial",
     ":core:api:mastodon",
     ":core:api:token",
-    ":core:data:shared",
+    ":core:data",
     ":core:data:account:model",
     ":core:data:account:infra",
     ":core:data:accountdetail:model",

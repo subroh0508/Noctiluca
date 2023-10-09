@@ -7,7 +7,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":core:data:shared"))
+                implementation(project(":core:data"))
 
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.resources)

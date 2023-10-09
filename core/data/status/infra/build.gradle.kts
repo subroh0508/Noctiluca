@@ -8,7 +8,6 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core:network:mastodon"))
-                implementation(project(":core:data:account:model"))
                 implementation(project(":core:data:status:model"))
 
                 implementation(libs.kotlinx.datetime)

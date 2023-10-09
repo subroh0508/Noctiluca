@@ -6,7 +6,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":core:data:account:model"))
+                implementation(project(":core:model"))
                 implementation(project(":core:data:status:model"))
                 implementation(project(":features:components"))
 

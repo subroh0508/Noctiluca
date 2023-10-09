@@ -1,4 +1,4 @@
-package noctiluca.account.infra.repository
+package noctiluca.data.account
 
 import noctiluca.model.AccountId
 import noctiluca.model.Domain

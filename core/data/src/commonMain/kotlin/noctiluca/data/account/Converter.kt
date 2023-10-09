@@ -1,4 +1,4 @@
-package noctiluca.account.infra
+package noctiluca.data.account
 
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.model.AccountId

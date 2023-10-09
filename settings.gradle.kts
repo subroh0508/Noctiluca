@@ -27,8 +27,6 @@ include(
     ":core:datastore",
     ":core:api:instancessocial",
     ":core:data",
-    ":core:data:account:model",
-    ":core:data:account:infra",
     ":core:data:instance:model",
     ":core:data:instance:infra",
     ":core:data:status:model",

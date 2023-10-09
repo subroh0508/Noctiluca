@@ -6,7 +6,6 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.kotest.matchers.be
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.*
@@ -18,7 +17,6 @@ import org.junit.runner.RunWith
 import kotlin.test.Test
 
 @RunWith(AndroidJUnit4::class)
-@OptIn(ExperimentalCoroutinesApi::class)
 class JsonSerializerSpec {
     @Serializable
     private data class TestData(val id: String, val name: String)

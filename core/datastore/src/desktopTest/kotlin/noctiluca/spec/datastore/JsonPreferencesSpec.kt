@@ -1,4 +1,4 @@
-package noctiluca.spec.preferences
+package noctiluca.spec.datastore
 
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
@@ -6,9 +6,9 @@ import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
-import noctiluca.preferences.JsonPreferences
-import noctiluca.preferences.add
-import noctiluca.preferences.remove
+import noctiluca.datastore.JsonPreferences
+import noctiluca.datastore.add
+import noctiluca.datastore.remove
 import java.util.prefs.Preferences
 
 @Serializable

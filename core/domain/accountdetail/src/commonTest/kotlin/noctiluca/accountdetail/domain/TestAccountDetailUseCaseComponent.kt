@@ -3,9 +3,9 @@ package noctiluca.accountdetail.domain
 import io.ktor.client.engine.*
 import kotlinx.serialization.json.Json
 import noctiluca.accountdetail.domain.di.AccountDetailDomainModule
-import noctiluca.api.mastodon.di.MastodonApiModule
-import noctiluca.api.mastodon.di.buildHttpClient
-import noctiluca.api.mastodon.di.buildWebSocketClient
+import noctiluca.network.mastodon.di.MastodonApiModule
+import noctiluca.network.mastodon.di.buildHttpClient
+import noctiluca.network.mastodon.di.buildWebSocketClient
 import noctiluca.data.di.DataAccountDetailModule
 import noctiluca.test.di.MockAccountDataStoreModule
 import noctiluca.test.di.MockTokenDataStoreModule

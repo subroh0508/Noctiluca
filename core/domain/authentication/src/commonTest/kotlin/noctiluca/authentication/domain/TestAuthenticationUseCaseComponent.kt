@@ -3,8 +3,8 @@ package noctiluca.authentication.domain
 import io.ktor.client.engine.*
 import kotlinx.serialization.json.Json
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
-import noctiluca.api.mastodon.di.MastodonApiModule
-import noctiluca.api.mastodon.di.buildHttpClient
+import noctiluca.network.mastodon.di.MastodonApiModule
+import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.authentication.domain.di.AuthenticationDomainModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.authentication.infra.repository.local.LocalTokenRepository

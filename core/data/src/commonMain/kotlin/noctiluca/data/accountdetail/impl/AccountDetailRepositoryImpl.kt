@@ -3,9 +3,9 @@ package noctiluca.data.accountdetail.impl
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import noctiluca.api.mastodon.MastodonApiV1
-import noctiluca.api.mastodon.json.account.AccountJson
-import noctiluca.api.mastodon.json.account.RelationshipJson
+import noctiluca.network.mastodon.MastodonApiV1
+import noctiluca.network.mastodon.json.account.AccountJson
+import noctiluca.network.mastodon.json.account.RelationshipJson
 import noctiluca.data.accountdetail.AccountDetailRepository
 import noctiluca.data.accountdetail.toValueObject
 import noctiluca.data.status.toEntity
@@ -20,7 +20,7 @@ import noctiluca.model.accountdetail.Relationship
 import noctiluca.model.accountdetail.Relationships
 
 internal class AccountDetailRepositoryImpl(
-    private val v1: MastodonApiV1,
+    private val v1: noctiluca.network.mastodon.MastodonApiV1,
     private val tokenDataStore: TokenDataStore,
 ) : AccountDetailRepository {
     override suspend fun fetch(

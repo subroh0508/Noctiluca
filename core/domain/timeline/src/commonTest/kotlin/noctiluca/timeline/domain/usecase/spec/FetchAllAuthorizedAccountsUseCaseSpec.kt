@@ -10,7 +10,7 @@ import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import noctiluca.api.mastodon.Api
+import noctiluca.network.mastodon.Api
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
 import noctiluca.model.Uri
@@ -60,7 +60,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
         context("when the local cache does not exists") {
             val localRepository = MockLocalAuthorizedAccountRepository()
             val useCase = buildUseCase(
-                Api.V1.Accounts.VerifyCredentials(),
+                noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
                 listOf(),
                 localRepository,
             )
@@ -87,7 +87,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
                 )
 
                 val useCase = buildUseCase(
-                    Api.V1.Accounts.VerifyCredentials(),
+                    noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
                     listOf(),
                     localRepository,
                 )
@@ -113,7 +113,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
 
                 context("and the sever returns valid response") {
                     val useCase = buildUseCase(
-                        Api.V1.Accounts.VerifyCredentials(),
+                        noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
                         listOf(
                             ACCESS_TOKENS[0] to JSON_ACCOUNT_CREDENTIAL_2,
                             ACCESS_TOKENS[1] to JSON_ACCOUNT_CREDENTIAL_3,
@@ -135,7 +135,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
                 }
                 context("and the sever returns error response") {
                     val useCase = buildUseCase(
-                        Api.V1.Accounts.VerifyCredentials(),
+                        noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
                         HttpStatusCode.BadRequest,
                         localRepository,
                     )

@@ -11,7 +11,7 @@ import io.kotest.matchers.should
 import io.ktor.client.engine.mock.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
-import noctiluca.api.mastodon.Api
+import noctiluca.network.mastodon.Api
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
 import noctiluca.authentication.domain.mock.MockLocalTokenRepository
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase

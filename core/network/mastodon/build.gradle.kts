@@ -27,4 +27,4 @@ kotlin {
     }
 }
 
-android { namespace = "noctiluca.api.mastodon" }
+android { namespace = "noctiluca.network.mastodon" }

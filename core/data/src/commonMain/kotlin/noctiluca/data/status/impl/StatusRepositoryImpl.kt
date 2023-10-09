@@ -1,13 +1,13 @@
 package noctiluca.data.status.impl
 
-import noctiluca.api.mastodon.MastodonApiV1
+import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.data.status.StatusRepository
 import noctiluca.data.status.toEntity
 import noctiluca.datastore.TokenDataStore
 import noctiluca.model.status.Status
 
 internal class StatusRepositoryImpl(
-    private val api: MastodonApiV1,
+    private val api: noctiluca.network.mastodon.MastodonApiV1,
     private val tokenDataStore: TokenDataStore,
 ) : StatusRepository {
     override suspend fun favourite(status: Status): Status {

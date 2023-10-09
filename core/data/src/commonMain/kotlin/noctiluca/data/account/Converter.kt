@@ -1,6 +1,6 @@
 package noctiluca.data.account
 
-import noctiluca.api.mastodon.json.account.AccountCredentialJson
+import noctiluca.network.mastodon.json.account.AccountCredentialJson
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
 import noctiluca.model.Uri

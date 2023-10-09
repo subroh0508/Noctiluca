@@ -13,7 +13,7 @@ import noctiluca.accountdetail.domain.myAccount
 import noctiluca.accountdetail.domain.otherAccount
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.json.*
-import noctiluca.api.mastodon.Api
+import noctiluca.network.mastodon.Api
 import noctiluca.model.AccountId
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationship
@@ -27,7 +27,7 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
             context("and the id is mine") {
                 val testCase = buildUseCase(
                     MockHttpClientEngine
-                        .mock(Api.V1.Accounts.Id(id = ACCOUNT_ID), JSON_MY_ACCOUNT)
+                        .mock(noctiluca.network.mastodon.Api.V1.Accounts.Id(id = ACCOUNT_ID), JSON_MY_ACCOUNT)
                         .build(),
                 )
 
@@ -43,8 +43,11 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
                     context("and the $name") {
                         val testCase = buildUseCase(
                             MockHttpClientEngine
-                                .mock(Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID), json)
-                                .mock(Api.V1.Accounts.Relationships(), "[$JSON_ACCOUNTS_RELATIONSHIP_NONE]")
+                                .mock(noctiluca.network.mastodon.Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID), json)
+                                .mock(
+                                    noctiluca.network.mastodon.Api.V1.Accounts.Relationships(),
+                                    "[$JSON_ACCOUNTS_RELATIONSHIP_NONE]"
+                                )
                                 .build(),
                         )
 
@@ -60,8 +63,11 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
                     context("and the ${relationship.name.lowercase()} is true") {
                         val testCase = buildUseCase(
                             MockHttpClientEngine
-                                .mock(Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID), JSON_OTHER_ACCOUNT)
-                                .mock(Api.V1.Accounts.Relationships(), "[$json]")
+                                .mock(
+                                    noctiluca.network.mastodon.Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID),
+                                    JSON_OTHER_ACCOUNT
+                                )
+                                .mock(noctiluca.network.mastodon.Api.V1.Accounts.Relationships(), "[$json]")
                                 .build(),
                         )
 
@@ -79,7 +85,10 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
             context("and the id is mine") {
                 val testCase = buildUseCase(
                     MockHttpClientEngine
-                        .mock(Api.V1.Accounts.Id(id = ACCOUNT_ID), HttpStatusCode.Unauthorized)
+                        .mock(
+                            noctiluca.network.mastodon.Api.V1.Accounts.Id(id = ACCOUNT_ID),
+                            HttpStatusCode.Unauthorized
+                        )
                         .build(),
                 )
 
@@ -94,8 +103,11 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
             context("and the id is not mine") {
                 val testCase = buildUseCase(
                     MockHttpClientEngine
-                        .mock(Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID), JSON_OTHER_ACCOUNT)
-                        .mock(Api.V1.Accounts.Relationships(), HttpStatusCode.UnprocessableEntity)
+                        .mock(noctiluca.network.mastodon.Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID), JSON_OTHER_ACCOUNT)
+                        .mock(
+                            noctiluca.network.mastodon.Api.V1.Accounts.Relationships(),
+                            HttpStatusCode.UnprocessableEntity
+                        )
                         .build(),
                 )
 

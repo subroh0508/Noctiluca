@@ -2,9 +2,9 @@ package noctiluca.timeline.domain
 
 import io.ktor.client.engine.HttpClientEngine
 import kotlinx.serialization.json.Json
-import noctiluca.api.mastodon.di.MastodonApiModule
-import noctiluca.api.mastodon.di.buildHttpClient
-import noctiluca.api.mastodon.di.buildWebSocketClient
+import noctiluca.network.mastodon.di.MastodonApiModule
+import noctiluca.network.mastodon.di.buildHttpClient
+import noctiluca.network.mastodon.di.buildWebSocketClient
 import noctiluca.data.di.DataAccountModule
 import noctiluca.data.di.DataStatusModule
 import noctiluca.data.di.DataTimelineModule

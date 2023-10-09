@@ -9,7 +9,7 @@ import io.kotest.matchers.should
 import io.ktor.http.*
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
-import noctiluca.api.mastodon.Api
+import noctiluca.network.mastodon.Api
 import noctiluca.model.*
 import noctiluca.model.account.Account
 import noctiluca.test.DOMAIN_SAMPLE_COM
@@ -39,7 +39,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                     domain = Domain(DOMAIN_SAMPLE_COM),
                 )
                 val useCase = buildUseCase(
-                    Api.V1.Accounts.VerifyCredentials(),
+                    noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
                     JSON_ACCOUNT_CREDENTIAL_1,
                     localRepository,
                 )
@@ -66,7 +66,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                     domain = null,
                 )
                 val useCase = buildUseCase(
-                    Api.V1.Accounts.VerifyCredentials(),
+                    noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
                     JSON_ACCOUNT_CREDENTIAL_1,
                     localRepository,
                 )
@@ -88,7 +88,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                     domain = Domain(DOMAIN_SAMPLE_COM),
                 )
                 val useCase = buildUseCase(
-                    Api.V1.Accounts.VerifyCredentials(),
+                    noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
                     HttpStatusCode.BadRequest,
                     localRepository,
                 )
@@ -122,7 +122,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 )
 
                 val useCase = buildUseCase(
-                    Api.V1.Accounts.VerifyCredentials(),
+                    noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
                     JSON_ACCOUNT_CREDENTIAL_1,
                     localRepository,
                 )
@@ -149,7 +149,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 )
 
                 val useCase = buildUseCase(
-                    Api.V1.Accounts.VerifyCredentials(),
+                    noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
                     HttpStatusCode.BadRequest,
                     localRepository,
                 )

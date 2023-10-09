@@ -1,6 +1,6 @@
 package app.noctiluca.di
 
-import noctiluca.api.mastodon.TokenProvider
+import noctiluca.network.mastodon.TokenProvider
 import noctiluca.datastore.TokenDataStore
 import org.koin.core.module.Module
 

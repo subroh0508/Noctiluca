@@ -4,4 +4,4 @@ import kotlinx.serialization.json.Json
 import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-internal expect fun Module.AccountDataStoreModule(json: Json)
+expect fun Module.AccountDataStoreModule(json: Json)

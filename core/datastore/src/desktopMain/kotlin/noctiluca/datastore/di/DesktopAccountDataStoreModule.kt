@@ -5,6 +5,6 @@ import noctiluca.datastore.AccountDataStore
 import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-internal actual fun Module.AccountDataStoreModule(json: Json) {
+actual fun Module.AccountDataStoreModule(json: Json) {
     single { AccountDataStore(json) }
 }

@@ -6,7 +6,7 @@ import noctiluca.model.AccountId
 import noctiluca.model.account.Account
 import java.util.prefs.Preferences
 
-internal actual class AccountDataStore(
+actual class AccountDataStore internal constructor(
     private val prefs: JsonPreferences<List<SerializableAccount>>,
 ) {
     constructor(json: Json) : this(

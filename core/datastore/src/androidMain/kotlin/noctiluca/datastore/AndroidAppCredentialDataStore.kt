@@ -9,7 +9,7 @@ import noctiluca.model.AppCredential
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 
-internal actual class AppCredentialDataStore(
+actual class AppCredentialDataStore internal constructor(
     private val dataStore: DataStore<Preferences>,
 ) {
     companion object {

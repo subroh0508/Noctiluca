@@ -7,7 +7,7 @@ import noctiluca.model.Domain
 import noctiluca.model.Uri
 import java.util.prefs.Preferences
 
-internal actual class AppCredentialDataStore(
+actual class AppCredentialDataStore internal constructor(
     private val prefs: Preferences,
 ) {
     actual suspend fun getCurrent() = withContext(Dispatchers.IO) {

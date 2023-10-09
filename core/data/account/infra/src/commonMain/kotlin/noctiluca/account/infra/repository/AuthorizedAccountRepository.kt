@@ -1,8 +1,8 @@
 package noctiluca.account.infra.repository
 
-import noctiluca.account.model.Account
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
+import noctiluca.model.account.Account
 
 interface AuthorizedAccountRepository {
     suspend fun getCurrent(): Pair<Account, Domain>?

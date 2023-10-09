@@ -1,9 +1,8 @@
 package noctiluca.account.infra.repository.local
 
-import noctiluca.account.model.Account
-import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
+import noctiluca.model.account.Account
 
 interface LocalAuthorizedAccountRepository {
     suspend fun getCurrentAccount(): Account?
@@ -12,5 +11,5 @@ interface LocalAuthorizedAccountRepository {
 
     suspend fun getAccessToken(id: AccountId): Pair<String, Domain>?
 
-    suspend fun save(json: AccountCredentialJson)
+    suspend fun save(account: Account)
 }

@@ -3,9 +3,9 @@ package noctiluca.account.infra.repository.impl
 import noctiluca.account.infra.repository.AuthorizedAccountRepository
 import noctiluca.account.infra.repository.local.LocalAuthorizedAccountRepository
 import noctiluca.account.infra.toEntity
-import noctiluca.account.model.Account
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.model.*
+import noctiluca.model.account.Account
 
 internal class AuthorizedAccountRepositoryImpl(
     private val local: LocalAuthorizedAccountRepository,
@@ -23,21 +23,21 @@ internal class AuthorizedAccountRepositoryImpl(
     override suspend fun fetchCurrent(): Pair<Account, Domain> {
         val domain = local.getCurrentDomain() ?: throw AuthorizedTokenNotFoundException
 
-        val json = runCatching {
+        val account = runCatching {
             v1.getVerifyAccountsCredentials(domain.value)
-        }.getOrNull() ?: throw AuthorizedTokenNotFoundException
+        }.getOrNull()?.toEntity(domain) ?: throw AuthorizedTokenNotFoundException
 
-        local.save(json)
+        local.save(account)
 
-        return json.toEntity(domain) to domain
+        return account to domain
     }
 
     override suspend fun refresh(id: AccountId): Account {
         val (accessToken, domain) = local.getAccessToken(id) ?: throw AuthorizedAccountNotFoundException
-        val json = v1.getVerifyAccountsCredentials(domain.value, accessToken)
+        val account = v1.getVerifyAccountsCredentials(domain.value, accessToken).toEntity(domain)
 
-        local.save(json)
+        local.save(account)
 
-        return json.toEntity(domain)
+        return account
     }
 }

@@ -8,7 +8,7 @@ import noctiluca.datastore.internal.SerializableAccount
 import noctiluca.model.AccountId
 import noctiluca.model.account.Account
 
-internal actual class AccountDataStore(
+actual class AccountDataStore internal constructor(
     private val dataStore: DataStore<List<SerializableAccount>>,
 ) {
     constructor(context: Context, json: Json) : this(

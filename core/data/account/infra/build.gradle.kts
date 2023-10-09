@@ -9,6 +9,7 @@ kotlin {
                 implementation(project(":core:api:mastodon"))
                 implementation(project(":core:datastore"))
                 implementation(project(":core:data:account:model"))
+                implementation(project(":core:model"))
 
                 implementation(libs.kotlinx.serialization)
             }

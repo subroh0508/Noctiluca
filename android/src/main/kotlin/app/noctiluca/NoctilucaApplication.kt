@@ -8,8 +8,8 @@ import noctiluca.accountdetail.infra.di.AccountDetailInfraModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.mastodon.di.buildWebSocketClient
-import noctiluca.api.token.di.TokenApiModule
-import noctiluca.authentication.infra.di.AuthenticationInfraModule
+import noctiluca.data.di.DataModule
+import noctiluca.datastore.di.DataStoreModule
 import noctiluca.features.components.di.ImageLoaderModule
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
 import noctiluca.network.authentication.di.AuthenticationApiModule
@@ -52,6 +52,7 @@ class NoctilucaApplication : Application() {
     }
 
     private fun buildApiModules() = module {
+        DataStoreModule(json)
         AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
         InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
         MastodonApiModule(
@@ -59,13 +60,13 @@ class NoctilucaApplication : Application() {
             buildWebSocketClient(httpClientEngine),
             json,
         )
-        TokenApiModule(json)
     }
 
     private fun buildRepositoriesModules() = module {
+        DataModule()
+
         AccountInfraModule(json)
         AccountDetailInfraModule()
-        AuthenticationInfraModule()
         InstanceRepositoriesModule()
         TimelineRepositoriesModule()
         StatusRepositoriesModule()

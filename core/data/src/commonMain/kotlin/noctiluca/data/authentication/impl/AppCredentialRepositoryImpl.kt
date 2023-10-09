@@ -1,6 +1,6 @@
-package noctiluca.authentication.impl
+package noctiluca.data.authentication.impl
 
-import noctiluca.authentication.AppCredentialRepository
+import noctiluca.data.authentication.AppCredentialRepository
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.authentication.AppCredential

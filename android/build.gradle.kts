@@ -3,17 +3,17 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":common:api:authentication"))
-    implementation(project(":common:api:instancessocial"))
-    implementation(project(":common:api:mastodon"))
-    implementation(project(":common:api:token"))
-    implementation(project(":common:data:shared"))
-    implementation(project(":common:data:account:infra"))
-    implementation(project(":common:data:accountdetail:infra"))
-    implementation(project(":common:data:authentication:infra"))
-    implementation(project(":common:data:instance:infra"))
-    implementation(project(":common:data:timeline:infra"))
-    implementation(project(":common:data:status:infra"))
+    implementation(project(":core:api:authentication"))
+    implementation(project(":core:api:instancessocial"))
+    implementation(project(":core:api:mastodon"))
+    implementation(project(":core:api:token"))
+    implementation(project(":core:data:shared"))
+    implementation(project(":core:data:account:infra"))
+    implementation(project(":core:data:accountdetail:infra"))
+    implementation(project(":core:data:authentication:infra"))
+    implementation(project(":core:data:instance:infra"))
+    implementation(project(":core:data:timeline:infra"))
+    implementation(project(":core:data:status:infra"))
 
     implementation(project(":features:theme"))
     implementation(project(":features:components"))

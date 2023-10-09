@@ -1,14 +1,12 @@
 plugins {
-    id("features")
+    id("common-model")
 }
 
 kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":core:data:account:model"))
                 implementation(project(":core:data:status:model"))
-                implementation(project(":features:components"))
 
                 implementation(libs.kotlinx.datetime)
             }
@@ -16,4 +14,4 @@ kotlin {
     }
 }
 
-android { namespace = "noctiluca.features.shared" }
+android { namespace = "noctiluca.timeline.model" }

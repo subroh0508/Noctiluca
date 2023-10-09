@@ -10,7 +10,7 @@ kotlin {
     sourceSets {
         named("commonMain") {
             dependencies {
-                implementation(project(":common:data:shared"))
+                implementation(project(":core:data:shared"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)

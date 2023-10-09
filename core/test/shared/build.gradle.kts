@@ -1,0 +1,21 @@
+plugins {
+    id("multiplatform-library")
+    kotlin("plugin.serialization")
+}
+
+kotlin {
+    sourceSets {
+        commonMain {
+            dependencies {
+                implementation(project(":core:data:shared"))
+
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.resources)
+                implementation(libs.ktor.client.mock)
+                implementation(libs.koin.core)
+            }
+        }
+    }
+}
+
+android { namespace = "noctiluca.test" }

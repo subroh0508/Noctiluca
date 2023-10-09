@@ -6,7 +6,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":common:domain:authentication"))
+                implementation(project(":core:domain:authentication"))
                 implementation(project(":features:shared"))
             }
         }

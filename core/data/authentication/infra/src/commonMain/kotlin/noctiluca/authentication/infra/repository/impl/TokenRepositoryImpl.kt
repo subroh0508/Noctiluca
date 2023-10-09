@@ -1,7 +1,7 @@
 package noctiluca.authentication.infra.repository.impl
 
-import noctiluca.api.authentication.AuthenticationApi
-import noctiluca.api.authentication.json.AppCredentialJson
+import noctiluca.network.authentication.AuthenticationApi
+import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.authentication.infra.repository.TokenRepository
 import noctiluca.authentication.infra.repository.local.LocalTokenRepository
 import noctiluca.authentication.model.AppCredential

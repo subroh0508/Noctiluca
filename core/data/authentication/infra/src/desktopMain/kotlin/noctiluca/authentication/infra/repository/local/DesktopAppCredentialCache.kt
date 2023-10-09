@@ -2,7 +2,7 @@ package noctiluca.authentication.infra.repository.local
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import noctiluca.api.authentication.json.AppCredentialJson
+import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.model.Domain
 import java.util.prefs.Preferences
 

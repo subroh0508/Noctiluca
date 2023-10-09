@@ -2,7 +2,7 @@ package noctiluca.authentication.domain
 
 import io.ktor.client.engine.*
 import kotlinx.serialization.json.Json
-import noctiluca.api.authentication.di.AuthenticationApiModule
+import noctiluca.network.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.mastodon.di.buildHttpClient

@@ -5,7 +5,7 @@ import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
 import noctiluca.account.infra.di.AccountInfraModule
 import noctiluca.accountdetail.infra.di.AccountDetailInfraModule
-import noctiluca.api.authentication.di.AuthenticationApiModule
+import noctiluca.network.authentication.di.AuthenticationApiModule
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.mastodon.di.buildWebSocketClient
@@ -20,7 +20,7 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import org.koin.dsl.module
-import noctiluca.api.authentication.di.buildHttpClient as buildHttpClientForAuthentication
+import noctiluca.network.authentication.di.buildHttpClient as buildHttpClientForAuthentication
 import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
 import noctiluca.api.mastodon.di.buildHttpClient as buildHttpClientForMastodon
 

@@ -7,7 +7,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":core:api:authentication"))
+                implementation(project(":core:network:authentication"))
                 implementation(project(":core:api:token"))
                 implementation(project(":core:data:authentication:model"))
 

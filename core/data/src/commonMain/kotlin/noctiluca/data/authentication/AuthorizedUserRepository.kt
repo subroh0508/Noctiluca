@@ -10,8 +10,6 @@ interface AuthorizedUserRepository {
         redirectUri: Uri,
     ): String?
 
-    suspend fun getCurrent(): AuthorizedUser?
-
     suspend fun switch(id: AccountId): AuthorizedUser
 
     suspend fun expireCurrent()

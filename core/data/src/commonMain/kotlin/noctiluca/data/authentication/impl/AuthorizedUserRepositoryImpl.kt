@@ -32,14 +32,12 @@ internal class AuthorizedUserRepositoryImpl(
         return accessToken
     }
 
-    override suspend fun getCurrent() = tokenDataStore.getCurrent()
-
     override suspend fun switch(id: AccountId) = tokenDataStore.setCurrent(id)
 
     override suspend fun expireCurrent() {
-        getCurrent()?.let { tokenDataStore.delete(it.id) }
+        tokenDataStore.getCurrent()?.let { tokenDataStore.delete(it.id) }
         tokenDataStore.getAll().firstOrNull()?.let {
-            switch(it.id)
+            tokenDataStore.setCurrent(it.id)
         }
     }
 }

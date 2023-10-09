@@ -11,6 +11,7 @@ kotlin {
                 implementation(project(":core:model"))
                 implementation(project(":core:datastore"))
                 implementation(project(":core:network:authentication"))
+                implementation(project(":core:network:mastodon"))
 
                 implementation(libs.kotlinx.serialization)
 

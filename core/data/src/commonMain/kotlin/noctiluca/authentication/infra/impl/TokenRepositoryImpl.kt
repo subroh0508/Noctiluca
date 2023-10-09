@@ -1,4 +1,4 @@
-package noctiluca.authentication.infra.repository.impl
+package noctiluca.authentication.infra.impl
 
 import noctiluca.authentication.infra.repository.TokenRepository
 import noctiluca.authentication.infra.repository.local.LocalTokenRepository

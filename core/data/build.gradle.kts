@@ -8,6 +8,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(project(":core:model"))
+
                 implementation(libs.kotlinx.serialization)
 
                 implementation(libs.koin.core)

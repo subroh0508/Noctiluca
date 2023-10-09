@@ -11,7 +11,7 @@ import kotlinx.serialization.json.Json
 import java.io.InputStream
 import java.io.OutputStream
 
-class JsonSerializer<T : Any?>(
+internal class JsonSerializer<T : Any?>(
     private val json: Json,
     private val serializer: KSerializer<T>,
     override val defaultValue: T,
@@ -39,7 +39,7 @@ class JsonSerializer<T : Any?>(
     }
 }
 
-fun <T : Any?> Context.getJsonDataStore(
+internal fun <T : Any?> Context.getJsonDataStore(
     serializer: JsonSerializer<T>,
     fileName: String,
 ) = DataStoreFactory.create(

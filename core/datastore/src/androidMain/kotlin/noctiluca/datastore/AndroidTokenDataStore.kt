@@ -1,4 +1,4 @@
-package noctiluca.datastore.token
+package noctiluca.datastore
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -6,18 +6,18 @@ import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
 import noctiluca.datastore.JsonSerializer
 import noctiluca.datastore.getJsonDataStore
-import noctiluca.datastore.token.internal.Token
+import noctiluca.datastore.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
-actual class LocalTokenCache internal constructor(
+actual class TokenDataStore internal constructor(
     private val dataStore: DataStore<List<Token.Json>>,
 ) {
     internal constructor(context: Context, json: Json) : this(
         context.getJsonDataStore(
             JsonSerializer(json, listOf()),
-            LocalTokenCache::class.simpleName ?: "",
+            TokenDataStore::class.simpleName ?: "",
         )
     )
 

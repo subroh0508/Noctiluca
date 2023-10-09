@@ -1,10 +1,10 @@
-package noctiluca.datastore.token
+package noctiluca.datastore
 
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
-expect class LocalTokenCache {
+expect class TokenDataStore {
     suspend fun getCurrentAccessToken(): String?
 
     suspend fun getCurrentDomain(): String?

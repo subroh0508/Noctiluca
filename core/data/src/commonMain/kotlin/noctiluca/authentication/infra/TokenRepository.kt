@@ -1,4 +1,4 @@
-package noctiluca.authentication.infra.repository
+package noctiluca.authentication.infra
 
 import noctiluca.authentication.AppCredential
 import noctiluca.model.AuthorizedUser

@@ -1,15 +1,15 @@
-package noctiluca.datastore.token
+package noctiluca.datastore
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import noctiluca.datastore.JsonPreferences
-import noctiluca.datastore.token.internal.Token
+import noctiluca.datastore.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
 @Suppress("UNCHECKED_CAST")
-actual class LocalTokenCache internal constructor(
+actual class TokenDataStore internal constructor(
     private val prefs: JsonPreferences<List<Token.Json>>,
 ) {
     actual suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken

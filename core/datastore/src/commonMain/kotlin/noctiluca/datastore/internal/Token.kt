@@ -1,4 +1,4 @@
-package noctiluca.datastore.token.internal
+package noctiluca.datastore.internal
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

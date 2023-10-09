@@ -42,6 +42,7 @@ include(
     ":core:data:timeline:model",
     ":core:data:timeline:infra",
     ":core:test:shared",
+    ":core:domain:common",
     ":core:domain:accountdetail",
     ":core:domain:authentication",
     ":core:domain:timeline",

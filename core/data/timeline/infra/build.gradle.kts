@@ -8,10 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core:network:mastodon"))
-                implementation(project(":core:data:status:model"))
                 implementation(project(":core:data:timeline:model"))
-
-                implementation(project(":core:data:status:infra"))
 
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.kotlinx.coroutines.core)

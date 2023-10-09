@@ -1,6 +1,6 @@
-package noctiluca.status.infra.repository
+package noctiluca.data.status
 
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 interface StatusRepository {
     suspend fun favourite(status: Status): Status

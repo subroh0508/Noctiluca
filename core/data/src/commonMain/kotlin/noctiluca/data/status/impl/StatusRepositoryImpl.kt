@@ -1,14 +1,14 @@
-package noctiluca.status.infra.repository.impl
+package noctiluca.data.status.impl
 
 import noctiluca.api.mastodon.MastodonApiV1
-import noctiluca.repository.TokenProvider
-import noctiluca.status.infra.repository.StatusRepository
-import noctiluca.status.infra.toEntity
-import noctiluca.status.model.Status
+import noctiluca.data.status.StatusRepository
+import noctiluca.data.status.toEntity
+import noctiluca.datastore.TokenDataStore
+import noctiluca.model.status.Status
 
 internal class StatusRepositoryImpl(
     private val api: MastodonApiV1,
-    private val tokenProvider: TokenProvider,
+    private val tokenDataStore: TokenDataStore,
 ) : StatusRepository {
     override suspend fun favourite(status: Status): Status {
         val json =
@@ -18,7 +18,7 @@ internal class StatusRepositoryImpl(
                 api.postStatusesFavourite(status.id.value)
             }
 
-        return json.toEntity(tokenProvider.getCurrent()?.id)
+        return json.toEntity(tokenDataStore.getCurrent()?.id)
     }
 
     override suspend fun boost(status: Status): Status {
@@ -29,7 +29,7 @@ internal class StatusRepositoryImpl(
                 api.postStatusesReblog(status.id.value)
             }
 
-        return json.toEntity(tokenProvider.getCurrent()?.id)
+        return json.toEntity(tokenDataStore.getCurrent()?.id)
     }
 
     override suspend fun bookmark(status: Status): Status {
@@ -40,6 +40,6 @@ internal class StatusRepositoryImpl(
                 api.postStatusesBookmark(status.id.value)
             }
 
-        return json.toEntity(tokenProvider.getCurrent()?.id)
+        return json.toEntity(tokenDataStore.getCurrent()?.id)
     }
 }

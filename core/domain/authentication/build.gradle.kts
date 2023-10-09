@@ -9,7 +9,6 @@ kotlin {
                 implementation(project(":core:model"))
                 implementation(project(":core:data"))
                 api(project(":core:data:instance:model"))
-                api(project(":core:data:status:model"))
                 implementation(project(":core:data:instance:infra"))
             }
         }

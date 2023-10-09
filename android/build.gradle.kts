@@ -10,7 +10,6 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:data:instance:infra"))
     implementation(project(":core:data:timeline:infra"))
-    implementation(project(":core:data:status:infra"))
 
     implementation(project(":features:theme"))
     implementation(project(":features:components"))

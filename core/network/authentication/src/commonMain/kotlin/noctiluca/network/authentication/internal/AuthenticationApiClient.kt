@@ -11,8 +11,8 @@ import io.ktor.resources.*
 import noctiluca.network.authentication.Api
 import noctiluca.network.authentication.AuthenticationApi
 import noctiluca.network.authentication.OAuth
-import noctiluca.network.authentication.json.AppCredentialJson
-import noctiluca.network.authentication.json.TokenJson
+import noctiluca.network.authentication.json.NetworkAppCredential
+import noctiluca.network.authentication.json.NetworkToken
 import noctiluca.network.authentication.params.GetAccountsVerifyCredential
 import noctiluca.network.authentication.params.PostApps
 import noctiluca.network.authentication.params.PostOauthToken
@@ -33,13 +33,13 @@ internal class AuthenticationApiClient(
         domain: String,
         clientName: String,
         redirectUri: String
-    ): Pair<AppCredentialJson, String> {
+    ): Pair<NetworkAppCredential, String> {
         val request = PostApps.Request(clientName, redirectUri)
 
         return client.post(Api.V1.Apps()) {
             host = domain
             setBody(request)
-        }.body<AppCredentialJson>().let { credential ->
+        }.body<NetworkAppCredential>().let { credential ->
             credential to buildAuthorizeUrl(domain, credential, redirectUri, request.scopes)
         }
     }
@@ -50,7 +50,7 @@ internal class AuthenticationApiClient(
         clientSecret: String,
         redirectUri: String,
         code: String
-    ): TokenJson = client.post(OAuth.Token()) {
+    ): NetworkToken = client.post(OAuth.Token()) {
         host = domain
         setBody(PostOauthToken.Request(clientId, clientSecret, redirectUri, code))
     }.body()
@@ -65,7 +65,7 @@ internal class AuthenticationApiClient(
 
     private fun buildAuthorizeUrl(
         domain: String,
-        credential: AppCredentialJson,
+        credential: NetworkAppCredential,
         redirectUri: String,
         scopes: String,
     ): String = URLBuilder().also { url ->

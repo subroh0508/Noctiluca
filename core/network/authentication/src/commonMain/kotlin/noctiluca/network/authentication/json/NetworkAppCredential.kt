@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AppCredentialJson(
+data class NetworkAppCredential(
     @SerialName("client_id")
     val clientId: String,
     @SerialName("client_secret")

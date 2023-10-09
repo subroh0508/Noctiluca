@@ -5,8 +5,8 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
-import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.model.Domain
+import noctiluca.network.authentication.json.AppCredentialJson
 
 internal actual class AppCredentialCache(
     private val dataStore: DataStore<Preferences>,

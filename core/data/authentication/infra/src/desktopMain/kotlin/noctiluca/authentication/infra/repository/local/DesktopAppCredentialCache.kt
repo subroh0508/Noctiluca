@@ -2,8 +2,8 @@ package noctiluca.authentication.infra.repository.local
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.model.Domain
+import noctiluca.network.authentication.json.AppCredentialJson
 import java.util.prefs.Preferences
 
 internal actual class AppCredentialCache(

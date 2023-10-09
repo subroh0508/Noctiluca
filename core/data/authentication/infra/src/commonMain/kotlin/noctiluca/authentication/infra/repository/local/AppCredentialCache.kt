@@ -1,7 +1,7 @@
 package noctiluca.authentication.infra.repository.local
 
-import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.model.Domain
+import noctiluca.network.authentication.json.AppCredentialJson
 
 internal const val KEY_CLIENT_ID = "CLIENT_ID"
 internal const val KEY_CLIENT_SECRET = "CLIENT_SECRET"

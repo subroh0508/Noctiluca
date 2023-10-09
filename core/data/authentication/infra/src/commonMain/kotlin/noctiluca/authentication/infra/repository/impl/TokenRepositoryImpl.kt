@@ -1,7 +1,5 @@
 package noctiluca.authentication.infra.repository.impl
 
-import noctiluca.network.authentication.AuthenticationApi
-import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.authentication.infra.repository.TokenRepository
 import noctiluca.authentication.infra.repository.local.LocalTokenRepository
 import noctiluca.authentication.model.AppCredential
@@ -9,6 +7,8 @@ import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.model.Uri
+import noctiluca.network.authentication.AuthenticationApi
+import noctiluca.network.authentication.json.AppCredentialJson
 
 internal class TokenRepositoryImpl(
     private val local: LocalTokenRepository,

@@ -1,12 +1,12 @@
 package noctiluca.authentication.infra.repository.local.impl
 
-import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.api.token.LocalTokenCache
 import noctiluca.authentication.infra.repository.local.AppCredentialCache
 import noctiluca.authentication.infra.repository.local.LocalTokenRepository
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
+import noctiluca.network.authentication.json.AppCredentialJson
 
 internal class LocalTokenRepositoryImpl(
     private val appCredentialCache: AppCredentialCache,

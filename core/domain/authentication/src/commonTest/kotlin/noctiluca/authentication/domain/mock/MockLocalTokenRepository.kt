@@ -1,10 +1,10 @@
 package noctiluca.authentication.domain.mock
 
-import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.authentication.infra.repository.local.LocalTokenRepository
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
+import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.test.model.MockAuthorizedUser
 
 class MockLocalTokenRepository(

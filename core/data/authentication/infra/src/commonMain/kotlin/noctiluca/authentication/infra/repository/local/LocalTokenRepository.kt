@@ -1,9 +1,9 @@
 package noctiluca.authentication.infra.repository.local
 
-import noctiluca.network.authentication.json.AppCredentialJson
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
+import noctiluca.network.authentication.json.AppCredentialJson
 
 interface LocalTokenRepository {
     suspend fun getCurrentAppCredential(): Pair<Domain, AppCredentialJson>?

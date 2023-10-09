@@ -6,10 +6,10 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(project(":core:data:authentication:model"))
+                implementation(project(":core:model"))
+                implementation(project(":core:data"))
                 api(project(":core:data:instance:model"))
                 api(project(":core:data:status:model"))
-                implementation(project(":core:data:authentication:infra"))
                 implementation(project(":core:data:instance:infra"))
             }
         }

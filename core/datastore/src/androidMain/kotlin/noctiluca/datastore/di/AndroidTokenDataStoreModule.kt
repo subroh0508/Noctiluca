@@ -6,7 +6,7 @@ import noctiluca.datastore.TokenDataStore
 import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-actual fun Module.TokenApiModule(json: Json) {
+actual fun Module.TokenDataStoreModule(json: Json) {
     single { TokenDataStore(get<Application>(), json) }
     // single<TokenCache> { get<LocalTokenCache>() }
 }

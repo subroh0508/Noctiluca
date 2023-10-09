@@ -4,8 +4,6 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
 import kotlinx.serialization.json.Json
-import noctiluca.datastore.JsonSerializer
-import noctiluca.datastore.getJsonDataStore
 import noctiluca.datastore.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser

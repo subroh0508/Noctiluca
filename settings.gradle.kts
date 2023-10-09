@@ -32,8 +32,6 @@ include(
     ":core:data:account:infra",
     ":core:data:accountdetail:model",
     ":core:data:accountdetail:infra",
-    ":core:data:authentication:model",
-    ":core:data:authentication:infra",
     ":core:data:instance:model",
     ":core:data:instance:infra",
     ":core:data:status:model",

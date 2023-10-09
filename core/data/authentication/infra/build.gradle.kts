@@ -9,7 +9,7 @@ kotlin {
             dependencies {
                 implementation(project(":core:network:authentication"))
                 implementation(project(":core:datastore"))
-                implementation(project(":core:data:authentication:model"))
+                //implementation(project(":core:data:authentication:model"))
 
                 implementation(libs.kotlinx.coroutines.core)
             }

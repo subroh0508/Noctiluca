@@ -2,7 +2,6 @@ package noctiluca.datastore
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import noctiluca.datastore.JsonPreferences
 import noctiluca.datastore.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser

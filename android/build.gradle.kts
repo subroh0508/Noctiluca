@@ -10,7 +10,6 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:data:account:infra"))
     implementation(project(":core:data:accountdetail:infra"))
-    implementation(project(":core:data:authentication:infra"))
     implementation(project(":core:data:instance:infra"))
     implementation(project(":core:data:timeline:infra"))
     implementation(project(":core:data:status:infra"))

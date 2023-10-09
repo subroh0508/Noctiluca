@@ -1,4 +1,7 @@
-package noctiluca.model
+package noctiluca.model.authentication
+
+import noctiluca.model.Domain
+import noctiluca.model.Uri
 
 data class AppCredential(
     val clientId: String,

@@ -2,7 +2,7 @@ package noctiluca.datastore
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import noctiluca.model.AppCredential
+import noctiluca.model.authentication.AppCredential
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import java.util.prefs.Preferences

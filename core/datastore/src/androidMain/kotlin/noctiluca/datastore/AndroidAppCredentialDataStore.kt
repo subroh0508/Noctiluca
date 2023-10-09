@@ -5,7 +5,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
-import noctiluca.model.AppCredential
+import noctiluca.model.authentication.AppCredential
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 

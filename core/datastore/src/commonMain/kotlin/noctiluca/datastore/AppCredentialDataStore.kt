@@ -1,6 +1,6 @@
 package noctiluca.datastore
 
-import noctiluca.model.AppCredential
+import noctiluca.model.authentication.AppCredential
 
 internal const val KEY_CLIENT_ID = "CLIENT_ID"
 internal const val KEY_CLIENT_SECRET = "CLIENT_SECRET"

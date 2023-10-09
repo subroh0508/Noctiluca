@@ -1,9 +1,15 @@
-package noctiluca.repository
+package noctiluca.authentication
 
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
+import noctiluca.model.Uri
 
-interface TokenProvider {
+interface AuthorizedUserRepository {
+    suspend fun fetchAccessToken(
+        code: String,
+        redirectUri: Uri,
+    ): String?
+
     suspend fun getCurrent(): AuthorizedUser?
 
     suspend fun switch(id: AccountId): AuthorizedUser

@@ -4,11 +4,10 @@ plugins {
 
 dependencies {
     implementation(project(":core:network:authentication"))
-    implementation(project(":core:api:instancessocial"))
+    implementation(project(":core:network:instancessocial"))
     implementation(project(":core:network:mastodon"))
     implementation(project(":core:datastore"))
     implementation(project(":core:data"))
-    implementation(project(":core:data:instance:infra"))
 
     implementation(project(":features:theme"))
     implementation(project(":features:components"))

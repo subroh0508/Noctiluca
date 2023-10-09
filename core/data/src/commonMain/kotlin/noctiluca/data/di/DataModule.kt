@@ -7,6 +7,7 @@ fun Module.DataModule() {
     DataAccountModule()
     DataAccountDetailModule()
     DataAuthenticationModule()
+    DataInstanceModule()
     DataStatusModule()
     DataTimelineModule()
 }

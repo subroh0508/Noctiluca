@@ -12,6 +12,7 @@ kotlin {
                 implementation(project(":core:datastore"))
                 implementation(project(":core:network:authentication"))
                 implementation(project(":core:network:mastodon"))
+                implementation(project(":core:network:instancessocial"))
 
                 implementation(libs.kotlinx.serialization)
                 implementation(libs.kotlinx.datetime)

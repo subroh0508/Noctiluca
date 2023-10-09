@@ -1,8 +1,8 @@
 package noctiluca.timeline.domain.model
 
 import noctiluca.model.StatusId
-import noctiluca.status.model.Status
-import noctiluca.status.model.StatusList
+import noctiluca.model.status.Status
+import noctiluca.model.status.StatusList
 import noctiluca.model.timeline.HashTag as HashTagValue
 import noctiluca.model.timeline.List as AccountList
 

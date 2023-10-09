@@ -1,7 +1,7 @@
 package noctiluca.authentication.domain.usecase.internal
 
 import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
-import noctiluca.instance.infra.repository.InstanceRepository
+import noctiluca.data.instance.InstanceRepository
 import noctiluca.model.StatusId
 
 internal class FetchLocalTimelineUseCaseImpl(

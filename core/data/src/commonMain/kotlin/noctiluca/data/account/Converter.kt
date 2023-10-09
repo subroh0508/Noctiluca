@@ -1,10 +1,10 @@
 package noctiluca.data.account
 
-import noctiluca.network.mastodon.json.account.AccountCredentialJson
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.account.Account
+import noctiluca.network.mastodon.json.account.AccountCredentialJson
 
 internal fun AccountCredentialJson.toEntity(
     domain: Domain,

@@ -2,16 +2,16 @@ package noctiluca.data.timeline.impl
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
+import noctiluca.data.status.toEntity
+import noctiluca.data.timeline.TimelineRepository
+import noctiluca.datastore.TokenDataStore
+import noctiluca.model.StatusId
+import noctiluca.model.timeline.StreamEvent
 import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.network.mastodon.MastodonStream
 import noctiluca.network.mastodon.json.streaming.Stream
 import noctiluca.network.mastodon.json.streaming.StreamEventJson
 import noctiluca.network.mastodon.json.streaming.StreamingType
-import noctiluca.data.status.toEntity
-import noctiluca.datastore.TokenDataStore
-import noctiluca.model.StatusId
-import noctiluca.data.timeline.TimelineRepository
-import noctiluca.model.timeline.StreamEvent
 
 internal class TimelineRepositoryImpl(
     private val api: noctiluca.network.mastodon.MastodonApiV1,

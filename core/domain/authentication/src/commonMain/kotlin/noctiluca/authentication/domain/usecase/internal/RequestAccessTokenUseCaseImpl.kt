@@ -1,7 +1,7 @@
 package noctiluca.authentication.domain.usecase.internal
 
-import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
+import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.model.Uri
 
 internal class RequestAccessTokenUseCaseImpl(

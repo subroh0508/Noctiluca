@@ -1,10 +1,10 @@
 package noctiluca.data.status.impl
 
-import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.data.status.StatusRepository
 import noctiluca.data.status.toEntity
 import noctiluca.datastore.TokenDataStore
 import noctiluca.model.status.Status
+import noctiluca.network.mastodon.MastodonApiV1
 
 internal class StatusRepositoryImpl(
     private val api: noctiluca.network.mastodon.MastodonApiV1,

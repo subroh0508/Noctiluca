@@ -1,12 +1,12 @@
 package noctiluca.data.account.impl
 
-import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.toEntity
 import noctiluca.datastore.AccountDataStore
 import noctiluca.datastore.TokenDataStore
 import noctiluca.model.*
 import noctiluca.model.account.Account
+import noctiluca.network.mastodon.MastodonApiV1
 
 internal class AuthorizedAccountRepositoryImpl(
     private val v1: noctiluca.network.mastodon.MastodonApiV1,

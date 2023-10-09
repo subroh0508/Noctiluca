@@ -16,9 +16,9 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import org.koin.dsl.module
+import noctiluca.network.authentication.di.buildHttpClient as buildHttpClientForAuthentication
 import noctiluca.network.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
 import noctiluca.network.mastodon.di.buildHttpClient as buildHttpClientForMastodon
-import noctiluca.network.authentication.di.buildHttpClient as buildHttpClientForAuthentication
 
 class NoctilucaApplication : Application() {
     private val json by lazy {

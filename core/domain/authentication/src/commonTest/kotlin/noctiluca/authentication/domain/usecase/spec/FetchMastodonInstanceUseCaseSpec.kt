@@ -8,10 +8,10 @@ import io.kotest.matchers.should
 import io.ktor.client.engine.mock.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
-import noctiluca.network.mastodon.Api
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
 import noctiluca.authentication.domain.usecase.json.*
+import noctiluca.network.mastodon.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.mock.MockHttpClientEngine
 

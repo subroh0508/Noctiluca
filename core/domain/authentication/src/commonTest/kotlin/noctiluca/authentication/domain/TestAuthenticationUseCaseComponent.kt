@@ -3,13 +3,13 @@ package noctiluca.authentication.domain
 import io.ktor.client.engine.*
 import kotlinx.serialization.json.Json
 import noctiluca.api.instancessocial.di.InstancesSocialApiModule
-import noctiluca.network.mastodon.di.MastodonApiModule
-import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.authentication.domain.di.AuthenticationDomainModule
 import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
 import noctiluca.authentication.infra.repository.local.LocalTokenRepository
 import noctiluca.instance.infra.di.InstanceRepositoriesModule
 import noctiluca.network.authentication.di.AuthenticationApiModule
+import noctiluca.network.mastodon.di.MastodonApiModule
+import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.repository.TokenCache
 import noctiluca.test.mock.MockTokenCache
 import org.koin.core.component.KoinScopeComponent

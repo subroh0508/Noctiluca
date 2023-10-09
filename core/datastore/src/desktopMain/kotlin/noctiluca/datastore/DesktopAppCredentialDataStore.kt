@@ -2,9 +2,9 @@ package noctiluca.datastore
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import noctiluca.model.authentication.AppCredential
 import noctiluca.model.Domain
 import noctiluca.model.Uri
+import noctiluca.model.authentication.AppCredential
 import java.util.prefs.Preferences
 
 actual class AppCredentialDataStore internal constructor(

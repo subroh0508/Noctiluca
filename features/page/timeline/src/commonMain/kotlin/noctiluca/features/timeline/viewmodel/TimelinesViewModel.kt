@@ -11,12 +11,12 @@ import noctiluca.features.components.LocalCoroutineExceptionHandler
 import noctiluca.features.components.UnauthorizedExceptionHandler
 import noctiluca.features.timeline.TimelineNavigator
 import noctiluca.model.Domain
-import noctiluca.timeline.domain.model.StatusAction
-import noctiluca.timeline.domain.model.Timeline
-import noctiluca.timeline.domain.usecase.*
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.StreamEvent
+import noctiluca.timeline.domain.model.StatusAction
+import noctiluca.timeline.domain.model.Timeline
+import noctiluca.timeline.domain.usecase.*
 import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")

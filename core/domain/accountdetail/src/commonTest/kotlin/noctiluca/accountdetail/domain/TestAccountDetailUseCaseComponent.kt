@@ -3,10 +3,10 @@ package noctiluca.accountdetail.domain
 import io.ktor.client.engine.*
 import kotlinx.serialization.json.Json
 import noctiluca.accountdetail.domain.di.AccountDetailDomainModule
+import noctiluca.data.di.DataAccountDetailModule
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.network.mastodon.di.buildWebSocketClient
-import noctiluca.data.di.DataAccountDetailModule
 import noctiluca.test.di.MockAccountDataStoreModule
 import noctiluca.test.di.MockTokenDataStoreModule
 import org.koin.core.component.KoinScopeComponent

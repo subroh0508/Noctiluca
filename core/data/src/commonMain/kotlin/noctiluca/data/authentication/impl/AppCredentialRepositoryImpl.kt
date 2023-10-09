@@ -1,10 +1,10 @@
 package noctiluca.data.authentication.impl
 
 import noctiluca.data.authentication.AppCredentialRepository
+import noctiluca.datastore.AppCredentialDataStore
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.authentication.AppCredential
-import noctiluca.datastore.AppCredentialDataStore
 import noctiluca.network.authentication.AuthenticationApi
 
 internal class AppCredentialRepositoryImpl(

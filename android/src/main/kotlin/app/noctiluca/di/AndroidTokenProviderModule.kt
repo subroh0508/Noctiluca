@@ -1,7 +1,7 @@
 package app.noctiluca.di
 
-import noctiluca.network.mastodon.TokenProvider
 import noctiluca.datastore.TokenDataStore
+import noctiluca.network.mastodon.TokenProvider
 import org.koin.core.module.Module
 
 @Suppress("FunctionName")

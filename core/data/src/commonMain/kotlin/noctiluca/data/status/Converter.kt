@@ -3,13 +3,13 @@ package noctiluca.data.status
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import noctiluca.network.mastodon.json.account.AccountJson
-import noctiluca.network.mastodon.json.status.StatusJson
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
+import noctiluca.network.mastodon.json.account.AccountJson
+import noctiluca.network.mastodon.json.status.StatusJson
 
 @Suppress("CyclomaticComplexMethod")
 fun StatusJson.toEntity(accountId: AccountId?) = Status(

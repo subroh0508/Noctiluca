@@ -1,10 +1,5 @@
 package noctiluca.data.instance.impl
 
-import noctiluca.network.mastodon.MastodonApiV1
-import noctiluca.network.mastodon.MastodonApiV2
-import noctiluca.network.mastodon.json.account.AccountJson
-import noctiluca.network.mastodon.json.instance.V1InstanceJson
-import noctiluca.network.mastodon.json.instance.V2InstanceJson
 import noctiluca.data.instance.InstanceRepository
 import noctiluca.data.status.toEntity
 import noctiluca.model.StatusId
@@ -12,6 +7,11 @@ import noctiluca.model.Uri
 import noctiluca.model.authentication.Instance
 import noctiluca.network.instancessocial.InstancesSocialApi
 import noctiluca.network.instancessocial.json.InstanceJson
+import noctiluca.network.mastodon.MastodonApiV1
+import noctiluca.network.mastodon.MastodonApiV2
+import noctiluca.network.mastodon.json.account.AccountJson
+import noctiluca.network.mastodon.json.instance.V1InstanceJson
+import noctiluca.network.mastodon.json.instance.V2InstanceJson
 import java.net.UnknownHostException
 
 internal class InstanceRepositoryImpl(

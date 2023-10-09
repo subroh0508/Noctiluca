@@ -9,9 +9,9 @@ import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.UnknownException
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
-import noctiluca.instance.model.Instance
 import noctiluca.model.Domain
 import noctiluca.model.Uri
+import noctiluca.model.authentication.Instance
 import org.koin.core.component.get
 
 interface AuthorizeViewModel {

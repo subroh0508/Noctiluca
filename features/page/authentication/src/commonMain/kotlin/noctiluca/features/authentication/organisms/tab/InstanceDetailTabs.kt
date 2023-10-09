@@ -6,7 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import noctiluca.features.authentication.getString
 import noctiluca.features.components.atoms.tab.PrimaryTabs
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 enum class InstancesTab {
     INFO, EXTENDED_DESCRIPTION, LOCAL_TIMELINE

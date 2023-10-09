@@ -10,7 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.toot.FloatingTootCard
 import noctiluca.features.timeline.LocalNavigation
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 @Composable
 internal fun BoxScope.TootCard(

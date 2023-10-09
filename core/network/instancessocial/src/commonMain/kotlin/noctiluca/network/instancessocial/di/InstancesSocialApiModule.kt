@@ -8,9 +8,9 @@ import io.ktor.client.plugins.resources.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
+import noctiluca.core.network.instancessocial.BuildConfig
 import noctiluca.network.instancessocial.InstancesSocialApi
 import noctiluca.network.instancessocial.internal.InstancesSocialApiClient
-import noctiluca.core.api.instancessocial.BuildConfig
 import org.koin.core.module.Module
 
 private const val HOST_INSTANCES_SOCIAL = "instances.social"
@@ -35,7 +35,7 @@ fun buildHttpClient(
 @Suppress("FunctionName")
 fun Module.InstancesSocialApiModule(
     client: HttpClient,
-    token: String = BuildConfig.SOCIAL_INSTANCES_API_TOKEN
+    token: String = BuildConfig.SOCIAL_INSTANCES_API_TOKEN,
 ) {
     single<InstancesSocialApi> { InstancesSocialApiClient(token, client) }
 }

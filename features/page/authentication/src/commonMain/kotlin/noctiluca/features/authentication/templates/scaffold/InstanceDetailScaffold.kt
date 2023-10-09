@@ -27,7 +27,7 @@ import noctiluca.features.components.getCommonString
 import noctiluca.features.components.molecules.scaffold.*
 import noctiluca.features.components.utils.description
 import noctiluca.features.components.utils.label
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

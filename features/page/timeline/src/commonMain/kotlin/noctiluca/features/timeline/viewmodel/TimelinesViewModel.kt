@@ -5,23 +5,23 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import noctiluca.account.model.Account
+import noctiluca.datastore.TokenDataStore
 import noctiluca.features.components.AuthorizedViewModel
 import noctiluca.features.components.LocalCoroutineExceptionHandler
 import noctiluca.features.components.UnauthorizedExceptionHandler
 import noctiluca.features.timeline.TimelineNavigator
 import noctiluca.model.Domain
-import noctiluca.repository.TokenProvider
-import noctiluca.status.model.Status
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.*
-import noctiluca.data.timeline.StreamEvent
+import noctiluca.model.account.Account
+import noctiluca.model.status.Status
+import noctiluca.model.timeline.StreamEvent
 import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel private constructor(
-    private val tokenProvider: TokenProvider,
+    private val dataStore: TokenDataStore,
     private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,
     private val fetchAllAuthorizedAccountsUseCase: FetchAllAuthorizedAccountsUseCase,
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
@@ -36,7 +36,7 @@ class TimelinesViewModel private constructor(
 
     fun switch(account: Account) {
         launch {
-            tokenProvider.switch(account.id)
+            dataStore.setCurrent(account.id)
             mutableUiModel.value = UiModel()
         }
     }

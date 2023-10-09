@@ -5,9 +5,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import noctiluca.features.shared.status.VisibilityIcon
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun VisibilityChip(
     visibility: MutableState<Status.Visibility>,

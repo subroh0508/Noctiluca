@@ -9,7 +9,7 @@ import noctiluca.features.authentication.SignInNavigator
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
 import noctiluca.model.StatusId
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 import org.koin.core.component.get
 
 interface ShowMastodonInstanceDetailViewModel {

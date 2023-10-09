@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import noctiluca.account.model.Account
 import noctiluca.features.components.atoms.appbar.NavigateIconSize
 import noctiluca.features.components.atoms.image.AsyncImage
+import noctiluca.model.account.Account
 
 @Composable
 fun AccountHeader(

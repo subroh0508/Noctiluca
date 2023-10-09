@@ -8,6 +8,7 @@ dependencies {
     implementation(project(":core:network:mastodon"))
     implementation(project(":core:datastore"))
     implementation(project(":core:data"))
+    implementation(project(":core:model"))
 
     implementation(project(":features:theme"))
     implementation(project(":features:components"))

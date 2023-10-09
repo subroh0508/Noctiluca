@@ -15,7 +15,7 @@ import noctiluca.features.components.atoms.list.OneLineListItem
 import noctiluca.features.components.atoms.textfield.DebouncedTextForm
 import noctiluca.features.components.atoms.textfield.SingleLineTextField
 import noctiluca.features.components.model.LoadState
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 private const val DEBOUNCE_TIME_MILLIS = 500L
 

@@ -1,21 +1,20 @@
-package noctiluca.api.token
+package noctiluca.datastore.token
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import noctiluca.api.token.internal.Token
+import noctiluca.datastore.JsonPreferences
+import noctiluca.datastore.token.internal.Token
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
-import noctiluca.preferences.JsonPreferences
-import noctiluca.repository.TokenCache
 
 @Suppress("UNCHECKED_CAST")
 actual class LocalTokenCache internal constructor(
     private val prefs: JsonPreferences<List<Token.Json>>,
-) : TokenCache {
-    override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
+) {
+    actual suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
 
-    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
+    actual suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
 
     actual suspend fun getAll(): List<AuthorizedUser> = withContext(Dispatchers.IO) {
         val current = getCurrent()

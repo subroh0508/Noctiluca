@@ -1,4 +1,4 @@
-package noctiluca.api.token.di
+package noctiluca.datastore.token.di
 
 import kotlinx.serialization.json.Json
 import org.koin.core.module.Module

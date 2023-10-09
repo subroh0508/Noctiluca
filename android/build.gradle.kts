@@ -6,7 +6,7 @@ dependencies {
     implementation(project(":core:network:authentication"))
     implementation(project(":core:api:instancessocial"))
     implementation(project(":core:api:mastodon"))
-    implementation(project(":core:api:token"))
+    implementation(project(":core:datastore"))
     implementation(project(":core:data"))
     implementation(project(":core:data:account:infra"))
     implementation(project(":core:data:accountdetail:infra"))

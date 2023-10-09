@@ -7,7 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core:api:mastodon"))
-                implementation(project(":core:api:token"))
+                implementation(project(":core:datastore"))
                 implementation(project(":core:data:account:model"))
 
                 implementation(libs.kotlinx.serialization)

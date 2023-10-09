@@ -8,7 +8,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core:network:authentication"))
-                implementation(project(":core:api:token"))
+                implementation(project(":core:datastore"))
                 implementation(project(":core:data:authentication:model"))
 
                 implementation(libs.kotlinx.coroutines.core)

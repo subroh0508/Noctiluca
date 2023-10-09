@@ -7,7 +7,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(project(":core:network:mastodon"))
                 implementation(project(":core:data"))
+                implementation(project(":core:model"))
 
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.resources)

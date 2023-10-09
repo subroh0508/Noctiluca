@@ -2,7 +2,7 @@ package noctiluca.accountdetail.domain.usecase.internal
 
 import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
-import noctiluca.accountdetail.infra.repository.AccountDetailRepository
+import noctiluca.data.accountdetail.AccountDetailRepository
 import noctiluca.model.AccountId
 
 internal class FetchAccountStatusesUseCaseImpl(

@@ -1,9 +1,9 @@
-package noctiluca.accountdetail.model
+package noctiluca.model.accountdetail
 
 import kotlinx.datetime.LocalDateTime
-import noctiluca.account.model.Account
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
+import noctiluca.model.account.Account
 
 data class AccountAttributes(
     val id: AccountId,

@@ -1,9 +1,9 @@
 package noctiluca.accountdetail.domain.usecase.internal
 
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
-import noctiluca.accountdetail.infra.repository.AccountDetailRepository
-import noctiluca.accountdetail.model.AccountAttributes
+import noctiluca.data.accountdetail.AccountDetailRepository
 import noctiluca.model.AccountId
+import noctiluca.model.accountdetail.AccountAttributes
 
 internal class FetchAccountAttributesUseCaseImpl(
     private val repository: AccountDetailRepository,

@@ -2,7 +2,7 @@ package noctiluca.accountdetail.domain.usecase
 
 import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.model.AccountId
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 interface FetchAccountStatusesUseCase {
     suspend fun execute(

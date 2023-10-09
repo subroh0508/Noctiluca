@@ -1,4 +1,4 @@
-package noctiluca.accountdetail.model
+package noctiluca.model.accountdetail
 
 enum class Relationship {
     FOLLOWING,

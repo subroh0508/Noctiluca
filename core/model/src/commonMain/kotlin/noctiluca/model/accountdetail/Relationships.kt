@@ -1,4 +1,4 @@
-package noctiluca.accountdetail.model
+package noctiluca.model.accountdetail
 
 @JvmInline
 value class Relationships(val value: Set<Relationship>?) {

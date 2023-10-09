@@ -3,10 +3,10 @@ package noctiluca.accountdetail.domain
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import noctiluca.accountdetail.model.AccountAttributes
-import noctiluca.accountdetail.model.Relationships
 import noctiluca.model.AccountId
 import noctiluca.model.Uri
+import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.Relationships
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.URL_SAMPLE_COM
 

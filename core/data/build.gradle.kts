@@ -14,6 +14,7 @@ kotlin {
                 implementation(project(":core:network:mastodon"))
 
                 implementation(libs.kotlinx.serialization)
+                implementation(libs.kotlinx.datetime)
 
                 implementation(libs.koin.core)
 

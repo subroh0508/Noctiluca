@@ -29,8 +29,6 @@ include(
     ":core:data",
     ":core:data:account:model",
     ":core:data:account:infra",
-    ":core:data:accountdetail:model",
-    ":core:data:accountdetail:infra",
     ":core:data:instance:model",
     ":core:data:instance:infra",
     ":core:data:status:model",

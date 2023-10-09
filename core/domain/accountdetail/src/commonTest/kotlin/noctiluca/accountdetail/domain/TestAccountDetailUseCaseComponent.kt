@@ -3,11 +3,11 @@ package noctiluca.accountdetail.domain
 import io.ktor.client.engine.*
 import kotlinx.serialization.json.Json
 import noctiluca.accountdetail.domain.di.AccountDetailDomainModule
-import noctiluca.accountdetail.infra.di.AccountDetailInfraModule
 import noctiluca.api.mastodon.di.MastodonApiModule
 import noctiluca.api.mastodon.di.buildHttpClient
 import noctiluca.api.mastodon.di.buildWebSocketClient
-import noctiluca.test.di.MockTokenModule
+import noctiluca.data.di.DataAccountDetailModule
+import noctiluca.test.di.MockTokenDataStoreModule
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope
 import org.koin.core.scope.Scope
@@ -40,9 +40,8 @@ class TestAccountDetailUseCaseComponent(
             buildWebSocketClient(mockHttpClientEngine),
             json,
         )
-        MockTokenModule()
-
-        AccountDetailInfraModule()
+        MockTokenDataStoreModule()
+        DataAccountDetailModule()
 
         scope(scope.scopeQualifier) {
             AccountDetailDomainModule()

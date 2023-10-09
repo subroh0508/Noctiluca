@@ -1,10 +1,10 @@
-package noctiluca.accountdetail.infra.repository
+package noctiluca.data.accountdetail
 
-import noctiluca.accountdetail.model.AccountAttributes
-import noctiluca.accountdetail.model.Relationships
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
-import noctiluca.status.model.Status
+import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.Relationships
+import noctiluca.model.status.Status
 
 interface AccountDetailRepository {
     suspend fun fetch(id: AccountId): AccountAttributes

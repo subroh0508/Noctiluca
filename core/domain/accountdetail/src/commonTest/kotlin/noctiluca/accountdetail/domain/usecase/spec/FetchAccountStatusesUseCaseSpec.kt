@@ -11,14 +11,14 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import noctiluca.account.model.Account
 import noctiluca.accountdetail.domain.TestAccountDetailUseCaseComponent
 import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.myAccount
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
 import noctiluca.api.mastodon.Api
 import noctiluca.model.StatusId
-import noctiluca.status.model.Status
+import noctiluca.model.account.Account
+import noctiluca.model.status.Status
 import noctiluca.test.JSON_STATUS_MEDIA
 import noctiluca.test.JSON_STATUS_NORMAL
 import noctiluca.test.mock.MockHttpClientEngine

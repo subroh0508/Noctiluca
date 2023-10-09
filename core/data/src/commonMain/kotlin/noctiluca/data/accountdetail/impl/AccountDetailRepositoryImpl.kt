@@ -1,32 +1,32 @@
-package noctiluca.accountdetail.infra.repository.impl
+package noctiluca.data.accountdetail.impl
 
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
-import noctiluca.account.model.Account
-import noctiluca.accountdetail.infra.repository.AccountDetailRepository
-import noctiluca.accountdetail.infra.toValueObject
-import noctiluca.accountdetail.model.AccountAttributes
-import noctiluca.accountdetail.model.Relationship
-import noctiluca.accountdetail.model.Relationships
 import noctiluca.api.mastodon.MastodonApiV1
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.account.RelationshipJson
+import noctiluca.data.accountdetail.AccountDetailRepository
+import noctiluca.data.accountdetail.toValueObject
+import noctiluca.data.status.toEntity
+import noctiluca.datastore.TokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.StatusId
 import noctiluca.model.Uri
-import noctiluca.repository.TokenProvider
-import noctiluca.status.infra.toEntity
+import noctiluca.model.account.Account
+import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.Relationship
+import noctiluca.model.accountdetail.Relationships
 
 internal class AccountDetailRepositoryImpl(
     private val v1: MastodonApiV1,
-    private val tokenProvider: TokenProvider,
+    private val tokenDataStore: TokenDataStore,
 ) : AccountDetailRepository {
     override suspend fun fetch(
         id: AccountId,
     ): AccountAttributes {
-        val current = tokenProvider.getCurrent()
+        val current = tokenDataStore.getCurrent()
         val account = v1.getAccount(id.value)
         val relationship = if (id != current?.id && account.moved == null) Relationships.NONE else Relationships.ME
 
@@ -36,7 +36,7 @@ internal class AccountDetailRepositoryImpl(
     override suspend fun fetchRelationships(
         id: AccountId,
     ): Relationships {
-        if (id == tokenProvider.getCurrent()?.id) {
+        if (id == tokenDataStore.getCurrent()?.id) {
             return Relationships.ME
         }
 
@@ -44,7 +44,7 @@ internal class AccountDetailRepositoryImpl(
             .find { it.id == id.value }
             ?: return Relationships.NONE
 
-        return json.toValueObject(tokenProvider.getCurrent())
+        return json.toValueObject(tokenDataStore.getCurrent())
     }
 
     override suspend fun fetchStatuses(
@@ -58,7 +58,7 @@ internal class AccountDetailRepositoryImpl(
         onlyMedia,
         excludeReplies,
     ).map {
-        it.toEntity(tokenProvider.getCurrent()?.id)
+        it.toEntity(tokenDataStore.getCurrent()?.id)
     }
 
     private fun AccountJson.toEntity(

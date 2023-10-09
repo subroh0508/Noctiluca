@@ -13,11 +13,11 @@ import noctiluca.accountdetail.domain.myAccount
 import noctiluca.accountdetail.domain.otherAccount
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.json.*
-import noctiluca.accountdetail.model.AccountAttributes
-import noctiluca.accountdetail.model.Relationship
-import noctiluca.accountdetail.model.Relationships
 import noctiluca.api.mastodon.Api
 import noctiluca.model.AccountId
+import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.Relationship
+import noctiluca.model.accountdetail.Relationships
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.mock.MockHttpClientEngine
 

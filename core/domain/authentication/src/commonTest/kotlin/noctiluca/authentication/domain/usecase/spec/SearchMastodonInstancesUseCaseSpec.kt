@@ -13,12 +13,12 @@ import io.ktor.http.*
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 import noctiluca.authentication.domain.usecase.json.*
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 import noctiluca.network.mastodon.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.mock.MockHttpClientEngine
 import java.net.UnknownHostException
-import noctiluca.api.instancessocial.Api as InstancesSocialApi
+import noctiluca.network.instancessocial.Api as InstancesSocialApi
 
 class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
     describe("#execute: for v4") {

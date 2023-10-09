@@ -2,26 +2,23 @@ package noctiluca.authentication.domain
 
 import io.ktor.client.engine.*
 import kotlinx.serialization.json.Json
-import noctiluca.api.instancessocial.di.InstancesSocialApiModule
 import noctiluca.authentication.domain.di.AuthenticationDomainModule
-import noctiluca.authentication.infra.di.AuthenticationRepositoriesModule
-import noctiluca.authentication.infra.repository.local.LocalTokenRepository
-import noctiluca.instance.infra.di.InstanceRepositoriesModule
+import noctiluca.data.di.DataAuthenticationModule
+import noctiluca.data.di.DataInstanceModule
 import noctiluca.network.authentication.di.AuthenticationApiModule
+import noctiluca.network.instancessocial.di.InstancesSocialApiModule
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildHttpClient
-import noctiluca.repository.TokenCache
-import noctiluca.test.mock.MockTokenCache
+import noctiluca.test.di.MockAccountDataStoreModule
+import noctiluca.test.di.MockTokenDataStoreModule
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope
-import org.koin.core.module.Module
 import org.koin.core.scope.Scope
 import org.koin.dsl.koinApplication
 import org.koin.dsl.module
 
 class TestAuthenticationUseCaseComponent(
     private val mockHttpClientEngine: HttpClientEngine,
-    private val mockLocalTokenRepository: LocalTokenRepository? = null,
 ) : KoinScopeComponent {
     private val json by lazy {
         Json {
@@ -49,22 +46,14 @@ class TestAuthenticationUseCaseComponent(
             json,
         )
 
-        single<TokenCache> { MockTokenCache() }
+        MockAccountDataStoreModule()
+        MockTokenDataStoreModule()
 
-        buildAuthenticationInfraModule()
-
-        InstanceRepositoriesModule()
+        DataAuthenticationModule()
+        DataInstanceModule()
 
         scope(scope.scopeQualifier) {
             AuthenticationDomainModule()
         }
-    }
-
-    private fun Module.buildAuthenticationInfraModule() {
-        mockLocalTokenRepository?.let { repository ->
-            single { repository }
-        }
-
-        AuthenticationRepositoriesModule()
     }
 }

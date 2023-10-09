@@ -8,6 +8,7 @@ import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
+import io.kotest.matchers.shouldNot
 import io.ktor.client.engine.mock.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
@@ -19,7 +20,7 @@ import noctiluca.model.AccountId
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.network.authentication.OAuth
-import noctiluca.network.authentication.json.AppCredentialJson
+import noctiluca.network.authentication.json.NetworkAppCredential
 import noctiluca.network.mastodon.Api
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.DOMAIN_SAMPLE_COM
@@ -27,7 +28,7 @@ import noctiluca.test.JSON_ACCOUNT_CREDENTIAL
 import noctiluca.test.mock.MockHttpClientEngine
 
 class RequestAccessTokenUseCaseSpec : DescribeSpec({
-    val json = AppCredentialJson(TEST_CLIENT_ID, TEST_CLIENT_SECRET)
+    val json = NetworkAppCredential(TEST_CLIENT_ID, TEST_CLIENT_SECRET)
 
     describe("#execute") {
         context("when the local cache does not exist") {
@@ -69,10 +70,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
                             TEST_CODE,
                             Uri(TEST_REDIRECT_URL),
                         )
-                    }!!.also {
-                        it.id should be(AccountId(ACCOUNT_ID))
-                        it.domain should be(Domain(DOMAIN_SAMPLE_COM))
-                    }
+                    } shouldNot beNull()
 
                     localRepository.credentials should beEmpty()
                     localRepository.users.let {

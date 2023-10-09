@@ -6,16 +6,16 @@ import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*
 import noctiluca.api.mastodon.Api
 import noctiluca.api.mastodon.MastodonApiV1
+import noctiluca.api.mastodon.TokenProvider
 import noctiluca.api.mastodon.json.account.AccountCredentialJson
 import noctiluca.api.mastodon.json.account.AccountJson
 import noctiluca.api.mastodon.json.account.RelationshipJson
 import noctiluca.api.mastodon.json.extendeddescription.ExtendedDescriptionJson
 import noctiluca.api.mastodon.json.instance.V1InstanceJson
 import noctiluca.api.mastodon.json.status.StatusJson
-import noctiluca.repository.TokenCache
 
 internal class MastodonApiV1Client(
-    override val token: TokenCache,
+    override val token: TokenProvider,
     override val client: HttpClient,
 ) : MastodonApiV1, AbstractMastodonApiClient() {
     override suspend fun getInstance(

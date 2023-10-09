@@ -1,6 +1,7 @@
 package app.noctiluca
 
 import android.app.Application
+import app.noctiluca.di.AndroidTokenProviderModule
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
 import noctiluca.account.infra.di.AccountInfraModule
@@ -53,6 +54,8 @@ class NoctilucaApplication : Application() {
 
     private fun buildApiModules() = module {
         DataStoreModule(json)
+        AndroidTokenProviderModule()
+
         AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
         InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
         MastodonApiModule(

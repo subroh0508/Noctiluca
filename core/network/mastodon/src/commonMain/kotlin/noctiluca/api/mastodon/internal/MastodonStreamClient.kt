@@ -11,13 +11,13 @@ import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import noctiluca.api.mastodon.MastodonStream
+import noctiluca.api.mastodon.TokenProvider
 import noctiluca.api.mastodon.json.status.StatusJson
 import noctiluca.api.mastodon.json.streaming.Event
 import noctiluca.api.mastodon.json.streaming.StreamEventJson
-import noctiluca.repository.TokenCache
 
 internal class MastodonStreamClient(
-    private val token: TokenCache,
+    private val token: TokenProvider,
     private val client: HttpClient,
     private val json: Json,
 ) : MastodonStream {

@@ -3,10 +3,10 @@ package noctiluca.api.mastodon.internal
 import io.ktor.client.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*
-import noctiluca.repository.TokenCache
+import noctiluca.api.mastodon.TokenProvider
 
 abstract class AbstractMastodonApiClient {
-    protected abstract val token: TokenCache
+    protected abstract val token: TokenProvider
     protected abstract val client: HttpClient
 
     protected suspend inline fun <reified T : Any> HttpClient.get(

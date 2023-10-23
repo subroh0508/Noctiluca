@@ -11,6 +11,8 @@ import io.ktor.client.engine.mock.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
+import noctiluca.authentication.domain.mock.MockAppCredentialDataStore
+import noctiluca.authentication.domain.mock.MockTokenDataStore
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 import noctiluca.authentication.domain.usecase.json.*
 import noctiluca.model.authentication.Instance
@@ -172,4 +174,6 @@ private fun buildUseCase(
     engine: MockEngine,
 ): SearchMastodonInstancesUseCase = TestAuthenticationUseCaseComponent(
     engine,
+    MockAppCredentialDataStore(),
+    MockTokenDataStore(),
 ).scope.get()

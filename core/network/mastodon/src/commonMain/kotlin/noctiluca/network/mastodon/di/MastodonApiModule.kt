@@ -4,11 +4,9 @@ import io.ktor.client.*
 import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.resources.*
 import io.ktor.client.plugins.resources.Resources
 import io.ktor.client.plugins.websocket.*
 import io.ktor.http.*
-import io.ktor.resources.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
 import noctiluca.network.mastodon.MastodonApiV1
@@ -52,7 +50,7 @@ fun Module.MastodonApiModule(
     webSocket: HttpClient,
     json: Json,
 ) {
-    single<noctiluca.network.mastodon.MastodonApiV1> { MastodonApiV1Client(get(), client) }
-    single<noctiluca.network.mastodon.MastodonApiV2> { MastodonApiV2Client(get(), client) }
-    single<noctiluca.network.mastodon.MastodonStream> { MastodonStreamClient(get(), webSocket, json) }
+    single<MastodonApiV1> { MastodonApiV1Client(get(), client) }
+    single<MastodonApiV2> { MastodonApiV2Client(get(), client) }
+    single<MastodonStream> { MastodonStreamClient(get(), webSocket, json) }
 }

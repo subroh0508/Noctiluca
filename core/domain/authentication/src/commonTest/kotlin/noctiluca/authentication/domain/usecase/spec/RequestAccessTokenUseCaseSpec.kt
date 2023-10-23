@@ -13,14 +13,17 @@ import io.ktor.client.engine.mock.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
-import noctiluca.authentication.domain.mock.MockLocalTokenRepository
+import noctiluca.authentication.domain.mock.MockAppCredentialDataStore
+import noctiluca.authentication.domain.mock.MockTokenDataStore
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.json.*
+import noctiluca.datastore.AppCredentialDataStore
+import noctiluca.datastore.TokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
 import noctiluca.model.Uri
+import noctiluca.model.authentication.AppCredential
 import noctiluca.network.authentication.OAuth
-import noctiluca.network.authentication.json.NetworkAppCredential
 import noctiluca.network.mastodon.Api
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.DOMAIN_SAMPLE_COM
@@ -28,17 +31,13 @@ import noctiluca.test.JSON_ACCOUNT_CREDENTIAL
 import noctiluca.test.mock.MockHttpClientEngine
 
 class RequestAccessTokenUseCaseSpec : DescribeSpec({
-    val json = NetworkAppCredential(TEST_CLIENT_ID, TEST_CLIENT_SECRET)
-
     describe("#execute") {
         context("when the local cache does not exist") {
-            val localRepository = MockLocalTokenRepository()
-            val testCase = buildUseCase(
+            val testCase = buildAuthenticationUseCase(
                 MockHttpClientEngine
                     .mock(OAuth.Token(), JSON_OAUTH_TOKEN)
                     .mock(Api.V1.Accounts.VerifyCredentials(), JSON_ACCOUNT_CREDENTIAL)
                     .build(),
-                localRepository,
             )
 
             it("returns null") {
@@ -53,15 +52,21 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
 
         context("when the local cache exists") {
             context("and the server returns valid response") {
-                val localRepository = MockLocalTokenRepository(
-                    currentAppCredential = Domain(DOMAIN_SAMPLE_COM) to json
-                )
-                val testCase = buildUseCase(
+                val mockTokenDataStore = MockTokenDataStore()
+                val testCase = buildAuthenticationUseCase(
                     MockHttpClientEngine
                         .mock(OAuth.Token(), JSON_OAUTH_TOKEN)
                         .mock(Api.V1.Accounts.VerifyCredentials(), JSON_ACCOUNT_CREDENTIAL)
                         .build(),
-                    localRepository,
+                    MockAppCredentialDataStore(
+                        AppCredential(
+                            TEST_CLIENT_ID,
+                            TEST_CLIENT_SECRET,
+                            Domain(DOMAIN_SAMPLE_COM),
+                            Uri("dummy"),
+                        ),
+                    ),
+                    mockTokenDataStore,
                 )
 
                 it("returns AuthorizedUser") {
@@ -72,8 +77,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
                         )
                     } shouldNot beNull()
 
-                    localRepository.credentials should beEmpty()
-                    localRepository.users.let {
+                    mockTokenDataStore.getAll().let {
                         it should haveSize(1)
                         it.first().id should be(AccountId(ACCOUNT_ID))
                         it.first().domain should be(Domain(DOMAIN_SAMPLE_COM))
@@ -83,15 +87,21 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
         }
 
         context("when the server returns error response") {
-            val localRepository = MockLocalTokenRepository(
-                currentAppCredential = Domain(DOMAIN_SAMPLE_COM) to json
-            )
-            val testCase = buildUseCase(
+            val mockTokenDataStore = MockTokenDataStore()
+            val testCase = buildAuthenticationUseCase(
                 MockHttpClientEngine
                     .mock(OAuth.Token(), HttpStatusCode.BadRequest)
                     .mock(Api.V1.Accounts.VerifyCredentials(), HttpStatusCode.BadRequest)
                     .build(),
-                localRepository,
+                MockAppCredentialDataStore(
+                    AppCredential(
+                        TEST_CLIENT_ID,
+                        TEST_CLIENT_SECRET,
+                        Domain(DOMAIN_SAMPLE_COM),
+                        Uri("dummy"),
+                    ),
+                ),
+                mockTokenDataStore,
             )
 
             it("raises ClientRequestException") {
@@ -104,17 +114,18 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
                     }
                 }
 
-                localRepository.credentials should beEmpty()
-                localRepository.users should beEmpty()
+                mockTokenDataStore.getAll() should beEmpty()
             }
         }
     }
 })
 
-private fun buildUseCase(
+private fun buildAuthenticationUseCase(
     engine: MockEngine,
-    localRepository: MockLocalTokenRepository,
+    mockAppCredentialDataStore: AppCredentialDataStore = MockAppCredentialDataStore(),
+    mockTokenDataStore: TokenDataStore = MockTokenDataStore(),
 ): RequestAccessTokenUseCase = TestAuthenticationUseCaseComponent(
     engine,
-    localRepository,
+    mockAppCredentialDataStore,
+    mockTokenDataStore,
 ).scope.get()

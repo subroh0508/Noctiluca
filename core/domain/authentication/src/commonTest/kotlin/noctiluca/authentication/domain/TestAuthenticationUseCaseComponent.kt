@@ -5,12 +5,15 @@ import kotlinx.serialization.json.Json
 import noctiluca.authentication.domain.di.AuthenticationDomainModule
 import noctiluca.data.di.DataAuthenticationModule
 import noctiluca.data.di.DataInstanceModule
+import noctiluca.datastore.AppCredentialDataStore
+import noctiluca.datastore.TokenDataStore
 import noctiluca.network.authentication.di.AuthenticationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.test.di.MockAccountDataStoreModule
 import noctiluca.test.di.MockTokenDataStoreModule
+import noctiluca.test.di.MockTokenProviderModule
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope
 import org.koin.core.scope.Scope
@@ -19,6 +22,8 @@ import org.koin.dsl.module
 
 class TestAuthenticationUseCaseComponent(
     private val mockHttpClientEngine: HttpClientEngine,
+    private val appCredentialDataStore: AppCredentialDataStore,
+    private val tokenDataStore: TokenDataStore,
 ) : KoinScopeComponent {
     private val json by lazy {
         Json {
@@ -46,8 +51,12 @@ class TestAuthenticationUseCaseComponent(
             json,
         )
 
-        MockAccountDataStoreModule()
-        MockTokenDataStoreModule()
+        // MockAccountDataStoreModule()
+        // MockTokenDataStoreModule()
+
+        MockTokenProviderModule()
+        single { appCredentialDataStore }
+        single { tokenDataStore }
 
         DataAuthenticationModule()
         DataInstanceModule()

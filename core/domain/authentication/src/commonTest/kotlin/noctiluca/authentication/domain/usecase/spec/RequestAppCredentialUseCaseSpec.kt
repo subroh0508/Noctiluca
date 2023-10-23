@@ -4,16 +4,16 @@ import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
-import io.kotest.matchers.collections.beEmpty
-import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.ktor.client.engine.mock.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
-import noctiluca.authentication.domain.mock.MockLocalTokenRepository
+import noctiluca.authentication.domain.mock.MockAppCredentialDataStore
+import noctiluca.authentication.domain.mock.MockTokenDataStore
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
 import noctiluca.authentication.domain.usecase.json.*
+import noctiluca.datastore.AppCredentialDataStore
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.network.authentication.Api
@@ -23,12 +23,12 @@ import noctiluca.test.mock.MockHttpClientEngine
 class RequestAppCredentialUseCaseSpec : DescribeSpec({
     describe("#execute") {
         context("when the server returns valid response") {
-            val localRepository = MockLocalTokenRepository()
-            val useCase = buildUseCase(
+            val mockAppCredentialDataStore = MockAppCredentialDataStore()
+            val useCase = buildAuthenticationUseCase(
                 MockHttpClientEngine
                     .mock(Api.V1.Apps(), JSON_APP_CREDENTIAL)
                     .build(),
-                localRepository,
+                mockAppCredentialDataStore,
             )
 
             it("returns URL for authorize") {
@@ -40,21 +40,20 @@ class RequestAppCredentialUseCaseSpec : DescribeSpec({
                     )
                 } should be(buildAuthorizedUrl())
 
-                localRepository.credentials.let {
-                    it should haveSize(1)
-                    it.first().clientId should be(TEST_CLIENT_ID)
-                    it.first().clientSecret should be(TEST_CLIENT_SECRET)
+                mockAppCredentialDataStore.getCurrent()!!.let {
+                    it.clientId should be(TEST_CLIENT_ID)
+                    it.clientSecret should be(TEST_CLIENT_SECRET)
                 }
-                localRepository.users should beEmpty()
             }
         }
 
         context("when the server returns error response") {
-            val useCase = buildUseCase(
+            val mockAppCredentialDataStore = MockAppCredentialDataStore()
+            val useCase = buildAuthenticationUseCase(
                 MockHttpClientEngine
                     .mock(Api.V1.Apps(), HttpStatusCode.BadRequest)
                     .build(),
-                MockLocalTokenRepository(),
+                mockAppCredentialDataStore,
             )
 
             it("raises ClientRequestException") {
@@ -78,10 +77,11 @@ private fun buildAuthorizedUrl() = buildString {
     append("&scope=read+write+follow+push")
 }.let { Uri(it) }
 
-private fun buildUseCase(
+private fun buildAuthenticationUseCase(
     engine: MockEngine,
-    localRepository: MockLocalTokenRepository,
+    mockAppCredentialDataStore: AppCredentialDataStore = MockAppCredentialDataStore(),
 ): RequestAppCredentialUseCase = TestAuthenticationUseCaseComponent(
     engine,
-    localRepository,
+    mockAppCredentialDataStore,
+    MockTokenDataStore(),
 ).scope.get()

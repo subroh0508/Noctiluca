@@ -11,8 +11,6 @@ import noctiluca.network.authentication.di.AuthenticationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildHttpClient
-import noctiluca.test.di.MockAccountDataStoreModule
-import noctiluca.test.di.MockTokenDataStoreModule
 import noctiluca.test.di.MockTokenProviderModule
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope

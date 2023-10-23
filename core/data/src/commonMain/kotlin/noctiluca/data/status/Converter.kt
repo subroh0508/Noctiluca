@@ -8,11 +8,11 @@ import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
-import noctiluca.network.mastodon.json.account.AccountJson
-import noctiluca.network.mastodon.json.status.StatusJson
+import noctiluca.network.mastodon.data.account.NetworkAccount
+import noctiluca.network.mastodon.data.status.NetworkStatus
 
 @Suppress("CyclomaticComplexMethod")
-fun StatusJson.toEntity(accountId: AccountId?) = Status(
+fun NetworkStatus.toEntity(accountId: AccountId?) = Status(
     (reblog?.id ?: id).let(::StatusId),
     reblog?.content ?: content,
     spoilerText.takeIf(String::isNotBlank),
@@ -32,7 +32,7 @@ fun StatusJson.toEntity(accountId: AccountId?) = Status(
     },
 )
 
-private fun AccountJson.toTooter() = Account(
+private fun NetworkAccount.toTooter() = Account(
     AccountId(id),
     username,
     displayName,

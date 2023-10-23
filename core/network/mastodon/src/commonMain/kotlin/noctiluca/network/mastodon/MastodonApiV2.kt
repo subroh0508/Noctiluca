@@ -1,9 +1,9 @@
 package noctiluca.network.mastodon
 
-import noctiluca.network.mastodon.json.instance.V2InstanceJson
+import noctiluca.network.mastodon.data.instance.NetworkV2Instance
 
 interface MastodonApiV2 {
     suspend fun getInstance(
         domain: String,
-    ): V2InstanceJson
+    ): NetworkV2Instance
 }

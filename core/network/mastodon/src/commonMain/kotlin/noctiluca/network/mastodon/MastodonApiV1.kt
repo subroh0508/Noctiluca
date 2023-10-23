@@ -1,26 +1,26 @@
 package noctiluca.network.mastodon
 
-import noctiluca.network.mastodon.json.account.AccountCredentialJson
-import noctiluca.network.mastodon.json.account.AccountJson
-import noctiluca.network.mastodon.json.account.RelationshipJson
-import noctiluca.network.mastodon.json.extendeddescription.ExtendedDescriptionJson
-import noctiluca.network.mastodon.json.instance.V1InstanceJson
-import noctiluca.network.mastodon.json.status.StatusJson
+import noctiluca.network.mastodon.data.account.NetworkAccount
+import noctiluca.network.mastodon.data.account.NetworkAccountCredential
+import noctiluca.network.mastodon.data.account.NetworkRelationship
+import noctiluca.network.mastodon.data.extendeddescription.NetworkExtendedDescription
+import noctiluca.network.mastodon.data.instance.NetworkV1Instance
+import noctiluca.network.mastodon.data.status.NetworkStatus
 
 @Suppress("TooManyFunctions")
 interface MastodonApiV1 {
     suspend fun getInstance(
         domain: String,
-    ): V1InstanceJson
+    ): NetworkV1Instance
 
     suspend fun getInstanceExtendedDescription(
         domain: String,
-    ): ExtendedDescriptionJson
+    ): NetworkExtendedDescription
 
     suspend fun getVerifyAccountsCredentials(
         domain: String,
         accessToken: String? = null,
-    ): AccountCredentialJson
+    ): NetworkAccountCredential
 
     suspend fun getTimelinesPublic(
         local: Boolean = false,
@@ -30,52 +30,52 @@ interface MastodonApiV1 {
         sinceId: String? = null,
         minId: String? = null,
         limit: Int = 20,
-    ): List<StatusJson>
+    ): List<NetworkStatus>
 
     suspend fun getTimelinesPublic(
         domain: String,
         maxId: String? = null,
         limit: Int = 20,
-    ): List<StatusJson>
+    ): List<NetworkStatus>
 
     suspend fun getTimelinesHome(
         maxId: String? = null,
         sinceId: String? = null,
         minId: String? = null,
         limit: Int = 20,
-    ): List<StatusJson>
+    ): List<NetworkStatus>
 
     suspend fun postStatusesFavourite(
         id: String,
-    ): StatusJson
+    ): NetworkStatus
 
     suspend fun postStatusesUnfavourite(
         id: String,
-    ): StatusJson
+    ): NetworkStatus
 
     suspend fun postStatusesReblog(
         id: String,
-    ): StatusJson
+    ): NetworkStatus
 
     suspend fun postStatusesUnreblog(
         id: String,
-    ): StatusJson
+    ): NetworkStatus
 
     suspend fun postStatusesBookmark(
         id: String,
-    ): StatusJson
+    ): NetworkStatus
 
     suspend fun postStatusesUnbookmark(
         id: String,
-    ): StatusJson
+    ): NetworkStatus
 
     suspend fun getAccount(
         id: String,
-    ): AccountJson
+    ): NetworkAccount
 
     suspend fun getAccountsRelationships(
         id: List<String>,
-    ): List<RelationshipJson>
+    ): List<NetworkRelationship>
 
     suspend fun getAccountsStatuses(
         id: String,
@@ -83,5 +83,5 @@ interface MastodonApiV1 {
         onlyMedia: Boolean = false,
         excludeReplies: Boolean = true,
         limit: Int = 20,
-    ): List<StatusJson>
+    ): List<NetworkStatus>
 }

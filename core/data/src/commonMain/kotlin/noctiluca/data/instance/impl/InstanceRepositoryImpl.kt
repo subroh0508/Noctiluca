@@ -6,12 +6,12 @@ import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.model.authentication.Instance
 import noctiluca.network.instancessocial.InstancesSocialApi
-import noctiluca.network.instancessocial.json.InstanceJson
+import noctiluca.network.instancessocial.data.NetworkInstance
 import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.network.mastodon.MastodonApiV2
-import noctiluca.network.mastodon.json.account.AccountJson
-import noctiluca.network.mastodon.json.instance.V1InstanceJson
-import noctiluca.network.mastodon.json.instance.V2InstanceJson
+import noctiluca.network.mastodon.data.account.NetworkAccount
+import noctiluca.network.mastodon.data.instance.NetworkV1Instance
+import noctiluca.network.mastodon.data.instance.NetworkV2Instance
 import java.net.UnknownHostException
 
 internal class InstanceRepositoryImpl(
@@ -26,7 +26,7 @@ internal class InstanceRepositoryImpl(
     } catch (@Suppress("SwallowedException") e: UnknownHostException) {
         instancesSocialApi.search(query)
             .instances
-            .filterNot(InstanceJson::dead)
+            .filterNot(NetworkInstance::dead)
             .map { it.toSuggest() }
     }
 
@@ -64,14 +64,14 @@ internal class InstanceRepositoryImpl(
         version,
     )
 
-    private fun InstanceJson.toSuggest() = Instance.Suggest(
+    private fun NetworkInstance.toSuggest() = Instance.Suggest(
         name,
         info?.shortDescription,
         thumbnail?.let(::Uri),
         version?.let { Instance.Version(it) },
     )
 
-    private fun V1InstanceJson.toValueObject() = Instance(
+    private fun NetworkV1Instance.toValueObject() = Instance(
         title,
         uri,
         shortDescription,
@@ -84,7 +84,7 @@ internal class InstanceRepositoryImpl(
         Instance.Version(version),
     )
 
-    private fun V2InstanceJson.toValueObject(extendedDescription: String) = Instance(
+    private fun NetworkV2Instance.toValueObject(extendedDescription: String) = Instance(
         title,
         domain,
         description,
@@ -97,7 +97,7 @@ internal class InstanceRepositoryImpl(
         Instance.Version(version),
     )
 
-    private fun AccountJson.toAdministrator() = Instance.Administrator(
+    private fun NetworkAccount.toAdministrator() = Instance.Administrator(
         "@$acct",
         displayName,
         Uri(url),

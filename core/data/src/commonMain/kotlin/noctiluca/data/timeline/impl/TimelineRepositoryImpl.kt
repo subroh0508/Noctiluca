@@ -9,9 +9,9 @@ import noctiluca.model.StatusId
 import noctiluca.model.timeline.StreamEvent
 import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.network.mastodon.MastodonStream
-import noctiluca.network.mastodon.json.streaming.Stream
-import noctiluca.network.mastodon.json.streaming.StreamEventJson
-import noctiluca.network.mastodon.json.streaming.StreamingType
+import noctiluca.network.mastodon.data.streaming.NetworkStreamEvent
+import noctiluca.network.mastodon.data.streaming.Stream
+import noctiluca.network.mastodon.data.streaming.StreamingType
 
 internal class TimelineRepositoryImpl(
     private val api: MastodonApiV1,
@@ -76,15 +76,17 @@ internal class TimelineRepositoryImpl(
         StreamingType.SUBSCRIBE.name.lowercase(),
     ).mapNotNull { it.toValueObject() }
 
-    private suspend fun StreamEventJson.toValueObject() = payload?.let {
+    private suspend fun NetworkStreamEvent.toValueObject() = payload?.let {
         when (it) {
-            is StreamEventJson.Payload.Updated -> StreamEvent.Updated(
+            is NetworkStreamEvent.Payload.Updated -> StreamEvent.Updated(
                 it.status.toEntity(tokenDataStore.getCurrent()?.id),
             )
-            is StreamEventJson.Payload.StatusEdited -> StreamEvent.StatusEdited(
+
+            is NetworkStreamEvent.Payload.StatusEdited -> StreamEvent.StatusEdited(
                 it.status.toEntity(tokenDataStore.getCurrent()?.id),
             )
-            is StreamEventJson.Payload.Deleted -> StreamEvent.Deleted(StatusId(it.id))
+
+            is NetworkStreamEvent.Payload.Deleted -> StreamEvent.Deleted(StatusId(it.id))
             else -> null
         }
     }

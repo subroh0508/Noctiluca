@@ -7,10 +7,12 @@ import noctiluca.model.Uri
 import noctiluca.model.authentication.AppCredential
 import java.util.prefs.Preferences
 
-actual class AppCredentialDataStore internal constructor(
+internal class DesktopAppCredentialDataStore private constructor(
     private val prefs: Preferences,
-) {
-    actual suspend fun getCurrent() = withContext(Dispatchers.IO) {
+) : AppCredentialDataStore {
+    constructor() : this(Preferences.userNodeForPackage(DesktopAppCredentialDataStore::class.java))
+
+    override suspend fun getCurrent() = withContext(Dispatchers.IO) {
         val clientId = prefs[KEY_CLIENT_ID, null] ?: return@withContext null
         val clientSecret = prefs[KEY_CLIENT_SECRET, null] ?: return@withContext null
         val domain = prefs[KEY_DOMAIN, null] ?: return@withContext null
@@ -19,7 +21,7 @@ actual class AppCredentialDataStore internal constructor(
         AppCredential(clientId, clientSecret, Domain(domain), Uri(authorizeUrl))
     }
 
-    actual suspend fun save(credential: AppCredential) {
+    override suspend fun save(credential: AppCredential) {
         withContext(Dispatchers.IO) {
             prefs.put(KEY_CLIENT_ID, credential.clientId)
             prefs.put(KEY_CLIENT_SECRET, credential.clientSecret)
@@ -28,7 +30,7 @@ actual class AppCredentialDataStore internal constructor(
         }
     }
 
-    actual suspend fun clear() {
+    override suspend fun clear() {
         withContext(Dispatchers.IO) { prefs.clear() }
     }
 }

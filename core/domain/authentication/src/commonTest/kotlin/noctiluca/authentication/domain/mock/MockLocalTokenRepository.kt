@@ -4,14 +4,14 @@ import noctiluca.authentication.infra.repository.local.LocalTokenRepository
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
-import noctiluca.network.authentication.json.AppCredentialJson
+import noctiluca.network.authentication.json.NetworkAppCredential
 import noctiluca.test.model.MockAuthorizedUser
 
 class MockLocalTokenRepository(
-    private val currentAppCredential: Pair<Domain, AppCredentialJson>? = null,
+    private val currentAppCredential: Pair<Domain, NetworkAppCredential>? = null,
     private val currentAuthorizedUser: AuthorizedUser? = null,
 ) : LocalTokenRepository {
-    private val _credentials: MutableList<AppCredentialJson> = mutableListOf()
+    private val _credentials: MutableList<NetworkAppCredential> = mutableListOf()
     private val _users: MutableList<AuthorizedUser> = mutableListOf()
 
     val credentials get() = _credentials

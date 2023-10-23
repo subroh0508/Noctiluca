@@ -9,9 +9,9 @@ import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
-actual class TokenDataStore internal constructor(
+internal class AndroidTokenDataStore private constructor(
     private val dataStore: DataStore<List<Token.Json>>,
-) {
+) : TokenDataStore {
     internal constructor(context: Context, json: Json) : this(
         context.getJsonDataStore(
             JsonSerializer(json, listOf()),
@@ -19,11 +19,11 @@ actual class TokenDataStore internal constructor(
         )
     )
 
-    actual suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
+    override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
 
-    actual suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
+    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
 
-    actual suspend fun getAll(): List<AuthorizedUser> {
+    override suspend fun getAll(): List<AuthorizedUser> {
         val current = getCurrent()
 
         return listOfNotNull(current) + dataStore.data.first().filterNot {
@@ -31,10 +31,10 @@ actual class TokenDataStore internal constructor(
         }.map(::Token)
     }
 
-    actual suspend fun getCurrent(): AuthorizedUser? =
+    override suspend fun getCurrent(): AuthorizedUser? =
         dataStore.data.first().find(Token.Json::current)?.let(::Token)
 
-    actual suspend fun setCurrent(id: AccountId): AuthorizedUser {
+    override suspend fun setCurrent(id: AccountId): AuthorizedUser {
         dataStore.updateData { json ->
             val token = json.find { it.accountId == id.value }
 
@@ -50,13 +50,13 @@ actual class TokenDataStore internal constructor(
         return Token(dataStore.data.first().first(Token.Json::current))
     }
 
-    actual suspend fun getAccessToken(id: AccountId) =
+    override suspend fun getAccessToken(id: AccountId) =
         dataStore.data.first().find { it.accountId == id.value }?.accessToken
 
-    actual suspend fun getDomain(id: AccountId) =
+    override suspend fun getDomain(id: AccountId) =
         dataStore.data.first().find { it.accountId == id.value }?.domain?.let(::Domain)
 
-    actual suspend fun add(
+    override suspend fun add(
         id: AccountId,
         domain: Domain,
         accessToken: String,
@@ -64,7 +64,7 @@ actual class TokenDataStore internal constructor(
         it + Token.Json(id, domain, accessToken)
     }.map(::Token)
 
-    actual suspend fun delete(id: AccountId): List<AuthorizedUser> =
+    override suspend fun delete(id: AccountId): List<AuthorizedUser> =
         dataStore.updateData {
             it.filterNot { t -> t.accountId == id.value }
         }.map(::Token)

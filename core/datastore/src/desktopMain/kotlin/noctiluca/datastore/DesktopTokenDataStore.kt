@@ -8,14 +8,14 @@ import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
 @Suppress("UNCHECKED_CAST")
-actual class TokenDataStore internal constructor(
+internal class DesktopTokenDataStore(
     private val prefs: JsonPreferences<List<Token.Json>>,
-) {
-    actual suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
+) : TokenDataStore {
+    override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
 
-    actual suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
+    override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value
 
-    actual suspend fun getAll(): List<AuthorizedUser> = withContext(Dispatchers.IO) {
+    override suspend fun getAll(): List<AuthorizedUser> = withContext(Dispatchers.IO) {
         val current = getCurrent()
 
         listOfNotNull(current) + prefs.data.filterNot {
@@ -23,11 +23,11 @@ actual class TokenDataStore internal constructor(
         }.map(::Token)
     }
 
-    actual suspend fun getCurrent(): AuthorizedUser? = withContext(Dispatchers.IO) {
+    override suspend fun getCurrent(): AuthorizedUser? = withContext(Dispatchers.IO) {
         prefs.data.find(Token.Json::current)?.let(::Token)
     }
 
-    actual suspend fun setCurrent(id: AccountId): AuthorizedUser =
+    override suspend fun setCurrent(id: AccountId): AuthorizedUser =
         withContext(Dispatchers.IO) {
             val prevTokens = prefs.data
 
@@ -45,15 +45,15 @@ actual class TokenDataStore internal constructor(
             Token(prefs.data.first(Token.Json::current))
         }
 
-    actual suspend fun getAccessToken(id: AccountId) = withContext(Dispatchers.IO) {
+    override suspend fun getAccessToken(id: AccountId) = withContext(Dispatchers.IO) {
         prefs.data.find { it.accountId == id.value }?.accessToken
     }
 
-    actual suspend fun getDomain(id: AccountId) = withContext(Dispatchers.IO) {
+    override suspend fun getDomain(id: AccountId) = withContext(Dispatchers.IO) {
         prefs.data.find { it.accountId == id.value }?.domain?.let(::Domain)
     }
 
-    actual suspend fun add(
+    override suspend fun add(
         id: AccountId,
         domain: Domain,
         accessToken: String,
@@ -64,7 +64,7 @@ actual class TokenDataStore internal constructor(
         nextTokens as List<AuthorizedUser>
     }
 
-    actual suspend fun delete(id: AccountId) = withContext(Dispatchers.IO) {
+    override suspend fun delete(id: AccountId) = withContext(Dispatchers.IO) {
         val nextTokens = prefs.data.filterNot { it.accountId == id.value }
         prefs.save(nextTokens)
 

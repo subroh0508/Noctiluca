@@ -8,9 +8,9 @@ import noctiluca.datastore.internal.SerializableAccount
 import noctiluca.model.AccountId
 import noctiluca.model.account.Account
 
-actual class AccountDataStore internal constructor(
+internal class AndroidAccountDataStore private constructor(
     private val dataStore: DataStore<List<SerializableAccount>>,
-) {
+) : AccountDataStore {
     constructor(context: Context, json: Json) : this(
         context.getJsonDataStore(
             JsonSerializer(json, listOf()),
@@ -18,13 +18,13 @@ actual class AccountDataStore internal constructor(
         )
     )
 
-    actual suspend fun get(id: AccountId) = dataStore.data.first().find { it.id == id.value }?.toEntity()
+    override suspend fun get(id: AccountId) = dataStore.data.first().find { it.id == id.value }?.toEntity()
 
-    actual suspend fun add(item: Account) = dataStore.updateData { list ->
+    override suspend fun add(item: Account) = dataStore.updateData { list ->
         list.filterNot { it.url == item.url.value } + SerializableAccount(item)
     }.map { it.toEntity() }
 
-    actual suspend fun delete(id: AccountId) = dataStore.updateData { list ->
+    override suspend fun delete(id: AccountId) = dataStore.updateData { list ->
         list.filterNot { it.id == id.value }
     }.map { it.toEntity() }
 }

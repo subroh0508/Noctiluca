@@ -4,7 +4,7 @@ import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
-expect class TokenDataStore {
+interface TokenDataStore {
     suspend fun getCurrentAccessToken(): String?
 
     suspend fun getCurrentDomain(): String?

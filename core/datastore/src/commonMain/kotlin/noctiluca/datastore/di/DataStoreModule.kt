@@ -5,6 +5,7 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.DataStoreModule(json: Json) {
+    AppCredentialDataStoreModule()
     TokenDataStoreModule(json)
     AccountDataStoreModule(json)
 }

@@ -6,9 +6,9 @@ import noctiluca.model.AccountId
 import noctiluca.model.account.Account
 import java.util.prefs.Preferences
 
-actual class AccountDataStore internal constructor(
+internal class DesktopAccountDataStore private constructor(
     private val prefs: JsonPreferences<List<SerializableAccount>>,
-) {
+) : AccountDataStore {
     constructor(json: Json) : this(
         JsonPreferences(
             json,
@@ -17,8 +17,8 @@ actual class AccountDataStore internal constructor(
         ),
     )
 
-    actual suspend fun get(id: AccountId) = prefs.data.find { it.id == id.value }?.toEntity()
-    actual suspend fun add(item: Account) = prefs.add(SerializableAccount(item)).map { it.toEntity() }
-    actual suspend fun delete(id: AccountId) =
+    override suspend fun get(id: AccountId) = prefs.data.find { it.id == id.value }?.toEntity()
+    override suspend fun add(item: Account) = prefs.add(SerializableAccount(item)).map { it.toEntity() }
+    override suspend fun delete(id: AccountId) =
         (get(id)?.let { prefs.remove(SerializableAccount(it)) } ?: prefs.data).map { it.toEntity() }
 }

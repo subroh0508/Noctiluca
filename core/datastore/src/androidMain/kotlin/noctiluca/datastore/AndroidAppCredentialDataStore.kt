@@ -9,9 +9,9 @@ import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.authentication.AppCredential
 
-actual class AppCredentialDataStore internal constructor(
+internal class AndroidAppCredentialDataStore(
     private val dataStore: DataStore<Preferences>,
-) {
+) : AppCredentialDataStore {
     companion object {
         private val PREF_CLIENT_ID = stringPreferencesKey(KEY_CLIENT_ID)
         private val PREF_CLIENT_SECRET = stringPreferencesKey(KEY_CLIENT_SECRET)
@@ -19,7 +19,7 @@ actual class AppCredentialDataStore internal constructor(
         private val PREF_AUTHORIZE_URL = stringPreferencesKey(KEY_AUTHORIZE_URL)
     }
 
-    actual suspend fun getCurrent(): AppCredential? {
+    override suspend fun getCurrent(): AppCredential? {
         val pref = dataStore.data.first()
 
         val clientId = pref[PREF_CLIENT_ID] ?: return null
@@ -30,7 +30,7 @@ actual class AppCredentialDataStore internal constructor(
         return AppCredential(clientId, clientSecret, Domain(domain), Uri(authorizeUrl))
     }
 
-    actual suspend fun save(credential: AppCredential) {
+    override suspend fun save(credential: AppCredential) {
         dataStore.edit {
             it[PREF_CLIENT_ID] = credential.clientId
             it[PREF_CLIENT_SECRET] = credential.clientSecret
@@ -39,7 +39,7 @@ actual class AppCredentialDataStore internal constructor(
         }
     }
 
-    actual suspend fun clear() {
+    override suspend fun clear() {
         dataStore.edit { it.clear() }
     }
 }

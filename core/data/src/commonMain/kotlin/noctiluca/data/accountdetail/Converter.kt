@@ -1,6 +1,6 @@
 package noctiluca.data.accountdetail
 
 import noctiluca.model.accountdetail.AccountAttributes
-import noctiluca.network.mastodon.json.account.FieldJson
+import noctiluca.network.mastodon.data.account.NetworkField
 
-internal fun FieldJson.toValueObject() = AccountAttributes.Field(name, value)
+internal fun NetworkField.toValueObject() = AccountAttributes.Field(name, value)

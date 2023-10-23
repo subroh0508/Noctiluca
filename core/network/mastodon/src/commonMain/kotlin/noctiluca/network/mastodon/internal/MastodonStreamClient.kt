@@ -12,9 +12,9 @@ import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import noctiluca.network.mastodon.MastodonStream
 import noctiluca.network.mastodon.TokenProvider
-import noctiluca.network.mastodon.json.status.StatusJson
-import noctiluca.network.mastodon.json.streaming.Event
-import noctiluca.network.mastodon.json.streaming.StreamEventJson
+import noctiluca.network.mastodon.data.status.NetworkStatus
+import noctiluca.network.mastodon.data.streaming.Event
+import noctiluca.network.mastodon.data.streaming.NetworkStreamEvent
 
 internal class MastodonStreamClient(
     private val token: TokenProvider,
@@ -30,7 +30,7 @@ internal class MastodonStreamClient(
         type: String,
         listId: String?,
         tag: String?,
-    ): Flow<StreamEventJson> = flow {
+    ): Flow<NetworkStreamEvent> = flow {
         client.websocket(
             httpRequestBuilder = {
                 parameter("type", type)
@@ -93,21 +93,22 @@ internal class MastodonStreamClient(
         StreamEventRawJson.serializer(),
         text,
     ).let { raw ->
-        StreamEventJson(
+        NetworkStreamEvent(
             raw.stream,
             raw.event,
             raw.buildPayload(),
         )
     }
 
-    private fun StreamEventRawJson.buildPayload(): StreamEventJson.Payload? {
+    private fun StreamEventRawJson.buildPayload(): NetworkStreamEvent.Payload? {
         payload ?: return null
 
         return when (Event.findEvent(event)) {
-            Event.UPDATE, Event.STATUS_UPDATE -> StreamEventJson.Payload.Updated(
-                json.decodeFromString(StatusJson.serializer(), payload),
+            Event.UPDATE, Event.STATUS_UPDATE -> NetworkStreamEvent.Payload.Updated(
+                json.decodeFromString(NetworkStatus.serializer(), payload),
             )
-            Event.DELETE -> StreamEventJson.Payload.Deleted(payload)
+
+            Event.DELETE -> NetworkStreamEvent.Payload.Deleted(payload)
             else -> null
         }
     }

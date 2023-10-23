@@ -1,7 +1,7 @@
 package noctiluca.network.authentication
 
-import noctiluca.network.authentication.json.NetworkAppCredential
-import noctiluca.network.authentication.json.NetworkToken
+import noctiluca.network.authentication.data.NetworkAppCredential
+import noctiluca.network.authentication.data.NetworkToken
 import noctiluca.network.authentication.params.GetAccountsVerifyCredential
 
 interface AuthenticationApi {

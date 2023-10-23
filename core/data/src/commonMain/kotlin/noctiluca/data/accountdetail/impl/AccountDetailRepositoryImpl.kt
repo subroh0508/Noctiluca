@@ -16,8 +16,8 @@ import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationship
 import noctiluca.model.accountdetail.Relationships
 import noctiluca.network.mastodon.MastodonApiV1
-import noctiluca.network.mastodon.json.account.AccountJson
-import noctiluca.network.mastodon.json.account.RelationshipJson
+import noctiluca.network.mastodon.data.account.NetworkAccount
+import noctiluca.network.mastodon.data.account.NetworkRelationship
 
 internal class AccountDetailRepositoryImpl(
     private val v1: MastodonApiV1,
@@ -61,7 +61,7 @@ internal class AccountDetailRepositoryImpl(
         it.toEntity(tokenDataStore.getCurrent()?.id)
     }
 
-    private fun AccountJson.toEntity(
+    private fun NetworkAccount.toEntity(
         relationships: Relationships,
     ) = AccountAttributes(
         AccountId(id),
@@ -69,7 +69,7 @@ internal class AccountDetailRepositoryImpl(
         displayName,
         Uri(url),
         Uri(avatar),
-        if (!header.contains(AccountJson.MISSING_IMAGE_NAME)) Uri(header) else null,
+        if (!header.contains(NetworkAccount.MISSING_IMAGE_NAME)) Uri(header) else null,
         "@$acct",
         note,
         followersCount,
@@ -84,7 +84,7 @@ internal class AccountDetailRepositoryImpl(
         moved?.toAccount(),
     )
 
-    private fun RelationshipJson.toValueObject(current: AuthorizedUser?): Relationships {
+    private fun NetworkRelationship.toValueObject(current: AuthorizedUser?): Relationships {
         if (id == current?.id?.value) {
             return Relationships.ME
         }
@@ -106,14 +106,14 @@ internal class AccountDetailRepositoryImpl(
         )
     }
 
-    private val AccountJson.condition
+    private val NetworkAccount.condition
         get() = when {
             limited == true -> AccountAttributes.Condition.LIMITED
             suspended == true -> AccountAttributes.Condition.SUSPENDED
             else -> null
         }
 
-    private fun AccountJson.toAccount() = Account(
+    private fun NetworkAccount.toAccount() = Account(
         AccountId(id),
         username,
         displayName,

@@ -1,7 +1,7 @@
 package noctiluca.network.mastodon
 
-import noctiluca.network.mastodon.data.account.NetworkAccountCredential
 import noctiluca.network.mastodon.data.account.NetworkAccount
+import noctiluca.network.mastodon.data.account.NetworkAccountCredential
 import noctiluca.network.mastodon.data.account.NetworkRelationship
 import noctiluca.network.mastodon.data.extendeddescription.NetworkExtendedDescription
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance

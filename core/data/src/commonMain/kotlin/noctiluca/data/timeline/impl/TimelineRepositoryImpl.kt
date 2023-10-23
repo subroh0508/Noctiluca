@@ -9,8 +9,8 @@ import noctiluca.model.StatusId
 import noctiluca.model.timeline.StreamEvent
 import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.network.mastodon.MastodonStream
-import noctiluca.network.mastodon.data.streaming.Stream
 import noctiluca.network.mastodon.data.streaming.NetworkStreamEvent
+import noctiluca.network.mastodon.data.streaming.Stream
 import noctiluca.network.mastodon.data.streaming.StreamingType
 
 internal class TimelineRepositoryImpl(

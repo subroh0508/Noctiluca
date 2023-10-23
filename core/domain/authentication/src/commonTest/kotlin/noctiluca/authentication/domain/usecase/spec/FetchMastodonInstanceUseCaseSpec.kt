@@ -10,12 +10,12 @@ import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
 import noctiluca.authentication.domain.mock.MockAppCredentialDataStore
-import noctiluca.authentication.domain.mock.MockTokenDataStore
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
 import noctiluca.authentication.domain.usecase.json.*
 import noctiluca.network.mastodon.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.mock.MockHttpClientEngine
+import noctiluca.test.mock.MockTokenDataStore
 
 class FetchMastodonInstanceUseCaseSpec : DescribeSpec({
     describe("#execute: for v4") {

@@ -5,12 +5,17 @@ import kotlinx.serialization.json.Json
 import noctiluca.data.di.DataAccountModule
 import noctiluca.data.di.DataStatusModule
 import noctiluca.data.di.DataTimelineModule
+import noctiluca.datastore.AccountDataStore
+import noctiluca.datastore.TokenDataStore
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.network.mastodon.di.buildWebSocketClient
 import noctiluca.test.di.MockAccountDataStoreModule
 import noctiluca.test.di.MockTokenDataStoreModule
+import noctiluca.test.di.MockTokenProviderModule
+import noctiluca.test.mock.MockTokenDataStore
 import noctiluca.timeline.domain.di.TimelineDomainModule
+import noctiluca.timeline.domain.mock.MockAccountDataStore
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope
 import org.koin.core.scope.Scope
@@ -19,6 +24,8 @@ import org.koin.dsl.module
 
 class TestTimelineUseCaseComponent(
     private val mockHttpClientEngine: HttpClientEngine,
+    private val mockTokenDataStore: TokenDataStore = MockTokenDataStore(),
+    private val mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ) : KoinScopeComponent {
     private val json by lazy {
         Json {
@@ -43,8 +50,12 @@ class TestTimelineUseCaseComponent(
             buildWebSocketClient(mockHttpClientEngine),
             json,
         )
-        MockAccountDataStoreModule()
-        MockTokenDataStoreModule()
+        // MockAccountDataStoreModule()
+        // MockTokenDataStoreModule()
+
+        MockTokenProviderModule()
+        single { mockTokenDataStore }
+        single { mockAccountDataStore }
 
         DataAccountModule()
         DataStatusModule()

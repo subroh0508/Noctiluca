@@ -9,6 +9,7 @@ kotlin {
             dependencies {
                 implementation(project(":core:network:mastodon"))
                 implementation(project(":core:data"))
+                implementation(project(":core:datastore"))
                 implementation(project(":core:model"))
 
                 implementation(libs.ktor.client.core)

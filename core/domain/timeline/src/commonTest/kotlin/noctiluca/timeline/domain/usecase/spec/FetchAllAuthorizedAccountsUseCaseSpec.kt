@@ -10,6 +10,7 @@ import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.runBlocking
+import noctiluca.datastore.AccountDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
 import noctiluca.model.Uri
@@ -20,8 +21,10 @@ import noctiluca.test.DUMMY_ACCESS_TOKEN
 import noctiluca.test.URL_SAMPLE_COM
 import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.MockHttpClientEngine.mockError
+import noctiluca.test.mock.MockTokenDataStore
+import noctiluca.test.model.MockAuthorizedUser
 import noctiluca.timeline.domain.TestTimelineUseCaseComponent
-import noctiluca.timeline.domain.mock.MockLocalAuthorizedAccountRepository
+import noctiluca.timeline.domain.mock.MockAccountDataStore
 import noctiluca.timeline.domain.usecase.FetchAllAuthorizedAccountsUseCase
 import noctiluca.timeline.domain.usecase.json.JSON_ACCOUNT_CREDENTIAL_2
 import noctiluca.timeline.domain.usecase.json.JSON_ACCOUNT_CREDENTIAL_3
@@ -58,11 +61,9 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
 
     describe("#execute") {
         context("when the local cache does not exists") {
-            val localRepository = MockLocalAuthorizedAccountRepository()
             val useCase = buildUseCase(
                 Api.V1.Accounts.VerifyCredentials(),
-                listOf(),
-                localRepository,
+                expected = listOf(),
             )
 
             it("returns empty flow") {
@@ -71,25 +72,14 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
         }
 
         context("when the local cache exists") {
-            val current = Account(
-                AccountId("1"),
-                "test1",
-                "テスト太郎",
-                Uri("$URL_SAMPLE_COM/@test1"),
-                Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
-                "@test1@$DOMAIN_SAMPLE_COM",
-            ) to Domain(DOMAIN_SAMPLE_COM)
+            val current = accounts[0]
 
             context("and the local cache has only one account") {
-                val localRepository = MockLocalAuthorizedAccountRepository(
-                    current = current,
-                    accessToken = { DUMMY_ACCESS_TOKEN to Domain(DOMAIN_SAMPLE_COM) },
-                )
-
                 val useCase = buildUseCase(
                     Api.V1.Accounts.VerifyCredentials(),
-                    listOf(),
-                    localRepository,
+                    expected = listOf(),
+                    MockTokenDataStore(current to Domain(DOMAIN_SAMPLE_COM)),
+                    MockAccountDataStore(current),
                 )
 
                 it("returns empty flow") {
@@ -98,27 +88,28 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
             }
 
             context("and the local cache has multiple accounts") {
-                val localRepository = MockLocalAuthorizedAccountRepository(
-                    current = current,
-                    accessToken = {
-                        when (it) {
-                            accounts[0].id -> DUMMY_ACCESS_TOKEN to Domain(DOMAIN_SAMPLE_COM)
-                            accounts[1].id -> ACCESS_TOKENS[0] to Domain(DOMAIN_SAMPLE_COM)
-                            accounts[2].id -> ACCESS_TOKENS[1] to Domain(DOMAIN_SAMPLE_COM)
-                            else -> null
-                        }
-                    },
-                    all = accounts,
-                )
-
                 context("and the sever returns valid response") {
+                    val mockTokenDataStore = MockTokenDataStore(
+                        accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
+                        getCache = {
+                            when (it) {
+                                accounts[0].id -> DUMMY_ACCESS_TOKEN to Domain(DOMAIN_SAMPLE_COM)
+                                accounts[1].id -> ACCESS_TOKENS[0] to Domain(DOMAIN_SAMPLE_COM)
+                                accounts[2].id -> ACCESS_TOKENS[1] to Domain(DOMAIN_SAMPLE_COM)
+                                else -> null
+                            }
+                        },
+                    )
+                    val mockAccountDataStore = MockAccountDataStore(accounts)
+
                     val useCase = buildUseCase(
                         Api.V1.Accounts.VerifyCredentials(),
-                        listOf(
+                        expected = listOf(
                             ACCESS_TOKENS[0] to JSON_ACCOUNT_CREDENTIAL_2,
                             ACCESS_TOKENS[1] to JSON_ACCOUNT_CREDENTIAL_3,
                         ),
-                        localRepository,
+                        mockTokenDataStore,
+                        mockAccountDataStore,
                     )
 
                     it("returns flow with instances from cache and server") {
@@ -134,10 +125,24 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
                     }
                 }
                 context("and the sever returns error response") {
+                    val mockTokenDataStore = MockTokenDataStore(
+                        accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
+                        getCache = {
+                            when (it) {
+                                accounts[0].id -> DUMMY_ACCESS_TOKEN to Domain(DOMAIN_SAMPLE_COM)
+                                accounts[1].id -> ACCESS_TOKENS[0] to Domain(DOMAIN_SAMPLE_COM)
+                                accounts[2].id -> ACCESS_TOKENS[1] to Domain(DOMAIN_SAMPLE_COM)
+                                else -> null
+                            }
+                        },
+                    )
+                    val mockAccountDataStore = MockAccountDataStore(accounts)
+
                     val useCase = buildUseCase(
                         Api.V1.Accounts.VerifyCredentials(),
-                        HttpStatusCode.BadRequest,
-                        localRepository,
+                        errorStatusCode = HttpStatusCode.BadRequest,
+                        mockTokenDataStore,
+                        mockAccountDataStore,
                     )
 
                     it("returns flow with instances from cache and server") {
@@ -158,7 +163,8 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
 private inline fun <reified T> buildUseCase(
     resource: T,
     expected: List<Pair<String, String>>,
-    localRepository: MockLocalAuthorizedAccountRepository,
+    mockTokenDataStore: MockTokenDataStore = MockTokenDataStore(),
+    mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchAllAuthorizedAccountsUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(
         resource,
@@ -176,14 +182,17 @@ private inline fun <reified T> buildUseCase(
 
         mockError()
     },
-    localRepository,
+    mockTokenDataStore,
+    mockAccountDataStore,
 ).scope.get()
 
 private inline fun <reified T> buildUseCase(
     resource: T,
     errorStatusCode: HttpStatusCode,
-    localRepository: MockLocalAuthorizedAccountRepository,
+    mockTokenDataStore: MockTokenDataStore = MockTokenDataStore(),
+    mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchAllAuthorizedAccountsUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(resource, errorStatusCode),
-    localRepository,
+    mockTokenDataStore,
+    mockAccountDataStore,
 ).scope.get()

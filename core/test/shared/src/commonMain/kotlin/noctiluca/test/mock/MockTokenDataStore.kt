@@ -1,22 +1,37 @@
-package noctiluca.authentication.domain.mock
+package noctiluca.test.mock
 
 import noctiluca.datastore.TokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
+import noctiluca.model.account.Account
+import noctiluca.test.model.MockAuthorizedUser
 
 class MockTokenDataStore(
     init: List<AuthorizedUser> = emptyList(),
+    private val currentAccessToken: String? = null,
+    private val getCache: (AccountId) -> Pair<String, Domain>? = { null },
 ) : TokenDataStore {
+    constructor(
+        id: AccountId,
+        domain: Domain,
+    ) : this(listOf(MockAuthorizedUser(id, domain)))
+
+    constructor(
+        vararg init: Pair<Account, Domain>,
+    ) : this(
+        init.map { (account, domain) -> MockAuthorizedUser(account.id, domain) },
+    )
+
     private var cache = init
 
-    override suspend fun getCurrentAccessToken() = null
+    override suspend fun getCurrentAccessToken() = currentAccessToken
 
-    override suspend fun getCurrentDomain() = null
+    override suspend fun getCurrentDomain() = getCurrent()?.domain?.value
 
-    override suspend fun getAccessToken(id: AccountId) = null
+    override suspend fun getAccessToken(id: AccountId) = getCache(id)?.first
 
-    override suspend fun getDomain(id: AccountId) = null
+    override suspend fun getDomain(id: AccountId) = getCache(id)?.second
 
     override suspend fun getAll(): List<AuthorizedUser> = cache
 

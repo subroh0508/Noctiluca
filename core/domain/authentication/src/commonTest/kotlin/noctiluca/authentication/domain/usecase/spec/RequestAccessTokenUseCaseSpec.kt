@@ -14,7 +14,6 @@ import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
 import noctiluca.authentication.domain.mock.MockAppCredentialDataStore
-import noctiluca.authentication.domain.mock.MockTokenDataStore
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.json.*
 import noctiluca.datastore.AppCredentialDataStore
@@ -29,6 +28,7 @@ import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.JSON_ACCOUNT_CREDENTIAL
 import noctiluca.test.mock.MockHttpClientEngine
+import noctiluca.test.mock.MockTokenDataStore
 
 class RequestAccessTokenUseCaseSpec : DescribeSpec({
     describe("#execute") {

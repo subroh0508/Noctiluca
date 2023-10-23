@@ -54,7 +54,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
         context("when action is favourite") {
             it("returns favourited status") {
                 val useCase = buildUseCase(
-                    noctiluca.network.mastodon.Api.V1.Statuses.Id.Favourite(status.id.value),
+                    Api.V1.Statuses.Id.Favourite(status.id.value),
                     JSON_STATUSES_FAVOURITE,
                 )
 
@@ -68,7 +68,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
 
             it("returns unfavourited status") {
                 val useCase = buildUseCase(
-                    noctiluca.network.mastodon.Api.V1.Statuses.Id.Unfavourite(status.id.value),
+                    Api.V1.Statuses.Id.Unfavourite(status.id.value),
                     JSON_STATUSES_UNFAVOURITE,
                 )
 
@@ -84,7 +84,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
         context("when action is bookmark") {
             it("returns bookmarked status") {
                 val useCase = buildUseCase(
-                    noctiluca.network.mastodon.Api.V1.Statuses.Id.Bookmark(status.id.value),
+                    Api.V1.Statuses.Id.Bookmark(status.id.value),
                     JSON_STATUSES_BOOKMARK,
                 )
 
@@ -98,7 +98,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
 
             it("returns unbookmarked status") {
                 val useCase = buildUseCase(
-                    noctiluca.network.mastodon.Api.V1.Statuses.Id.Unbookmark(status.id.value),
+                    Api.V1.Statuses.Id.Unbookmark(status.id.value),
                     JSON_STATUSES_UNBOOKMARK,
                 )
 

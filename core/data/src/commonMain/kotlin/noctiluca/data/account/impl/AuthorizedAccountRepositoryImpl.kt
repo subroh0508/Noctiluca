@@ -9,7 +9,7 @@ import noctiluca.model.account.Account
 import noctiluca.network.mastodon.MastodonApiV1
 
 internal class AuthorizedAccountRepositoryImpl(
-    private val v1: noctiluca.network.mastodon.MastodonApiV1,
+    private val v1: MastodonApiV1,
     private val tokenDataStore: TokenDataStore,
     private val accountDataStore: AccountDataStore,
 ) : AuthorizedAccountRepository {

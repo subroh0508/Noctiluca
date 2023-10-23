@@ -7,7 +7,7 @@ import noctiluca.model.status.Status
 import noctiluca.network.mastodon.MastodonApiV1
 
 internal class StatusRepositoryImpl(
-    private val api: noctiluca.network.mastodon.MastodonApiV1,
+    private val api: MastodonApiV1,
     private val tokenDataStore: TokenDataStore,
 ) : StatusRepository {
     override suspend fun favourite(status: Status): Status {

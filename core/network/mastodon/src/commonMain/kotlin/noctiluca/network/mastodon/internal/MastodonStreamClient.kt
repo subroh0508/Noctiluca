@@ -17,10 +17,10 @@ import noctiluca.network.mastodon.json.streaming.Event
 import noctiluca.network.mastodon.json.streaming.StreamEventJson
 
 internal class MastodonStreamClient(
-    private val token: noctiluca.network.mastodon.TokenProvider,
+    private val token: TokenProvider,
     private val client: HttpClient,
     private val json: Json,
-) : noctiluca.network.mastodon.MastodonStream {
+) : MastodonStream {
     companion object {
         private const val ENDPOINT = "/api/v1/streaming/"
     }

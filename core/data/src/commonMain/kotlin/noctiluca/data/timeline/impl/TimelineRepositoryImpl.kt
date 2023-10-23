@@ -14,8 +14,8 @@ import noctiluca.network.mastodon.json.streaming.StreamEventJson
 import noctiluca.network.mastodon.json.streaming.StreamingType
 
 internal class TimelineRepositoryImpl(
-    private val api: noctiluca.network.mastodon.MastodonApiV1,
-    private val webSocket: noctiluca.network.mastodon.MastodonStream,
+    private val api: MastodonApiV1,
+    private val webSocket: MastodonStream,
     private val tokenDataStore: TokenDataStore,
 ) : TimelineRepository {
     override suspend fun fetchGlobal(

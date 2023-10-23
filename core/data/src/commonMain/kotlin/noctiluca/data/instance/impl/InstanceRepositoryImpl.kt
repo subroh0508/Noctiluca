@@ -16,8 +16,8 @@ import java.net.UnknownHostException
 
 internal class InstanceRepositoryImpl(
     private val instancesSocialApi: InstancesSocialApi,
-    private val v1: noctiluca.network.mastodon.MastodonApiV1,
-    private val v2: noctiluca.network.mastodon.MastodonApiV2,
+    private val v1: MastodonApiV1,
+    private val v2: MastodonApiV2,
 ) : InstanceRepository {
     override suspend fun search(
         query: String,

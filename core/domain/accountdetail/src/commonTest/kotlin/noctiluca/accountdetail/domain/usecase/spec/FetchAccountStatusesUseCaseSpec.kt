@@ -76,8 +76,8 @@ class FetchAccountStatusesUseCaseSpec : DescribeSpec({
                 val testCase = buildUseCase(
                     MockHttpClientEngine
                         .mock(
-                            noctiluca.network.mastodon.Api.V1.Accounts.Id.Statuses(
-                                noctiluca.network.mastodon.Api.V1.Accounts.Id(
+                            Api.V1.Accounts.Id.Statuses(
+                                Api.V1.Accounts.Id(
                                     id = myAccount.id.value
                                 )
                             ),
@@ -97,8 +97,8 @@ class FetchAccountStatusesUseCaseSpec : DescribeSpec({
                 val testCase = buildUseCase(
                     MockHttpClientEngine
                         .mock(
-                            noctiluca.network.mastodon.Api.V1.Accounts.Id.Statuses(
-                                noctiluca.network.mastodon.Api.V1.Accounts.Id(
+                            Api.V1.Accounts.Id.Statuses(
+                                Api.V1.Accounts.Id(
                                     id = myAccount.id.value
                                 )
                             ),
@@ -118,8 +118,8 @@ class FetchAccountStatusesUseCaseSpec : DescribeSpec({
                 val testCase = buildUseCase(
                     MockHttpClientEngine
                         .mock(
-                            noctiluca.network.mastodon.Api.V1.Accounts.Id.Statuses(
-                                noctiluca.network.mastodon.Api.V1.Accounts.Id(
+                            Api.V1.Accounts.Id.Statuses(
+                                Api.V1.Accounts.Id(
                                     id = myAccount.id.value
                                 )
                             ),
@@ -139,8 +139,8 @@ class FetchAccountStatusesUseCaseSpec : DescribeSpec({
                 val testCase = buildUseCase(
                     MockHttpClientEngine
                         .mock(
-                            noctiluca.network.mastodon.Api.V1.Accounts.Id.Statuses(
-                                noctiluca.network.mastodon.Api.V1.Accounts.Id(
+                            Api.V1.Accounts.Id.Statuses(
+                                Api.V1.Accounts.Id(
                                     id = myAccount.id.value
                                 )
                             ),
@@ -160,8 +160,8 @@ class FetchAccountStatusesUseCaseSpec : DescribeSpec({
             val testCase = buildUseCase(
                 MockHttpClientEngine
                     .mock(
-                        noctiluca.network.mastodon.Api.V1.Accounts.Id.Statuses(
-                            noctiluca.network.mastodon.Api.V1.Accounts.Id(
+                        Api.V1.Accounts.Id.Statuses(
+                            Api.V1.Accounts.Id(
                                 id = myAccount.id.value
                             )
                         ),

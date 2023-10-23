@@ -15,13 +15,13 @@ import noctiluca.network.mastodon.json.instance.V1InstanceJson
 import noctiluca.network.mastodon.json.status.StatusJson
 
 internal class MastodonApiV1Client(
-    override val token: noctiluca.network.mastodon.TokenProvider,
+    override val token: TokenProvider,
     override val client: HttpClient,
-) : noctiluca.network.mastodon.MastodonApiV1, AbstractMastodonApiClient() {
+) : MastodonApiV1, AbstractMastodonApiClient() {
     override suspend fun getInstance(
         domain: String,
     ): V1InstanceJson = client.get(
-        noctiluca.network.mastodon.Api.V1.Instance(),
+        Api.V1.Instance(),
         domain = domain,
         skipAuthorization = true,
     ).body()
@@ -29,7 +29,7 @@ internal class MastodonApiV1Client(
     override suspend fun getInstanceExtendedDescription(
         domain: String,
     ): ExtendedDescriptionJson = client.get(
-        noctiluca.network.mastodon.Api.V1.Instance.ExtendedDescription(),
+        Api.V1.Instance.ExtendedDescription(),
         domain = domain,
         skipAuthorization = true,
     ).body()
@@ -38,7 +38,7 @@ internal class MastodonApiV1Client(
         domain: String,
         accessToken: String?,
     ): AccountCredentialJson = client.get(
-        noctiluca.network.mastodon.Api.V1.Accounts.VerifyCredentials(),
+        Api.V1.Accounts.VerifyCredentials(),
         domain = domain,
         accessToken = accessToken,
     ).body()
@@ -52,7 +52,7 @@ internal class MastodonApiV1Client(
         minId: String?,
         limit: Int,
     ): List<StatusJson> = client.get(
-        noctiluca.network.mastodon.Api.V1.Timelines.Public(),
+        Api.V1.Timelines.Public(),
     ) {
         parameter("local", local.toString())
         parameter("remote", remote.toString())
@@ -68,7 +68,7 @@ internal class MastodonApiV1Client(
         maxId: String?,
         limit: Int,
     ): List<StatusJson> = client.get(
-        noctiluca.network.mastodon.Api.V1.Timelines.Public(),
+        Api.V1.Timelines.Public(),
         domain = domain,
         skipAuthorization = true,
     ) {
@@ -84,7 +84,7 @@ internal class MastodonApiV1Client(
         minId: String?,
         limit: Int
     ): List<StatusJson> = client.get(
-        noctiluca.network.mastodon.Api.V1.Timelines.Home()
+        Api.V1.Timelines.Home()
     ) {
         parameter("max_id", maxId)
         parameter("since_id", sinceId)
@@ -95,49 +95,49 @@ internal class MastodonApiV1Client(
     override suspend fun postStatusesFavourite(
         id: String,
     ): StatusJson = client.post(
-        noctiluca.network.mastodon.Api.V1.Statuses.Id.Favourite(id = id),
+        Api.V1.Statuses.Id.Favourite(id = id),
     ).body()
 
     override suspend fun postStatusesUnfavourite(
         id: String,
     ): StatusJson = client.post(
-        noctiluca.network.mastodon.Api.V1.Statuses.Id.Unfavourite(id = id),
+        Api.V1.Statuses.Id.Unfavourite(id = id),
     ).body()
 
     override suspend fun postStatusesReblog(
         id: String,
     ): StatusJson = client.post(
-        noctiluca.network.mastodon.Api.V1.Statuses.Id.Reblog(id = id),
+        Api.V1.Statuses.Id.Reblog(id = id),
     ).body()
 
     override suspend fun postStatusesUnreblog(
         id: String,
     ): StatusJson = client.post(
-        noctiluca.network.mastodon.Api.V1.Statuses.Id.Unreblog(id = id),
+        Api.V1.Statuses.Id.Unreblog(id = id),
     ).body()
 
     override suspend fun postStatusesBookmark(
         id: String,
     ): StatusJson = client.post(
-        noctiluca.network.mastodon.Api.V1.Statuses.Id.Bookmark(id = id),
+        Api.V1.Statuses.Id.Bookmark(id = id),
     ).body()
 
     override suspend fun postStatusesUnbookmark(
         id: String,
     ): StatusJson = client.post(
-        noctiluca.network.mastodon.Api.V1.Statuses.Id.Unbookmark(id = id),
+        Api.V1.Statuses.Id.Unbookmark(id = id),
     ).body()
 
     override suspend fun getAccount(
         id: String,
     ): AccountJson = client.get(
-        noctiluca.network.mastodon.Api.V1.Accounts.Id(id = id),
+        Api.V1.Accounts.Id(id = id),
     ).body()
 
     override suspend fun getAccountsRelationships(
         id: List<String>
     ): List<RelationshipJson> = client.get(
-        noctiluca.network.mastodon.Api.V1.Accounts.Relationships(),
+        Api.V1.Accounts.Relationships(),
     ) {
         parameter("id", id)
     }.body()
@@ -149,7 +149,7 @@ internal class MastodonApiV1Client(
         excludeReplies: Boolean,
         limit: Int,
     ): List<StatusJson> = client.get(
-        noctiluca.network.mastodon.Api.V1.Accounts.Id.Statuses(noctiluca.network.mastodon.Api.V1.Accounts.Id(id = id))
+        Api.V1.Accounts.Id.Statuses(Api.V1.Accounts.Id(id = id))
     ) {
         parameter("max_id", maxId)
         parameter("only_media", onlyMedia)

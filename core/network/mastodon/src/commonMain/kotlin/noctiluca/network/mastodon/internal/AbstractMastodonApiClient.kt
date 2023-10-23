@@ -6,7 +6,7 @@ import io.ktor.client.request.*
 import noctiluca.network.mastodon.TokenProvider
 
 abstract class AbstractMastodonApiClient {
-    protected abstract val token: noctiluca.network.mastodon.TokenProvider
+    protected abstract val token: TokenProvider
     protected abstract val client: HttpClient
 
     protected suspend inline fun <reified T : Any> HttpClient.get(

@@ -20,7 +20,7 @@ import noctiluca.network.mastodon.json.account.AccountJson
 import noctiluca.network.mastodon.json.account.RelationshipJson
 
 internal class AccountDetailRepositoryImpl(
-    private val v1: noctiluca.network.mastodon.MastodonApiV1,
+    private val v1: MastodonApiV1,
     private val tokenDataStore: TokenDataStore,
 ) : AccountDetailRepository {
     override suspend fun fetch(

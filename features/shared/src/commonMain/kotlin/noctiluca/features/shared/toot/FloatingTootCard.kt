@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.card.FilledCard
 import noctiluca.features.shared.toot.internal.TootTextArea
 import noctiluca.features.shared.toot.internal.VisibilityChip
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 @Composable
 fun FloatingTootCard(

@@ -18,7 +18,7 @@ import noctiluca.features.components.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 import noctiluca.timeline.domain.model.Timeline
 
 @Composable

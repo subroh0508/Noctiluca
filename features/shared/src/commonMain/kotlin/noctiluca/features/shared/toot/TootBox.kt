@@ -9,12 +9,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import noctiluca.account.model.Account
 import noctiluca.features.components.atoms.appbar.NavigateIconSize
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.toot.internal.TootAreaPadding
 import noctiluca.features.shared.toot.internal.TootTextArea
+import noctiluca.model.account.Account
 
 @Composable
 fun TootBox(

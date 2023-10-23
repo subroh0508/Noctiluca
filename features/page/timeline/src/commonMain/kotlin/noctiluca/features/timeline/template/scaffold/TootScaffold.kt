@@ -11,7 +11,7 @@ import noctiluca.features.shared.toot.TootBox
 import noctiluca.features.timeline.LocalNavigation
 import noctiluca.features.timeline.template.scaffold.toot.TootTopAppBar
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

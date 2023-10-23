@@ -1,28 +1,24 @@
 package app.noctiluca
 
 import android.app.Application
+import app.noctiluca.di.AndroidTokenProviderModule
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
-import noctiluca.account.infra.di.AccountInfraModule
-import noctiluca.accountdetail.infra.di.AccountDetailInfraModule
-import noctiluca.api.authentication.di.AuthenticationApiModule
-import noctiluca.api.instancessocial.di.InstancesSocialApiModule
-import noctiluca.api.mastodon.di.MastodonApiModule
-import noctiluca.api.mastodon.di.buildWebSocketClient
-import noctiluca.api.token.di.TokenApiModule
-import noctiluca.authentication.infra.di.AuthenticationInfraModule
+import noctiluca.data.di.DataModule
+import noctiluca.datastore.di.DataStoreModule
 import noctiluca.features.components.di.ImageLoaderModule
-import noctiluca.instance.infra.di.InstanceRepositoriesModule
-import noctiluca.status.infra.di.StatusRepositoriesModule
-import noctiluca.timeline.infra.di.TimelineRepositoriesModule
+import noctiluca.network.authentication.di.AuthenticationApiModule
+import noctiluca.network.instancessocial.di.InstancesSocialApiModule
+import noctiluca.network.mastodon.di.MastodonApiModule
+import noctiluca.network.mastodon.di.buildWebSocketClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
 import org.koin.dsl.module
-import noctiluca.api.authentication.di.buildHttpClient as buildHttpClientForAuthentication
-import noctiluca.api.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
-import noctiluca.api.mastodon.di.buildHttpClient as buildHttpClientForMastodon
+import noctiluca.network.authentication.di.buildHttpClient as buildHttpClientForAuthentication
+import noctiluca.network.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
+import noctiluca.network.mastodon.di.buildHttpClient as buildHttpClientForMastodon
 
 class NoctilucaApplication : Application() {
     private val json by lazy {
@@ -52,6 +48,9 @@ class NoctilucaApplication : Application() {
     }
 
     private fun buildApiModules() = module {
+        DataStoreModule(json)
+        AndroidTokenProviderModule()
+
         AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
         InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
         MastodonApiModule(
@@ -59,16 +58,10 @@ class NoctilucaApplication : Application() {
             buildWebSocketClient(httpClientEngine),
             json,
         )
-        TokenApiModule(json)
     }
 
     private fun buildRepositoriesModules() = module {
-        AccountInfraModule(json)
-        AccountDetailInfraModule()
-        AuthenticationInfraModule()
-        InstanceRepositoriesModule()
-        TimelineRepositoriesModule()
-        StatusRepositoriesModule()
+        DataModule()
     }
 
     private fun buildFeaturesModules() = ImageLoaderModule(httpClientEngine)

@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.card.FilledCard
 import noctiluca.features.components.atoms.list.SectionPadding
 import noctiluca.features.components.atoms.text.HtmlText
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 @Composable
 internal fun InstanceExtendedDescriptionTab(

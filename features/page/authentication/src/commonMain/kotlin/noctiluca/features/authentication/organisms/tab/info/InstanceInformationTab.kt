@@ -19,7 +19,7 @@ import noctiluca.features.components.atoms.image.NumberCircle
 import noctiluca.features.components.atoms.list.LeadingAvatarContainerSize
 import noctiluca.features.components.atoms.list.Section
 import noctiluca.features.components.atoms.list.SectionItem
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 @Composable
 internal fun InstanceInformationTab(

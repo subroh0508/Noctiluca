@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDateTime
-import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.components.atoms.card.FilledCard
 import noctiluca.features.components.atoms.divider.Divider
@@ -15,6 +14,7 @@ import noctiluca.features.components.atoms.text.HtmlText
 import noctiluca.features.components.utils.format
 import noctiluca.features.components.utils.toYearMonthDay
 import noctiluca.features.shared.account.AccountName
+import noctiluca.model.accountdetail.AccountAttributes
 
 @Composable
 internal fun AccountDetailCaption(

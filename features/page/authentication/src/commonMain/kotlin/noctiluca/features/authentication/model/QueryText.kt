@@ -1,6 +1,6 @@
 package noctiluca.features.authentication.model
 
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 internal sealed class QueryText {
     abstract val text: String

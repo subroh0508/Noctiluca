@@ -2,7 +2,7 @@ package noctiluca.features.shared.toot.internal
 
 import androidx.compose.runtime.Composable
 import noctiluca.features.components.getCommonString
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 @Composable
 internal fun Status.Visibility.label() = when (this) {

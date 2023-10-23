@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import noctiluca.features.components.molecules.list.infiniteScrollFooter
 import noctiluca.features.components.molecules.list.items
 import noctiluca.features.shared.status.Status
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 @Suppress("FunctionNaming")
 internal fun LazyListScope.StatuseTab(

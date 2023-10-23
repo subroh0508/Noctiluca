@@ -11,7 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.appbar.TopAppBar
 import noctiluca.features.shared.toot.internal.VisibilityChip
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

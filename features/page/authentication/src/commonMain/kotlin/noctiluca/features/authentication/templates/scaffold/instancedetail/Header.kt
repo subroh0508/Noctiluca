@@ -16,8 +16,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
-import noctiluca.instance.model.Instance
 import noctiluca.model.Uri
+import noctiluca.model.authentication.Instance
 
 @Suppress("FunctionNaming")
 fun LazyListScope.InstanceDetailHeader(

@@ -5,7 +5,6 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import noctiluca.accountdetail.model.AccountAttributes
 import noctiluca.features.accountdetail.organisms.tab.AccountStatusesTabs
 import noctiluca.features.accountdetail.organisms.tab.rememberTabbedAccountStatusesState
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
@@ -15,6 +14,7 @@ import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.components.molecules.scaffold.HeadlineAvatar
 import noctiluca.features.components.molecules.scaffold.HeadlineHeader
 import noctiluca.features.components.molecules.scaffold.LoadStateLargeHeadlinedScaffold
+import noctiluca.model.accountdetail.AccountAttributes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

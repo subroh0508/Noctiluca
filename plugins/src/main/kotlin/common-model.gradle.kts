@@ -6,7 +6,7 @@ kotlin {
     sourceSets {
         named("commonMain") {
             dependencies {
-                implementation(project(":common:data:shared"))
+                implementation(project(":core:data"))
             }
         }
     }

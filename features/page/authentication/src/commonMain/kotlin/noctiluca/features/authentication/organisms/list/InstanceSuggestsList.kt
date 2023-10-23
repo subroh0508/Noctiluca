@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.organisms.card.SuggestCard
 import noctiluca.features.components.molecules.list.LazyColumn
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 @Composable
 internal fun InstanceSuggestsList(

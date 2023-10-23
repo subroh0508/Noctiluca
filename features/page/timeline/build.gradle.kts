@@ -6,7 +6,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":common:domain:timeline"))
+                implementation(project(":core:datastore"))
+                implementation(project(":core:domain:timeline"))
                 implementation(project(":features:shared"))
 
                 implementation(libs.kotlinx.datetime)

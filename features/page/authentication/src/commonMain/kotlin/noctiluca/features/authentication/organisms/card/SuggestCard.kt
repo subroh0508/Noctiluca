@@ -17,7 +17,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.components.atoms.text.HtmlText
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 private const val FOREGROUND_ID = "foreground"
 private const val BACKGROUND_ID = "background"

@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 @Composable
 internal fun BoxScope.InstanceDetailActionButtons(

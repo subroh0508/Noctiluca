@@ -4,8 +4,8 @@ import androidx.compose.runtime.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
+import noctiluca.datastore.TokenDataStore
 import noctiluca.model.AuthorizedTokenNotFoundException
-import noctiluca.repository.TokenProvider
 import org.koin.core.component.get
 
 val LocalCoroutineExceptionHandler = compositionLocalOf { UnauthorizedExceptionHandler() }
@@ -25,7 +25,7 @@ fun <T : Navigator.Screen> AuthorizedFeatureComposable(
 }
 
 class UnauthorizedExceptionHandler(
-    private val tokenProvider: TokenProvider? = null,
+    private val dataStore: TokenDataStore? = null,
     private val navigator: Navigator? = null,
 ) {
     fun handleException(exception: Throwable) {
@@ -47,8 +47,8 @@ class UnauthorizedExceptionHandler(
 
     private fun tryOtherToken() {
         val nextAuthorizedUser = runBlocking {
-            tokenProvider?.expireCurrent()
-            tokenProvider?.getCurrent()
+            expireCurrent()
+            getCurrent()
         }
 
         if (nextAuthorizedUser != null) {
@@ -58,4 +58,13 @@ class UnauthorizedExceptionHandler(
 
         navigator?.backToSignIn()
     }
+
+    private suspend fun expireCurrent() {
+        dataStore?.getCurrent()?.let { dataStore.delete(it.id) }
+        dataStore?.getAll()?.firstOrNull()?.let {
+            dataStore.setCurrent(it.id)
+        }
+    }
+
+    private suspend fun getCurrent() = dataStore?.getCurrent()
 }

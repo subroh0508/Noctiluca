@@ -10,7 +10,7 @@ import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.organisms.tab.InstanceDetailScrollState
 import noctiluca.features.components.molecules.scaffold.HeadlineText
 import noctiluca.features.components.molecules.scaffold.HeadlineTopAppBar
-import noctiluca.instance.model.Instance
+import noctiluca.model.authentication.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

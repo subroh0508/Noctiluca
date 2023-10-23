@@ -16,7 +16,7 @@ import noctiluca.features.components.UnauthorizedExceptionHandler
 import noctiluca.features.components.model.LoadState
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
-import noctiluca.status.model.Status
+import noctiluca.model.status.Status
 import org.koin.core.component.get
 
 class AccountDetailViewModel private constructor(

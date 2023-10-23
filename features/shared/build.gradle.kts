@@ -6,8 +6,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation(project(":common:data:account:model"))
-                implementation(project(":common:data:status:model"))
+                implementation(project(":core:model"))
                 implementation(project(":features:components"))
 
                 implementation(libs.kotlinx.datetime)

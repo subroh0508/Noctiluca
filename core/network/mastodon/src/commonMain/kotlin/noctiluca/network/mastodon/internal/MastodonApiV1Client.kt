@@ -14,6 +14,7 @@ import noctiluca.network.mastodon.json.extendeddescription.ExtendedDescriptionJs
 import noctiluca.network.mastodon.json.instance.V1InstanceJson
 import noctiluca.network.mastodon.json.status.StatusJson
 
+@Suppress("TooManyFunctions")
 internal class MastodonApiV1Client(
     override val token: TokenProvider,
     override val client: HttpClient,

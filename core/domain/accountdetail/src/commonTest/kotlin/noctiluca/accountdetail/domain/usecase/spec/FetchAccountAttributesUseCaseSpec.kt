@@ -27,7 +27,7 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
             context("and the id is mine") {
                 val testCase = buildUseCase(
                     MockHttpClientEngine
-                        .mock(noctiluca.network.mastodon.Api.V1.Accounts.Id(id = ACCOUNT_ID), JSON_MY_ACCOUNT)
+                        .mock(Api.V1.Accounts.Id(id = ACCOUNT_ID), JSON_MY_ACCOUNT)
                         .build(),
                 )
 

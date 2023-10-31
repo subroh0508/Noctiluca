@@ -3,7 +3,7 @@ agp = "8.1.2"
 kotlin = "1.9.10"
 compose = "1.5.3"
 buildconfig = "4.1.2"
-detekt = "1.23.1"
+detekt = "1.23.3"
 
 androidx-core = "1.12.0"
 androidx-appcompat = "1.6.1"

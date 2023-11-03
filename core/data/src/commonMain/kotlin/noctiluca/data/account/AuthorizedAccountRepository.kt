@@ -6,8 +6,8 @@ import noctiluca.model.account.Account
 
 interface AuthorizedAccountRepository {
     suspend fun getCurrent(): Pair<Account, Domain>?
-    suspend fun getAll(): List<Account>
 
+    suspend fun fetchAll(): List<Account>
     suspend fun fetchCurrent(): Pair<Account, Domain>
     suspend fun refresh(id: AccountId): Account
 }

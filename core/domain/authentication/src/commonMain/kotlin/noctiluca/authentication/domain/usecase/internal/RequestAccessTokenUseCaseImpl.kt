@@ -2,6 +2,7 @@ package noctiluca.authentication.domain.usecase.internal
 
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.model.AuthorizedUser
 import noctiluca.model.Uri
 
 internal class RequestAccessTokenUseCaseImpl(
@@ -10,5 +11,9 @@ internal class RequestAccessTokenUseCaseImpl(
     override suspend fun execute(
         code: String,
         redirectUri: Uri,
-    ) = repository.fetchAccessToken(code, redirectUri)
+    ): AuthorizedUser? {
+        val user = repository.fetch(code, redirectUri) ?: return null
+
+        return repository.switch(user.id)
+    }
 }

@@ -21,9 +21,17 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     override suspend fun fetchAll() = tokenDataStore.getAll().mapNotNull {
-        accountDataStore.get(it.id) ?: runCatching {
+        val cache = accountDataStore.get(it.id)
+        if (cache != null) {
+            return@mapNotNull cache
+        }
+
+        val account = runCatching {
             v1.getAccount(it.id.value).toEntity(it.domain)
-        }.getOrNull()
+        }.getOrNull() ?: return@mapNotNull null
+
+        accountDataStore.add(account)
+        account
     }
 
     override suspend fun fetchCurrent(): Pair<Account, Domain> {

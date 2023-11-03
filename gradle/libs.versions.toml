@@ -1,6 +1,6 @@
 [versions]
 agp = "8.2.1"
-kotlin = "1.9.10"
+kotlin = "1.9.20"
 compose = "1.5.10"
 buildconfig = "5.3.5"
 detekt = "1.23.4"

@@ -8,7 +8,7 @@ internal class FetchAllAuthorizedAccountsUseCaseImpl(
     private val repository: AuthorizedAccountRepository,
 ) : FetchAllAuthorizedAccountsUseCase {
     override suspend fun execute() = flow {
-        repository.getAll().drop(1).forEach { cache ->
+        repository.fetchAll().drop(1).forEach { cache ->
             emit(cache)
 
             runCatching { repository.refresh(cache.id) }

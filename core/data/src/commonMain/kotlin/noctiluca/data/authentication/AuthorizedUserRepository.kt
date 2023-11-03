@@ -5,10 +5,10 @@ import noctiluca.model.AuthorizedUser
 import noctiluca.model.Uri
 
 interface AuthorizedUserRepository {
-    suspend fun fetchAccessToken(
+    suspend fun fetch(
         code: String,
         redirectUri: Uri,
-    ): String?
+    ): AuthorizedUser?
 
     suspend fun switch(id: AccountId): AuthorizedUser
 

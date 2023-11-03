@@ -4,6 +4,7 @@ import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.datastore.AppCredentialDataStore
 import noctiluca.datastore.TokenDataStore
 import noctiluca.model.AccountId
+import noctiluca.model.AuthorizedUser
 import noctiluca.model.Uri
 import noctiluca.network.authentication.AuthenticationApi
 
@@ -12,10 +13,10 @@ internal class AuthorizedUserRepositoryImpl(
     private val tokenDataStore: TokenDataStore,
     private val api: AuthenticationApi,
 ) : AuthorizedUserRepository {
-    override suspend fun fetchAccessToken(
+    override suspend fun fetch(
         code: String,
         redirectUri: Uri,
-    ): String? {
+    ): AuthorizedUser? {
         val (clientId, clientSecret, domain) = appCredentialDataStore.getCurrent() ?: return null
 
         val accessToken = api.postOAuthToken(
@@ -27,9 +28,8 @@ internal class AuthorizedUserRepositoryImpl(
         ).accessToken
 
         val id = AccountId(api.getVerifyAccountsCredentials(domain.value, accessToken).id)
-        tokenDataStore.add(id, domain, accessToken)
 
-        return accessToken
+        return tokenDataStore.add(id, domain, accessToken).find { it.id == id }
     }
 
     override suspend fun switch(id: AccountId) = tokenDataStore.setCurrent(id)

@@ -27,6 +27,9 @@ dependencies {
     implementation(libs.bundles.ktor.client.jvm)
     implementation(libs.kotlinx.serialization)
 
+    implementation(libs.voyager.navigator)
+    implementation(libs.voyager.transitions)
+    implementation(libs.voyager.koin)
     implementation(libs.decompose.core)
     implementation(libs.decompose.compose.jetbrains)
 

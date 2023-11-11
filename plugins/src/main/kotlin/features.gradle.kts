@@ -21,6 +21,9 @@ kotlin {
 
                 implementation(libs.coroutinesCore)
 
+                implementation(libs.voyagerNavigator)
+                implementation(libs.voyagerTransitions)
+                implementation(libs.voyagerKoin)
                 implementation(libs.decomposeCore)
                 implementation(libs.decomposeComposeJetbrains)
 

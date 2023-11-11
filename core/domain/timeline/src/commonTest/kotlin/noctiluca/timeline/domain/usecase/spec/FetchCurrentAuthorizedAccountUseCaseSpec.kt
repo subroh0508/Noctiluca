@@ -97,7 +97,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
         }
 
         context("when the local cache exists") {
-            val mockTokenDataStore = MockAuthenticationTokenDataStore(
+            val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(
                 init = listOf(MockAuthorizedUser(account.id, Domain(DOMAIN_SAMPLE_COM))),
                 getCache = { DUMMY_ACCESS_TOKEN to Domain(DOMAIN_SAMPLE_COM) },
             )
@@ -107,7 +107,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 val useCase = buildUseCase(
                     Api.V1.Accounts.VerifyCredentials(),
                     JSON_ACCOUNT_CREDENTIAL_1,
-                    mockTokenDataStore,
+                    mockAuthenticationTokenDataStore,
                     mockAccountDataStore,
                 )
 
@@ -129,7 +129,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 val useCase = buildUseCase(
                     Api.V1.Accounts.VerifyCredentials(),
                     HttpStatusCode.BadRequest,
-                    mockTokenDataStore,
+                    mockAuthenticationTokenDataStore,
                     mockAccountDataStore,
                 )
 
@@ -156,21 +156,21 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
 private inline fun <reified T> buildUseCase(
     resource: T,
     expected: String,
-    mockTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
     mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchCurrentAuthorizedAccountUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(resource, expected),
-    mockTokenDataStore,
+    mockAuthenticationTokenDataStore,
     mockAccountDataStore,
 ).scope.get()
 
 private inline fun <reified T> buildUseCase(
     resource: T,
     errorStatusCode: HttpStatusCode,
-    mockTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
     mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchCurrentAuthorizedAccountUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(resource, errorStatusCode),
-    mockTokenDataStore,
+    mockAuthenticationTokenDataStore,
     mockAccountDataStore,
 ).scope.get()

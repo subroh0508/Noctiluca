@@ -17,7 +17,7 @@ import noctiluca.authentication.domain.mock.MockAppCredentialDataStore
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.json.*
 import noctiluca.datastore.AppCredentialDataStore
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
 import noctiluca.model.Uri
@@ -27,8 +27,8 @@ import noctiluca.network.mastodon.Api
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.JSON_ACCOUNT_CREDENTIAL
+import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
-import noctiluca.test.mock.MockTokenDataStore
 
 class RequestAccessTokenUseCaseSpec : DescribeSpec({
     describe("#execute") {
@@ -52,7 +52,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
 
         context("when the local cache exists") {
             context("and the server returns valid response") {
-                val mockTokenDataStore = MockTokenDataStore()
+                val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore()
                 val testCase = buildAuthenticationUseCase(
                     MockHttpClientEngine
                         .mock(OAuth.Token(), JSON_OAUTH_TOKEN)
@@ -66,7 +66,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
                             Uri("dummy"),
                         ),
                     ),
-                    mockTokenDataStore,
+                    mockAuthenticationTokenDataStore,
                 )
 
                 it("returns AuthorizedUser") {
@@ -77,7 +77,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
                         )
                     } shouldNot beNull()
 
-                    mockTokenDataStore.getAll().let {
+                    mockAuthenticationTokenDataStore.getAll().let {
                         it should haveSize(1)
                         it.first().id should be(AccountId(ACCOUNT_ID))
                         it.first().domain should be(Domain(DOMAIN_SAMPLE_COM))
@@ -87,7 +87,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
         }
 
         context("when the server returns error response") {
-            val mockTokenDataStore = MockTokenDataStore()
+            val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore()
             val testCase = buildAuthenticationUseCase(
                 MockHttpClientEngine
                     .mock(OAuth.Token(), HttpStatusCode.BadRequest)
@@ -101,7 +101,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
                         Uri("dummy"),
                     ),
                 ),
-                mockTokenDataStore,
+                mockAuthenticationTokenDataStore,
             )
 
             it("raises ClientRequestException") {
@@ -114,7 +114,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
                     }
                 }
 
-                mockTokenDataStore.getAll() should beEmpty()
+                mockAuthenticationTokenDataStore.getAll() should beEmpty()
             }
         }
     }
@@ -123,9 +123,9 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
 private fun buildAuthenticationUseCase(
     engine: MockEngine,
     mockAppCredentialDataStore: AppCredentialDataStore = MockAppCredentialDataStore(),
-    mockTokenDataStore: TokenDataStore = MockTokenDataStore(),
+    mockAuthenticationTokenDataStore: AuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
 ): RequestAccessTokenUseCase = TestAuthenticationUseCaseComponent(
     engine,
     mockAppCredentialDataStore,
-    mockTokenDataStore,
+    mockAuthenticationTokenDataStore,
 ).scope.get()

@@ -89,7 +89,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
 
             context("and the local cache has multiple accounts") {
                 context("and the sever returns valid response") {
-                    val mockTokenDataStore = MockAuthenticationTokenDataStore(
+                    val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(
                         accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
                         getCache = {
                             when (it) {
@@ -108,7 +108,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
                             ACCESS_TOKENS[0] to JSON_ACCOUNT_CREDENTIAL_2,
                             ACCESS_TOKENS[1] to JSON_ACCOUNT_CREDENTIAL_3,
                         ),
-                        mockTokenDataStore,
+                        mockAuthenticationTokenDataStore,
                         mockAccountDataStore,
                     )
 
@@ -125,7 +125,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
                     }
                 }
                 context("and the sever returns error response") {
-                    val mockTokenDataStore = MockAuthenticationTokenDataStore(
+                    val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(
                         accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
                         getCache = {
                             when (it) {
@@ -141,7 +141,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
                     val useCase = buildUseCase(
                         Api.V1.Accounts.VerifyCredentials(),
                         errorStatusCode = HttpStatusCode.BadRequest,
-                        mockTokenDataStore,
+                        mockAuthenticationTokenDataStore,
                         mockAccountDataStore,
                     )
 
@@ -163,7 +163,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
 private inline fun <reified T> buildUseCase(
     resource: T,
     expected: List<Pair<String, String>>,
-    mockTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
     mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchAllAuthorizedAccountsUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(
@@ -182,17 +182,17 @@ private inline fun <reified T> buildUseCase(
 
         mockError()
     },
-    mockTokenDataStore,
+    mockAuthenticationTokenDataStore,
     mockAccountDataStore,
 ).scope.get()
 
 private inline fun <reified T> buildUseCase(
     resource: T,
     errorStatusCode: HttpStatusCode,
-    mockTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
     mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchAllAuthorizedAccountsUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(resource, errorStatusCode),
-    mockTokenDataStore,
+    mockAuthenticationTokenDataStore,
     mockAccountDataStore,
 ).scope.get()

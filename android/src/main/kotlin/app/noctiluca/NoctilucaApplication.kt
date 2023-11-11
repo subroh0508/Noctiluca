@@ -1,7 +1,7 @@
 package app.noctiluca
 
 import android.app.Application
-import app.noctiluca.di.AndroidTokenProviderModule
+import app.noctiluca.di.AndroidAuthenticationTokenProviderModule
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
 import noctiluca.data.di.DataModule
@@ -14,7 +14,6 @@ import noctiluca.network.mastodon.di.buildWebSocketClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
-import org.koin.core.logger.Level
 import org.koin.dsl.module
 import noctiluca.network.authentication.di.buildHttpClient as buildHttpClientForAuthentication
 import noctiluca.network.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
@@ -49,7 +48,7 @@ class NoctilucaApplication : Application() {
 
     private fun buildApiModules() = module {
         DataStoreModule(json)
-        AndroidTokenProviderModule()
+        AndroidAuthenticationTokenProviderModule()
 
         AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
         InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))

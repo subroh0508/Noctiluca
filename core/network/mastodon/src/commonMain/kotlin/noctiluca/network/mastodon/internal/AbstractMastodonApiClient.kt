@@ -3,12 +3,11 @@ package noctiluca.network.mastodon.internal
 import io.ktor.client.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*
-import noctiluca.network.mastodon.TokenProvider
+import noctiluca.network.mastodon.AuthenticationTokenProvider
 
-abstract class AbstractMastodonApiClient {
-    protected abstract val token: TokenProvider
-    protected abstract val client: HttpClient
-
+abstract class AbstractMastodonApiClient(
+    private val token: AuthenticationTokenProvider,
+) {
     protected suspend inline fun <reified T : Any> HttpClient.get(
         resource: T,
         domain: String? = null,

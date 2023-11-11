@@ -1,6 +1,6 @@
 package noctiluca.network.mastodon
 
-interface TokenProvider {
+interface AuthenticationTokenProvider {
     suspend fun getCurrentAccessToken(): String?
     suspend fun getCurrentDomain(): String?
 }

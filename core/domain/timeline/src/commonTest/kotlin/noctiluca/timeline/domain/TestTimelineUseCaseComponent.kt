@@ -10,7 +10,7 @@ import noctiluca.datastore.TokenDataStore
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.network.mastodon.di.buildWebSocketClient
-import noctiluca.test.di.MockTokenProviderModule
+import noctiluca.test.di.MockAuthenticationTokenProviderModule
 import noctiluca.test.mock.MockTokenDataStore
 import noctiluca.timeline.domain.di.TimelineDomainModule
 import noctiluca.timeline.domain.mock.MockAccountDataStore
@@ -51,7 +51,7 @@ class TestTimelineUseCaseComponent(
         // MockAccountDataStoreModule()
         // MockTokenDataStoreModule()
 
-        MockTokenProviderModule()
+        MockAuthenticationTokenProviderModule()
         single { mockTokenDataStore }
         single { mockAccountDataStore }
 

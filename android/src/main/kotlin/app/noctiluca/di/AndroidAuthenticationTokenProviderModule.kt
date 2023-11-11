@@ -1,6 +1,6 @@
 package app.noctiluca.di
 
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.network.mastodon.AuthenticationTokenProvider
 import org.koin.core.module.Module
 
@@ -10,8 +10,8 @@ internal fun Module.AndroidAuthenticationTokenProviderModule() {
 }
 
 private class AndroidAuthenticationTokenProvider(
-    private val tokenDataStore: TokenDataStore,
+    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
 ) : AuthenticationTokenProvider {
-    override suspend fun getCurrentAccessToken() = tokenDataStore.getCurrentAccessToken()
-    override suspend fun getCurrentDomain() = tokenDataStore.getCurrentDomain()
+    override suspend fun getCurrentAccessToken() = authenticationTokenDataStore.getCurrentAccessToken()
+    override suspend fun getCurrentDomain() = authenticationTokenDataStore.getCurrentDomain()
 }

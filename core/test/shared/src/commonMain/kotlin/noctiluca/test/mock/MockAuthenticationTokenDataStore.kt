@@ -1,17 +1,17 @@
 package noctiluca.test.mock
 
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
 import noctiluca.test.model.MockAuthorizedUser
 
-class MockTokenDataStore(
+class MockAuthenticationTokenDataStore(
     init: List<AuthorizedUser> = emptyList(),
     private val currentAccessToken: String? = null,
     private val getCache: (AccountId) -> Pair<String, Domain>? = { null },
-) : TokenDataStore {
+) : AuthenticationTokenDataStore {
     constructor(
         id: AccountId,
         domain: Domain,

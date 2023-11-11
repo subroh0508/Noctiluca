@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import io.ktor.client.plugins.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.AuthorizedTokenNotFoundException
 import org.koin.core.component.get
 
@@ -25,7 +25,7 @@ fun <T : Navigator.Screen> AuthorizedFeatureComposable(
 }
 
 class UnauthorizedExceptionHandler(
-    private val dataStore: TokenDataStore? = null,
+    private val dataStore: AuthenticationTokenDataStore? = null,
     private val navigator: Navigator? = null,
 ) {
     fun handleException(exception: Throwable) {

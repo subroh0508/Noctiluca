@@ -4,7 +4,7 @@ import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
-interface TokenDataStore {
+interface AuthenticationTokenDataStore {
     suspend fun getCurrentAccessToken(): String?
 
     suspend fun getCurrentDomain(): String?

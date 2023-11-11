@@ -6,7 +6,7 @@ import kotlinx.datetime.toLocalDateTime
 import noctiluca.data.accountdetail.AccountDetailRepository
 import noctiluca.data.accountdetail.toValueObject
 import noctiluca.data.status.toEntity
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.StatusId
@@ -21,12 +21,12 @@ import noctiluca.network.mastodon.data.account.NetworkRelationship
 
 internal class AccountDetailRepositoryImpl(
     private val v1: MastodonApiV1,
-    private val tokenDataStore: TokenDataStore,
+    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
 ) : AccountDetailRepository {
     override suspend fun fetch(
         id: AccountId,
     ): AccountAttributes {
-        val current = tokenDataStore.getCurrent()
+        val current = authenticationTokenDataStore.getCurrent()
         val account = v1.getAccount(id.value)
         val relationship = if (id != current?.id && account.moved == null) Relationships.NONE else Relationships.ME
 
@@ -36,7 +36,7 @@ internal class AccountDetailRepositoryImpl(
     override suspend fun fetchRelationships(
         id: AccountId,
     ): Relationships {
-        if (id == tokenDataStore.getCurrent()?.id) {
+        if (id == authenticationTokenDataStore.getCurrent()?.id) {
             return Relationships.ME
         }
 
@@ -44,7 +44,7 @@ internal class AccountDetailRepositoryImpl(
             .find { it.id == id.value }
             ?: return Relationships.NONE
 
-        return json.toValueObject(tokenDataStore.getCurrent())
+        return json.toValueObject(authenticationTokenDataStore.getCurrent())
     }
 
     override suspend fun fetchStatuses(
@@ -58,7 +58,7 @@ internal class AccountDetailRepositoryImpl(
         onlyMedia,
         excludeReplies,
     ).map {
-        it.toEntity(tokenDataStore.getCurrent()?.id)
+        it.toEntity(authenticationTokenDataStore.getCurrent()?.id)
     }
 
     private fun NetworkAccount.toEntity(

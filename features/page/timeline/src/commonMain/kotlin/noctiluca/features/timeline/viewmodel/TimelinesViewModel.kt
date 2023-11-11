@@ -5,7 +5,7 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.features.components.AuthorizedViewModel
 import noctiluca.features.components.LocalCoroutineExceptionHandler
 import noctiluca.features.components.UnauthorizedExceptionHandler
@@ -21,7 +21,7 @@ import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel private constructor(
-    private val dataStore: TokenDataStore,
+    private val dataStore: AuthenticationTokenDataStore,
     private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,
     private val fetchAllAuthorizedAccountsUseCase: FetchAllAuthorizedAccountsUseCase,
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,

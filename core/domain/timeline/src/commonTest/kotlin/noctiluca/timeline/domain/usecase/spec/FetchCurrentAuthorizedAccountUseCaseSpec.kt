@@ -17,8 +17,8 @@ import noctiluca.network.mastodon.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.DUMMY_ACCESS_TOKEN
 import noctiluca.test.URL_SAMPLE_COM
+import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
-import noctiluca.test.mock.MockTokenDataStore
 import noctiluca.test.model.MockAuthorizedUser
 import noctiluca.timeline.domain.TestTimelineUseCaseComponent
 import noctiluca.timeline.domain.mock.MockAccountDataStore
@@ -42,7 +42,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 val useCase = buildUseCase(
                     Api.V1.Accounts.VerifyCredentials(),
                     JSON_ACCOUNT_CREDENTIAL_1,
-                    MockTokenDataStore(account.id, Domain(DOMAIN_SAMPLE_COM)),
+                    MockAuthenticationTokenDataStore(account.id, Domain(DOMAIN_SAMPLE_COM)),
                     mockAccountDataStore,
                 )
 
@@ -81,7 +81,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
                 val useCase = buildUseCase(
                     Api.V1.Accounts.VerifyCredentials(),
                     HttpStatusCode.BadRequest,
-                    MockTokenDataStore(account.id, Domain(DOMAIN_SAMPLE_COM)),
+                    MockAuthenticationTokenDataStore(account.id, Domain(DOMAIN_SAMPLE_COM)),
                     MockAccountDataStore(),
                 )
 
@@ -97,7 +97,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
         }
 
         context("when the local cache exists") {
-            val mockTokenDataStore = MockTokenDataStore(
+            val mockTokenDataStore = MockAuthenticationTokenDataStore(
                 init = listOf(MockAuthorizedUser(account.id, Domain(DOMAIN_SAMPLE_COM))),
                 getCache = { DUMMY_ACCESS_TOKEN to Domain(DOMAIN_SAMPLE_COM) },
             )
@@ -156,7 +156,7 @@ class FetchCurrentAuthorizedAccountUseCaseSpec : DescribeSpec({
 private inline fun <reified T> buildUseCase(
     resource: T,
     expected: String,
-    mockTokenDataStore: MockTokenDataStore = MockTokenDataStore(),
+    mockTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
     mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchCurrentAuthorizedAccountUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(resource, expected),
@@ -167,7 +167,7 @@ private inline fun <reified T> buildUseCase(
 private inline fun <reified T> buildUseCase(
     resource: T,
     errorStatusCode: HttpStatusCode,
-    mockTokenDataStore: MockTokenDataStore = MockTokenDataStore(),
+    mockTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
     mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchCurrentAuthorizedAccountUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(resource, errorStatusCode),

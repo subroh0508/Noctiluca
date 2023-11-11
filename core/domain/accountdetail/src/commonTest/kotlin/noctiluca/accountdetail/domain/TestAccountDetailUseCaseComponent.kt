@@ -7,8 +7,8 @@ import noctiluca.data.di.DataAccountDetailModule
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.network.mastodon.di.buildWebSocketClient
+import noctiluca.test.di.MockAuthenticationTokenDataStoreModule
 import noctiluca.test.di.MockAuthenticationTokenProviderModule
-import noctiluca.test.di.MockTokenDataStoreModule
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope
 import org.koin.core.scope.Scope
@@ -42,7 +42,7 @@ class TestAccountDetailUseCaseComponent(
             json,
         )
 
-        MockTokenDataStoreModule()
+        MockAuthenticationTokenDataStoreModule()
         MockAuthenticationTokenProviderModule()
 
         DataAccountDetailModule()

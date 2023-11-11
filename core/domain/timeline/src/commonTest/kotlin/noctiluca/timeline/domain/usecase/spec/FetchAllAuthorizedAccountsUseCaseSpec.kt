@@ -19,9 +19,9 @@ import noctiluca.network.mastodon.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.DUMMY_ACCESS_TOKEN
 import noctiluca.test.URL_SAMPLE_COM
+import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.MockHttpClientEngine.mockError
-import noctiluca.test.mock.MockTokenDataStore
 import noctiluca.test.model.MockAuthorizedUser
 import noctiluca.timeline.domain.TestTimelineUseCaseComponent
 import noctiluca.timeline.domain.mock.MockAccountDataStore
@@ -78,7 +78,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
                 val useCase = buildUseCase(
                     Api.V1.Accounts.VerifyCredentials(),
                     expected = listOf(),
-                    MockTokenDataStore(current to Domain(DOMAIN_SAMPLE_COM)),
+                    MockAuthenticationTokenDataStore(current to Domain(DOMAIN_SAMPLE_COM)),
                     MockAccountDataStore(current),
                 )
 
@@ -89,7 +89,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
 
             context("and the local cache has multiple accounts") {
                 context("and the sever returns valid response") {
-                    val mockTokenDataStore = MockTokenDataStore(
+                    val mockTokenDataStore = MockAuthenticationTokenDataStore(
                         accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
                         getCache = {
                             when (it) {
@@ -125,7 +125,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
                     }
                 }
                 context("and the sever returns error response") {
-                    val mockTokenDataStore = MockTokenDataStore(
+                    val mockTokenDataStore = MockAuthenticationTokenDataStore(
                         accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
                         getCache = {
                             when (it) {
@@ -163,7 +163,7 @@ class FetchAllAuthorizedAccountsUseCaseSpec : DescribeSpec({
 private inline fun <reified T> buildUseCase(
     resource: T,
     expected: List<Pair<String, String>>,
-    mockTokenDataStore: MockTokenDataStore = MockTokenDataStore(),
+    mockTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
     mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchAllAuthorizedAccountsUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(
@@ -189,7 +189,7 @@ private inline fun <reified T> buildUseCase(
 private inline fun <reified T> buildUseCase(
     resource: T,
     errorStatusCode: HttpStatusCode,
-    mockTokenDataStore: MockTokenDataStore = MockTokenDataStore(),
+    mockTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
     mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
 ): FetchAllAuthorizedAccountsUseCase = TestTimelineUseCaseComponent(
     MockHttpClientEngine(resource, errorStatusCode),

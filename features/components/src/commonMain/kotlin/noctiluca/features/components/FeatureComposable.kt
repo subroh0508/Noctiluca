@@ -7,8 +7,6 @@ import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.destroy
 import com.arkivanov.essenty.lifecycle.resume
-import noctiluca.features.components.di.FeatureComponent
-import org.koin.core.component.KoinComponent
 
 @Composable
 fun FeatureComposable(

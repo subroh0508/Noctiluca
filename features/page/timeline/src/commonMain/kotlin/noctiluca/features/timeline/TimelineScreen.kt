@@ -3,7 +3,6 @@ package noctiluca.features.timeline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
-import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState

@@ -2,12 +2,8 @@ package noctiluca.features.authentication.viewmodel
 
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
-import cafe.adriel.voyager.core.model.screenModelScope
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.*
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
@@ -17,17 +13,19 @@ import org.koin.core.component.get
 class MastodonInstanceListViewModel(
     coroutineScope: CoroutineScope,
     private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
-) : ViewModel(coroutineScope), ScreenModel {
-    private val mutableUiModel by lazy { MutableValue(UiModel()) }
-    private val mutableInstanceSuggests by lazy {
-        MutableValue<LoadState>(LoadState.Initial).also {
-            it.subscribe { loadState ->
-                mutableUiModel.value = uiModel.value.copy(suggests = loadState)
-            }
-        }
-    }
+) : ViewModel(coroutineScope) {
+    private val instanceSuggests by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
+    private val query by lazy { MutableStateFlow("") }
 
-    val uiModel: Value<UiModel> = mutableUiModel
+    val uiModel = combine(
+        instanceSuggests,
+        query,
+    ) { suggests, query -> UiModel(query, suggests) }
+        .stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = UiModel(),
+        )
 
     fun search(query: String) {
         val prevQuery = uiModel.value.query
@@ -36,19 +34,19 @@ class MastodonInstanceListViewModel(
             return
         }
 
-        mutableUiModel.value = uiModel.value.copy(query = query)
+        this.query.value = query
         if (query.isBlank()) {
-            mutableInstanceSuggests.value = LoadState.Initial
+            instanceSuggests.value = LoadState.Initial
             return
         }
 
-        val job = screenModelScope.launch(start = CoroutineStart.LAZY) {
+        val job = launchLazy {
             runCatching { searchMastodonInstancesUseCase.execute(query) }
-                .onSuccess { mutableInstanceSuggests.value = LoadState.Loaded(it) }
-                .onFailure { mutableInstanceSuggests.value = LoadState.Error(it) }
+                .onSuccess { instanceSuggests.value = LoadState.Loaded(it) }
+                .onFailure { instanceSuggests.value = LoadState.Error(it) }
         }
 
-        mutableInstanceSuggests.value = LoadState.Loading(job)
+        instanceSuggests.value = LoadState.Loading(job)
         job.start()
     }
 
@@ -58,8 +56,6 @@ class MastodonInstanceListViewModel(
     ) : ScreenModel
 
     companion object Provider {
-        private const val UI_MODEL_KEEPER = "MastodonInstanceListViewModel.UiModel"
-
         @Composable
         operator fun invoke(
             koinComponent: KoinComponent,

@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
 import noctiluca.features.navigation.redirectToSignIn
 
+// @see: https://github.com/adrielcafe/voyager/issues/149
 @Composable
 actual fun HandleDeepLink() {
     val navigator = LocalNavigator.current

@@ -3,10 +3,10 @@ package noctiluca.features.authentication.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
 import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
 import noctiluca.features.authentication.getString
@@ -27,21 +27,21 @@ class AuthorizeViewModel private constructor(
     private val requestRequestAccessTokenUseCase: RequestAccessTokenUseCase,
     coroutineScope: CoroutineScope,
 ) : ViewModel(coroutineScope) {
-    private val authorizationLoadState by lazy { MutableValue<Event>(Event.Initial) }
+    private val mutableEvent by lazy { MutableStateFlow<Event>(Event.Initial) }
 
-    val event: Value<Event> = authorizationLoadState
-    val isFetchingAccessToken get() = authorizationLoadState.value.isFetchingAccessToken
+    val event: StateFlow<Event> = mutableEvent
+    val isFetchingAccessToken get() = mutableEvent.value.isFetchingAccessToken
 
     fun requestAuthorize(instance: Instance) {
         val domain = Domain(instance.domain)
 
         val job = launchLazy {
             runCatching { requestAppCredentialUseCase.execute(domain, clientName, redirectUri) }
-                .onSuccess { authorizationLoadState.value = Event.OpeningBrowser(it) }
-                .onFailure { authorizationLoadState.value = Event.Error(it) }
+                .onSuccess { mutableEvent.value = Event.OpeningBrowser(it) }
+                .onFailure { mutableEvent.value = Event.Error(it) }
         }
 
-        authorizationLoadState.value = Event.Loading(job)
+        mutableEvent.value = Event.Loading(job)
         job.start()
     }
 
@@ -49,12 +49,12 @@ class AuthorizeViewModel private constructor(
         val code = result?.getCodeOrNull()
         val error = result?.getErrorOrNull()
 
-        if (authorizationLoadState.value !is Event.OpeningBrowser) {
+        if (mutableEvent.value !is Event.OpeningBrowser) {
             return
         }
 
         if (code == null) {
-            authorizationLoadState.value = error?.let(Event::Error) ?: Event.Initial
+            mutableEvent.value = error?.let(Event::Error) ?: Event.Initial
             return
         }
 
@@ -62,17 +62,16 @@ class AuthorizeViewModel private constructor(
             runCatching { requestRequestAccessTokenUseCase.execute(code, redirectUri) }
                 .onSuccess {
                     if (it != null) {
-                        authorizationLoadState.value = Event.NavigatingToTimelines
-                        // navigator?.navigateToTimelines()
+                        mutableEvent.value = Event.NavigatingToTimelines
                         return@onSuccess
                     }
 
-                    authorizationLoadState.value = Event.Error(UnknownException)
+                    mutableEvent.value = Event.Error(UnknownException)
                 }
-                .onFailure { authorizationLoadState.value = Event.Error(it) }
+                .onFailure { mutableEvent.value = Event.Error(it) }
         }
 
-        authorizationLoadState.value = Event.Loading(job)
+        mutableEvent.value = Event.Loading(job)
         job.start()
     }
 

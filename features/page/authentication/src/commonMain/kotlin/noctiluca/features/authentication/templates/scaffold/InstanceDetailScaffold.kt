@@ -6,7 +6,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.navigator.LocalNavigator
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
 import noctiluca.features.authentication.organisms.tab.InstancesTab
@@ -39,7 +38,7 @@ internal fun InstanceDetailScaffold(
 ) {
     LaunchedEffect(viewModel.domain) { viewModel.load() }
 
-    val uiModel by viewModel.uiModel.subscribeAsState()
+    val uiModel by viewModel.uiModel.collectAsState()
     val tabbedScrollState = rememberTabbedInstanceDetailState(uiModel.instance.getValueOrNull())
 
     SnackbarForAuthorizationError(authorizeResult)

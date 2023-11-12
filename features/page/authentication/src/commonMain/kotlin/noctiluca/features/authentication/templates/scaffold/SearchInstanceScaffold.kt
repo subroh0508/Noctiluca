@@ -7,7 +7,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.MastodonInstanceDetailScreen
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
@@ -24,7 +23,7 @@ internal fun SearchInstanceScaffold(
     viewModel: MastodonInstanceListViewModel,
 ) {
     val navigator = LocalNavigator.current
-    val uiModel by viewModel.uiModel.subscribeAsState()
+    val uiModel by viewModel.uiModel.collectAsState()
 
     println(uiModel.suggests)
     Scaffold(

@@ -2,8 +2,8 @@ package noctiluca.features.authentication.templates.scaffold
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.components.utils.openBrowser
@@ -18,7 +18,7 @@ fun HandleAuthorize(
         viewModel.fetchAccessToken(authorizeResult)
     }
 
-    val event by viewModel.event.subscribeAsState()
+    val event by viewModel.event.collectAsState()
 
     HandleEvent(event)
 }

@@ -3,9 +3,11 @@ package noctiluca.features.authentication.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
 import noctiluca.features.components.ViewModel
@@ -21,23 +23,18 @@ class MastodonInstanceDetailViewModel private constructor(
     private val fetchLocalTimelineUseCase: FetchLocalTimelineUseCase,
     coroutineScope: CoroutineScope,
 ) : ViewModel(coroutineScope) {
-    private val mutableUiModel by lazy { MutableValue(UiModel()) }
-    private val instanceLoadState by lazy {
-        MutableValue<LoadState>(LoadState.Initial).also {
-            it.subscribe { loadState ->
-                mutableUiModel.value = uiModel.value.copy(instance = loadState)
-            }
-        }
-    }
-    private val statuses by lazy {
-        MutableValue(listOf<Status>()).also {
-            it.subscribe { statuses ->
-                mutableUiModel.value = uiModel.value.copy(statuses = statuses)
-            }
-        }
-    }
+    private val instanceLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
+    private val statuses by lazy { MutableStateFlow(listOf<Status>()) }
 
-    val uiModel: Value<UiModel> = mutableUiModel
+    val uiModel = combine(
+        instanceLoadState,
+        statuses,
+    ) { instance, statuses -> UiModel(instance, statuses) }
+        .stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = UiModel(),
+        )
 
     fun load() {
         loadInstanceDetail()

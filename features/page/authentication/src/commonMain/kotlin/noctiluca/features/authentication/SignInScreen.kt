@@ -3,7 +3,6 @@ package noctiluca.features.authentication
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
-import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.Navigator
@@ -18,7 +17,6 @@ import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewMod
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
 import noctiluca.features.navigation.SignInScreen
-import org.koin.core.component.get
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
@@ -41,10 +39,7 @@ internal data object MastodonInstanceListScreen : Screen {
     @Composable
     override fun Content() = SignInFeature {
         val component = remember { SignInComponent() }
-        val coroutineScope = rememberCoroutineScope()
-        val viewModel = rememberScreenModel {
-            MastodonInstanceListViewModel(coroutineScope, component.get())
-        }
+        val viewModel = MastodonInstanceListViewModel.Provider(component)
 
         SearchInstanceScaffold(viewModel)
     }

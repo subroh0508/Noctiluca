@@ -99,7 +99,7 @@ private fun Fallback(
         supporting = { CardSupporting(error.description()) },
         actions = {
             Button(
-                onClick = { navigator?.parent?.pop() },
+                onClick = { navigator?.pop() },
             ) {
                 Text(getCommonString().back)
             }

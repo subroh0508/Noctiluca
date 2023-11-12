@@ -33,7 +33,7 @@ internal fun InstanceDetailTopAppBar(
         },
         onBackPressed = {
             job?.cancel()
-            navigator?.parent?.pop()
+            navigator?.pop()
         },
         scrollBehavior = scrollBehavior,
     )

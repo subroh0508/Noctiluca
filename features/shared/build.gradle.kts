@@ -6,6 +6,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(project(":core:data"))
                 implementation(project(":core:model"))
                 implementation(project(":features:components"))
                 implementation(project(":features:navigation"))

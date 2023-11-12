@@ -6,6 +6,7 @@ import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.HttpException
 import noctiluca.model.HttpUnauthorizedException
 import noctiluca.network.mastodon.AuthenticationTokenProvider
@@ -53,15 +54,10 @@ abstract class AbstractMastodonApiClient(
         accessToken: String? = null,
         skipAuthorization: Boolean = false,
     ) {
-        val token = accessToken ?: getCurrentAccessToken()
-        val host = domain ?: getCurrentDomain()
+        host = domain ?: getCurrentDomain()
 
-        if (host != null) {
-            this.host = host
-        }
-
-        if (token != null && !skipAuthorization) {
-            bearerAuth(token)
+        if (!skipAuthorization) {
+            bearerAuth(accessToken ?: getCurrentAccessToken())
         }
     }
 
@@ -78,6 +74,8 @@ abstract class AbstractMastodonApiClient(
         throw e
     }
 
-    private suspend fun getCurrentAccessToken() = token.getCurrentAccessToken()
-    private suspend fun getCurrentDomain() = token.getCurrentDomain()
+    private suspend fun getCurrentAccessToken() =
+        token.getCurrentAccessToken() ?: throw AuthorizedTokenNotFoundException
+
+    private suspend fun getCurrentDomain() = token.getCurrentDomain() ?: throw AuthorizedTokenNotFoundException
 }

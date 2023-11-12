@@ -3,8 +3,12 @@ package noctiluca.features.timeline
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
+import cafe.adriel.voyager.core.registry.ScreenProvider
+import cafe.adriel.voyager.core.registry.screenModule
+import cafe.adriel.voyager.core.screen.Screen
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.components.AuthorizedFeatureComposable
+import noctiluca.features.navigation.TimelineScreen
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
@@ -13,6 +17,29 @@ import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 
 internal val LocalNavigation = compositionLocalOf<TimelineNavigator.Screen?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
+
+val featureTimelineScreenModule = screenModule {
+    register<TimelineScreen.Timelines> {
+        TimelinesScreen
+    }
+    register<TimelineScreen.Toot> {
+        TootScreen
+    }
+}
+
+data object TimelinesScreen : Screen {
+    @Composable
+    override fun Content() {
+        Text("TimelineScreen")
+    }
+}
+
+data object TootScreen : Screen {
+    @Composable
+    override fun Content() {
+        Text("TootScreen")
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

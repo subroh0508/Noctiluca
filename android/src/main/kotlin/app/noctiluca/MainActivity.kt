@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.util.Consumer
+import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
@@ -24,7 +25,10 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             NoctilucaTheme {
-                SignInScreen { HandleOnNewIntent(it) }
+                Navigator(MastodonInstanceListScreen) {
+                    CurrentScreen()
+                    HandleOnNewIntent(it)
+                }
             }
         }
     }

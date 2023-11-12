@@ -3,14 +3,12 @@ package noctiluca.features.authentication
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
-import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.CurrentScreen
-import cafe.adriel.voyager.navigator.Navigator
 import com.arkivanov.decompose.ComponentContext
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
+import noctiluca.features.authentication.model.buildAuthorizeResult
 import noctiluca.features.authentication.templates.scaffold.HandleAuthorize
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
@@ -19,8 +17,8 @@ import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewMod
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.FeatureComposable
 import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
+import noctiluca.features.navigation.SignInScreen
 
-internal val LocalNavigator = compositionLocalOf<SignInNavigator.Screen?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
 
@@ -31,30 +29,12 @@ val featureSignInScreenModule = screenModule {
     register<SignInScreen.MastodonInstanceDetail> { provider ->
         MastodonInstanceDetailScreen(
             provider.domain,
-            provider.authorizeResult,
+            buildAuthorizeResult(provider),
         )
     }
 }
 
-sealed class SignInScreen : ScreenProvider {
-    object MastodonInstanceList : SignInScreen()
-    data class MastodonInstanceDetail(
-        val domain: String,
-        val authorizeResult: AuthorizeResult? = null,
-    ) : SignInScreen()
-
-    companion object {
-        @Composable
-        operator fun invoke(
-            handle: @Composable (Navigator) -> Unit,
-        ) = Navigator(MastodonInstanceListScreen) {
-            CurrentScreen()
-            handle(it)
-        }
-    }
-}
-
-internal object MastodonInstanceListScreen : Screen {
+data object MastodonInstanceListScreen : Screen {
     @Composable
     override fun Content() {
         val component = SignInComponent()

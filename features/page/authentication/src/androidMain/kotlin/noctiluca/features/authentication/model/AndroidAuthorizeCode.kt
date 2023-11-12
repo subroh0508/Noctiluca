@@ -3,6 +3,11 @@ package noctiluca.features.authentication.model
 import noctiluca.features.authentication.model.AuthorizeResult.Companion.QUERY_CODE
 import noctiluca.features.authentication.model.AuthorizeResult.Companion.QUERY_ERROR
 import noctiluca.features.authentication.model.AuthorizeResult.Companion.QUERY_ERROR_DESCRIPTION
+import noctiluca.features.navigation.SignInScreen
+
+actual fun buildAuthorizeResult(
+    provider: SignInScreen.MastodonInstanceDetail
+) = AuthorizeResult(provider.query)
 
 private val QUERY_CODE_PATTERN = """$QUERY_CODE=([^&]*)""".toRegex()
 private val QUERY_ERROR_PATTERN = """$QUERY_ERROR=([^&]*)""".toRegex()

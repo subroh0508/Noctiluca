@@ -9,6 +9,7 @@ import noctiluca.data.di.DataModule
 import noctiluca.datastore.di.DataStoreModule
 import noctiluca.features.authentication.featureSignInScreenModule
 import noctiluca.features.components.di.ImageLoaderModule
+import noctiluca.features.timeline.featureTimelineScreenModule
 import noctiluca.network.authentication.di.AuthenticationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
 import noctiluca.network.mastodon.di.MastodonApiModule
@@ -49,6 +50,7 @@ class NoctilucaApplication : Application() {
 
         ScreenRegistry {
             featureSignInScreenModule()
+            featureTimelineScreenModule()
         }
     }
 

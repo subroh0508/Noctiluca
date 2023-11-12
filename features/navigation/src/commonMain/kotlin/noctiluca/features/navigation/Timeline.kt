@@ -15,5 +15,5 @@ fun navigateToTimelines() {
     val navigator = LocalNavigator.current
     val timelines = rememberScreen(TimelineScreen.Timelines)
 
-    navigator?.push(timelines)
+    navigator?.replaceAll(timelines)
 }

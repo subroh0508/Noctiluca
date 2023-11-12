@@ -6,10 +6,6 @@ import app.noctiluca.navigation.*
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.accountdetail.AccountDetailNavigator
 import noctiluca.features.accountdetail.AccountDetailScreen
-import noctiluca.features.authentication.SignInNavigator
-import noctiluca.features.authentication.SignInScreen
-import noctiluca.features.authentication.model.AuthorizeResult
-import noctiluca.features.authentication.model.invoke
 import noctiluca.features.timeline.TimelineNavigator
 import noctiluca.features.timeline.TimelineScreen
 

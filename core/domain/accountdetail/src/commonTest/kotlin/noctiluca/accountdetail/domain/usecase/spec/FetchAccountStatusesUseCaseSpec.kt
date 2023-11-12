@@ -5,7 +5,6 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
 import io.kotest.matchers.should
 import io.ktor.client.engine.mock.*
-import io.ktor.client.plugins.*
 import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.datetime.TimeZone
@@ -15,6 +14,7 @@ import noctiluca.accountdetail.domain.TestAccountDetailUseCaseComponent
 import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.myAccount
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
+import noctiluca.model.HttpUnauthorizedException
 import noctiluca.model.StatusId
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
@@ -170,8 +170,8 @@ class FetchAccountStatusesUseCaseSpec : DescribeSpec({
                     .build(),
             )
 
-            it("raises ClientRequestException") {
-                shouldThrowExactly<ClientRequestException> {
+            it("raises HttpUnauthorizedException") {
+                shouldThrowExactly<HttpUnauthorizedException> {
                     runBlocking {
                         testCase.execute(myAccount.id, StatusesQuery.Default())
                     }

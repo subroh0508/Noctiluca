@@ -14,6 +14,7 @@ import noctiluca.authentication.domain.TestAuthenticationUseCaseComponent
 import noctiluca.authentication.domain.mock.MockAppCredentialDataStore
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 import noctiluca.authentication.domain.usecase.json.*
+import noctiluca.model.HttpException
 import noctiluca.model.authentication.Instance
 import noctiluca.network.mastodon.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
@@ -49,8 +50,8 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
                     .build(),
             )
 
-            it("raises ClientRequestException") {
-                shouldThrowExactly<ClientRequestException> {
+            it("raises HttpException") {
+                shouldThrowExactly<HttpException> {
                     runBlocking { useCase.execute(DOMAIN_SAMPLE_COM) }
                 }
             }
@@ -88,8 +89,8 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
                         .build(),
                 )
 
-                it("raises ClientRequestException") {
-                    shouldThrowExactly<ClientRequestException> {
+                it("raises HttpException") {
+                    shouldThrowExactly<HttpException> {
                         runBlocking { useCase.execute(query) }
                     }
                 }
@@ -121,8 +122,8 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
                     .build(),
             )
 
-            it("raises ClientRequestException") {
-                shouldThrowExactly<ClientRequestException> {
+            it("raises HttpException") {
+                shouldThrowExactly<HttpException> {
                     runBlocking { useCase.execute(DOMAIN_V3_INSTANCE) }
                 }
             }
@@ -160,8 +161,8 @@ class SearchMastodonInstancesUseCaseSpec : DescribeSpec({
                         .build(),
                 )
 
-                it("raises ClientRequestException") {
-                    shouldThrowExactly<ClientRequestException> {
+                it("raises HttpException") {
+                    shouldThrowExactly<HttpException> {
                         runBlocking { useCase.execute(query) }
                     }
                 }

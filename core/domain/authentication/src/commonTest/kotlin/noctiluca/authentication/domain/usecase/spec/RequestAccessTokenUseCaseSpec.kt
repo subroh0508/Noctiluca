@@ -20,6 +20,7 @@ import noctiluca.datastore.AppCredentialDataStore
 import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
+import noctiluca.model.HttpException
 import noctiluca.model.Uri
 import noctiluca.model.authentication.AppCredential
 import noctiluca.network.authentication.OAuth
@@ -104,8 +105,8 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
                 mockAuthenticationTokenDataStore,
             )
 
-            it("raises ClientRequestException") {
-                shouldThrowExactly<ClientRequestException> {
+            it("raises HttpException") {
+                shouldThrowExactly<HttpException> {
                     runBlocking {
                         testCase.execute(
                             TEST_CODE,

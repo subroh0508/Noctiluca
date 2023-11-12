@@ -12,13 +12,22 @@ import noctiluca.model.HttpUnauthorizedException
 import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class AuthorizedViewModel(
-    private val authorizedUserRepository: AuthorizedUserRepository,
+    protected val authorizedUserRepository: AuthorizedUserRepository,
     coroutineScope: CoroutineScope,
 ) : ViewModel(coroutineScope) {
     enum class Event { OK, REOPEN, SIGN_IN }
 
     private val mutableEvent by lazy { MutableStateFlow(Event.OK) }
-    private val exceptionHandler = CoroutineExceptionHandler { _, e ->
+
+    internal val event: StateFlow<Event> = mutableEvent
+
+    protected inline fun <R> runCatchingWithAuth(
+        block: () -> R,
+    ) = runCatching(block).apply {
+        exceptionOrNull()?.let { handleException(it) }
+    }
+
+    protected fun handleException(e: Throwable) {
         e.printStackTrace()
 
         when (e) {
@@ -26,24 +35,6 @@ abstract class AuthorizedViewModel(
             is AuthorizedTokenNotFoundException -> requestSignIn()
         }
     }
-
-    internal val event: StateFlow<Event> = mutableEvent
-
-    protected fun launch(
-        start: CoroutineStart,
-        block: suspend CoroutineScope.() -> Unit
-    ) = launch(
-        exceptionHandler,
-        start,
-        block,
-    )
-
-    protected fun launchLazy(
-        block: suspend CoroutineScope.() -> Unit,
-    ) = launchLazy(
-        exceptionHandler,
-        block,
-    )
 
     private fun expireCurrentToken() {
         launch(EmptyCoroutineContext) {

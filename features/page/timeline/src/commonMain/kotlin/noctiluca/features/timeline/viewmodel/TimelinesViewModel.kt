@@ -5,10 +5,9 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import noctiluca.datastore.AuthenticationTokenDataStore
-import noctiluca.features.components.AuthorizedViewModel
+import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.components.LocalCoroutineExceptionHandler
-import noctiluca.features.components.UnauthorizedExceptionHandler
+import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.timeline.TimelineNavigator
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
@@ -17,27 +16,27 @@ import noctiluca.model.timeline.StreamEvent
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.*
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel private constructor(
-    private val dataStore: AuthenticationTokenDataStore,
     private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,
     private val fetchAllAuthorizedAccountsUseCase: FetchAllAuthorizedAccountsUseCase,
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
     private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
+    authorizedUserRepository: AuthorizedUserRepository,
     coroutineScope: CoroutineScope,
-    exceptionHandler: UnauthorizedExceptionHandler,
-) : AuthorizedViewModel(coroutineScope, exceptionHandler) {
+) : AuthorizedViewModel(authorizedUserRepository, coroutineScope) {
     private val mutableUiModel by lazy { MutableValue(UiModel()) }
 
     val uiModel: Value<UiModel> = mutableUiModel
 
     fun switch(account: Account) {
         launch {
-            dataStore.setCurrent(account.id)
-            mutableUiModel.value = UiModel()
+            authorizedUserRepository.switch(account.id)
+            reopen()
         }
     }
 
@@ -92,7 +91,6 @@ class TimelinesViewModel private constructor(
         val job = launchLazy {
             runCatchingWithAuth { updateTimelineUseCase.execute(timeline) }
                 .onSuccess { setTimeline(index, it) }
-                .onFailure { it.printStackTrace() }
         }
 
         setJob(index, job)
@@ -209,21 +207,19 @@ class TimelinesViewModel private constructor(
 
         @Composable
         operator fun invoke(
-            context: TimelineNavigator.Screen,
+            component: KoinComponent,
         ): TimelinesViewModel {
             val coroutineScope = rememberCoroutineScope()
-            val handler = LocalCoroutineExceptionHandler.current
 
             return remember {
                 TimelinesViewModel(
-                    context.get(),
-                    context.get(),
-                    context.get(),
-                    context.get(),
-                    context.get(),
-                    context.get(),
+                    component.get(),
+                    component.get(),
+                    component.get(),
+                    component.get(),
+                    component.get(),
+                    component.get(),
                     coroutineScope = coroutineScope,
-                    exceptionHandler = handler,
                 )
             }
         }

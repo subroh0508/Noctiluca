@@ -3,7 +3,12 @@ package noctiluca.features.authentication
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import cafe.adriel.voyager.core.registry.ScreenProvider
+import cafe.adriel.voyager.core.registry.screenModule
+import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.Navigator
+import com.arkivanov.decompose.ComponentContext
+import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
@@ -16,40 +21,68 @@ internal val LocalNavigator = compositionLocalOf<SignInNavigator.Screen?> { null
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
 
-@Composable
-fun SignInScreen(
-    domain: String?,
-    authorizeResult: AuthorizeResult?,
-    screen: SignInNavigator.Screen,
-) = SignInFeature(
-    authorizeResult,
-    screen,
-) { page ->
-    when (page) {
-        is SignInNavigator.Screen.Child.MastodonInstanceList -> SearchInstanceScaffold(
-            MastodonInstanceListViewModel.Provider(screen),
+val featureSignInScreenModule = screenModule {
+    register<SignInScreen.MastodonInstanceList> {
+        MastodonInstanceListScreen
+    }
+    register<SignInScreen.MastodonInstanceDetail> { provider ->
+        MastodonInstanceDetailScreen(
+            provider.domain,
+            provider.authorizeResult,
         )
+    }
+}
 
-        is SignInNavigator.Screen.Child.MastodonInstanceDetail -> InstanceDetailScaffold(
-            MastodonInstanceDetailViewModel.Provider(domain ?: page.domain, screen)
-        )
+sealed class SignInScreen : ScreenProvider {
+    object MastodonInstanceList : SignInScreen()
+    data class MastodonInstanceDetail(
+        val domain: String,
+        val authorizeResult: AuthorizeResult? = null,
+    ) : SignInScreen()
+
+    companion object {
+        @Composable
+        operator fun invoke() = Navigator(MastodonInstanceListScreen)
+    }
+}
+
+internal object MastodonInstanceListScreen : Screen {
+    @Composable
+    override fun Content() {
+        SignInFeature(authorizeResult = null) { context ->
+            SearchInstanceScaffold(
+                MastodonInstanceListViewModel.Provider(
+                    SignInComponent(),
+                    context,
+                ),
+            )
+        }
+    }
+}
+
+internal data class MastodonInstanceDetailScreen(
+    private val domain: String,
+    private val authorizeResult: AuthorizeResult? = null,
+) : Screen {
+    @Composable
+    override fun Content() {
+        SignInFeature(authorizeResult = authorizeResult) {
+            InstanceDetailScaffold(
+                MastodonInstanceDetailViewModel.Provider(
+                    domain,
+                    SignInComponent(),
+                )
+            )
+        }
     }
 }
 
 @Composable
 private fun SignInFeature(
     authorizeResult: AuthorizeResult?,
-    screen: SignInNavigator.Screen,
-    content: @Composable (SignInNavigator.Screen.Child) -> Unit,
-) = FeatureComposable(context = screen) {
-    CompositionLocalProvider(
-        LocalResources provides Resources(Locale.current.language),
-        LocalNavigator provides screen,
-        LocalAuthorizeResult provides authorizeResult,
-        LocalSnackbarHostState provides remember { SnackbarHostState() },
-    ) {
-        val page by screen.childStack.subscribeAsState()
-
-        content(page.active.instance)
-    }
-}
+    content: @Composable (ComponentContext) -> Unit,
+) = CompositionLocalProvider(
+    LocalResources provides Resources(Locale.current.language),
+    LocalAuthorizeResult provides authorizeResult,
+    LocalSnackbarHostState provides remember { SnackbarHostState() },
+) { FeatureComposable(content) }

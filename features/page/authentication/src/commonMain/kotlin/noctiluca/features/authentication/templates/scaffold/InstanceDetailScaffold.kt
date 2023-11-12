@@ -5,9 +5,9 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
+import cafe.adriel.voyager.navigator.LocalNavigator
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.LocalAuthorizeResult
-import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
 import noctiluca.features.authentication.organisms.tab.InstancesTab
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
@@ -99,7 +99,7 @@ private fun Fallback(
         supporting = { CardSupporting(error.description()) },
         actions = {
             Button(
-                onClick = { navigator?.backPressed() },
+                onClick = { navigator?.parent?.pop() },
             ) {
                 Text(getCommonString().back)
             }

@@ -4,7 +4,7 @@ import androidx.compose.runtime.Composable
 import kotlinx.coroutines.Job
 
 sealed class LoadState {
-    object Initial : LoadState()
+    data object Initial : LoadState()
     data class Loaded<T : Any>(val value: T) : LoadState()
     data class Error(val cause: Throwable) : LoadState()
     class Loading(val job: Job) : LoadState()

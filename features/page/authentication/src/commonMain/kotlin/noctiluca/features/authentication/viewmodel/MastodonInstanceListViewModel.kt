@@ -1,24 +1,24 @@
 package noctiluca.features.authentication.viewmodel
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.DefaultComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.instancekeeper.InstanceKeeper
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
-import noctiluca.features.authentication.SignInNavigator
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 class MastodonInstanceListViewModel private constructor(
-    private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
     coroutineScope: CoroutineScope,
-    screen: SignInNavigator.Screen,
-) : ViewModel(coroutineScope), ComponentContext by screen {
+    componentContext: ComponentContext,
+    private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
+) : ViewModel(coroutineScope), ComponentContext by componentContext {
     private val mutableUiModel by lazy {
         MutableValue(cachedUiModel ?: UiModel()).also {
             it.subscribe { model ->
@@ -78,15 +78,16 @@ class MastodonInstanceListViewModel private constructor(
 
         @Composable
         operator fun invoke(
-            context: SignInNavigator.Screen,
+            koinComponent: KoinComponent,
+            context: ComponentContext,
         ): MastodonInstanceListViewModel {
             val coroutineScope = rememberCoroutineScope()
 
             return remember {
                 MastodonInstanceListViewModel(
-                    context.get(),
                     coroutineScope,
                     context,
+                    koinComponent.get(),
                 )
             }
         }

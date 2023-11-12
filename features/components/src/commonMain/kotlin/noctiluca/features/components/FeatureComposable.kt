@@ -2,8 +2,27 @@ package noctiluca.features.components
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.DefaultComponentContext
+import com.arkivanov.essenty.lifecycle.LifecycleRegistry
 import com.arkivanov.essenty.lifecycle.destroy
 import com.arkivanov.essenty.lifecycle.resume
+import noctiluca.features.components.di.FeatureComponent
+import org.koin.core.component.KoinComponent
+
+@Composable
+fun FeatureComposable(
+    content: @Composable (ComponentContext) -> Unit,
+) {
+    val lifecycleRegistry = remember { LifecycleRegistry() }
+
+    DisposableEffect(Unit) {
+        lifecycleRegistry.resume()
+        onDispose { lifecycleRegistry.destroy() }
+    }
+
+    content(DefaultComponentContext(lifecycleRegistry))
+}
 
 @Composable
 fun <T : Navigator.Screen> FeatureComposable(

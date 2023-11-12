@@ -5,8 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.Job
-import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.organisms.tab.InstanceDetailScrollState
 import noctiluca.features.components.molecules.scaffold.HeadlineText
 import noctiluca.features.components.molecules.scaffold.HeadlineTopAppBar
@@ -33,7 +33,7 @@ internal fun InstanceDetailTopAppBar(
         },
         onBackPressed = {
             job?.cancel()
-            navigator?.backPressed()
+            navigator?.parent?.pop()
         },
         scrollBehavior = scrollBehavior,
     )

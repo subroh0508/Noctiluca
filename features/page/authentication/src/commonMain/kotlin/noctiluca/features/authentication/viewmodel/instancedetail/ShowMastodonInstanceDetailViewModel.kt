@@ -1,5 +1,6 @@
 package noctiluca.features.authentication.viewmodel.instancedetail
 
+import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
@@ -10,6 +11,7 @@ import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 interface ShowMastodonInstanceDetailViewModel {
@@ -17,11 +19,11 @@ interface ShowMastodonInstanceDetailViewModel {
         operator fun invoke(
             domain: String,
             coroutineScope: CoroutineScope,
-            context: SignInNavigator.Screen,
+            koinComponent: KoinComponent,
         ): ShowMastodonInstanceDetailViewModel = Impl(
             domain,
-            context.get(),
-            context.get(),
+            koinComponent.get(),
+            koinComponent.get(),
             coroutineScope,
         )
     }

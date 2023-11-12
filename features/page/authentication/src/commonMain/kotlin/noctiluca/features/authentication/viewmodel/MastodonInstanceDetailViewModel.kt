@@ -3,6 +3,7 @@ package noctiluca.features.authentication.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import com.arkivanov.decompose.ComponentContext
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.authentication.LocalNavigator
 import noctiluca.features.authentication.SignInNavigator
@@ -12,6 +13,7 @@ import noctiluca.features.authentication.viewmodel.instancedetail.AuthorizeViewM
 import noctiluca.features.authentication.viewmodel.instancedetail.ShowMastodonInstanceDetailViewModel
 import noctiluca.features.components.ViewModel
 import noctiluca.model.Uri
+import org.koin.core.component.KoinComponent
 
 class MastodonInstanceDetailViewModel private constructor(
     val domain: String,
@@ -19,25 +21,25 @@ class MastodonInstanceDetailViewModel private constructor(
     redirectUri: Uri,
     navigator: SignInNavigator?,
     coroutineScope: CoroutineScope,
-    context: SignInNavigator.Screen,
+    koinComponent: KoinComponent,
 ) : ViewModel(coroutineScope),
     AuthorizeViewModel by AuthorizeViewModel(
         clientName,
         redirectUri,
         navigator,
         coroutineScope,
-        context,
+        koinComponent,
     ),
     ShowMastodonInstanceDetailViewModel by ShowMastodonInstanceDetailViewModel(
         domain,
         coroutineScope,
-        context,
+        koinComponent,
     ) {
     companion object Provider {
         @Composable
         operator fun invoke(
             domain: String,
-            context: SignInNavigator.Screen,
+            koinComponent: KoinComponent,
         ): MastodonInstanceDetailViewModel {
             val clientName = getString().sign_in_client_name
             val redirectUri = buildRedirectUri(domain)
@@ -51,7 +53,7 @@ class MastodonInstanceDetailViewModel private constructor(
                     redirectUri,
                     navigator,
                     coroutineScope,
-                    context,
+                    koinComponent,
                 )
             }
         }

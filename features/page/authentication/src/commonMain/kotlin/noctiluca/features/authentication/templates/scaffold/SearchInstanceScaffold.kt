@@ -6,8 +6,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import noctiluca.features.authentication.LocalNavigator
+import noctiluca.features.authentication.MastodonInstanceDetailScreen
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
@@ -38,7 +39,7 @@ internal fun SearchInstanceScaffold(
                 InstanceSuggestsList(
                     suggests,
                     onSelect = {
-                        navigator?.navigateToInstanceDetail(it.domain)
+                        navigator?.push(MastodonInstanceDetailScreen(it.domain))
                     },
                 )
             },

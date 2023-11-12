@@ -2,32 +2,62 @@ package app.noctiluca
 
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import app.noctiluca.navigation.AndroidNavigator
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.util.Consumer
+import cafe.adriel.voyager.core.registry.ScreenRegistry
+import cafe.adriel.voyager.navigator.LocalNavigator
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.collectLatest
+import noctiluca.features.authentication.*
 import noctiluca.features.authentication.R
+import noctiluca.features.authentication.model.AuthorizeResult
+import noctiluca.features.authentication.model.invoke
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {
-    private val navigator by lazy { AndroidNavigator(this) }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
             NoctilucaTheme {
-                Routing(navigator)
+                SignInScreen()
             }
+            HandleOnNewIntent()
         }
     }
 
-    override fun onNewIntent(intent: Intent?) {
-        super.onNewIntent(intent)
+    @Composable
+    fun HandleOnNewIntent() {
+        val navigator = LocalNavigator.current
+        val context = LocalContext.current
 
-        val uri = intent?.data ?: return
+        LaunchedEffect(Unit) {
+            callbackFlow<Intent> {
+                val activity = context as? ComponentActivity
+                val consumer = Consumer<Intent> { trySend(it) }
 
-        when (uri.scheme) {
-            getString(R.string.sign_in_oauth_scheme) -> navigator.redirectToSignIn(uri)
+                activity?.addOnNewIntentListener(consumer)
+                awaitClose { activity?.removeOnNewIntentListener(consumer) }
+            }.collectLatest { intent ->
+                val uri = intent.data ?: return@collectLatest
+
+                when (uri.scheme) {
+                    getString(R.string.sign_in_oauth_scheme) -> navigator?.push(
+                        ScreenRegistry.get(
+                            SignInScreen.MastodonInstanceDetail(
+                                uri.host ?: return@collectLatest,
+                                AuthorizeResult.invoke(uri.query ?: return@collectLatest),
+                            ),
+                        ),
+                    )
+                }
+            }
         }
     }
 }

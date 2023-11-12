@@ -19,11 +19,7 @@ fun Routing(navigator: AndroidNavigator) {
 
     feature.active.instance.let {
         when (it) {
-            is AndroidNavigator.Feature.SignIn -> SignInScreen(
-                it.domain,
-                AuthorizeResult(it.query),
-                SignInNavigator.Screen(navigator),
-            )
+            is AndroidNavigator.Feature.SignIn -> Unit
 
             is AndroidNavigator.Feature.Timeline -> TimelineScreen(
                 TimelineNavigator.Screen(navigator),

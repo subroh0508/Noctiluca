@@ -1,5 +1,6 @@
 package noctiluca.features.authentication.viewmodel.instancedetail
 
+import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
@@ -12,6 +13,7 @@ import noctiluca.features.components.model.LoadState
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.authentication.Instance
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 interface AuthorizeViewModel {
@@ -21,13 +23,13 @@ interface AuthorizeViewModel {
             redirectUri: Uri,
             navigator: SignInNavigator?,
             coroutineScope: CoroutineScope,
-            context: SignInNavigator.Screen,
+            koinComponent: KoinComponent,
         ): AuthorizeViewModel = Impl(
             clientName,
             redirectUri,
             navigator,
-            context.get(),
-            context.get(),
+            koinComponent.get(),
+            koinComponent.get(),
             coroutineScope,
         )
     }

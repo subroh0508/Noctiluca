@@ -5,8 +5,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
-import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
+import noctiluca.features.shared.viewmodel.ViewModel
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 

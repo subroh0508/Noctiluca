@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
-import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
+import noctiluca.features.shared.viewmodel.ViewModel
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import org.koin.core.component.KoinComponent

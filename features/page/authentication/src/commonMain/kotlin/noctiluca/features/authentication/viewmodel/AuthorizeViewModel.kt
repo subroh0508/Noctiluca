@@ -13,7 +13,7 @@ import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.UnknownException
 import noctiluca.features.authentication.model.buildRedirectUri
-import noctiluca.features.components.ViewModel
+import noctiluca.features.shared.viewmodel.ViewModel
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.authentication.Instance

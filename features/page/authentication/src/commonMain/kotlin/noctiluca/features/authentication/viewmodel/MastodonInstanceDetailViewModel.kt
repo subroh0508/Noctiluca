@@ -3,22 +3,14 @@ package noctiluca.features.authentication.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
-import noctiluca.features.authentication.LocalNavigator
-import noctiluca.features.authentication.SignInNavigator
-import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.model.buildRedirectUri
-import noctiluca.features.authentication.viewmodel.instancedetail.AuthorizeViewModel
-import noctiluca.features.authentication.viewmodel.instancedetail.ShowMastodonInstanceDetailViewModel
 import noctiluca.features.components.ViewModel
 import noctiluca.features.components.model.LoadState
 import noctiluca.model.StatusId
-import noctiluca.model.Uri
 import noctiluca.model.status.Status
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
@@ -29,7 +21,7 @@ class MastodonInstanceDetailViewModel private constructor(
     private val fetchLocalTimelineUseCase: FetchLocalTimelineUseCase,
     coroutineScope: CoroutineScope,
 ) : ViewModel(coroutineScope) {
-    private val mutableUiModel by lazy { MutableValue(ShowMastodonInstanceDetailViewModel.UiModel()) }
+    private val mutableUiModel by lazy { MutableValue(UiModel()) }
     private val instanceLoadState by lazy {
         MutableValue<LoadState>(LoadState.Initial).also {
             it.subscribe { loadState ->
@@ -45,7 +37,7 @@ class MastodonInstanceDetailViewModel private constructor(
         }
     }
 
-    val uiModel: Value<ShowMastodonInstanceDetailViewModel.UiModel> = mutableUiModel
+    val uiModel: Value<UiModel> = mutableUiModel
 
     fun load() {
         loadInstanceDetail()
@@ -83,6 +75,11 @@ class MastodonInstanceDetailViewModel private constructor(
                 .onFailure { statuses.value = listOf() }
         }
     }
+
+    data class UiModel(
+        val instance: LoadState = LoadState.Initial,
+        val statuses: List<Status> = listOf(),
+    )
 
     companion object Provider {
         @Composable

@@ -22,7 +22,7 @@ abstract class AuthorizedViewModel(
         e.printStackTrace()
 
         when (e) {
-            is HttpUnauthorizedException -> reopen()
+            is HttpUnauthorizedException -> expireCurrentToken()
             is AuthorizedTokenNotFoundException -> requestSignIn()
         }
     }
@@ -45,15 +45,19 @@ abstract class AuthorizedViewModel(
         block,
     )
 
-    private fun reopen() {
+    private fun expireCurrentToken() {
         launch(EmptyCoroutineContext) {
             runCatching { authorizedUserRepository.expireCurrent() }
-                .onSuccess { mutableEvent.value = Event.REOPEN }
+                .onSuccess { reopen() }
                 .onFailure { requestSignIn() }
         }
     }
 
-    private fun requestSignIn() {
+    protected fun reopen() {
+        mutableEvent.value = Event.REOPEN
+    }
+
+    protected fun requestSignIn() {
         mutableEvent.value = Event.SIGN_IN
     }
 }

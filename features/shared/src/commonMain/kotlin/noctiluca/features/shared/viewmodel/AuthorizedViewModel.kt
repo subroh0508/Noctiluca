@@ -1,8 +1,6 @@
 package noctiluca.features.shared.viewmodel
 
-import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import noctiluca.data.authentication.AuthorizedUserRepository

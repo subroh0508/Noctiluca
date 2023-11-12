@@ -6,9 +6,7 @@ import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import noctiluca.data.authentication.AuthorizedUserRepository
-import noctiluca.features.components.LocalCoroutineExceptionHandler
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
-import noctiluca.features.timeline.TimelineNavigator
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status

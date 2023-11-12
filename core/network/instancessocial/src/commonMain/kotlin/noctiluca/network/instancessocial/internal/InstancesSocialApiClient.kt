@@ -8,7 +8,6 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import noctiluca.model.HttpException
-import noctiluca.model.HttpUnauthorizedException
 import noctiluca.network.instancessocial.Api
 import noctiluca.network.instancessocial.InstancesSocialApi
 import noctiluca.network.instancessocial.params.GetInstancesSearch

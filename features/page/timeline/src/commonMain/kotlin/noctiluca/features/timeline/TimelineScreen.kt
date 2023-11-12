@@ -29,6 +29,9 @@ val featureTimelineScreenModule = screenModule {
     }
 }
 
+@Composable
+fun FeatureTimelineScreen() = Navigator(TimelinesScreen)
+
 data object TimelinesScreen : Screen {
     @Composable
     override fun Content() = TimelineFeature { viewModel ->

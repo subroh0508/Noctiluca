@@ -5,7 +5,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.Navigator
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildAuthorizeResult
@@ -30,9 +29,6 @@ val featureSignInScreenModule = screenModule {
         )
     }
 }
-
-@Composable
-fun FeatureSignInScreen() = Navigator(MastodonInstanceListScreen)
 
 internal data object MastodonInstanceListScreen : Screen {
     @Composable

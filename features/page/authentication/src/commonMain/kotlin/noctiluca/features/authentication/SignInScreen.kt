@@ -9,7 +9,6 @@ import cafe.adriel.voyager.navigator.Navigator
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildAuthorizeResult
-import noctiluca.features.authentication.templates.scaffold.HandleAuthorize
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel

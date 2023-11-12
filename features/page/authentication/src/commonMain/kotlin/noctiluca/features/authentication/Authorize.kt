@@ -1,4 +1,4 @@
-package noctiluca.features.authentication.templates.scaffold
+package noctiluca.features.authentication
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,11 +20,11 @@ fun HandleAuthorize(
 
     val event by viewModel.event.collectAsState()
 
-    HandleEvent(event)
+    HandleAuthorizeEvent(event)
 }
 
 @Composable
-private fun HandleEvent(
+private fun HandleAuthorizeEvent(
     event: AuthorizeViewModel.Event
 ) = when (event) {
     is AuthorizeViewModel.Event.OpeningBrowser -> openBrowser(event.uri)

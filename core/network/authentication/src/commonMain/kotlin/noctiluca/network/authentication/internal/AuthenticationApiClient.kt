@@ -6,8 +6,10 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.plugins.resources.Resources
 import io.ktor.client.request.*
+import io.ktor.client.statement.*
 import io.ktor.http.*
 import io.ktor.resources.*
+import noctiluca.model.HttpException
 import noctiluca.network.authentication.Api
 import noctiluca.network.authentication.AuthenticationApi
 import noctiluca.network.authentication.OAuth
@@ -36,9 +38,11 @@ internal class AuthenticationApiClient(
     ): Pair<NetworkAppCredential, String> {
         val request = PostApps.Request(clientName, redirectUri)
 
-        return client.post(Api.V1.Apps()) {
-            host = domain
-            setBody(request)
+        return handleResponseException {
+            client.post(Api.V1.Apps()) {
+                host = domain
+                setBody(request)
+            }
         }.body<NetworkAppCredential>().let { credential ->
             credential to buildAuthorizeUrl(domain, credential, redirectUri, request.scopes)
         }
@@ -50,17 +54,21 @@ internal class AuthenticationApiClient(
         clientSecret: String,
         redirectUri: String,
         code: String
-    ): NetworkToken = client.post(OAuth.Token()) {
-        host = domain
-        setBody(PostOauthToken.Request(clientId, clientSecret, redirectUri, code))
+    ): NetworkToken = handleResponseException {
+        client.post(OAuth.Token()) {
+            host = domain
+            setBody(PostOauthToken.Request(clientId, clientSecret, redirectUri, code))
+        }
     }.body()
 
     override suspend fun getVerifyAccountsCredentials(
         domain: String,
         accessToken: String,
-    ): GetAccountsVerifyCredential.Response = client.get(Api.V1.Accounts.VerifyCredentials()) {
-        host = domain
-        bearerAuth(accessToken)
+    ): GetAccountsVerifyCredential.Response = handleResponseException {
+        client.get(Api.V1.Accounts.VerifyCredentials()) {
+            host = domain
+            bearerAuth(accessToken)
+        }
     }.body()
 
     private fun buildAuthorizeUrl(
@@ -84,4 +92,14 @@ internal class AuthenticationApiClient(
             },
         )
     }.build().toString()
+
+    private inline fun handleResponseException(
+        block: () -> HttpResponse,
+    ) = runCatching { block() }.getOrElse { e ->
+        if (e is ResponseException) {
+            throw HttpException(e.response.status.value, e)
+        }
+
+        throw e
+    }
 }

@@ -8,21 +8,26 @@ import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.authentication.LocalAuthorizeResult
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.components.utils.openBrowser
+import noctiluca.features.navigation.navigateToTimelines
 
 @Composable
 fun HandleAuthorize(
     viewModel: AuthorizeViewModel,
 ) {
     val authorizeResult = LocalAuthorizeResult.current
-    val navigator = LocalNavigator.current
 
     LaunchedEffect(authorizeResult) { viewModel.fetchAccessToken(authorizeResult) }
 
     val event by viewModel.event.subscribeAsState()
 
-    when (event) {
-        is AuthorizeViewModel.Event.OpeningBrowser -> openBrowser((event as AuthorizeViewModel.Event.OpeningBrowser).uri)
-        is AuthorizeViewModel.Event.NavigatingToTimelines -> println("Sign In Success!") /* navigator.push() */
-        else -> Unit
-    }
+    HandleEvent(event)
+}
+
+@Composable
+private fun HandleEvent(
+    event: AuthorizeViewModel.Event
+) = when (event) {
+    is AuthorizeViewModel.Event.OpeningBrowser -> openBrowser(event.uri)
+    is AuthorizeViewModel.Event.NavigatingToTimelines -> navigateToTimelines()
+    else -> Unit
 }

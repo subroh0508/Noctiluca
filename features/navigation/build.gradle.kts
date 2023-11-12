@@ -1,5 +1,6 @@
 plugins {
     id("multiplatform-library")
+    id("org.jetbrains.compose")
 }
 
 kotlin {
@@ -7,6 +8,9 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core:model"))
+
+                implementation(compose.runtime)
+                implementation(compose.foundation)
 
                 implementation(libs.kotlinx.coroutines.core)
 

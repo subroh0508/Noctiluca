@@ -9,6 +9,7 @@ kotlin {
         named("commonMain") {
             dependencies {
                 implementation(project(":features:components"))
+                implementation(project(":features:navigation"))
                 implementation(project(":features:theme"))
             }
         }

@@ -9,15 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.util.Consumer
-import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.navigator.Navigator
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
 import noctiluca.features.authentication.*
 import noctiluca.features.authentication.R
-import noctiluca.features.authentication.model.AuthorizeResult
-import noctiluca.features.authentication.model.invoke
+import noctiluca.features.navigation.redirectToSignIn
 import noctiluca.theme.NoctilucaTheme
 
 class MainActivity : AppCompatActivity() {
@@ -47,14 +45,7 @@ class MainActivity : AppCompatActivity() {
                 val uri = intent.data ?: return@collectLatest
 
                 when (uri.scheme) {
-                    getString(R.string.sign_in_oauth_scheme) -> navigator.push(
-                        ScreenRegistry.get(
-                            SignInScreen.MastodonInstanceDetail(
-                                uri.host ?: return@collectLatest,
-                                AuthorizeResult(uri.query ?: return@collectLatest),
-                            ),
-                        ),
-                    )
+                    getString(R.string.sign_in_oauth_scheme) -> navigator.redirectToSignIn(uri)
                 }
             }
         }

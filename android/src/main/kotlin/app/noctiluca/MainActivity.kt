@@ -10,7 +10,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.util.Consumer
 import cafe.adriel.voyager.core.registry.ScreenRegistry
-import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.collectLatest
@@ -26,15 +26,14 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             NoctilucaTheme {
-                SignInScreen()
+                SignInScreen { HandleOnNewIntent(it) }
             }
-            HandleOnNewIntent()
         }
     }
 
+    // @see: https://github.com/adrielcafe/voyager/issues/149
     @Composable
-    fun HandleOnNewIntent() {
-        val navigator = LocalNavigator.current
+    fun HandleOnNewIntent(navigator: Navigator) {
         val context = LocalContext.current
 
         LaunchedEffect(Unit) {
@@ -48,11 +47,11 @@ class MainActivity : AppCompatActivity() {
                 val uri = intent.data ?: return@collectLatest
 
                 when (uri.scheme) {
-                    getString(R.string.sign_in_oauth_scheme) -> navigator?.push(
+                    getString(R.string.sign_in_oauth_scheme) -> navigator.push(
                         ScreenRegistry.get(
                             SignInScreen.MastodonInstanceDetail(
                                 uri.host ?: return@collectLatest,
-                                AuthorizeResult.invoke(uri.query ?: return@collectLatest),
+                                AuthorizeResult(uri.query ?: return@collectLatest),
                             ),
                         ),
                     )

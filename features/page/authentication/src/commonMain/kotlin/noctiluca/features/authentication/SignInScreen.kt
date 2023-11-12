@@ -6,12 +6,15 @@ import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.ScreenProvider
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.CurrentScreen
 import cafe.adriel.voyager.navigator.Navigator
 import com.arkivanov.decompose.ComponentContext
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
+import noctiluca.features.authentication.templates.scaffold.HandleAuthorize
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
+import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.components.FeatureComposable
@@ -42,17 +45,24 @@ sealed class SignInScreen : ScreenProvider {
 
     companion object {
         @Composable
-        operator fun invoke() = Navigator(MastodonInstanceListScreen)
+        operator fun invoke(
+            handle: @Composable (Navigator) -> Unit,
+        ) = Navigator(MastodonInstanceListScreen) {
+            CurrentScreen()
+            handle(it)
+        }
     }
 }
 
 internal object MastodonInstanceListScreen : Screen {
     @Composable
     override fun Content() {
+        val component = SignInComponent()
+
         SignInFeature(authorizeResult = null) { context ->
             SearchInstanceScaffold(
                 MastodonInstanceListViewModel.Provider(
-                    SignInComponent(),
+                    component,
                     context,
                 ),
             )
@@ -66,13 +76,23 @@ internal data class MastodonInstanceDetailScreen(
 ) : Screen {
     @Composable
     override fun Content() {
+        val component = SignInComponent()
+
         SignInFeature(authorizeResult = authorizeResult) {
+            val authorizeViewModel = AuthorizeViewModel.Provider(
+                domain,
+                component,
+            )
+
+            HandleAuthorize(authorizeViewModel)
+
             InstanceDetailScaffold(
                 MastodonInstanceDetailViewModel.Provider(
                     domain,
-                    SignInComponent(),
-                )
-            )
+                    component,
+                ),
+                authorizeViewModel.isFetchingAccessToken,
+            ) { authorizeViewModel.requestAuthorize(it) }
         }
     }
 }

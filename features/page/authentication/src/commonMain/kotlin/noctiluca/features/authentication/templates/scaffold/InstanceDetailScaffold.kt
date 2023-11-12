@@ -33,10 +33,11 @@ import noctiluca.model.authentication.Instance
 @Composable
 internal fun InstanceDetailScaffold(
     viewModel: MastodonInstanceDetailViewModel,
+    isFetchingAccessToken: Boolean,
+    onClickAuthorize: (Instance) -> Unit,
 ) {
     val authorizeResult = LocalAuthorizeResult.current
 
-    LaunchedEffect(authorizeResult) { viewModel.fetchAccessToken(authorizeResult) }
     LaunchedEffect(viewModel.domain) { viewModel.load() }
 
     val uiModel by viewModel.uiModel.subscribeAsState()
@@ -61,9 +62,10 @@ internal fun InstanceDetailScaffold(
         bottomBar = { instance, horizontalPadding ->
             InstanceDetailActionButtons(
                 instance,
-                authorizeResult?.getCodeOrNull() != null && viewModel.loading,
+                authorizeResult?.getCodeOrNull() != null && isFetchingAccessToken,
                 horizontalPadding,
-            ) { viewModel.requestAuthorize(it) }
+                onClickAuthorize,
+            )
         },
         tabs = { InstanceDetailTabs(tabbedScrollState) },
         fallback = { error, paddingValues ->

@@ -3,9 +3,10 @@ package noctiluca.features.authentication
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
+import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
-import com.arkivanov.decompose.ComponentContext
+import cafe.adriel.voyager.navigator.Navigator
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildAuthorizeResult
@@ -15,12 +16,11 @@ import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffo
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
-import noctiluca.features.components.FeatureComposable
 import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
 import noctiluca.features.navigation.SignInScreen
+import org.koin.core.component.get
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
-internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
 
 val featureSignInScreenModule = screenModule {
     register<SignInScreen.MastodonInstanceList> {
@@ -34,19 +34,19 @@ val featureSignInScreenModule = screenModule {
     }
 }
 
-data object MastodonInstanceListScreen : Screen {
-    @Composable
-    override fun Content() {
-        val component = SignInComponent()
+@Composable
+fun FeatureSignInScreen() = Navigator(MastodonInstanceListScreen)
 
-        SignInFeature(authorizeResult = null) { context ->
-            SearchInstanceScaffold(
-                MastodonInstanceListViewModel.Provider(
-                    component,
-                    context,
-                ),
-            )
+internal data object MastodonInstanceListScreen : Screen {
+    @Composable
+    override fun Content() = SignInFeature {
+        val component = remember { SignInComponent() }
+        val coroutineScope = rememberCoroutineScope()
+        val viewModel = rememberScreenModel {
+            MastodonInstanceListViewModel(coroutineScope, component.get())
         }
+
+        SearchInstanceScaffold(viewModel)
     }
 }
 
@@ -55,34 +55,32 @@ internal data class MastodonInstanceDetailScreen(
     private val authorizeResult: AuthorizeResult? = null,
 ) : Screen {
     @Composable
-    override fun Content() {
-        val component = SignInComponent()
+    override fun Content() = SignInFeature {
+        val component = remember { SignInComponent() }
 
-        SignInFeature(authorizeResult = authorizeResult) {
-            val authorizeViewModel = AuthorizeViewModel.Provider(
+        val authorizeViewModel = AuthorizeViewModel.Provider(
+            domain,
+            component,
+        )
+
+        HandleAuthorize(authorizeResult, authorizeViewModel)
+        HandleDeepLink()
+
+        InstanceDetailScaffold(
+            MastodonInstanceDetailViewModel.Provider(
                 domain,
                 component,
-            )
-
-            HandleAuthorize(authorizeViewModel)
-
-            InstanceDetailScaffold(
-                MastodonInstanceDetailViewModel.Provider(
-                    domain,
-                    component,
-                ),
-                authorizeViewModel.isFetchingAccessToken,
-            ) { authorizeViewModel.requestAuthorize(it) }
-        }
+            ),
+            authorizeResult,
+            authorizeViewModel.isFetchingAccessToken,
+        ) { authorizeViewModel.requestAuthorize(it) }
     }
 }
 
 @Composable
 private fun SignInFeature(
-    authorizeResult: AuthorizeResult?,
-    content: @Composable (ComponentContext) -> Unit,
+    content: @Composable () -> Unit,
 ) = CompositionLocalProvider(
     LocalResources provides Resources(Locale.current.language),
-    LocalAuthorizeResult provides authorizeResult,
     LocalSnackbarHostState provides remember { SnackbarHostState() },
-) { FeatureComposable(content) }
+) { content() }

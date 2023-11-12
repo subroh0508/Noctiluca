@@ -3,20 +3,20 @@ package noctiluca.features.authentication.templates.scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import cafe.adriel.voyager.navigator.LocalNavigator
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import noctiluca.features.authentication.LocalAuthorizeResult
+import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.components.utils.openBrowser
 import noctiluca.features.navigation.navigateToTimelines
 
 @Composable
 fun HandleAuthorize(
+    authorizeResult: AuthorizeResult?,
     viewModel: AuthorizeViewModel,
 ) {
-    val authorizeResult = LocalAuthorizeResult.current
-
-    LaunchedEffect(authorizeResult) { viewModel.fetchAccessToken(authorizeResult) }
+    LaunchedEffect(authorizeResult) {
+        viewModel.fetchAccessToken(authorizeResult)
+    }
 
     val event by viewModel.event.subscribeAsState()
 

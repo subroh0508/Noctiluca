@@ -26,13 +26,16 @@ internal fun SearchInstanceScaffold(
     val navigator = LocalNavigator.current
     val uiModel by viewModel.uiModel.subscribeAsState()
 
+    println(uiModel.suggests)
     Scaffold(
         topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
     ) { paddingValues ->
         SearchInstanceQueryTextField(
             uiModel = uiModel,
             paddingValues = paddingValues,
-            onDebouncedTextChange = { viewModel.search(it) },
+            onDebouncedTextChange = {
+                viewModel.search(it)
+            },
             modifier = Modifier.padding(horizontal = HorizontalPadding),
             headline = { loading -> Headline(loading) },
             listContent = { suggests ->

@@ -25,10 +25,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             NoctilucaTheme {
-                Navigator(MastodonInstanceListScreen) {
-                    CurrentScreen()
-                    HandleOnNewIntent(it)
-                }
+                FeatureSignInScreen()
             }
         }
     }

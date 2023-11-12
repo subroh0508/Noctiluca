@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import cafe.adriel.voyager.navigator.LocalNavigator
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import noctiluca.features.authentication.LocalAuthorizeResult
+import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
 import noctiluca.features.authentication.organisms.tab.InstancesTab
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
@@ -33,17 +33,16 @@ import noctiluca.model.authentication.Instance
 @Composable
 internal fun InstanceDetailScaffold(
     viewModel: MastodonInstanceDetailViewModel,
+    authorizeResult: AuthorizeResult?,
     isFetchingAccessToken: Boolean,
     onClickAuthorize: (Instance) -> Unit,
 ) {
-    val authorizeResult = LocalAuthorizeResult.current
-
     LaunchedEffect(viewModel.domain) { viewModel.load() }
 
     val uiModel by viewModel.uiModel.subscribeAsState()
     val tabbedScrollState = rememberTabbedInstanceDetailState(uiModel.instance.getValueOrNull())
 
-    SnackbarForAuthorizationError()
+    SnackbarForAuthorizationError(authorizeResult)
 
     LoadStateSmallHeadlinedScaffold<Instance>(
         uiModel.instance,
@@ -115,8 +114,10 @@ private fun Fallback(
 }
 
 @Composable
-private fun SnackbarForAuthorizationError() {
-    val error = LocalAuthorizeResult.current?.getErrorOrNull() ?: return
+private fun SnackbarForAuthorizationError(
+    authorizeResult: AuthorizeResult?,
+) {
+    val error = authorizeResult?.getErrorOrNull() ?: return
 
     showSnackbar(error.message ?: getCommonString().error_unknown)
 }

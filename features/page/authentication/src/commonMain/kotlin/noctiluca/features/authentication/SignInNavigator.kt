@@ -43,10 +43,6 @@ interface SignInNavigator : Navigator {
             }
         }
 
-        fun navigateToInstanceDetail(
-            domain: String,
-        ) = stackNavigation.push(Config.MastodonInstanceDetail(domain))
-
         sealed class Child : Navigator.Destination {
             object MastodonInstanceList : Child()
             class MastodonInstanceDetail(val domain: String) : Child()

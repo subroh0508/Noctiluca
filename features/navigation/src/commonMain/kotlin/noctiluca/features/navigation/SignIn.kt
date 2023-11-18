@@ -2,8 +2,10 @@ package noctiluca.features.navigation
 
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.registry.ScreenProvider
+import cafe.adriel.voyager.core.registry.ScreenRegistry
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
+import cafe.adriel.voyager.navigator.Navigator
 
 sealed class SignInScreen : ScreenProvider {
     data object MastodonInstanceList : SignInScreen()
@@ -11,6 +13,10 @@ sealed class SignInScreen : ScreenProvider {
         val domain: String,
         val query: String?,
     ) : SignInScreen()
+}
+
+fun Navigator.navigateToSignIn() {
+    push(ScreenRegistry.get(SignInScreen.MastodonInstanceList))
 }
 
 @Composable

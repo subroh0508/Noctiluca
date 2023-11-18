@@ -8,9 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import noctiluca.features.components.di.getKoinOrNull
 import noctiluca.features.shared.utils.ImageLoader
 import noctiluca.model.Uri
+import org.koin.core.context.GlobalContext
+
+private fun getKoinOrNull() = GlobalContext.getOrNull()
 
 @Composable
 fun AsyncImage(

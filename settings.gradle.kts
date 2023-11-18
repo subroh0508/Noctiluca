@@ -32,7 +32,6 @@ include(
     ":core:domain:authentication",
     ":core:domain:timeline",
     ":features:navigation",
-    ":features:components",
     ":features:shared",
     ":features:theme",
     ":features:page:accountdetail",

@@ -12,7 +12,6 @@ dependencies {
 
     implementation(project(":features:theme"))
     implementation(project(":features:shared"))
-    implementation(project(":features:components"))
     implementation(project(":features:navigation"))
     implementation(project(":features:page:accountdetail"))
     implementation(project(":features:page:authentication"))

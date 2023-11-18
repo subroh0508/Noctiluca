@@ -9,7 +9,6 @@ kotlin {
             dependencies {
                 implementation(project(":core:data"))
                 implementation(project(":core:model"))
-                implementation(project(":features:components"))
                 implementation(project(":features:navigation"))
 
                 implementation(libs.kotlinx.datetime)

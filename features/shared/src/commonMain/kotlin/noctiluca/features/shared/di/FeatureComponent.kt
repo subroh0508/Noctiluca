@@ -1,4 +1,4 @@
-package noctiluca.features.components.di
+package noctiluca.features.shared.di
 
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope

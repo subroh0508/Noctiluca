@@ -4,7 +4,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import noctiluca.data.authentication.AuthorizedUserRepository
-import noctiluca.features.components.ViewModel
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.HttpUnauthorizedException
 import kotlin.coroutines.EmptyCoroutineContext

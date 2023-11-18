@@ -8,7 +8,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import noctiluca.features.navigation.TimelineScreen
 import noctiluca.features.navigation.navigateToAccountDetail
-import noctiluca.features.navigation.navigateToTimelines
+import noctiluca.features.navigation.navigateToSignIn
 import noctiluca.features.shared.AuthorizedComposable
 import noctiluca.features.timeline.di.TimelineComponent
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
@@ -87,6 +87,6 @@ private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,
     navigator: Navigator?,
 ) = when (item) {
-    is TimelineDrawerMenu.NewAccount -> navigator?.navigateToTimelines()
+    is TimelineDrawerMenu.NewAccount -> navigator?.navigateToSignIn()
     is TimelineDrawerMenu.Settings -> Unit
 }

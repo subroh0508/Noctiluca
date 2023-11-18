@@ -3,14 +3,14 @@ package noctiluca.data.account.impl
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.toEntity
 import noctiluca.datastore.AccountDataStore
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.*
 import noctiluca.model.account.Account
 import noctiluca.network.mastodon.MastodonApiV1
 
 internal class AuthorizedAccountRepositoryImpl(
     private val v1: MastodonApiV1,
-    private val tokenDataStore: TokenDataStore,
+    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
     private val accountDataStore: AccountDataStore,
 ) : AuthorizedAccountRepository {
     override suspend fun getCurrent(): Pair<Account, Domain>? {
@@ -20,7 +20,7 @@ internal class AuthorizedAccountRepositoryImpl(
         return account to domain
     }
 
-    override suspend fun fetchAll() = tokenDataStore.getAll().mapNotNull {
+    override suspend fun fetchAll() = authenticationTokenDataStore.getAll().mapNotNull {
         val cache = accountDataStore.get(it.id)
         if (cache != null) {
             return@mapNotNull cache
@@ -55,15 +55,15 @@ internal class AuthorizedAccountRepositoryImpl(
         return account
     }
 
-    private suspend fun getCurrentAccount() = tokenDataStore.getCurrent()?.let {
+    private suspend fun getCurrentAccount() = authenticationTokenDataStore.getCurrent()?.let {
         accountDataStore.get(it.id)
     }
 
-    private suspend fun getCurrentDomain() = tokenDataStore.getCurrent()?.domain
+    private suspend fun getCurrentDomain() = authenticationTokenDataStore.getCurrent()?.domain
 
     private suspend fun getAccessToken(id: AccountId): Pair<String, Domain>? {
-        val accessToken = tokenDataStore.getAccessToken(id) ?: return null
-        val domain = tokenDataStore.getDomain(id) ?: return null
+        val accessToken = authenticationTokenDataStore.getAccessToken(id) ?: return null
+        val domain = authenticationTokenDataStore.getDomain(id) ?: return null
 
         return accessToken to domain
     }

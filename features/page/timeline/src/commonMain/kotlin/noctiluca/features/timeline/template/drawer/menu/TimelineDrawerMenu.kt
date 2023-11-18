@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import noctiluca.features.components.atoms.list.OneLineListItem
+import noctiluca.features.shared.atoms.list.OneLineListItem
 import noctiluca.features.timeline.getString
 
 internal sealed class TimelineDrawerMenu {

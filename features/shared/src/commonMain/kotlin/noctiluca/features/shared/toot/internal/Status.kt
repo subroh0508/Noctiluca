@@ -1,7 +1,7 @@
 package noctiluca.features.shared.toot.internal
 
 import androidx.compose.runtime.Composable
-import noctiluca.features.components.getCommonString
+import noctiluca.features.shared.getCommonString
 import noctiluca.model.status.Status
 
 @Composable

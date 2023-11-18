@@ -4,10 +4,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import noctiluca.features.accountdetail.LocalNavigator
+import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.components.molecules.scaffold.HeadlineText
-import noctiluca.features.components.molecules.scaffold.LargeHeadlineTopAppBar
+import noctiluca.features.shared.molecules.scaffold.HeadlineText
+import noctiluca.features.shared.molecules.scaffold.LargeHeadlineTopAppBar
 import noctiluca.model.accountdetail.AccountAttributes
 
 private const val CONTENT_SCROLL_OFFSET = -400F
@@ -18,7 +18,7 @@ fun AccountHeaderTopAppBar(
     detail: AccountAttributes?,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
-    val navigation = LocalNavigator.current
+    val navigator = LocalNavigator.current
 
     LargeHeadlineTopAppBar(
         { appAppBarState ->
@@ -27,7 +27,7 @@ fun AccountHeaderTopAppBar(
                 appAppBarState,
             )
         },
-        onBackPressed = { navigation?.backPressed() },
+        onBackPressed = { navigator?.pop() },
         actions = {
             IconButton(onClick = {}) {
                 Icon(

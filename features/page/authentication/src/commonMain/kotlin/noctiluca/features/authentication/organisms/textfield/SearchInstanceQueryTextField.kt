@@ -11,10 +11,10 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
-import noctiluca.features.components.atoms.list.OneLineListItem
-import noctiluca.features.components.atoms.textfield.DebouncedTextForm
-import noctiluca.features.components.atoms.textfield.SingleLineTextField
-import noctiluca.features.components.model.LoadState
+import noctiluca.features.shared.atoms.list.OneLineListItem
+import noctiluca.features.shared.atoms.textfield.DebouncedTextForm
+import noctiluca.features.shared.atoms.textfield.SingleLineTextField
+import noctiluca.features.shared.model.LoadState
 import noctiluca.model.authentication.Instance
 
 private const val DEBOUNCE_TIME_MILLIS = 500L

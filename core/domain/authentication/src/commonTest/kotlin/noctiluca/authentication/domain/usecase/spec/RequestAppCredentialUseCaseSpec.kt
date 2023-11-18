@@ -14,11 +14,12 @@ import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
 import noctiluca.authentication.domain.usecase.json.*
 import noctiluca.datastore.AppCredentialDataStore
 import noctiluca.model.Domain
+import noctiluca.model.HttpException
 import noctiluca.model.Uri
 import noctiluca.network.authentication.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
+import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
-import noctiluca.test.mock.MockTokenDataStore
 
 class RequestAppCredentialUseCaseSpec : DescribeSpec({
     describe("#execute") {
@@ -56,8 +57,8 @@ class RequestAppCredentialUseCaseSpec : DescribeSpec({
                 mockAppCredentialDataStore,
             )
 
-            it("raises ClientRequestException") {
-                shouldThrowExactly<ClientRequestException> {
+            it("raises HttpException") {
+                shouldThrowExactly<HttpException> {
                     useCase.execute(
                         Domain(DOMAIN_SAMPLE_COM),
                         TEST_CLIENT_NAME,
@@ -83,5 +84,5 @@ private fun buildAuthenticationUseCase(
 ): RequestAppCredentialUseCase = TestAuthenticationUseCaseComponent(
     engine,
     mockAppCredentialDataStore,
-    MockTokenDataStore(),
+    MockAuthenticationTokenDataStore(),
 ).scope.get()

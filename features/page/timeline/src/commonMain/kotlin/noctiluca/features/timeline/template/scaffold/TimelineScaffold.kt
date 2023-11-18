@@ -3,21 +3,17 @@ package noctiluca.features.timeline.template.scaffold
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import kotlinx.coroutines.launch
-import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
-import noctiluca.features.components.atoms.appbar.NavigateIconSize
-import noctiluca.features.components.atoms.appbar.scrollToTop
-import noctiluca.features.components.atoms.image.AsyncImage
-import noctiluca.features.components.molecules.scaffold.TabbedScaffold
+import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
+import noctiluca.features.shared.atoms.appbar.NavigateIconSize
+import noctiluca.features.shared.atoms.appbar.scrollToTop
+import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.organisms.card.TootCard
@@ -31,7 +27,7 @@ internal fun TimelineScaffold(
     viewModel: TimelinesViewModel,
     drawerState: DrawerState,
 ) {
-    val uiModel by viewModel.uiModel.subscribeAsState()
+    val uiModel by viewModel.uiModel.collectAsState()
 
     LaunchedEffect(uiModel.account.current) {
         viewModel.subscribeAll()

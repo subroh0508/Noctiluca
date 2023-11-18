@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapNotNull
 import noctiluca.data.status.toEntity
 import noctiluca.data.timeline.TimelineRepository
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.StatusId
 import noctiluca.model.timeline.StreamEvent
 import noctiluca.network.mastodon.MastodonApiV1
@@ -16,7 +16,7 @@ import noctiluca.network.mastodon.data.streaming.StreamingType
 internal class TimelineRepositoryImpl(
     private val api: MastodonApiV1,
     private val webSocket: MastodonStream,
-    private val tokenDataStore: TokenDataStore,
+    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
 ) : TimelineRepository {
     override suspend fun fetchGlobal(
         onlyRemote: Boolean,
@@ -26,7 +26,7 @@ internal class TimelineRepositoryImpl(
         remote = onlyRemote,
         onlyMedia = onlyMedia,
         maxId = maxId?.value,
-    ).map { it.toEntity(tokenDataStore.getCurrent()?.id) }
+    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
 
     override suspend fun fetchLocal(
         onlyMedia: Boolean,
@@ -35,13 +35,13 @@ internal class TimelineRepositoryImpl(
         local = true,
         onlyMedia = onlyMedia,
         maxId = maxId?.value,
-    ).map { it.toEntity(tokenDataStore.getCurrent()?.id) }
+    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
 
     override suspend fun fetchHome(
         maxId: StatusId?,
     ) = api.getTimelinesHome(
         maxId = maxId?.value,
-    ).map { it.toEntity(tokenDataStore.getCurrent()?.id) }
+    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
 
     override suspend fun buildGlobalStream(
         onlyRemote: Boolean,
@@ -79,11 +79,11 @@ internal class TimelineRepositoryImpl(
     private suspend fun NetworkStreamEvent.toValueObject() = payload?.let {
         when (it) {
             is NetworkStreamEvent.Payload.Updated -> StreamEvent.Updated(
-                it.status.toEntity(tokenDataStore.getCurrent()?.id),
+                it.status.toEntity(authenticationTokenDataStore.getCurrent()?.id),
             )
 
             is NetworkStreamEvent.Payload.StatusEdited -> StreamEvent.StatusEdited(
-                it.status.toEntity(tokenDataStore.getCurrent()?.id),
+                it.status.toEntity(authenticationTokenDataStore.getCurrent()?.id),
             )
 
             is NetworkStreamEvent.Payload.Deleted -> StreamEvent.Deleted(StatusId(it.id))

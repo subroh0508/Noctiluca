@@ -5,9 +5,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import noctiluca.features.authentication.LocalAuthorizeResult
-import noctiluca.features.authentication.LocalNavigator
+import cafe.adriel.voyager.navigator.LocalNavigator
+import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.organisms.tab.InstanceDetailTabs
 import noctiluca.features.authentication.organisms.tab.InstancesTab
 import noctiluca.features.authentication.organisms.tab.extendeddescription.InstanceExtendedDescriptionTab
@@ -18,31 +17,31 @@ import noctiluca.features.authentication.templates.scaffold.instancedetail.Insta
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailHeader
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailTopAppBar
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
-import noctiluca.features.components.atoms.card.CardHeader
-import noctiluca.features.components.atoms.card.CardSupporting
-import noctiluca.features.components.atoms.card.FilledCard
-import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
-import noctiluca.features.components.atoms.snackbar.showSnackbar
-import noctiluca.features.components.getCommonString
-import noctiluca.features.components.molecules.scaffold.*
-import noctiluca.features.components.utils.description
-import noctiluca.features.components.utils.label
+import noctiluca.features.shared.atoms.card.CardHeader
+import noctiluca.features.shared.atoms.card.CardSupporting
+import noctiluca.features.shared.atoms.card.FilledCard
+import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
+import noctiluca.features.shared.atoms.snackbar.showSnackbar
+import noctiluca.features.shared.getCommonString
+import noctiluca.features.shared.molecules.scaffold.LoadStateSmallHeadlinedScaffold
+import noctiluca.features.shared.utils.description
+import noctiluca.features.shared.utils.label
 import noctiluca.model.authentication.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun InstanceDetailScaffold(
     viewModel: MastodonInstanceDetailViewModel,
+    authorizeResult: AuthorizeResult?,
+    isFetchingAccessToken: Boolean,
+    onClickAuthorize: (Instance) -> Unit,
 ) {
-    val authorizeResult = LocalAuthorizeResult.current
-
-    LaunchedEffect(authorizeResult) { viewModel.fetchAccessToken(authorizeResult) }
     LaunchedEffect(viewModel.domain) { viewModel.load() }
 
-    val uiModel by viewModel.uiModel.subscribeAsState()
+    val uiModel by viewModel.uiModel.collectAsState()
     val tabbedScrollState = rememberTabbedInstanceDetailState(uiModel.instance.getValueOrNull())
 
-    SnackbarForAuthorizationError()
+    SnackbarForAuthorizationError(authorizeResult)
 
     LoadStateSmallHeadlinedScaffold<Instance>(
         uiModel.instance,
@@ -61,9 +60,10 @@ internal fun InstanceDetailScaffold(
         bottomBar = { instance, horizontalPadding ->
             InstanceDetailActionButtons(
                 instance,
-                authorizeResult?.getCodeOrNull() != null && viewModel.loading,
+                authorizeResult?.getCodeOrNull() != null && isFetchingAccessToken,
                 horizontalPadding,
-            ) { viewModel.requestAuthorize(it) }
+                onClickAuthorize,
+            )
         },
         tabs = { InstanceDetailTabs(tabbedScrollState) },
         fallback = { error, paddingValues ->
@@ -99,7 +99,7 @@ private fun Fallback(
         supporting = { CardSupporting(error.description()) },
         actions = {
             Button(
-                onClick = { navigator?.backPressed() },
+                onClick = { navigator?.pop() },
             ) {
                 Text(getCommonString().back)
             }
@@ -113,8 +113,10 @@ private fun Fallback(
 }
 
 @Composable
-private fun SnackbarForAuthorizationError() {
-    val error = LocalAuthorizeResult.current?.getErrorOrNull() ?: return
+private fun SnackbarForAuthorizationError(
+    authorizeResult: AuthorizeResult?,
+) {
+    val error = authorizeResult?.getErrorOrNull() ?: return
 
     showSnackbar(error.message ?: getCommonString().error_unknown)
 }

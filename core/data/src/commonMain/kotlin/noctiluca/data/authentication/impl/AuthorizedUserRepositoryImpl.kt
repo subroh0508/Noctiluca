@@ -2,7 +2,7 @@ package noctiluca.data.authentication.impl
 
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.datastore.AppCredentialDataStore
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Uri
@@ -10,7 +10,7 @@ import noctiluca.network.authentication.AuthenticationApi
 
 internal class AuthorizedUserRepositoryImpl(
     private val appCredentialDataStore: AppCredentialDataStore,
-    private val tokenDataStore: TokenDataStore,
+    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
     private val api: AuthenticationApi,
 ) : AuthorizedUserRepository {
     override suspend fun fetch(
@@ -29,15 +29,15 @@ internal class AuthorizedUserRepositoryImpl(
 
         val id = AccountId(api.getVerifyAccountsCredentials(domain.value, accessToken).id)
 
-        return tokenDataStore.add(id, domain, accessToken).find { it.id == id }
+        return authenticationTokenDataStore.add(id, domain, accessToken).find { it.id == id }
     }
 
-    override suspend fun switch(id: AccountId) = tokenDataStore.setCurrent(id)
+    override suspend fun switch(id: AccountId) = authenticationTokenDataStore.setCurrent(id)
 
     override suspend fun expireCurrent() {
-        tokenDataStore.getCurrent()?.let { tokenDataStore.delete(it.id) }
-        tokenDataStore.getAll().firstOrNull()?.let {
-            tokenDataStore.setCurrent(it.id)
+        authenticationTokenDataStore.getCurrent()?.let { authenticationTokenDataStore.delete(it.id) }
+        authenticationTokenDataStore.getAll().firstOrNull()?.let {
+            authenticationTokenDataStore.setCurrent(it.id)
         }
     }
 }

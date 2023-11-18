@@ -1,6 +1,6 @@
 package noctiluca.features.timeline.di
 
-import noctiluca.features.components.di.FeatureComponent
+import noctiluca.features.shared.di.FeatureComponent
 import noctiluca.timeline.domain.di.TimelineDomainModule
 import org.koin.dsl.module
 

@@ -6,7 +6,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
-import noctiluca.features.components.atoms.tab.PrimaryTabs
+import noctiluca.features.shared.atoms.tab.PrimaryTabs
 
 @Composable
 internal fun AccountStatusesTabs(

@@ -1,15 +1,13 @@
 package noctiluca.features.timeline.viewmodel
 
 import androidx.compose.runtime.*
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import noctiluca.datastore.TokenDataStore
-import noctiluca.features.components.AuthorizedViewModel
-import noctiluca.features.components.LocalCoroutineExceptionHandler
-import noctiluca.features.components.UnauthorizedExceptionHandler
-import noctiluca.features.timeline.TimelineNavigator
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.subscribe
+import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
@@ -17,27 +15,28 @@ import noctiluca.model.timeline.StreamEvent
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.*
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel private constructor(
-    private val dataStore: TokenDataStore,
     private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,
     private val fetchAllAuthorizedAccountsUseCase: FetchAllAuthorizedAccountsUseCase,
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
     private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
+    authorizedUserRepository: AuthorizedUserRepository,
     coroutineScope: CoroutineScope,
-    exceptionHandler: UnauthorizedExceptionHandler,
-) : AuthorizedViewModel(coroutineScope, exceptionHandler) {
-    private val mutableUiModel by lazy { MutableValue(UiModel()) }
+) : AuthorizedViewModel(authorizedUserRepository, coroutineScope) {
+    private val subscribed by lazy { MutableStateFlow(false) }
+    private val mutableUiModel by lazy { MutableStateFlow(UiModel()) }
 
-    val uiModel: Value<UiModel> = mutableUiModel
+    val uiModel: StateFlow<UiModel> = mutableUiModel
 
     fun switch(account: Account) {
         launch {
-            dataStore.setCurrent(account.id)
-            mutableUiModel.value = UiModel()
+            authorizedUserRepository.switch(account.id)
+            reopen()
         }
     }
 
@@ -79,6 +78,11 @@ class TimelinesViewModel private constructor(
     }
 
     fun subscribeAll() {
+        if (subscribed.value) {
+            return
+        }
+
+        subscribed.value = true
         uiModel.value.timelines.forEachIndexed { index, (timeline) -> subscribe(index, timeline) }
     }
 
@@ -92,7 +96,6 @@ class TimelinesViewModel private constructor(
         val job = launchLazy {
             runCatchingWithAuth { updateTimelineUseCase.execute(timeline) }
                 .onSuccess { setTimeline(index, it) }
-                .onFailure { it.printStackTrace() }
         }
 
         setJob(index, job)
@@ -205,25 +208,21 @@ class TimelinesViewModel private constructor(
     )
 
     companion object Provider {
-        private const val UI_MODEL_KEEPER = "TimelinesViewModel.UiModel"
-
         @Composable
         operator fun invoke(
-            context: TimelineNavigator.Screen,
+            component: KoinComponent,
         ): TimelinesViewModel {
             val coroutineScope = rememberCoroutineScope()
-            val handler = LocalCoroutineExceptionHandler.current
 
             return remember {
                 TimelinesViewModel(
-                    context.get(),
-                    context.get(),
-                    context.get(),
-                    context.get(),
-                    context.get(),
-                    context.get(),
+                    component.get(),
+                    component.get(),
+                    component.get(),
+                    component.get(),
+                    component.get(),
+                    component.get(),
                     coroutineScope = coroutineScope,
-                    exceptionHandler = handler,
                 )
             }
         }

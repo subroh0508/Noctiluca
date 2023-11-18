@@ -16,8 +16,9 @@ internal val VersionCatalog.ktorSerializationKotlinxJson: Provider<MinimalExtern
 internal val VersionCatalog.ktorClientResources: Provider<MinimalExternalModuleDependency> get() = getLibrary("ktor-client-resources")
 internal val VersionCatalog.ktorClientMock: Provider<MinimalExternalModuleDependency> get() = getLibrary("ktor-client-mock")
 
-internal val VersionCatalog.decomposeCore: Provider<MinimalExternalModuleDependency> get() = getLibrary("decompose-core")
-internal val VersionCatalog.decomposeComposeJetbrains: Provider<MinimalExternalModuleDependency> get() = getLibrary("decompose-compose-jetbrains")
+internal val VersionCatalog.voyagerNavigator: Provider<MinimalExternalModuleDependency> get() = getLibrary("voyager-navigator")
+internal val VersionCatalog.voyagerTransitions: Provider<MinimalExternalModuleDependency> get() = getLibrary("voyager-transitions")
+internal val VersionCatalog.voyagerKoin: Provider<MinimalExternalModuleDependency> get() = getLibrary("voyager-koin")
 
 internal val VersionCatalog.koinCore: Provider<MinimalExternalModuleDependency> get() = getLibrary("koin-core")
 internal val VersionCatalog.koinAndroid: Provider<MinimalExternalModuleDependency> get() = getLibrary("koin-android")

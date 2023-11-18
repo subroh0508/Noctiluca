@@ -10,8 +10,9 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:model"))
 
-    implementation(project(":features:theme"))
-    implementation(project(":features:components"))
+    implementation(project(":features:designsystem"))
+    implementation(project(":features:shared"))
+    implementation(project(":features:navigation"))
     implementation(project(":features:page:accountdetail"))
     implementation(project(":features:page:authentication"))
     implementation(project(":features:page:timeline"))
@@ -27,8 +28,9 @@ dependencies {
     implementation(libs.bundles.ktor.client.jvm)
     implementation(libs.kotlinx.serialization)
 
-    implementation(libs.decompose.core)
-    implementation(libs.decompose.compose.jetbrains)
+    implementation(libs.voyager.navigator)
+    implementation(libs.voyager.transitions)
+    implementation(libs.voyager.koin)
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)

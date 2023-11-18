@@ -17,12 +17,12 @@ import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDateTime
-import noctiluca.features.components.atoms.image.AsyncImage
-import noctiluca.features.components.atoms.text.HtmlText
-import noctiluca.features.components.atoms.text.RelativeTime
-import noctiluca.features.components.utils.baseline
-import noctiluca.features.components.utils.toDp
 import noctiluca.features.shared.account.TooterName
+import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.atoms.text.HtmlText
+import noctiluca.features.shared.atoms.text.RelativeTime
+import noctiluca.features.shared.utils.baseline
+import noctiluca.features.shared.utils.toDp
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 

@@ -7,6 +7,8 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                implementation(project(":core:model"))
+
                 implementation(libs.bundles.ktor.client.common)
                 implementation(libs.ktor.client.websockets)
                 implementation(libs.ktor.client.resources)

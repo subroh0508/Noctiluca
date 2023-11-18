@@ -6,14 +6,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import noctiluca.features.authentication.LocalNavigator
+import cafe.adriel.voyager.navigator.LocalNavigator
+import noctiluca.features.authentication.MastodonInstanceDetailScreen
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
-import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
-import noctiluca.features.components.molecules.HeadlineWithProgress
+import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
+import noctiluca.features.shared.molecules.HeadlineWithProgress
 
 private val HorizontalPadding = 16.dp
 
@@ -23,7 +23,7 @@ internal fun SearchInstanceScaffold(
     viewModel: MastodonInstanceListViewModel,
 ) {
     val navigator = LocalNavigator.current
-    val uiModel by viewModel.uiModel.subscribeAsState()
+    val uiModel by viewModel.uiModel.collectAsState()
 
     Scaffold(
         topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
@@ -31,14 +31,16 @@ internal fun SearchInstanceScaffold(
         SearchInstanceQueryTextField(
             uiModel = uiModel,
             paddingValues = paddingValues,
-            onDebouncedTextChange = { viewModel.search(it) },
+            onDebouncedTextChange = {
+                viewModel.search(it)
+            },
             modifier = Modifier.padding(horizontal = HorizontalPadding),
             headline = { loading -> Headline(loading) },
             listContent = { suggests ->
                 InstanceSuggestsList(
                     suggests,
                     onSelect = {
-                        navigator?.navigateToInstanceDetail(it.domain)
+                        navigator?.push(MastodonInstanceDetailScreen(it.domain))
                     },
                 )
             },

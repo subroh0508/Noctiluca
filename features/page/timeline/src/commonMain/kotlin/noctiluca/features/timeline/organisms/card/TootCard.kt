@@ -8,15 +8,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.shared.toot.FloatingTootCard
-import noctiluca.features.timeline.LocalNavigation
+import noctiluca.features.timeline.TootScreen
 import noctiluca.model.status.Status
 
 @Composable
 internal fun BoxScope.TootCard(
     modifier: Modifier = Modifier,
 ) {
-    val navigation = LocalNavigation.current
+    val navigator = LocalNavigator.current
 
     val expanded = remember { mutableStateOf(false) }
 
@@ -30,7 +31,7 @@ internal fun BoxScope.TootCard(
             warning,
             visibility,
             expanded,
-            onClickOpenFullScreen = { navigation?.navigateToToot() },
+            onClickOpenFullScreen = { navigator?.push(TootScreen) },
             modifier = modifier,
         )
 

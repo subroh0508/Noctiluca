@@ -2,13 +2,13 @@ package noctiluca.data.status.impl
 
 import noctiluca.data.status.StatusRepository
 import noctiluca.data.status.toEntity
-import noctiluca.datastore.TokenDataStore
+import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.status.Status
 import noctiluca.network.mastodon.MastodonApiV1
 
 internal class StatusRepositoryImpl(
     private val api: MastodonApiV1,
-    private val tokenDataStore: TokenDataStore,
+    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
 ) : StatusRepository {
     override suspend fun favourite(status: Status): Status {
         val json =
@@ -18,7 +18,7 @@ internal class StatusRepositoryImpl(
                 api.postStatusesFavourite(status.id.value)
             }
 
-        return json.toEntity(tokenDataStore.getCurrent()?.id)
+        return json.toEntity(authenticationTokenDataStore.getCurrent()?.id)
     }
 
     override suspend fun boost(status: Status): Status {
@@ -29,7 +29,7 @@ internal class StatusRepositoryImpl(
                 api.postStatusesReblog(status.id.value)
             }
 
-        return json.toEntity(tokenDataStore.getCurrent()?.id)
+        return json.toEntity(authenticationTokenDataStore.getCurrent()?.id)
     }
 
     override suspend fun bookmark(status: Status): Status {
@@ -40,6 +40,6 @@ internal class StatusRepositoryImpl(
                 api.postStatusesBookmark(status.id.value)
             }
 
-        return json.toEntity(tokenDataStore.getCurrent()?.id)
+        return json.toEntity(authenticationTokenDataStore.getCurrent()?.id)
     }
 }

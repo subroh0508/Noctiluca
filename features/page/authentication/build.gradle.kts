@@ -7,7 +7,12 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core:domain:authentication"))
-                implementation(project(":features:shared"))
+            }
+        }
+
+        androidMain {
+            dependencies {
+                implementation(libs.androidx.core)
             }
         }
     }

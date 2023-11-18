@@ -1,47 +1,33 @@
 package noctiluca.features.authentication.viewmodel
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import com.arkivanov.decompose.ComponentContext
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.instancekeeper.InstanceKeeper
+import androidx.compose.runtime.*
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.*
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
-import noctiluca.features.authentication.SignInNavigator
-import noctiluca.features.components.ViewModel
-import noctiluca.features.components.model.LoadState
+import noctiluca.features.shared.model.LoadState
+import noctiluca.features.shared.viewmodel.ViewModel
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class MastodonInstanceListViewModel private constructor(
-    private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
+class MastodonInstanceListViewModel(
     coroutineScope: CoroutineScope,
-    screen: SignInNavigator.Screen,
-) : ViewModel(coroutineScope), ComponentContext by screen {
-    private val mutableUiModel by lazy {
-        MutableValue(cachedUiModel ?: UiModel()).also {
-            it.subscribe { model ->
-                if (cachedUiModel != null) {
-                    instanceKeeper.remove(UI_MODEL_KEEPER)
-                }
+    private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
+) : ViewModel(coroutineScope) {
+    private val instanceSuggests by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
+    private val query by lazy { MutableStateFlow("") }
 
-                instanceKeeper.put(UI_MODEL_KEEPER, model)
-            }
-        }
+    val uiModel by lazy {
+        combine(
+            instanceSuggests,
+            query,
+        ) { suggests, query -> UiModel(query, suggests) }
+            .stateIn(
+                scope = coroutineScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = UiModel(),
+            )
     }
-
-    private val mutableInstanceSuggests by lazy {
-        MutableValue(cachedUiModel?.suggests ?: LoadState.Initial).also {
-            it.subscribe { loadState ->
-                mutableUiModel.value = uiModel.value.copy(suggests = loadState)
-            }
-        }
-    }
-
-    val uiModel: Value<UiModel> = mutableUiModel
-
-    private val cachedUiModel get() = instanceKeeper.get(UI_MODEL_KEEPER) as? UiModel
 
     fun search(query: String) {
         val prevQuery = uiModel.value.query
@@ -50,43 +36,38 @@ class MastodonInstanceListViewModel private constructor(
             return
         }
 
-        mutableUiModel.value = uiModel.value.copy(query = query)
+        this.query.value = query
         if (query.isBlank()) {
-            mutableInstanceSuggests.value = LoadState.Initial
+            instanceSuggests.value = LoadState.Initial
             return
         }
 
         val job = launchLazy {
             runCatching { searchMastodonInstancesUseCase.execute(query) }
-                .onSuccess { mutableInstanceSuggests.value = LoadState.Loaded(it) }
-                .onFailure { mutableInstanceSuggests.value = LoadState.Error(it) }
+                .onSuccess { instanceSuggests.value = LoadState.Loaded(it) }
+                .onFailure { instanceSuggests.value = LoadState.Error(it) }
         }
 
-        mutableInstanceSuggests.value = LoadState.Loading(job)
+        instanceSuggests.value = LoadState.Loading(job)
         job.start()
     }
 
     data class UiModel(
         val query: String = "",
         val suggests: LoadState = LoadState.Initial,
-    ) : InstanceKeeper.Instance {
-        override fun onDestroy() = Unit
-    }
+    ) : ScreenModel
 
     companion object Provider {
-        private const val UI_MODEL_KEEPER = "MastodonInstanceListViewModel.UiModel"
-
         @Composable
         operator fun invoke(
-            context: SignInNavigator.Screen,
+            koinComponent: KoinComponent,
         ): MastodonInstanceListViewModel {
             val coroutineScope = rememberCoroutineScope()
 
             return remember {
                 MastodonInstanceListViewModel(
-                    context.get(),
                     coroutineScope,
-                    context,
+                    koinComponent.get(),
                 )
             }
         }

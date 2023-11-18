@@ -3,53 +3,74 @@ package noctiluca.features.authentication
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
+import cafe.adriel.voyager.core.registry.screenModule
+import cafe.adriel.voyager.core.screen.Screen
+import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
+import noctiluca.features.authentication.model.buildAuthorizeResult
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
+import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
-import noctiluca.features.components.FeatureComposable
-import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
+import noctiluca.features.navigation.SignInScreen
+import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
 
-internal val LocalNavigator = compositionLocalOf<SignInNavigator.Screen?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
-internal val LocalAuthorizeResult = compositionLocalOf<AuthorizeResult?> { null }
 
-@Composable
-fun SignInScreen(
-    domain: String?,
-    authorizeResult: AuthorizeResult?,
-    screen: SignInNavigator.Screen,
-) = SignInFeature(
-    authorizeResult,
-    screen,
-) { page ->
-    when (page) {
-        is SignInNavigator.Screen.Child.MastodonInstanceList -> SearchInstanceScaffold(
-            MastodonInstanceListViewModel.Provider(screen),
+val featureSignInScreenModule = screenModule {
+    register<SignInScreen.MastodonInstanceList> {
+        MastodonInstanceListScreen
+    }
+    register<SignInScreen.MastodonInstanceDetail> { provider ->
+        MastodonInstanceDetailScreen(
+            provider.domain,
+            buildAuthorizeResult(provider),
+        )
+    }
+}
+
+internal data object MastodonInstanceListScreen : Screen {
+    @Composable
+    override fun Content() = SignInFeature {
+        val component = remember { SignInComponent() }
+        val viewModel = MastodonInstanceListViewModel.Provider(component)
+
+        SearchInstanceScaffold(viewModel)
+    }
+}
+
+internal data class MastodonInstanceDetailScreen(
+    private val domain: String,
+    private val authorizeResult: AuthorizeResult? = null,
+) : Screen {
+    @Composable
+    override fun Content() = SignInFeature {
+        val component = remember { SignInComponent() }
+
+        val authorizeViewModel = AuthorizeViewModel.Provider(
+            domain,
+            component,
         )
 
-        is SignInNavigator.Screen.Child.MastodonInstanceDetail -> InstanceDetailScaffold(
-            MastodonInstanceDetailViewModel.Provider(domain ?: page.domain, screen)
-        )
+        HandleAuthorize(authorizeResult, authorizeViewModel)
+        HandleDeepLink()
+
+        InstanceDetailScaffold(
+            MastodonInstanceDetailViewModel.Provider(
+                domain,
+                component,
+            ),
+            authorizeResult,
+            authorizeViewModel.isFetchingAccessToken,
+        ) { authorizeViewModel.requestAuthorize(it) }
     }
 }
 
 @Composable
 private fun SignInFeature(
-    authorizeResult: AuthorizeResult?,
-    screen: SignInNavigator.Screen,
-    content: @Composable (SignInNavigator.Screen.Child) -> Unit,
-) = FeatureComposable(context = screen) {
-    CompositionLocalProvider(
-        LocalResources provides Resources(Locale.current.language),
-        LocalNavigator provides screen,
-        LocalAuthorizeResult provides authorizeResult,
-        LocalSnackbarHostState provides remember { SnackbarHostState() },
-    ) {
-        val page by screen.childStack.subscribeAsState()
-
-        content(page.active.instance)
-    }
-}
+    content: @Composable () -> Unit,
+) = CompositionLocalProvider(
+    LocalResources provides Resources(Locale.current.language),
+    LocalSnackbarHostState provides remember { SnackbarHostState() },
+) { content() }

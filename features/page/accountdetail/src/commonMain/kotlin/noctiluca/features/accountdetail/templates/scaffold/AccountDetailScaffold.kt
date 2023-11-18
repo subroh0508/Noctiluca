@@ -4,16 +4,15 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.accountdetail.organisms.tab.AccountStatusesTabs
 import noctiluca.features.accountdetail.organisms.tab.rememberTabbedAccountStatusesState
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.AccountDetailCaption
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.StatuseTab
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
-import noctiluca.features.components.molecules.scaffold.HeadlineAvatar
-import noctiluca.features.components.molecules.scaffold.HeadlineHeader
-import noctiluca.features.components.molecules.scaffold.LoadStateLargeHeadlinedScaffold
+import noctiluca.features.shared.molecules.scaffold.HeadlineAvatar
+import noctiluca.features.shared.molecules.scaffold.HeadlineHeader
+import noctiluca.features.shared.molecules.scaffold.LoadStateLargeHeadlinedScaffold
 import noctiluca.model.accountdetail.AccountAttributes
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,7 +25,7 @@ fun AccountDetailScaffold(
         viewModel.refreshStatuses()
     }
 
-    val uiModel by viewModel.uiModel.subscribeAsState()
+    val uiModel by viewModel.uiModel.collectAsState()
     val statusesScrollState = rememberTabbedAccountStatusesState(uiModel.tab)
 
     LoadStateLargeHeadlinedScaffold<AccountAttributes>(

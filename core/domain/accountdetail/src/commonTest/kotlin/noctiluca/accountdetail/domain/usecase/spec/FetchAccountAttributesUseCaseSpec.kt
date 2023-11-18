@@ -6,7 +6,6 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
 import io.kotest.matchers.should
 import io.ktor.client.engine.mock.*
-import io.ktor.client.plugins.*
 import io.ktor.http.*
 import noctiluca.accountdetail.domain.TestAccountDetailUseCaseComponent
 import noctiluca.accountdetail.domain.myAccount
@@ -14,6 +13,7 @@ import noctiluca.accountdetail.domain.otherAccount
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.json.*
 import noctiluca.model.AccountId
+import noctiluca.model.HttpUnauthorizedException
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationship
 import noctiluca.model.accountdetail.Relationships
@@ -92,8 +92,8 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
                         .build(),
                 )
 
-                it("raises ClientRequestException") {
-                    shouldThrowExactly<ClientRequestException> {
+                it("raises HttpUnauthorizedException") {
+                    shouldThrowExactly<HttpUnauthorizedException> {
                         runBlocking {
                             testCase.execute(AccountId(ACCOUNT_ID))
                         }

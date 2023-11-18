@@ -1,6 +1,5 @@
 package noctiluca.features.timeline.template.drawer.header
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -13,10 +12,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import noctiluca.features.components.atoms.appbar.NavigateIconSize
-import noctiluca.features.components.atoms.clickable
-import noctiluca.features.components.atoms.image.AsyncImage
 import noctiluca.features.shared.account.AccountName
+import noctiluca.features.shared.atoms.appbar.NavigateIconSize
+import noctiluca.features.shared.atoms.clickable
+import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.model.account.Account
 
 @Composable

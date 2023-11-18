@@ -2,8 +2,8 @@ package noctiluca.features.accountdetail.templates.scaffold.accountdetail
 
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
-import noctiluca.features.components.molecules.list.infiniteScrollFooter
-import noctiluca.features.components.molecules.list.items
+import noctiluca.features.shared.molecules.list.infiniteScrollFooter
+import noctiluca.features.shared.molecules.list.items
 import noctiluca.features.shared.status.Status
 import noctiluca.model.status.Status
 

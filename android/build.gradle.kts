@@ -11,6 +11,7 @@ dependencies {
     implementation(project(":core:model"))
 
     implementation(project(":features:theme"))
+    implementation(project(":features:shared"))
     implementation(project(":features:components"))
     implementation(project(":features:navigation"))
     implementation(project(":features:page:accountdetail"))
@@ -31,8 +32,6 @@ dependencies {
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)
     implementation(libs.voyager.koin)
-    implementation(libs.decompose.core)
-    implementation(libs.decompose.compose.jetbrains)
 
     implementation(libs.koin.core)
     implementation(libs.koin.android)

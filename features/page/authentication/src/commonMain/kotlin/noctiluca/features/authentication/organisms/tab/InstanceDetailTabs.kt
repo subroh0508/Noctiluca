@@ -5,7 +5,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import noctiluca.features.authentication.getString
-import noctiluca.features.components.atoms.tab.PrimaryTabs
+import noctiluca.features.shared.atoms.tab.PrimaryTabs
 import noctiluca.model.authentication.Instance
 
 enum class InstancesTab {

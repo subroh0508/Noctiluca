@@ -11,10 +11,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import noctiluca.features.components.StringResources
-import noctiluca.features.components.atoms.text.buildTimestamp
-import noctiluca.features.components.getString
-import noctiluca.features.components.molecules.list.LazyColumn
+import noctiluca.features.shared.StringResources
+import noctiluca.features.shared.atoms.text.buildTimestamp
+import noctiluca.features.shared.getString
+import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel

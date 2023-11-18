@@ -7,9 +7,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import noctiluca.features.components.atoms.image.AsyncImage
-import noctiluca.features.components.atoms.list.TwoLineListItem
-import noctiluca.features.components.molecules.list.LazyColumn
+import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.atoms.list.TwoLineListItem
+import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.model.account.Account
 

@@ -6,8 +6,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
-import noctiluca.features.components.utils.openBrowser
 import noctiluca.features.navigation.navigateToTimelines
+import noctiluca.features.shared.utils.openBrowser
 
 @Composable
 fun HandleAuthorize(

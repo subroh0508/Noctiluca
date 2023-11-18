@@ -13,11 +13,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import kotlinx.coroutines.launch
-import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
-import noctiluca.features.components.atoms.appbar.NavigateIconSize
-import noctiluca.features.components.atoms.appbar.scrollToTop
-import noctiluca.features.components.atoms.image.AsyncImage
-import noctiluca.features.components.molecules.scaffold.TabbedScaffold
+import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
+import noctiluca.features.shared.atoms.appbar.NavigateIconSize
+import noctiluca.features.shared.atoms.appbar.scrollToTop
+import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.organisms.card.TootCard

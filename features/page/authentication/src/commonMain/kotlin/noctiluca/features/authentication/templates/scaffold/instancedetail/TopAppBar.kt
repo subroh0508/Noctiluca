@@ -8,8 +8,8 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.Job
 import noctiluca.features.authentication.organisms.tab.InstanceDetailScrollState
-import noctiluca.features.components.molecules.scaffold.HeadlineText
-import noctiluca.features.components.molecules.scaffold.HeadlineTopAppBar
+import noctiluca.features.shared.molecules.scaffold.HeadlineText
+import noctiluca.features.shared.molecules.scaffold.HeadlineTopAppBar
 import noctiluca.model.authentication.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)

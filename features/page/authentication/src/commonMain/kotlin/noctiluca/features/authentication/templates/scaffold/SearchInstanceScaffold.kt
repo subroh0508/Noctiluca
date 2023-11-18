@@ -12,8 +12,8 @@ import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
-import noctiluca.features.components.atoms.appbar.CenterAlignedTopAppBar
-import noctiluca.features.components.molecules.HeadlineWithProgress
+import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
+import noctiluca.features.shared.molecules.HeadlineWithProgress
 
 private val HorizontalPadding = 16.dp
 

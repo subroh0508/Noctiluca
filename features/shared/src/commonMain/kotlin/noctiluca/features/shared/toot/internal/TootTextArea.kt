@@ -11,9 +11,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import noctiluca.features.components.atoms.divider.Divider
-import noctiluca.features.components.atoms.textfield.TextArea
-import noctiluca.features.components.getCommonString
+import noctiluca.features.shared.atoms.divider.Divider
+import noctiluca.features.shared.atoms.textfield.TextArea
+import noctiluca.features.shared.getCommonString
 
 internal val TootAreaPadding = 16.dp
 private val OptionButtonsHorizontalPadding = 4.dp

@@ -11,9 +11,9 @@ import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppB
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.AccountDetailCaption
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.StatuseTab
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
-import noctiluca.features.components.molecules.scaffold.HeadlineAvatar
-import noctiluca.features.components.molecules.scaffold.HeadlineHeader
-import noctiluca.features.components.molecules.scaffold.LoadStateLargeHeadlinedScaffold
+import noctiluca.features.shared.molecules.scaffold.HeadlineAvatar
+import noctiluca.features.shared.molecules.scaffold.HeadlineHeader
+import noctiluca.features.shared.molecules.scaffold.LoadStateLargeHeadlinedScaffold
 import noctiluca.model.accountdetail.AccountAttributes
 
 @OptIn(ExperimentalMaterial3Api::class)

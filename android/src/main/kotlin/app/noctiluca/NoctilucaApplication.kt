@@ -2,6 +2,7 @@ package app.noctiluca
 
 import android.app.Application
 import app.noctiluca.di.AndroidAuthenticationTokenProviderModule
+import app.noctiluca.di.ImageLoaderModule
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
@@ -9,7 +10,6 @@ import noctiluca.data.di.DataModule
 import noctiluca.datastore.di.DataStoreModule
 import noctiluca.features.accountdetail.featureAccountDetailScreenModule
 import noctiluca.features.authentication.featureSignInScreenModule
-import noctiluca.features.components.di.ImageLoaderModule
 import noctiluca.features.timeline.featureTimelineScreenModule
 import noctiluca.network.authentication.di.AuthenticationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule

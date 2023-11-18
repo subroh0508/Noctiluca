@@ -10,7 +10,7 @@ import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
 import noctiluca.data.authentication.AuthorizedUserRepository
-import noctiluca.features.components.model.LoadState
+import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId

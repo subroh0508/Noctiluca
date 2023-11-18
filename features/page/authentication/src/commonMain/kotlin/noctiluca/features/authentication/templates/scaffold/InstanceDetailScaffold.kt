@@ -17,15 +17,15 @@ import noctiluca.features.authentication.templates.scaffold.instancedetail.Insta
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailHeader
 import noctiluca.features.authentication.templates.scaffold.instancedetail.InstanceDetailTopAppBar
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
-import noctiluca.features.components.atoms.card.CardHeader
-import noctiluca.features.components.atoms.card.CardSupporting
-import noctiluca.features.components.atoms.card.FilledCard
-import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
-import noctiluca.features.components.atoms.snackbar.showSnackbar
-import noctiluca.features.components.getCommonString
-import noctiluca.features.components.molecules.scaffold.*
-import noctiluca.features.components.utils.description
-import noctiluca.features.components.utils.label
+import noctiluca.features.shared.atoms.card.CardHeader
+import noctiluca.features.shared.atoms.card.CardSupporting
+import noctiluca.features.shared.atoms.card.FilledCard
+import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
+import noctiluca.features.shared.atoms.snackbar.showSnackbar
+import noctiluca.features.shared.getCommonString
+import noctiluca.features.shared.molecules.scaffold.LoadStateSmallHeadlinedScaffold
+import noctiluca.features.shared.utils.description
+import noctiluca.features.shared.utils.label
 import noctiluca.model.authentication.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)

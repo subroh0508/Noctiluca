@@ -13,8 +13,8 @@ import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffo
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
-import noctiluca.features.components.atoms.snackbar.LocalSnackbarHostState
 import noctiluca.features.navigation.SignInScreen
+import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 

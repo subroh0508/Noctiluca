@@ -14,11 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import noctiluca.features.authentication.getString
-import noctiluca.features.components.atoms.image.AsyncImage
-import noctiluca.features.components.atoms.image.NumberCircle
-import noctiluca.features.components.atoms.list.LeadingAvatarContainerSize
-import noctiluca.features.components.atoms.list.Section
-import noctiluca.features.components.atoms.list.SectionItem
+import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.atoms.image.NumberCircle
+import noctiluca.features.shared.atoms.list.LeadingAvatarContainerSize
+import noctiluca.features.shared.atoms.list.Section
+import noctiluca.features.shared.atoms.list.SectionItem
 import noctiluca.model.authentication.Instance
 
 @Composable

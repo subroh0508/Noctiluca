@@ -1,4 +1,4 @@
-package noctiluca.theme.yellow
+package noctiluca.designsystem.yellow
 
 import androidx.compose.ui.graphics.Color
 

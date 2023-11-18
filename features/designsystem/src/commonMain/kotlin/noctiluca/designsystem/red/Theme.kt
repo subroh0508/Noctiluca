@@ -1,9 +1,9 @@
-package noctiluca.theme.cyan
+package noctiluca.designsystem.red
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 
-val LightCyan = lightColorScheme(
+val LightRed = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
     primaryContainer = md_theme_light_primaryContainer,
@@ -37,7 +37,7 @@ val LightCyan = lightColorScheme(
     */
 )
 
-val DarkCyan = darkColorScheme(
+val DarkRed = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
     primaryContainer = md_theme_dark_primaryContainer,

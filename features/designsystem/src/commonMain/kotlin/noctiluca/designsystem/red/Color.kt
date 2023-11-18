@@ -1,4 +1,4 @@
-package noctiluca.theme.red
+package noctiluca.designsystem.red
 
 import androidx.compose.ui.graphics.Color
 

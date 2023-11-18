@@ -1,4 +1,4 @@
-package noctiluca.theme.purple
+package noctiluca.designsystem.purple
 
 import androidx.compose.ui.graphics.Color
 

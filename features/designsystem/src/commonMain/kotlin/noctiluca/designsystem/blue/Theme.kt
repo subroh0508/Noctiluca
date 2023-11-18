@@ -1,9 +1,9 @@
-package noctiluca.theme.yellow
+package noctiluca.designsystem.blue
 
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 
-val LightYellow = lightColorScheme(
+val LightBlue = lightColorScheme(
     primary = md_theme_light_primary,
     onPrimary = md_theme_light_onPrimary,
     primaryContainer = md_theme_light_primaryContainer,
@@ -37,7 +37,7 @@ val LightYellow = lightColorScheme(
     */
 )
 
-val DarkYellow = darkColorScheme(
+val DarkBlue = darkColorScheme(
     primary = md_theme_dark_primary,
     onPrimary = md_theme_dark_onPrimary,
     primaryContainer = md_theme_dark_primaryContainer,

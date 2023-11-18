@@ -33,7 +33,7 @@ include(
     ":core:domain:timeline",
     ":features:navigation",
     ":features:shared",
-    ":features:theme",
+    ":features:designsystem",
     ":features:page:accountdetail",
     ":features:page:authentication",
     ":features:page:timeline",

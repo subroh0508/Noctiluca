@@ -1,4 +1,4 @@
-package noctiluca.theme.cyan
+package noctiluca.designsystem.cyan
 
 import androidx.compose.ui.graphics.Color
 

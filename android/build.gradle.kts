@@ -10,7 +10,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:model"))
 
-    implementation(project(":features:theme"))
+    implementation(project(":features:designsystem"))
     implementation(project(":features:shared"))
     implementation(project(":features:navigation"))
     implementation(project(":features:page:accountdetail"))

@@ -1,18 +1,18 @@
-package noctiluca.theme
+package noctiluca.designsystem
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import noctiluca.theme.blue.DarkBlue
-import noctiluca.theme.blue.LightBlue
-import noctiluca.theme.cyan.DarkCyan
-import noctiluca.theme.cyan.LightCyan
-import noctiluca.theme.purple.DarkPurple
-import noctiluca.theme.purple.LightPurple
-import noctiluca.theme.red.DarkRed
-import noctiluca.theme.red.LightRed
-import noctiluca.theme.yellow.DarkYellow
-import noctiluca.theme.yellow.LightYellow
+import noctiluca.designsystem.blue.DarkBlue
+import noctiluca.designsystem.blue.LightBlue
+import noctiluca.designsystem.cyan.DarkCyan
+import noctiluca.designsystem.cyan.LightCyan
+import noctiluca.designsystem.purple.DarkPurple
+import noctiluca.designsystem.purple.LightPurple
+import noctiluca.designsystem.red.DarkRed
+import noctiluca.designsystem.red.LightRed
+import noctiluca.designsystem.yellow.DarkYellow
+import noctiluca.designsystem.yellow.LightYellow
 
 enum class ColorPalette { BLUE, CYAN, RED, PURPLE, YELLOW }
 

@@ -2,14 +2,14 @@ package noctiluca.features.timeline
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
-import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
-import noctiluca.features.navigation.SignInScreen
 import noctiluca.features.navigation.TimelineScreen
+import noctiluca.features.navigation.navigateToAccountDetail
+import noctiluca.features.navigation.navigateToTimelines
 import noctiluca.features.shared.AuthorizedComposable
 import noctiluca.features.timeline.di.TimelineComponent
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
@@ -38,15 +38,13 @@ data object TimelinesScreen : Screen {
         val navigator = LocalNavigator.current
         val uiModel by viewModel.uiModel.subscribeAsState()
 
-        val signInScreen = rememberScreen(SignInScreen.MastodonInstanceList)
-
         LaunchedEffect(uiModel.account.current) {
             viewModel.loadCurrentAuthorizedAccount()
         }
 
         TimelineNavigationDrawer(
             uiModel.account,
-            onClickTopAccount = { /*screen.navigateToAccountDetail(it.id.value)*/ },
+            onClickTopAccount = { navigator?.navigateToAccountDetail(it.id) },
             onClickOtherAccount = { account ->
                 viewModel.switch(account)
             },
@@ -54,7 +52,6 @@ data object TimelinesScreen : Screen {
                 handleOnClickDrawerItem(
                     menu,
                     navigator,
-                    signInScreen,
                 )
             },
         ) { drawerState ->
@@ -90,8 +87,7 @@ private fun TimelineFeature(
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,
     navigator: Navigator?,
-    screen: Screen,
 ) = when (item) {
-    is TimelineDrawerMenu.NewAccount -> navigator?.push(screen)
+    is TimelineDrawerMenu.NewAccount -> navigator?.navigateToTimelines()
     is TimelineDrawerMenu.Settings -> Unit
 }

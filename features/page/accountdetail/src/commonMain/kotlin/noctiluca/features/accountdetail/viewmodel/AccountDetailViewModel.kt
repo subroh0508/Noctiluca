@@ -9,23 +9,22 @@ import kotlinx.coroutines.CoroutineScope
 import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
-import noctiluca.features.accountdetail.AccountDetailNavigator
-import noctiluca.features.components.AuthorizedViewModel
-import noctiluca.features.components.LocalCoroutineExceptionHandler
-import noctiluca.features.components.UnauthorizedExceptionHandler
+import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.components.model.LoadState
+import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
+import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 class AccountDetailViewModel private constructor(
     val id: AccountId,
     private val fetchAccountAttributesUseCase: FetchAccountAttributesUseCase,
     private val fetchAccountStatusesUseCase: FetchAccountStatusesUseCase,
+    authorizedUserRepository: AuthorizedUserRepository,
     coroutineScope: CoroutineScope,
-    exceptionHandler: UnauthorizedExceptionHandler,
-) : AuthorizedViewModel(coroutineScope, exceptionHandler) {
+) : AuthorizedViewModel(authorizedUserRepository, coroutineScope) {
     private val mutableUiModel by lazy { MutableValue(UiModel()) }
 
     private val tab by lazy {
@@ -128,18 +127,18 @@ class AccountDetailViewModel private constructor(
     companion object Provider {
         @Composable
         operator fun invoke(
-            context: AccountDetailNavigator.Screen,
+            id: AccountId,
+            component: KoinComponent,
         ): AccountDetailViewModel {
             val coroutineScope = rememberCoroutineScope()
-            val handler = LocalCoroutineExceptionHandler.current
 
             return remember {
                 AccountDetailViewModel(
-                    context.id,
-                    context.get(),
-                    context.get(),
+                    id,
+                    component.get(),
+                    component.get(),
+                    component.get(),
                     coroutineScope,
-                    handler,
                 )
             }
         }

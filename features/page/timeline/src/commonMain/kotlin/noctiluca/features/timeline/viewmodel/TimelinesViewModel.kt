@@ -201,8 +201,6 @@ class TimelinesViewModel private constructor(
     )
 
     companion object Provider {
-        private const val UI_MODEL_KEEPER = "TimelinesViewModel.UiModel"
-
         @Composable
         operator fun invoke(
             component: KoinComponent,

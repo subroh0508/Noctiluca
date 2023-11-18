@@ -1,34 +1,39 @@
 package noctiluca.features.accountdetail
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.compositionLocalOf
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
+import cafe.adriel.voyager.core.registry.screenModule
+import cafe.adriel.voyager.core.screen.Screen
+import noctiluca.features.accountdetail.di.AccountDetailComponent
 import noctiluca.features.accountdetail.templates.scaffold.AccountDetailScaffold
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
-import noctiluca.features.components.AuthorizedFeatureComposable
+import noctiluca.features.shared.AuthorizedComposable
+import noctiluca.model.AccountId
+import noctiluca.features.navigation.AccountDetailScreen as NavigationAccountDetailScreen
 
-internal val LocalNavigator = compositionLocalOf<AccountDetailNavigator?> { null }
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
-@Composable
-fun AccountDetailScreen(
-    screen: AccountDetailNavigator.Screen,
-) = AccountDetailFeature(screen) {
-    AccountDetailScaffold(AccountDetailViewModel.Provider(screen))
+val featureAccountDetailScreenModule = screenModule {
+    register<NavigationAccountDetailScreen> { provider ->
+        AccountDetailScreen(provider.id)
+    }
 }
 
-@Composable
-private fun AccountDetailFeature(
-    screen: AccountDetailNavigator.Screen,
-    content: @Composable () -> Unit,
-) = AuthorizedFeatureComposable(
-    context = screen,
-    navigator = screen,
-) { navigator ->
-    CompositionLocalProvider(
-        LocalResources provides Resources(Locale.current.language),
-        LocalNavigator provides navigator,
-    ) { content() }
+internal data class AccountDetailScreen(
+    private val id: String,
+) : Screen {
+    @Composable
+    override fun Content() {
+        val component = remember { AccountDetailComponent() }
+        val viewModel = AccountDetailViewModel.Provider(
+            AccountId(id),
+            component,
+        )
+
+        AuthorizedComposable(viewModel) {
+            CompositionLocalProvider(
+                LocalResources provides Resources(Locale.current.language),
+            ) { AccountDetailScaffold(viewModel) }
+        }
+    }
 }

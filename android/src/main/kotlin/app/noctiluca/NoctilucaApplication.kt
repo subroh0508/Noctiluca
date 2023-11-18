@@ -7,6 +7,7 @@ import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
 import noctiluca.data.di.DataModule
 import noctiluca.datastore.di.DataStoreModule
+import noctiluca.features.accountdetail.featureAccountDetailScreenModule
 import noctiluca.features.authentication.featureSignInScreenModule
 import noctiluca.features.components.di.ImageLoaderModule
 import noctiluca.features.timeline.featureTimelineScreenModule
@@ -51,6 +52,7 @@ class NoctilucaApplication : Application() {
         ScreenRegistry {
             featureSignInScreenModule()
             featureTimelineScreenModule()
+            featureAccountDetailScreenModule()
         }
     }
 

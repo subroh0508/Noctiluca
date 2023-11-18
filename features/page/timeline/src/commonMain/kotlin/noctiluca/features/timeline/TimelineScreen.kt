@@ -6,7 +6,6 @@ import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.navigation.TimelineScreen
 import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToTimelines
@@ -36,7 +35,7 @@ data object TimelinesScreen : Screen {
     @Composable
     override fun Content() = TimelineFeature { viewModel ->
         val navigator = LocalNavigator.current
-        val uiModel by viewModel.uiModel.subscribeAsState()
+        val uiModel by viewModel.uiModel.collectAsState()
 
         LaunchedEffect(uiModel.account.current) {
             viewModel.loadCurrentAuthorizedAccount()

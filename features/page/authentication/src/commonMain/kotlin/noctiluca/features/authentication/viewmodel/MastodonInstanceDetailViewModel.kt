@@ -26,15 +26,17 @@ class MastodonInstanceDetailViewModel private constructor(
     private val instanceLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val statuses by lazy { MutableStateFlow(listOf<Status>()) }
 
-    val uiModel = combine(
-        instanceLoadState,
-        statuses,
-    ) { instance, statuses -> UiModel(instance, statuses) }
-        .stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = UiModel(),
-        )
+    val uiModel by lazy {
+        combine(
+            instanceLoadState,
+            statuses,
+        ) { instance, statuses -> UiModel(instance, statuses) }
+            .stateIn(
+                scope = coroutineScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = UiModel(),
+            )
+    }
 
     fun load() {
         loadInstanceDetail()

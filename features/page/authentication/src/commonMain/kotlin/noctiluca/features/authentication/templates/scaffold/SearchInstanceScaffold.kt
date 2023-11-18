@@ -25,7 +25,6 @@ internal fun SearchInstanceScaffold(
     val navigator = LocalNavigator.current
     val uiModel by viewModel.uiModel.collectAsState()
 
-    println(uiModel.suggests)
     Scaffold(
         topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
     ) { paddingValues ->

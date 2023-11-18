@@ -17,15 +17,17 @@ class MastodonInstanceListViewModel(
     private val instanceSuggests by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val query by lazy { MutableStateFlow("") }
 
-    val uiModel = combine(
-        instanceSuggests,
-        query,
-    ) { suggests, query -> UiModel(query, suggests) }
-        .stateIn(
-            scope = coroutineScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = UiModel(),
-        )
+    val uiModel by lazy {
+        combine(
+            instanceSuggests,
+            query,
+        ) { suggests, query -> UiModel(query, suggests) }
+            .stateIn(
+                scope = coroutineScope,
+                started = SharingStarted.WhileSubscribed(),
+                initialValue = UiModel(),
+            )
+    }
 
     fun search(query: String) {
         val prevQuery = uiModel.value.query

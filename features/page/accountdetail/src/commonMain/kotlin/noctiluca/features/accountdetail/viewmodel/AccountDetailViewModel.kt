@@ -3,9 +3,8 @@ package noctiluca.features.accountdetail.viewmodel
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.*
 import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
@@ -25,37 +24,36 @@ class AccountDetailViewModel private constructor(
     authorizedUserRepository: AuthorizedUserRepository,
     coroutineScope: CoroutineScope,
 ) : AuthorizedViewModel(authorizedUserRepository, coroutineScope) {
-    private val mutableUiModel by lazy { MutableValue(UiModel()) }
+    private val accountDetailLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
+    private val tab by lazy { MutableStateFlow(UiModel.Tab.STATUSES) }
+    private val statuses by lazy { MutableStateFlow<Map<UiModel.Tab, List<Status>>>(mapOf()) }
 
-    private val tab by lazy {
-        MutableValue(UiModel.Tab.STATUSES).also {
-            it.subscribe { tab ->
-                mutableUiModel.value = uiModel.value.copy(tab = tab)
-            }
-        }
+    val uiModel by lazy {
+        combine(
+            accountDetailLoadState,
+            tab,
+            statuses,
+        ) { accountDetailLoadState, tab, statuses ->
+            UiModel(
+                accountDetailLoadState,
+                tab = tab,
+                statuses = statuses,
+            )
+        }.stateIn(
+            scope = coroutineScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = UiModel(),
+        )
     }
-    private val statuses by lazy {
-        MutableValue(listOf<Status>()).also {
-            it.subscribe { statuses ->
-                val current = uiModel.value.statuses[tab.value] ?: listOf()
-
-                mutableUiModel.value = uiModel.value.copy(
-                    statuses = uiModel.value.statuses + mapOf(tab.value to current + statuses),
-                )
-            }
-        }
-    }
-
-    val uiModel: Value<UiModel> = mutableUiModel
 
     fun load() {
         val job = launchLazy {
             runCatchingWithAuth { fetchAccountAttributesUseCase.execute(id) }
-                .onSuccess { mutableUiModel.value = uiModel.value.copy(account = LoadState.Loaded(it)) }
-                .onFailure { mutableUiModel.value = uiModel.value.copy(account = LoadState.Error(it)) }
+                .onSuccess { accountDetailLoadState.value = LoadState.Loaded(it) }
+                .onFailure { accountDetailLoadState.value = LoadState.Error(it) }
         }
 
-        mutableUiModel.value = uiModel.value.copy(account = LoadState.Loading(job))
+        accountDetailLoadState.value = LoadState.Loading(job)
         job.start()
     }
 
@@ -64,7 +62,7 @@ class AccountDetailViewModel private constructor(
     }
 
     fun refreshStatuses() {
-        val tabs = UiModel.Tab.values()
+        val tabs = UiModel.Tab.entries.toTypedArray()
 
         tabs.forEach { t ->
             if (uiModel.value.statuses[t]?.isNotEmpty() == true) {
@@ -78,13 +76,7 @@ class AccountDetailViewModel private constructor(
                         t.buildQuery(),
                     )
                 }
-                    .onSuccess {
-                        val current = uiModel.value
-
-                        mutableUiModel.value = current.copy(
-                            statuses = current.statuses + mapOf(t to it),
-                        )
-                    }
+                    .onSuccess { statuses.value += mapOf(t to it) }
                     .onFailure { }
             }
         }
@@ -101,7 +93,11 @@ class AccountDetailViewModel private constructor(
                     tab.buildQuery(foregroundStatuses.lastOrNull()?.id),
                 )
             }
-                .onSuccess { statuses.value = it }
+                .onSuccess {
+                    val current = statuses.value[tab] ?: listOf()
+
+                    statuses.value += mapOf(tab to current + it)
+                }
                 .onFailure { }
         }
     }

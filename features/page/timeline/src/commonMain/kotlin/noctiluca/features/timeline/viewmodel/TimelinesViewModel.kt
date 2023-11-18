@@ -1,10 +1,11 @@
 package noctiluca.features.timeline.viewmodel
 
 import androidx.compose.runtime.*
-import com.arkivanov.decompose.value.MutableValue
-import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.subscribe
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.model.Domain
@@ -27,9 +28,10 @@ class TimelinesViewModel private constructor(
     authorizedUserRepository: AuthorizedUserRepository,
     coroutineScope: CoroutineScope,
 ) : AuthorizedViewModel(authorizedUserRepository, coroutineScope) {
-    private val mutableUiModel by lazy { MutableValue(UiModel()) }
+    private val subscribed by lazy { MutableStateFlow(false) }
+    private val mutableUiModel by lazy { MutableStateFlow(UiModel()) }
 
-    val uiModel: Value<UiModel> = mutableUiModel
+    val uiModel: StateFlow<UiModel> = mutableUiModel
 
     fun switch(account: Account) {
         launch {
@@ -76,6 +78,11 @@ class TimelinesViewModel private constructor(
     }
 
     fun subscribeAll() {
+        if (subscribed.value) {
+            return
+        }
+
+        subscribed.value = true
         uiModel.value.timelines.forEachIndexed { index, (timeline) -> subscribe(index, timeline) }
     }
 

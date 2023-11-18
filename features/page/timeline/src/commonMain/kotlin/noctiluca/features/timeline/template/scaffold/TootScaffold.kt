@@ -6,7 +6,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
-import com.arkivanov.decompose.extensions.compose.jetbrains.subscribeAsState
 import noctiluca.features.shared.toot.TootBox
 import noctiluca.features.timeline.template.scaffold.toot.TootTopAppBar
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
@@ -20,7 +19,7 @@ internal fun TootScaffold(
         viewModel.loadCurrentAuthorizedAccount()
     }
 
-    val uiModel by viewModel.uiModel.subscribeAsState()
+    val uiModel by viewModel.uiModel.collectAsState()
 
     val navigator = LocalNavigator.current
 

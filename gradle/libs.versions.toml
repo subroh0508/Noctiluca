@@ -20,7 +20,6 @@ kotlinx-serialization = "1.6.0"
 ktor = "2.3.6"
 
 voyager = "1.0.0-rc10"
-decompose = "2.1.4"
 
 koin = "3.5.0"
 
@@ -88,9 +87,6 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }
 voyager-koin = { module = "cafe.adriel.voyager:voyager-koin", version.ref = "voyager" }
-
-decompose-core = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
-decompose-compose-jetbrains = { module = "com.arkivanov.decompose:extensions-compose-jetbrains", version.ref = "decompose" }
 
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }

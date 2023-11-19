@@ -39,6 +39,10 @@ abstract class AuthorizedViewModel(
         }
     }
 
+    internal fun reset() {
+        mutableEvent.value = Event.OK
+    }
+
     protected fun reopen() {
         mutableEvent.value = Event.REOPEN
     }

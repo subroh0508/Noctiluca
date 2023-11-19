@@ -5,20 +5,20 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.navigator.Navigator
-import noctiluca.features.authentication.di.SignInComponent
+import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildAuthorizeResult
+import noctiluca.features.authentication.model.buildRedirectUri
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
-import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.navigation.MastodonInstanceDetailParams
 import noctiluca.features.navigation.MastodonInstanceListParams
 import noctiluca.features.navigation.SignIn
 import noctiluca.features.navigation.SignInParams
 import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
+import org.koin.core.parameter.parametersOf
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
@@ -27,58 +27,46 @@ val featureSignInScreenModule = screenModule {
 }
 
 internal data class SignInScreen(
-    val params: SignInParams
+    val params: SignInParams,
 ) : Screen {
+    constructor(domain: String) : this(MastodonInstanceDetailParams(domain, null))
+
     @Composable
     override fun Content() = SignInFeature {
-
         when (params) {
-            is MastodonInstanceListParams -> Navigator(MastodonInstanceListScreen)
-            is MastodonInstanceDetailParams -> Navigator(
-                MastodonInstanceDetailScreen(
-                    params.domain,
-                    buildAuthorizeResult(params),
-                )
+            is MastodonInstanceListParams -> MastodonInstanceListScreen()
+            is MastodonInstanceDetailParams -> MastodonInstanceDetailScreen(
+                params.domain,
+                buildAuthorizeResult(params),
             )
         }
     }
 }
 
-internal data object MastodonInstanceListScreen : Screen {
-    @Composable
-    override fun Content() = SignInFeature {
-        val component = remember { SignInComponent() }
-        val viewModel = MastodonInstanceListViewModel.Provider(component)
+@Composable
+internal fun Screen.MastodonInstanceListScreen() {
+    val viewModel: MastodonInstanceListViewModel = getScreenModel()
 
-        SearchInstanceScaffold(viewModel)
-    }
+    SearchInstanceScaffold(viewModel)
 }
 
-internal data class MastodonInstanceDetailScreen(
-    private val domain: String,
-    private val authorizeResult: AuthorizeResult? = null,
-) : Screen {
-    @Composable
-    override fun Content() = SignInFeature {
-        val component = remember { SignInComponent() }
+@Composable
+internal fun Screen.MastodonInstanceDetailScreen(
+    domain: String,
+    authorizeResult: AuthorizeResult?,
+) {
+    val clientName = getString().sign_in_client_name
+    val redirectUri = buildRedirectUri(domain)
+    val authorizeViewModel: AuthorizeViewModel = getScreenModel { parametersOf(clientName, redirectUri) }
 
-        val authorizeViewModel = AuthorizeViewModel.Provider(
-            domain,
-            component,
-        )
+    HandleAuthorize(authorizeResult, authorizeViewModel)
+    HandleDeepLink()
 
-        HandleAuthorize(authorizeResult, authorizeViewModel)
-        HandleDeepLink()
-
-        InstanceDetailScaffold(
-            MastodonInstanceDetailViewModel.Provider(
-                domain,
-                component,
-            ),
-            authorizeResult,
-            authorizeViewModel.isFetchingAccessToken,
-        ) { authorizeViewModel.requestAuthorize(it) }
-    }
+    InstanceDetailScaffold(
+        getScreenModel { parametersOf(domain) },
+        authorizeResult,
+        authorizeViewModel.isFetchingAccessToken,
+    ) { authorizeViewModel.requestAuthorize(it) }
 }
 
 @Composable

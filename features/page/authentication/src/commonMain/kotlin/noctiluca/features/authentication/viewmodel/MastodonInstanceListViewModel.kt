@@ -13,7 +13,7 @@ import org.koin.core.component.get
 
 class MastodonInstanceListViewModel(
     private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
-) : ViewModel() {
+) : ViewModel(), ScreenModel {
     private val instanceSuggests by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val query by lazy { MutableStateFlow("") }
 

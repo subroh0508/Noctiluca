@@ -2,6 +2,7 @@ package noctiluca.features.authentication.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -18,11 +19,11 @@ import noctiluca.model.status.Status
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class MastodonInstanceDetailViewModel private constructor(
+class MastodonInstanceDetailViewModel(
     val domain: String,
     private val fetchMastodonInstanceUseCase: FetchMastodonInstanceUseCase,
     private val fetchLocalTimelineUseCase: FetchLocalTimelineUseCase,
-) : ViewModel() {
+) : ViewModel(), ScreenModel {
     private val instanceLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val statuses by lazy { MutableStateFlow(listOf<Status>()) }
 

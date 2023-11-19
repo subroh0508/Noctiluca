@@ -2,6 +2,7 @@ package noctiluca.features.authentication.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,12 +20,12 @@ import noctiluca.model.authentication.Instance
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class AuthorizeViewModel private constructor(
+class AuthorizeViewModel(
     private val clientName: String,
     private val redirectUri: Uri,
     private val requestAppCredentialUseCase: RequestAppCredentialUseCase,
     private val requestRequestAccessTokenUseCase: RequestAccessTokenUseCase,
-) : ViewModel() {
+) : ViewModel(), ScreenModel {
     private val mutableEvent by lazy { MutableStateFlow<Event>(Event.Initial) }
 
     val event: StateFlow<Event> = mutableEvent

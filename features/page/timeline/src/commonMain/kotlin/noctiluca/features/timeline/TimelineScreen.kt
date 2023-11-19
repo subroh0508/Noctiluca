@@ -4,13 +4,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
-import noctiluca.features.navigation.TimelineScreen
+import noctiluca.features.navigation.Timeline
 import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToSignIn
 import noctiluca.features.shared.AuthorizedComposable
-import noctiluca.features.timeline.di.TimelineComponent
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
@@ -20,18 +20,15 @@ import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
 val featureTimelineScreenModule = screenModule {
-    register<TimelineScreen.Timelines> {
-        TimelinesScreen
+    register<Timeline.TimelineLane> {
+        TimelineLaneScreen
     }
-    register<TimelineScreen.Toot> {
+    register<Timeline.Toot> {
         TootScreen
     }
 }
 
-@Composable
-fun FeatureTimelineScreen() = Navigator(TimelinesScreen)
-
-data object TimelinesScreen : Screen {
+data object TimelineLaneScreen : Screen {
     @Composable
     override fun Content() = TimelineFeature { viewModel ->
         val navigator = LocalNavigator.current
@@ -62,7 +59,7 @@ data object TimelinesScreen : Screen {
     }
 }
 
-data object TootScreen : Screen {
+internal data object TootScreen : Screen {
     @Composable
     override fun Content() = TimelineFeature { viewModel ->
         TootScaffold(viewModel)
@@ -70,11 +67,10 @@ data object TootScreen : Screen {
 }
 
 @Composable
-private fun TimelineFeature(
+private fun Screen.TimelineFeature(
     content: @Composable (TimelinesViewModel) -> Unit,
 ) {
-    val component = remember { TimelineComponent() }
-    val viewModel = TimelinesViewModel.Provider(component)
+    val viewModel: TimelinesViewModel = getScreenModel()
 
     AuthorizedComposable(viewModel) {
         CompositionLocalProvider(

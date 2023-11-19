@@ -1,6 +1,7 @@
 package noctiluca.features.timeline.viewmodel
 
 import androidx.compose.runtime.*
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -19,14 +20,14 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
-class TimelinesViewModel private constructor(
+class TimelinesViewModel(
     private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,
     private val fetchAllAuthorizedAccountsUseCase: FetchAllAuthorizedAccountsUseCase,
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
     private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     authorizedUserRepository: AuthorizedUserRepository,
-) : AuthorizedViewModel(authorizedUserRepository) {
+) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
     private val subscribed by lazy { MutableStateFlow(false) }
     private val mutableUiModel by lazy { MutableStateFlow(UiModel()) }
 

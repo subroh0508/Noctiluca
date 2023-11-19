@@ -7,19 +7,19 @@ import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 
-sealed class TimelineScreen : ScreenProvider {
-    data object Timelines : TimelineScreen()
-    data object Toot : TimelineScreen()
+sealed class Timeline : ScreenProvider {
+    data object TimelineLane : Timeline()
+    data object Toot : Timeline()
 }
 
 fun Navigator.navigateToTimelines() {
-    push(ScreenRegistry.get(TimelineScreen.Timelines))
+    push(ScreenRegistry.get(Timeline.TimelineLane))
 }
 
 @Composable
 fun navigateToTimelines() {
     val navigator = LocalNavigator.current
-    val timelines = rememberScreen(TimelineScreen.Timelines)
+    val timelines = rememberScreen(Timeline.TimelineLane)
 
     navigator?.replaceAll(timelines)
 }

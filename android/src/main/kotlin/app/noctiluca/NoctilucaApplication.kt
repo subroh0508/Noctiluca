@@ -11,6 +11,7 @@ import noctiluca.datastore.di.DataStoreModule
 import noctiluca.features.accountdetail.featureAccountDetailScreenModule
 import noctiluca.features.authentication.di.FeatureSignInModule
 import noctiluca.features.authentication.featureSignInScreenModule
+import noctiluca.features.timeline.di.FeatureTimelineModule
 import noctiluca.features.timeline.featureTimelineScreenModule
 import noctiluca.network.authentication.di.AuthenticationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
@@ -77,5 +78,6 @@ class NoctilucaApplication : Application() {
 
     private fun buildFeaturesModule() = module {
         FeatureSignInModule()
+        FeatureTimelineModule()
     }
 }

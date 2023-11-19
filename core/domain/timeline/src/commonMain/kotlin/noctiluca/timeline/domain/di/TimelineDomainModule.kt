@@ -6,13 +6,13 @@ import noctiluca.timeline.domain.usecase.internal.FetchAllAuthorizedAccountsUseC
 import noctiluca.timeline.domain.usecase.internal.FetchCurrentAuthorizedAccountUseCaseImpl
 import noctiluca.timeline.domain.usecase.internal.FetchTimelineStreamUseCaseImpl
 import noctiluca.timeline.domain.usecase.internal.UpdateTimelineUseCaseImpl
-import org.koin.dsl.ScopeDSL
+import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-fun ScopeDSL.TimelineDomainModule() {
-    scoped<FetchCurrentAuthorizedAccountUseCase> { FetchCurrentAuthorizedAccountUseCaseImpl(get()) }
-    scoped<FetchAllAuthorizedAccountsUseCase> { FetchAllAuthorizedAccountsUseCaseImpl(get()) }
-    scoped<FetchTimelineStreamUseCase> { FetchTimelineStreamUseCaseImpl(get()) }
-    scoped<UpdateTimelineUseCase> { UpdateTimelineUseCaseImpl(get()) }
-    scoped<ExecuteStatusActionUseCase> { ExecuteStatusActionUseCaseImpl(get()) }
+fun Module.TimelineDomainModule() {
+    single<FetchCurrentAuthorizedAccountUseCase> { FetchCurrentAuthorizedAccountUseCaseImpl(get()) }
+    single<FetchAllAuthorizedAccountsUseCase> { FetchAllAuthorizedAccountsUseCaseImpl(get()) }
+    single<FetchTimelineStreamUseCase> { FetchTimelineStreamUseCaseImpl(get()) }
+    single<UpdateTimelineUseCase> { UpdateTimelineUseCaseImpl(get()) }
+    single<ExecuteStatusActionUseCase> { ExecuteStatusActionUseCaseImpl(get()) }
 }

@@ -36,6 +36,7 @@ class TimelinesViewModel(
     fun switch(account: Account) {
         launch {
             authorizedUserRepository.switch(account.id)
+            clear()
             reopen()
         }
     }
@@ -105,6 +106,11 @@ class TimelinesViewModel(
     fun favourite(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.FAVOURITE)
     fun boost(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOST)
     fun bookmark(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOKMARK)
+
+    fun clear() {
+        mutableUiModel.value = UiModel()
+        subscribed.value = false
+    }
 
     private fun execute(timeline: Timeline, status: Status, action: StatusAction) {
         val index = uiModel.value.timelines.indexOfFirst { it.timeline == timeline }

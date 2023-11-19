@@ -1,7 +1,7 @@
 package noctiluca.features.shared
 
 import androidx.compose.runtime.*
-import noctiluca.features.navigation.navigateToSignIn
+import noctiluca.features.navigation.backToSignIn
 import noctiluca.features.navigation.navigateToTimelines
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 
@@ -12,13 +12,16 @@ fun AuthorizedComposable(
 ) {
     val event by viewModel.event.collectAsState()
 
-    DisposableEffect(Unit) {
-        onDispose { viewModel.reset() }
-    }
-
     when (event) {
         AuthorizedViewModel.Event.OK -> content()
-        AuthorizedViewModel.Event.REOPEN -> navigateToTimelines()
-        AuthorizedViewModel.Event.SIGN_IN -> navigateToSignIn()
+        AuthorizedViewModel.Event.REOPEN -> {
+            viewModel.reset()
+            navigateToTimelines()
+        }
+
+        AuthorizedViewModel.Event.SIGN_IN -> {
+            viewModel.reset()
+            backToSignIn()
+        }
     }
 }

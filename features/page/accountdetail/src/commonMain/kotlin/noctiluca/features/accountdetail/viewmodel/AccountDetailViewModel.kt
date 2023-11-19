@@ -2,6 +2,7 @@ package noctiluca.features.accountdetail.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
@@ -18,12 +19,12 @@ import noctiluca.model.status.Status
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class AccountDetailViewModel private constructor(
+class AccountDetailViewModel(
     val id: AccountId,
     private val fetchAccountAttributesUseCase: FetchAccountAttributesUseCase,
     private val fetchAccountStatusesUseCase: FetchAccountStatusesUseCase,
     authorizedUserRepository: AuthorizedUserRepository,
-) : AuthorizedViewModel(authorizedUserRepository) {
+) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
     private val accountDetailLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val tab by lazy { MutableStateFlow(UiModel.Tab.STATUSES) }
     private val statuses by lazy { MutableStateFlow<Map<UiModel.Tab, List<Status>>>(mapOf()) }

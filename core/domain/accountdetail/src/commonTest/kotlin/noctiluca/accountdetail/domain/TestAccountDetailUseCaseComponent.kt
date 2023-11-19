@@ -47,8 +47,6 @@ class TestAccountDetailUseCaseComponent(
 
         DataAccountDetailModule()
 
-        scope(scope.scopeQualifier) {
-            AccountDetailDomainModule()
-        }
+        AccountDetailDomainModule()
     }
 }

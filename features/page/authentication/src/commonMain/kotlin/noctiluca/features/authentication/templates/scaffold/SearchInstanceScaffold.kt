@@ -7,7 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.features.authentication.MastodonInstanceDetailScreen
+import noctiluca.features.authentication.SignInScreen
 import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
 import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
@@ -40,7 +40,7 @@ internal fun SearchInstanceScaffold(
                 InstanceSuggestsList(
                     suggests,
                     onSelect = {
-                        navigator?.push(MastodonInstanceDetailScreen(it.domain))
+                        navigator?.push(SignInScreen(it.domain))
                     },
                 )
             },

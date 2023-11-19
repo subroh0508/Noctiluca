@@ -10,6 +10,7 @@ import kotlinx.datetime.LocalDateTime
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.atoms.card.FilledCard
+import noctiluca.features.shared.atoms.divider.Divider
 import noctiluca.features.shared.atoms.text.HtmlText
 import noctiluca.features.shared.utils.format
 import noctiluca.features.shared.utils.toYearMonthDay

@@ -2,8 +2,7 @@ package noctiluca.features.authentication.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.CoroutineScope
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
@@ -12,17 +11,19 @@ import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
 import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.ViewModel
+import noctiluca.features.shared.viewmodel.launch
+import noctiluca.features.shared.viewmodel.launchLazy
+import noctiluca.features.shared.viewmodel.viewModelScope
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class MastodonInstanceDetailViewModel private constructor(
+class MastodonInstanceDetailViewModel(
     val domain: String,
     private val fetchMastodonInstanceUseCase: FetchMastodonInstanceUseCase,
     private val fetchLocalTimelineUseCase: FetchLocalTimelineUseCase,
-    coroutineScope: CoroutineScope,
-) : ViewModel(coroutineScope) {
+) : ViewModel(), ScreenModel {
     private val instanceLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val statuses by lazy { MutableStateFlow(listOf<Status>()) }
 
@@ -32,7 +33,7 @@ class MastodonInstanceDetailViewModel private constructor(
             statuses,
         ) { instance, statuses -> UiModel(instance, statuses) }
             .stateIn(
-                scope = coroutineScope,
+                scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),
                 initialValue = UiModel(),
             )
@@ -86,14 +87,11 @@ class MastodonInstanceDetailViewModel private constructor(
             domain: String,
             koinComponent: KoinComponent,
         ): MastodonInstanceDetailViewModel {
-            val coroutineScope = rememberCoroutineScope()
-
             return remember {
                 MastodonInstanceDetailViewModel(
                     domain,
                     koinComponent.get(),
                     koinComponent.get(),
-                    coroutineScope,
                 )
             }
         }

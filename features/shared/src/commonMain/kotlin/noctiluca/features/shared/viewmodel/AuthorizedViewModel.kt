@@ -1,6 +1,5 @@
 package noctiluca.features.shared.viewmodel
 
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import noctiluca.data.authentication.AuthorizedUserRepository
@@ -10,8 +9,7 @@ import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class AuthorizedViewModel(
     protected val authorizedUserRepository: AuthorizedUserRepository,
-    coroutineScope: CoroutineScope,
-) : ViewModel(coroutineScope) {
+) : ViewModel() {
     enum class Event { OK, REOPEN, SIGN_IN }
 
     private val mutableEvent by lazy { MutableStateFlow(Event.OK) }
@@ -39,6 +37,10 @@ abstract class AuthorizedViewModel(
                 .onSuccess { reopen() }
                 .onFailure { requestSignIn() }
         }
+    }
+
+    internal fun reset() {
+        mutableEvent.value = Event.OK
     }
 
     protected fun reopen() {

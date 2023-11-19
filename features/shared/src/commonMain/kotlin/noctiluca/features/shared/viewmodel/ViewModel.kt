@@ -6,21 +6,21 @@ import kotlinx.coroutines.launch
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
-abstract class ViewModel(
-    protected val coroutineScope: CoroutineScope,
-) {
-    protected fun launch(
-        context: CoroutineContext = EmptyCoroutineContext,
-        start: CoroutineStart = CoroutineStart.DEFAULT,
-        block: suspend CoroutineScope.() -> Unit,
-    ) = coroutineScope.launch(
-        context,
-        start,
-        block,
-    )
+expect abstract class ViewModel()
 
-    protected fun launchLazy(
-        context: CoroutineContext = EmptyCoroutineContext,
-        block: suspend CoroutineScope.() -> Unit,
-    ) = launch(context, CoroutineStart.LAZY, block)
-}
+expect val ViewModel.viewModelScope: CoroutineScope
+
+fun ViewModel.launch(
+    context: CoroutineContext = EmptyCoroutineContext,
+    start: CoroutineStart = CoroutineStart.DEFAULT,
+    block: suspend CoroutineScope.() -> Unit,
+) = viewModelScope.launch(
+    context,
+    start,
+    block,
+)
+
+fun ViewModel.launchLazy(
+    context: CoroutineContext = EmptyCoroutineContext,
+    block: suspend CoroutineScope.() -> Unit,
+) = launch(context, CoroutineStart.LAZY, block)

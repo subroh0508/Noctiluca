@@ -4,10 +4,10 @@ import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
 import noctiluca.accountdetail.domain.usecase.internal.FetchAccountAttributesUseCaseImpl
 import noctiluca.accountdetail.domain.usecase.internal.FetchAccountStatusesUseCaseImpl
-import org.koin.dsl.ScopeDSL
+import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-fun ScopeDSL.AccountDetailDomainModule() {
-    scoped<FetchAccountAttributesUseCase> { FetchAccountAttributesUseCaseImpl(get()) }
-    scoped<FetchAccountStatusesUseCase> { FetchAccountStatusesUseCaseImpl(get()) }
+fun Module.AccountDetailDomainModule() {
+    single<FetchAccountAttributesUseCase> { FetchAccountAttributesUseCaseImpl(get()) }
+    single<FetchAccountStatusesUseCase> { FetchAccountStatusesUseCaseImpl(get()) }
 }

@@ -8,7 +8,7 @@ fun Navigator.redirectToSignIn(uri: Uri) {
     val host = uri.host ?: return
 
     val screen = ScreenRegistry.get(
-        SignInScreen.MastodonInstanceDetail(host, uri.query),
+        SignIn(MastodonInstanceDetailParams(host, uri.query)),
     )
 
     push(screen)

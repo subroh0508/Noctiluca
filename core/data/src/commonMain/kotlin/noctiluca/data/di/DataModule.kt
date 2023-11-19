@@ -1,9 +1,9 @@
 package noctiluca.data.di
 
-import org.koin.core.module.Module
+import org.koin.dsl.module
 
 @Suppress("FunctionName")
-fun Module.DataModule() {
+fun DataModule() = module {
     DataAccountModule()
     DataAccountDetailModule()
     DataAuthenticationModule()

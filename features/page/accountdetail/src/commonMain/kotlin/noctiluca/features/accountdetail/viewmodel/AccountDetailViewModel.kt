@@ -2,8 +2,7 @@ package noctiluca.features.accountdetail.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.CoroutineScope
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
@@ -11,19 +10,21 @@ import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
+import noctiluca.features.shared.viewmodel.launch
+import noctiluca.features.shared.viewmodel.launchLazy
+import noctiluca.features.shared.viewmodel.viewModelScope
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
-class AccountDetailViewModel private constructor(
+class AccountDetailViewModel(
     val id: AccountId,
     private val fetchAccountAttributesUseCase: FetchAccountAttributesUseCase,
     private val fetchAccountStatusesUseCase: FetchAccountStatusesUseCase,
     authorizedUserRepository: AuthorizedUserRepository,
-    coroutineScope: CoroutineScope,
-) : AuthorizedViewModel(authorizedUserRepository, coroutineScope) {
+) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
     private val accountDetailLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val tab by lazy { MutableStateFlow(UiModel.Tab.STATUSES) }
     private val statuses by lazy { MutableStateFlow<Map<UiModel.Tab, List<Status>>>(mapOf()) }
@@ -40,7 +41,7 @@ class AccountDetailViewModel private constructor(
                 statuses = statuses,
             )
         }.stateIn(
-            scope = coroutineScope,
+            scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
             initialValue = UiModel(),
         )
@@ -126,15 +127,12 @@ class AccountDetailViewModel private constructor(
             id: AccountId,
             component: KoinComponent,
         ): AccountDetailViewModel {
-            val coroutineScope = rememberCoroutineScope()
-
             return remember {
                 AccountDetailViewModel(
                     id,
                     component.get(),
                     component.get(),
                     component.get(),
-                    coroutineScope,
                 )
             }
         }

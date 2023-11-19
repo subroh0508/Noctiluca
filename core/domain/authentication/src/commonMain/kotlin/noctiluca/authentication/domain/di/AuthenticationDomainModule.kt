@@ -6,13 +6,13 @@ import noctiluca.authentication.domain.usecase.internal.FetchMastodonInstanceUse
 import noctiluca.authentication.domain.usecase.internal.RequestAccessTokenUseCaseImpl
 import noctiluca.authentication.domain.usecase.internal.RequestAppCredentialUseCaseImpl
 import noctiluca.authentication.domain.usecase.internal.SearchMastodonInstancesUseCaseImpl
-import org.koin.dsl.ScopeDSL
+import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-fun ScopeDSL.AuthenticationDomainModule() {
-    scoped<SearchMastodonInstancesUseCase> { SearchMastodonInstancesUseCaseImpl(get()) }
-    scoped<FetchMastodonInstanceUseCase> { FetchMastodonInstanceUseCaseImpl(get()) }
-    scoped<FetchLocalTimelineUseCase> { FetchLocalTimelineUseCaseImpl(get()) }
-    scoped<RequestAppCredentialUseCase> { RequestAppCredentialUseCaseImpl(get()) }
-    scoped<RequestAccessTokenUseCase> { RequestAccessTokenUseCaseImpl(get()) }
+fun Module.AuthenticationDomainModule() {
+    single<SearchMastodonInstancesUseCase> { SearchMastodonInstancesUseCaseImpl(get()) }
+    single<FetchMastodonInstanceUseCase> { FetchMastodonInstanceUseCaseImpl(get()) }
+    single<FetchLocalTimelineUseCase> { FetchLocalTimelineUseCaseImpl(get()) }
+    single<RequestAppCredentialUseCase> { RequestAppCredentialUseCaseImpl(get()) }
+    single<RequestAccessTokenUseCase> { RequestAccessTokenUseCaseImpl(get()) }
 }

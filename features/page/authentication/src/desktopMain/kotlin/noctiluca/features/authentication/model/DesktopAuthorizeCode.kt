@@ -1,7 +1,7 @@
 package noctiluca.features.authentication.model
 
-import noctiluca.features.navigation.SignInScreen
+import noctiluca.features.navigation.MastodonInstanceDetailParams
 
 actual fun buildAuthorizeResult(
-    provider: SignInScreen.MastodonInstanceDetail
+    params: MastodonInstanceDetailParams,
 ): AuthorizeResult? = null

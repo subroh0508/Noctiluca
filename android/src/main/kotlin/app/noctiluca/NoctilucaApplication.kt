@@ -8,8 +8,11 @@ import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
 import noctiluca.data.di.DataModule
 import noctiluca.datastore.di.DataStoreModule
+import noctiluca.features.accountdetail.di.FeatureAccountDetailModule
 import noctiluca.features.accountdetail.featureAccountDetailScreenModule
+import noctiluca.features.authentication.di.FeatureSignInModule
 import noctiluca.features.authentication.featureSignInScreenModule
+import noctiluca.features.timeline.di.FeatureTimelineModule
 import noctiluca.features.timeline.featureTimelineScreenModule
 import noctiluca.network.authentication.di.AuthenticationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
@@ -46,7 +49,12 @@ class NoctilucaApplication : Application() {
         startKoin {
             // androidLogger(Level.DEBUG)
             androidContext(this@NoctilucaApplication)
-            modules(buildApiModules() + buildRepositoriesModules() + buildFeaturesModules())
+            modules(
+                buildApiModules(),
+                DataModule(),
+                buildFeaturesModule(),
+                ImageLoaderModule(httpClientEngine)
+            )
         }
 
         ScreenRegistry {
@@ -69,9 +77,9 @@ class NoctilucaApplication : Application() {
         )
     }
 
-    private fun buildRepositoriesModules() = module {
-        DataModule()
+    private fun buildFeaturesModule() = module {
+        FeatureSignInModule()
+        FeatureTimelineModule()
+        FeatureAccountDetailModule()
     }
-
-    private fun buildFeaturesModules() = ImageLoaderModule(httpClientEngine)
 }

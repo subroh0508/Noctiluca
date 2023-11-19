@@ -1,13 +1,14 @@
 package noctiluca.features.timeline.viewmodel
 
 import androidx.compose.runtime.*
-import kotlinx.coroutines.CoroutineScope
+import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.subscribe
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
+import noctiluca.features.shared.viewmodel.launch
+import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
@@ -19,15 +20,14 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
-class TimelinesViewModel private constructor(
+class TimelinesViewModel(
     private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,
     private val fetchAllAuthorizedAccountsUseCase: FetchAllAuthorizedAccountsUseCase,
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
     private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     authorizedUserRepository: AuthorizedUserRepository,
-    coroutineScope: CoroutineScope,
-) : AuthorizedViewModel(authorizedUserRepository, coroutineScope) {
+) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
     private val subscribed by lazy { MutableStateFlow(false) }
     private val mutableUiModel by lazy { MutableStateFlow(UiModel()) }
 
@@ -36,6 +36,7 @@ class TimelinesViewModel private constructor(
     fun switch(account: Account) {
         launch {
             authorizedUserRepository.switch(account.id)
+            clear()
             reopen()
         }
     }
@@ -105,6 +106,11 @@ class TimelinesViewModel private constructor(
     fun favourite(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.FAVOURITE)
     fun boost(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOST)
     fun bookmark(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOKMARK)
+
+    fun clear() {
+        mutableUiModel.value = UiModel()
+        subscribed.value = false
+    }
 
     private fun execute(timeline: Timeline, status: Status, action: StatusAction) {
         val index = uiModel.value.timelines.indexOfFirst { it.timeline == timeline }
@@ -212,8 +218,6 @@ class TimelinesViewModel private constructor(
         operator fun invoke(
             component: KoinComponent,
         ): TimelinesViewModel {
-            val coroutineScope = rememberCoroutineScope()
-
             return remember {
                 TimelinesViewModel(
                     component.get(),
@@ -222,7 +226,6 @@ class TimelinesViewModel private constructor(
                     component.get(),
                     component.get(),
                     component.get(),
-                    coroutineScope = coroutineScope,
                 )
             }
         }

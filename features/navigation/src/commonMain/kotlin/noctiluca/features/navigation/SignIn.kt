@@ -29,11 +29,3 @@ fun backToSignIn() {
 
     navigator?.replaceAll(signIn)
 }
-
-@Composable
-fun navigateToSignIn() {
-    val navigator = LocalNavigator.current
-    val signIn = rememberScreen(SignIn(MastodonInstanceListParams))
-
-    navigator?.push(signIn)
-}

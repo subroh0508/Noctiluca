@@ -59,8 +59,6 @@ class TestTimelineUseCaseComponent(
         DataStatusModule()
         DataTimelineModule()
 
-        scope(scope.scopeQualifier) {
-            TimelineDomainModule()
-        }
+        TimelineDomainModule()
     }
 }

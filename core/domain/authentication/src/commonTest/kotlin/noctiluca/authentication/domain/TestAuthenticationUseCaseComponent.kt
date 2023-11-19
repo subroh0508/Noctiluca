@@ -59,8 +59,6 @@ class TestAuthenticationUseCaseComponent(
         DataAuthenticationModule()
         DataInstanceModule()
 
-        scope(scope.scopeQualifier) {
-            AuthenticationDomainModule()
-        }
+        AuthenticationDomainModule()
     }
 }

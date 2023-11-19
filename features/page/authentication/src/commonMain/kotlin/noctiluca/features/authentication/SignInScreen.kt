@@ -5,6 +5,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.navigator.Navigator
 import noctiluca.features.authentication.di.SignInComponent
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildAuthorizeResult
@@ -13,20 +14,33 @@ import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffo
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
-import noctiluca.features.navigation.SignInScreen
+import noctiluca.features.navigation.MastodonInstanceDetailParams
+import noctiluca.features.navigation.MastodonInstanceListParams
+import noctiluca.features.navigation.SignIn
+import noctiluca.features.navigation.SignInParams
 import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
 val featureSignInScreenModule = screenModule {
-    register<SignInScreen.MastodonInstanceList> {
-        MastodonInstanceListScreen
-    }
-    register<SignInScreen.MastodonInstanceDetail> { provider ->
-        MastodonInstanceDetailScreen(
-            provider.domain,
-            buildAuthorizeResult(provider),
-        )
+    register<SignIn> { (params) -> SignInScreen(params) }
+}
+
+internal data class SignInScreen(
+    val params: SignInParams
+) : Screen {
+    @Composable
+    override fun Content() = SignInFeature {
+
+        when (params) {
+            is MastodonInstanceListParams -> Navigator(MastodonInstanceListScreen)
+            is MastodonInstanceDetailParams -> Navigator(
+                MastodonInstanceDetailScreen(
+                    params.domain,
+                    buildAuthorizeResult(params),
+                )
+            )
+        }
     }
 }
 

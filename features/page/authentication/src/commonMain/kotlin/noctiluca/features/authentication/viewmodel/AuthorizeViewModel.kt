@@ -2,8 +2,6 @@ package noctiluca.features.authentication.viewmodel
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,6 +12,7 @@ import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.UnknownException
 import noctiluca.features.authentication.model.buildRedirectUri
 import noctiluca.features.shared.viewmodel.ViewModel
+import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.authentication.Instance
@@ -25,8 +24,7 @@ class AuthorizeViewModel private constructor(
     private val redirectUri: Uri,
     private val requestAppCredentialUseCase: RequestAppCredentialUseCase,
     private val requestRequestAccessTokenUseCase: RequestAccessTokenUseCase,
-    coroutineScope: CoroutineScope,
-) : ViewModel(coroutineScope) {
+) : ViewModel() {
     private val mutableEvent by lazy { MutableStateFlow<Event>(Event.Initial) }
 
     val event: StateFlow<Event> = mutableEvent
@@ -94,7 +92,6 @@ class AuthorizeViewModel private constructor(
         ): AuthorizeViewModel {
             val clientName = getString().sign_in_client_name
             val redirectUri = buildRedirectUri(domain)
-            val coroutineScope = rememberCoroutineScope()
 
             return remember {
                 AuthorizeViewModel(
@@ -102,7 +99,6 @@ class AuthorizeViewModel private constructor(
                     redirectUri,
                     koinComponent.get(),
                     koinComponent.get(),
-                    coroutineScope,
                 )
             }
         }

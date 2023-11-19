@@ -1,13 +1,13 @@
 package noctiluca.features.timeline.viewmodel
 
 import androidx.compose.runtime.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.subscribe
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
+import noctiluca.features.shared.viewmodel.launch
+import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
@@ -26,8 +26,7 @@ class TimelinesViewModel private constructor(
     private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     authorizedUserRepository: AuthorizedUserRepository,
-    coroutineScope: CoroutineScope,
-) : AuthorizedViewModel(authorizedUserRepository, coroutineScope) {
+) : AuthorizedViewModel(authorizedUserRepository) {
     private val subscribed by lazy { MutableStateFlow(false) }
     private val mutableUiModel by lazy { MutableStateFlow(UiModel()) }
 
@@ -212,8 +211,6 @@ class TimelinesViewModel private constructor(
         operator fun invoke(
             component: KoinComponent,
         ): TimelinesViewModel {
-            val coroutineScope = rememberCoroutineScope()
-
             return remember {
                 TimelinesViewModel(
                     component.get(),
@@ -222,7 +219,6 @@ class TimelinesViewModel private constructor(
                     component.get(),
                     component.get(),
                     component.get(),
-                    coroutineScope = coroutineScope,
                 )
             }
         }

@@ -2,18 +2,18 @@ package noctiluca.features.authentication.viewmodel
 
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.*
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.ViewModel
+import noctiluca.features.shared.viewmodel.launchLazy
+import noctiluca.features.shared.viewmodel.viewModelScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 class MastodonInstanceListViewModel(
-    coroutineScope: CoroutineScope,
     private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
-) : ViewModel(coroutineScope) {
+) : ViewModel() {
     private val instanceSuggests by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val query by lazy { MutableStateFlow("") }
 
@@ -23,7 +23,7 @@ class MastodonInstanceListViewModel(
             query,
         ) { suggests, query -> UiModel(query, suggests) }
             .stateIn(
-                scope = coroutineScope,
+                scope = viewModelScope,
                 started = SharingStarted.WhileSubscribed(),
                 initialValue = UiModel(),
             )
@@ -62,11 +62,8 @@ class MastodonInstanceListViewModel(
         operator fun invoke(
             koinComponent: KoinComponent,
         ): MastodonInstanceListViewModel {
-            val coroutineScope = rememberCoroutineScope()
-
             return remember {
                 MastodonInstanceListViewModel(
-                    coroutineScope,
                     koinComponent.get(),
                 )
             }

@@ -8,10 +8,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildAuthorizeResult
-import noctiluca.features.authentication.model.buildRedirectUri
 import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
-import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.navigation.MastodonInstanceDetailParams
 import noctiluca.features.navigation.MastodonInstanceListParams
@@ -32,7 +30,10 @@ internal data class SignInScreen(
     constructor(domain: String) : this(MastodonInstanceDetailParams(domain, null))
 
     @Composable
-    override fun Content() = SignInFeature {
+    override fun Content() = CompositionLocalProvider(
+        LocalResources provides Resources(Locale.current.language),
+        LocalSnackbarHostState provides remember { SnackbarHostState() },
+    ) {
         when (params) {
             is MastodonInstanceListParams -> MastodonInstanceListScreen()
             is MastodonInstanceDetailParams -> MastodonInstanceDetailScreen(
@@ -54,25 +55,13 @@ internal fun Screen.MastodonInstanceListScreen() {
 internal fun Screen.MastodonInstanceDetailScreen(
     domain: String,
     authorizeResult: AuthorizeResult?,
-) {
-    val clientName = getString().sign_in_client_name
-    val redirectUri = buildRedirectUri(domain)
-    val authorizeViewModel: AuthorizeViewModel = getScreenModel { parametersOf(clientName, redirectUri) }
-
-    HandleAuthorize(authorizeResult, authorizeViewModel)
-    HandleDeepLink()
-
+) = HandleAuthorize(
+    domain,
+    authorizeResult,
+) { viewModel, isFetchingAccessToken ->
     InstanceDetailScaffold(
         getScreenModel { parametersOf(domain) },
         authorizeResult,
-        authorizeViewModel.isFetchingAccessToken,
-    ) { authorizeViewModel.requestAuthorize(it) }
+        isFetchingAccessToken,
+    ) { viewModel.requestAuthorize(it) }
 }
-
-@Composable
-private fun SignInFeature(
-    content: @Composable () -> Unit,
-) = CompositionLocalProvider(
-    LocalResources provides Resources(Locale.current.language),
-    LocalSnackbarHostState provides remember { SnackbarHostState() },
-) { content() }

@@ -73,11 +73,10 @@ private fun Screen.TimelineFeature(
 ) {
     val viewModel: TimelinesViewModel = getScreenModel()
 
-    AuthorizedComposable(viewModel) {
-        CompositionLocalProvider(
-            LocalResources provides Resources(Locale.current.language),
-        ) { content(viewModel) }
-    }
+    AuthorizedComposable(
+        viewModel,
+        LocalResources provides Resources(Locale.current.language),
+    ) { content(viewModel) }
 }
 
 private fun handleOnClickDrawerItem(

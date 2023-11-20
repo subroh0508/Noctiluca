@@ -8,11 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import noctiluca.features.shared.utils.ImageLoader
+import com.seiko.imageloader.ui.AutoSizeImage
 import noctiluca.model.Uri
-import org.koin.core.context.GlobalContext
-
-private fun getKoinOrNull() = GlobalContext.getOrNull()
 
 @Composable
 fun AsyncImage(
@@ -22,22 +19,24 @@ fun AsyncImage(
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
     fallback: Painter? = null,
-) {
-    val loader: ImageLoader? = remember { getKoinOrNull()?.get() }
-    var imageBitmap: ImageBitmap? by remember { mutableStateOf(null) }
+) = when {
+    uri != null -> AutoSizeImage(
+        uri.value,
+        alignment = alignment,
+        contentScale = contentScale,
+        modifier = modifier,
+        contentDescription = contentDescription,
+    )
 
-    LaunchedEffect(uri, fallback) {
-        imageBitmap = loader?.loadImage(uri)?.getOrNull()
-    }
-
-    LoadedImage(
-        imageBitmap,
+    fallback != null -> Image(
         fallback,
-        alignment,
-        contentScale,
         contentDescription,
         modifier,
+        alignment = alignment,
+        contentScale = contentScale,
     )
+
+    else -> Spacer(modifier)
 }
 
 @Composable

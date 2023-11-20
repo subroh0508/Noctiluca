@@ -28,6 +28,8 @@ dependencies {
     implementation(libs.bundles.ktor.client.jvm)
     implementation(libs.kotlinx.serialization)
 
+    implementation(libs.image.loader)
+
     implementation(libs.voyager.navigator)
     implementation(libs.voyager.transitions)
     implementation(libs.voyager.koin)

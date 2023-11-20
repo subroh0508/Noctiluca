@@ -15,6 +15,7 @@ import noctiluca.features.navigation.MastodonInstanceDetailParams
 import noctiluca.features.navigation.MastodonInstanceListParams
 import noctiluca.features.navigation.SignIn
 import noctiluca.features.navigation.SignInParams
+import noctiluca.features.shared.FeatureComposable
 import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
 import org.koin.core.parameter.parametersOf
 
@@ -30,7 +31,7 @@ internal data class SignInScreen(
     constructor(domain: String) : this(MastodonInstanceDetailParams(domain, null))
 
     @Composable
-    override fun Content() = CompositionLocalProvider(
+    override fun Content() = FeatureComposable(
         LocalResources provides Resources(Locale.current.language),
         LocalSnackbarHostState provides remember { SnackbarHostState() },
     ) {

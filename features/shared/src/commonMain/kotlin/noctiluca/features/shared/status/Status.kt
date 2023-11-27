@@ -19,8 +19,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDateTime
 import noctiluca.features.shared.account.TooterName
 import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.atoms.image.imageResources
 import noctiluca.features.shared.atoms.text.HtmlText
 import noctiluca.features.shared.atoms.text.RelativeTime
+import noctiluca.features.shared.getDrawables
 import noctiluca.features.shared.utils.baseline
 import noctiluca.features.shared.utils.toDp
 import noctiluca.model.account.Account
@@ -71,7 +73,7 @@ private fun StatusHeader(
 
     AsyncImage(
         tooter.avatar,
-        // fallback = imageResources(getDrawables().icon_mastodon),
+        fallback = imageResources(getDrawables().icon_mastodon),
         modifier = Modifier.size(tooterIconSize.toDp())
             .clip(RoundedCornerShape(8.dp)),
     )

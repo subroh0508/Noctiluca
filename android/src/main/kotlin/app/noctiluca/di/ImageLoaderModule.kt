@@ -12,6 +12,7 @@ import io.ktor.client.plugins.cache.*
 import okio.Path.Companion.toOkioPath
 import org.koin.dsl.module
 
+@Suppress("MagicNumber")
 object ImageLoaderModule {
     operator fun invoke(
         application: Application,

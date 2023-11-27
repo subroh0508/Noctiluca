@@ -27,10 +27,9 @@ internal data class AccountDetailScreen(
     override fun Content() {
         val viewModel: AccountDetailViewModel = getScreenModel { parametersOf(AccountId(id)) }
 
-        AuthorizedComposable(viewModel) {
-            CompositionLocalProvider(
-                LocalResources provides Resources(Locale.current.language),
-            ) { AccountDetailScaffold(viewModel) }
-        }
+        AuthorizedComposable(
+            viewModel,
+            LocalResources provides Resources(Locale.current.language),
+        ) { AccountDetailScaffold(viewModel) }
     }
 }

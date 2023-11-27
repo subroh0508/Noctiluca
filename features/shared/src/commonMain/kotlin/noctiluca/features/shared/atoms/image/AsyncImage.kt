@@ -5,14 +5,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
-import noctiluca.features.shared.utils.ImageLoader
+import com.seiko.imageloader.model.ImageAction
+import com.seiko.imageloader.rememberImageSuccessPainter
+import com.seiko.imageloader.ui.AutoSizeBox
 import noctiluca.model.Uri
-import org.koin.core.context.GlobalContext
-
-private fun getKoinOrNull() = GlobalContext.getOrNull()
 
 @Composable
 fun AsyncImage(
@@ -23,17 +21,34 @@ fun AsyncImage(
     contentDescription: String? = null,
     fallback: Painter? = null,
 ) {
-    val loader: ImageLoader? = remember { getKoinOrNull()?.get() }
-    var imageBitmap: ImageBitmap? by remember { mutableStateOf(null) }
+    if (uri != null) {
+        AutoSizeBox(
+            uri.value,
+            contentAlignment = alignment,
+        ) { action ->
+            when (action) {
+                is ImageAction.Success -> Image(
+                    rememberImageSuccessPainter(action),
+                    contentDescription = contentDescription,
+                    contentScale = contentScale,
+                    modifier = modifier,
+                )
 
-    LaunchedEffect(uri, fallback) {
-        imageBitmap = loader?.loadImage(uri)?.getOrNull()
+                is ImageAction.Failure -> FallbackImage(
+                    fallback,
+                    contentScale,
+                    contentDescription,
+                    modifier,
+                )
+
+                is ImageAction.Loading -> Spacer(modifier)
+            }
+        }
+        return
     }
 
-    LoadedImage(
-        imageBitmap,
+    FallbackImage(
         fallback,
-        alignment,
         contentScale,
         contentDescription,
         modifier,
@@ -41,29 +56,18 @@ fun AsyncImage(
 }
 
 @Composable
-private fun LoadedImage(
-    imageBitmap: ImageBitmap?,
-    fallback: Painter?,
-    alignment: Alignment,
+private fun FallbackImage(
+    painter: Painter?,
     contentScale: ContentScale,
     contentDescription: String?,
-    modifier: Modifier,
-) = when {
-    imageBitmap != null -> Image(
-        imageBitmap,
+    modifier: Modifier = Modifier,
+) = if (painter != null) {
+    Image(
+        painter,
         contentDescription,
         modifier,
-        alignment = alignment,
         contentScale = contentScale,
     )
-
-    fallback != null -> Image(
-        fallback,
-        contentDescription,
-        modifier,
-        alignment = alignment,
-        contentScale = contentScale,
-    )
-
-    else -> Spacer(modifier)
+} else {
+    Spacer(modifier)
 }

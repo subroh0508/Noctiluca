@@ -19,6 +19,8 @@ kotlinx-serialization = "1.6.1"
 
 ktor = "2.3.6"
 
+image-loader = "1.7.1"
+
 voyager = "1.0.0-rc10"
 
 koin = "3.5.0"
@@ -83,6 +85,9 @@ ktor-client-resources = { module = "io.ktor:ktor-client-resources", version.ref 
 ktor-client-websockets = { module = "io.ktor:ktor-client-websockets", version.ref = "ktor" }
 ktor-serialization-kotlinx-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktor" }
 ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
+
+image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
+image-loader-extension-blur = { module = "io.github.qdsfdhvh:image-loader-extension-blur", version.ref = "image-loader" }
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }

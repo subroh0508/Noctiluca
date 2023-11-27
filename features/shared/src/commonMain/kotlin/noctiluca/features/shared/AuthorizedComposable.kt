@@ -8,8 +8,9 @@ import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 @Composable
 fun AuthorizedComposable(
     viewModel: AuthorizedViewModel,
+    vararg values: ProvidedValue<*>,
     content: @Composable () -> Unit,
-) {
+) = FeatureComposable(*values) {
     val event by viewModel.event.collectAsState()
 
     when (event) {

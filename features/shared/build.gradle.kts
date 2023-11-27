@@ -13,6 +13,10 @@ kotlin {
 
                 implementation(libs.kotlinx.datetime)
                 implementation(libs.ktor.client.core)
+
+                implementation(libs.image.loader)
+
+                implementation(libs.koin.core)
             }
         }
         androidMain {

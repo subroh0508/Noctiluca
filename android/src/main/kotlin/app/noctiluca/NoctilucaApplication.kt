@@ -53,7 +53,10 @@ class NoctilucaApplication : Application() {
                 buildApiModules(),
                 DataModule(),
                 buildFeaturesModule(),
-                ImageLoaderModule(httpClientEngine)
+                ImageLoaderModule(
+                    this@NoctilucaApplication,
+                    httpClientEngine,
+                )
             )
         }
 

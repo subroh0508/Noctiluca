@@ -21,7 +21,7 @@ ktor = "2.3.7"
 
 image-loader = "1.7.1"
 
-voyager = "1.0.0-rc10"
+voyager = "1.0.0"
 
 koin = "3.5.3"
 

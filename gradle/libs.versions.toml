@@ -23,7 +23,7 @@ image-loader = "1.7.1"
 
 voyager = "1.0.0-rc10"
 
-koin = "3.5.0"
+koin = "3.5.3"
 
 okhttp3 = "4.12.0"
 

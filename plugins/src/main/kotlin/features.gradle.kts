@@ -1,9 +1,11 @@
 import extension.*
+import org.jetbrains.compose.ExperimentalComposeLibrary
 
 plugins {
     id("multiplatform-library")
     id("org.jetbrains.compose")
     id("kotlin-parcelize")
+    id("has-resources")
 }
 
 kotlin {
@@ -14,10 +16,11 @@ kotlin {
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
                 implementation(compose.preview)
+                @OptIn(ExperimentalComposeLibrary::class)
+                implementation(compose.components.resources)
 
                 implementation(libs.coroutinesCore)
 

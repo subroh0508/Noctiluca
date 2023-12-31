@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
-import noctiluca.model.LoadState
+import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.ViewModel
 import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope

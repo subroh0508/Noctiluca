@@ -23,9 +23,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Job
-import noctiluca.features.shared.LoadStateComposable
 import noctiluca.features.shared.atoms.image.AsyncImage
-import noctiluca.model.LoadState
+import noctiluca.features.shared.model.LoadState
+import noctiluca.features.shared.model.LoadStateComposable
 import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.model.Uri
 

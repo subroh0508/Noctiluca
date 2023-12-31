@@ -1,5 +1,6 @@
-package noctiluca.model
+package noctiluca.features.shared.model
 
+import androidx.compose.runtime.Composable
 import kotlinx.coroutines.Job
 
 sealed class LoadState {
@@ -17,4 +18,18 @@ sealed class LoadState {
     fun cancel() {
         if (this is Loading) job.cancel()
     }
+}
+
+@Suppress("UNCHECKED_CAST")
+@Composable
+fun <T : Any> LoadStateComposable(
+    loadState: LoadState,
+    loading: @Composable (Job) -> Unit,
+    fallback: @Composable (Throwable?) -> Unit,
+    content: @Composable (T) -> Unit,
+) = when (loadState) {
+    LoadState.Initial -> fallback(null)
+    is LoadState.Loading -> loading(loadState.job)
+    is LoadState.Loaded<*> -> content(loadState.value as T)
+    is LoadState.Error -> fallback(loadState.cause)
 }

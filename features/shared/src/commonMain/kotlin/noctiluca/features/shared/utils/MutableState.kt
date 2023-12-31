@@ -4,7 +4,7 @@ import androidx.compose.runtime.MutableState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.launch
-import noctiluca.features.shared.model.LoadState
+import noctiluca.model.LoadState
 
 internal fun <T : Any> CoroutineScope.loadLazy(
     state: MutableState<LoadState>,

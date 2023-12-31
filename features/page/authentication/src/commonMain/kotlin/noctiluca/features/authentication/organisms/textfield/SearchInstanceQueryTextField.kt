@@ -14,7 +14,7 @@ import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.shared.atoms.list.OneLineListItem
 import noctiluca.features.shared.atoms.textfield.DebouncedTextForm
 import noctiluca.features.shared.atoms.textfield.SingleLineTextField
-import noctiluca.features.shared.model.LoadState
+import noctiluca.model.LoadState
 import noctiluca.model.authentication.Instance
 
 private const val DEBOUNCE_TIME_MILLIS = 500L

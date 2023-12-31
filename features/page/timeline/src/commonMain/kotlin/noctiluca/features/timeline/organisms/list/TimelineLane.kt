@@ -14,19 +14,19 @@ import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.shared.StringResources
 import noctiluca.features.shared.atoms.text.buildTimestamp
 import noctiluca.features.shared.getString
+import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.Timeline
-import noctiluca.model.timeline.TimelineId
 
 @Composable
 internal fun TimelineLane(
-    timelineId: TimelineId,
     timelineState: TimelinesViewModel.TimelineState,
-    onLoad: suspend CoroutineScope.(TimelineId) -> Unit,
+    loadState: LoadState?,
+    onLoad: suspend CoroutineScope.() -> Unit,
     onExecuteAction: CoroutineScope.(Timeline, Status, Action) -> Unit,
     onScrollToTop: () -> Unit,
     lazyListState: LazyListState = rememberLazyListState(),
@@ -61,7 +61,7 @@ internal fun TimelineLane(
         modifier = modifier,
         state = lazyListState,
         showDivider = true,
-        footerContent = { TimelineFooter(timelineId, timelineState, onLoad) },
+        footerContent = { TimelineFooter(timelineState, loadState, onLoad) },
     ) { _, item ->
         Status(
             item,
@@ -72,23 +72,21 @@ internal fun TimelineLane(
 
 @Composable
 private fun TimelineFooter(
-    foregroundId: TimelineId,
     foreground: TimelinesViewModel.TimelineState,
-    onLoad: suspend CoroutineScope.(TimelineId) -> Unit,
+    loadState: LoadState?,
+    onLoad: suspend CoroutineScope.() -> Unit,
     height: Dp = 64.dp,
 ) {
-    /*
-    if (foreground.jobs.isEmpty()) {
+    if (loadState?.loading == false) {
         Spacer(Modifier.height(height))
         return
     }
-    */
 
     LaunchedEffect(Unit) {
         if (foreground.timeline.statuses.isEmpty()) {
             return@LaunchedEffect
         }
-        onLoad(foregroundId)
+        onLoad()
     }
 
     Box(

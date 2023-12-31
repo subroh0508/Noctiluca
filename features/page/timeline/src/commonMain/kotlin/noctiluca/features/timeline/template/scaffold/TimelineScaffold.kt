@@ -13,6 +13,7 @@ import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.shared.atoms.appbar.NavigateIconSize
 import noctiluca.features.shared.atoms.appbar.scrollToTop
 import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.getString
@@ -66,6 +67,7 @@ internal fun TimelineScaffold(
         TimelineLanes(
             viewModel,
             uiModel.timelines,
+            uiModel.loadState,
             scrollBehavior,
         )
     }
@@ -100,13 +102,14 @@ private fun CurrentInstanceTopAppBar(
 private fun TimelineLanes(
     viewModel: TimelinesViewModel,
     timelines: Map<TimelineId, TimelinesViewModel.TimelineState>,
+    loadState: Map<TimelineId, LoadState>,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     timelines.forEach { (timelineId, timelineState) ->
         TimelineLane(
-            timelineId,
             timelineState,
-            onLoad = { viewModel.load(it) },
+            loadState[timelineId],
+            onLoad = { viewModel.load(timelineId) },
             onExecuteAction = { timeline, status, action ->
                 when (action) {
                     Action.FAVOURITE -> viewModel.favourite(timeline, status)

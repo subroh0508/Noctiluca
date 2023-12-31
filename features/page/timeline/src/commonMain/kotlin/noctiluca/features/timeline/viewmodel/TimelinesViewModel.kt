@@ -2,13 +2,14 @@ package noctiluca.features.timeline.viewmodel
 
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.data.timeline.TimelineRepository
+import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
+import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope
 import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
@@ -30,6 +31,7 @@ class TimelinesViewModel(
     authorizedUserRepository: AuthorizedUserRepository,
 ) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
     private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
+    private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 
     val uiModel: StateFlow<UiModel> by lazy {
         combine(
@@ -37,7 +39,8 @@ class TimelinesViewModel(
             authorizedAccountRepository.others(),
             timelineRepository.buildStream(),
             foregroundIdStateFlow,
-        ) { current, others, timelines, timelineId ->
+            loadStateFlow,
+        ) { current, others, timelines, timelineId, loadState ->
             UiModel(
                 account = CurrentAuthorizedAccount(current, others),
                 timelines = timelines.map { (id, timeline) ->
@@ -46,6 +49,7 @@ class TimelinesViewModel(
                         foreground = timelineId == id,
                     )
                 }.toMap(),
+                loadState = loadState,
             )
         }
             .stateIn(
@@ -70,15 +74,25 @@ class TimelinesViewModel(
     fun scrolledToTop(timelineId: TimelineId) = Unit
 
     fun subscribeAll() {
-        launch {
+        val job = launchLazy {
             runCatchingWithAuth { timelineRepository.start() }
+                .onSuccess { loadStateFlow.value = mapOf() }
+                .onFailure { e -> loadStateFlow.value += uiModel.value.timelines.keys.associateWith { LoadState.Error(e) } }
         }
+
+        loadStateFlow.value += uiModel.value.timelines.keys.associateWith { LoadState.Loading(job) }
+        job.start()
     }
 
     fun load(timelineId: TimelineId) {
-        launch {
+        val job = launchLazy {
             runCatchingWithAuth { timelineRepository.load(timelineId) }
+                .onSuccess { loadStateFlow.value -= timelineId }
+                .onFailure { loadStateFlow.value += timelineId to LoadState.Error(it) }
         }
+
+        loadStateFlow.value += timelineId to LoadState.Loading(job)
+        job.start()
     }
 
     fun favourite(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.FAVOURITE)
@@ -96,6 +110,7 @@ class TimelinesViewModel(
     data class UiModel(
         val account: CurrentAuthorizedAccount = CurrentAuthorizedAccount(),
         val timelines: Map<TimelineId, TimelineState> = mapOf(),
+        val loadState: Map<TimelineId, LoadState> = mapOf(),
     ) {
         val foreground get() = timelines.values.find { it.foreground }
         val currentTabIndex get() = timelines.values.indexOfFirst { it.foreground }
@@ -106,7 +121,6 @@ class TimelinesViewModel(
 
     data class TimelineState(
         val timeline: Timeline,
-        val jobs: List<Job> = listOf(),
         val latestEvent: StreamEvent? = null,
         val scrollToTop: Boolean = false,
         val foreground: Boolean = false,

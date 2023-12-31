@@ -32,7 +32,6 @@ internal fun TimelineScaffold(
 
     LaunchedEffect(uiModel.account.current) {
         viewModel.subscribeAll()
-        viewModel.loadAll()
     }
 
     val scope = rememberCoroutineScope()

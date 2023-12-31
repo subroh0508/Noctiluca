@@ -6,6 +6,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.data.timeline.TimelineRepository
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
@@ -22,27 +23,34 @@ import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel(
-    private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
-    private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     private val authorizedAccountRepository: AuthorizedAccountRepository,
+    private val timelineRepository: TimelineRepository,
     authorizedUserRepository: AuthorizedUserRepository,
 ) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
-    private val subscribed by lazy { MutableStateFlow(false) }
     private val mutableUiModel by lazy { MutableStateFlow(UiModel()) }
+    private val foregroundIndexStateFlow by lazy { MutableStateFlow(0) }
 
     val uiModel: StateFlow<UiModel> by lazy {
         combine(
             authorizedAccountRepository.current(),
             authorizedAccountRepository.others(),
-        ) { current, others ->
+            timelineRepository.buildStream(),
+            foregroundIndexStateFlow,
+        ) { current, others, timelines, index ->
             UiModel(
                 account = CurrentAuthorizedAccount(current, others),
+                timelines = timelines.mapIndexed { i, timeline ->
+                    TimelineState(
+                        timeline = timeline,
+                        foreground = i == index,
+                    )
+                },
             )
         }
             .stateIn(
                 scope = viewModelScope,
-                started = SharingStarted.Lazily,
+                started = SharingStarted.Eagerly,
                 initialValue = UiModel(),
             )
     }
@@ -50,22 +58,13 @@ class TimelinesViewModel(
     fun switch(account: Account) {
         launch {
             authorizedAccountRepository.switch(account.id)
-            clear()
+            timelineRepository.close()
             reopen()
         }
     }
 
     fun setForeground(index: Int) {
-        if (uiModel.value.timelines[index].foreground) {
-            set(index) { copy(scrollToTop = true) }
-            return
-        }
-
-        mutableUiModel.value = uiModel.value.copy(
-            timelines = uiModel.value.timelines.mapIndexed { i, state ->
-                state.copy(foreground = i == index)
-            }
-        )
+        foregroundIndexStateFlow.value = index
     }
 
     fun scrolledToTop(index: Int) {
@@ -73,28 +72,15 @@ class TimelinesViewModel(
     }
 
     fun subscribeAll() {
-        if (subscribed.value) {
-            return
+        launch {
+            runCatchingWithAuth { timelineRepository.start() }
         }
-
-        subscribed.value = true
-        uiModel.value.timelines.forEachIndexed { index, (timeline) -> subscribe(index, timeline) }
-    }
-
-    fun loadAll() {
-        uiModel.value.timelines.forEach { (timeline) -> load(timeline) }
     }
 
     fun load(timeline: Timeline) {
-        val index = uiModel.value.timelines.indexOfFirst { it.timeline == timeline }
-
-        val job = launchLazy {
-            runCatchingWithAuth { updateTimelineUseCase.execute(timeline) }
-                .onSuccess { setTimeline(index, it) }
+        launch {
+            runCatchingWithAuth { timelineRepository.load(timeline) }
         }
-
-        setJob(index, job)
-        job.start()
     }
 
     fun favourite(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.FAVOURITE)
@@ -102,8 +88,9 @@ class TimelinesViewModel(
     fun bookmark(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOKMARK)
 
     fun clear() {
-        mutableUiModel.value = UiModel()
-        subscribed.value = false
+        launch {
+            timelineRepository.close()
+        }
     }
 
     private fun execute(timeline: Timeline, status: Status, action: StatusAction) {
@@ -116,31 +103,6 @@ class TimelinesViewModel(
 
         setJob(index, job)
         job.start()
-    }
-
-    private fun subscribe(index: Int, timeline: Timeline) {
-        launch {
-            runCatchingWithAuth {
-                fetchTimelineStreamUseCase.execute(timeline)
-                    .collect { receiveEvent(index, it) }
-            }
-        }
-    }
-
-    private fun receiveEvent(index: Int, event: StreamEvent) {
-        val current = uiModel.value.timelines[index]
-
-        val next = when (event) {
-            is StreamEvent.Updated -> current.timeline.insert(event.status)
-            is StreamEvent.Deleted -> current.timeline - event.id
-            is StreamEvent.StatusEdited -> current.timeline.replace(event.status)
-        }
-
-        set(index) { copy(timeline = next, latestEvent = event) }
-    }
-
-    private fun setTimeline(index: Int, timeline: Timeline) {
-        set(index) { copy(timeline = timeline, jobs = jobs.filterNot { it.isCompleted }) }
     }
 
     private fun setStatus(index: Int, status: Status) {
@@ -184,7 +146,6 @@ class TimelinesViewModel(
         ): TimelinesViewModel {
             return remember {
                 TimelinesViewModel(
-                    component.get(),
                     component.get(),
                     component.get(),
                     component.get(),

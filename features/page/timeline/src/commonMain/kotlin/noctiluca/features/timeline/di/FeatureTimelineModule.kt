@@ -7,5 +7,5 @@ import org.koin.core.module.Module
 @Suppress("FunctionName")
 fun Module.FeatureTimelineModule() {
     TimelineDomainModule()
-    factory { TimelinesViewModel(get(), get(), get(), get(), get()) }
+    factory { TimelinesViewModel(get(), get(), get(), get()) }
 }

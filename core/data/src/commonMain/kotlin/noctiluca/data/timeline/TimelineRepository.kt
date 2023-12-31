@@ -4,8 +4,15 @@ import kotlinx.coroutines.flow.Flow
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.StreamEvent
+import noctiluca.model.timeline.Timeline
 
 interface TimelineRepository {
+    fun buildStream(): Flow<List<Timeline>>
+
+    suspend fun start()
+    suspend fun load(timeline: Timeline)
+    suspend fun close()
+
     suspend fun fetchGlobal(
         onlyRemote: Boolean = false,
         onlyMedia: Boolean = false,

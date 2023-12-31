@@ -8,6 +8,8 @@ import noctiluca.model.timeline.HashTag as HashTagValue
 sealed class Timeline {
     abstract val statuses: StatusList
 
+    val maxId get() = statuses.lastOrNull()?.id
+
     operator fun plus(list: StatusList): Timeline = when (this) {
         is Global -> copy(statuses = statuses + list)
         is Local -> copy(statuses = statuses + list)

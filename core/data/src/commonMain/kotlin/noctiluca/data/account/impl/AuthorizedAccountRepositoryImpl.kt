@@ -1,5 +1,7 @@
 package noctiluca.data.account.impl
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.onStart
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.toEntity
 import noctiluca.datastore.AccountDataStore
@@ -13,6 +15,45 @@ internal class AuthorizedAccountRepositoryImpl(
     private val authenticationTokenDataStore: AuthenticationTokenDataStore,
     private val accountDataStore: AccountDataStore,
 ) : AuthorizedAccountRepository {
+    private val currentStateFlow: MutableStateFlow<Pair<Account, Domain>?> = MutableStateFlow(null)
+    private val allStateFlow: MutableStateFlow<List<Account>> = MutableStateFlow(emptyList())
+
+    override suspend fun current() = currentStateFlow.onStart {
+        if (currentStateFlow.value != null) {
+            return@onStart
+        }
+
+        refreshCurrent()
+    }
+
+    override suspend fun others() = allStateFlow.onStart {
+        if (allStateFlow.value.isNotEmpty()) {
+            return@onStart
+        }
+
+        refreshOthers()
+    }
+
+    private suspend fun refreshCurrent() {
+        val cache = getCurrent()
+
+        if (cache == null) {
+            currentStateFlow.value = fetchCurrent()
+            return
+        }
+
+        val (account, domain) = cache
+        currentStateFlow.value = cache
+        currentStateFlow.value = refresh(account.id) to domain
+    }
+
+    private suspend fun refreshOthers() {
+        val cache = authenticationTokenDataStore.getAll().drop(1)
+
+        allStateFlow.value = cache.mapNotNull { accountDataStore.get(it.id) }
+        allStateFlow.value = cache.mapNotNull { runCatching { refresh(it.id) }.getOrNull() }
+    }
+
     override suspend fun getCurrent(): Pair<Account, Domain>? {
         val account = getCurrentAccount() ?: return null
         val domain = getCurrentDomain() ?: return null

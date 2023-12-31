@@ -9,10 +9,10 @@ import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
-import noctiluca.model.Domain
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.StreamEvent
+import noctiluca.timeline.domain.model.CurrentAuthorizedAccount
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.*
@@ -22,7 +22,6 @@ import org.koin.core.component.get
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel(
     private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,
-    private val fetchAllAuthorizedAccountsUseCase: FetchAllAuthorizedAccountsUseCase,
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
     private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
@@ -45,17 +44,8 @@ class TimelinesViewModel(
         launch {
             runCatchingWithAuth {
                 fetchCurrentAuthorizedAccountUseCase.execute()
-                    .collect { (account, domain) ->
-                        setCurrentAuthorizedAccount(account, domain)
-                    }
-            }
-        }
-
-        launch {
-            runCatchingWithAuth {
-                fetchAllAuthorizedAccountsUseCase.execute()
-                    .collect { accounts ->
-                        setOthersAuthorizedAccount(accounts)
+                    .collect {
+                        mutableUiModel.value = uiModel.value.copy(account = it)
                     }
             }
         }
@@ -124,30 +114,6 @@ class TimelinesViewModel(
         job.start()
     }
 
-    private fun setCurrentAuthorizedAccount(account: Account, domain: Domain) {
-        val currentAuthorizedAccount = uiModel.value.account
-
-        mutableUiModel.value = uiModel.value.copy(
-            account = currentAuthorizedAccount.copy(
-                current = account,
-                domain = domain,
-            ),
-        )
-    }
-
-    private fun setOthersAuthorizedAccount(account: Account) {
-        val currentAuthorizedAccount = uiModel.value.account
-        val nextOthers = currentAuthorizedAccount.others.filterNot {
-            it.id == account.id
-        } + account
-
-        mutableUiModel.value = uiModel.value.copy(
-            account = currentAuthorizedAccount.copy(
-                others = nextOthers,
-            ),
-        )
-    }
-
     private fun subscribe(index: Int, timeline: Timeline) {
         launch {
             runCatchingWithAuth {
@@ -199,12 +165,6 @@ class TimelinesViewModel(
         val currentTabIndex get() = timelines.indexOfFirst { it.foreground }
     }
 
-    data class CurrentAuthorizedAccount(
-        val current: Account? = null,
-        val domain: Domain? = null,
-        val others: List<Account> = listOf(),
-    )
-
     data class TimelineState(
         val timeline: Timeline,
         val jobs: List<Job> = listOf(),
@@ -220,7 +180,6 @@ class TimelinesViewModel(
         ): TimelinesViewModel {
             return remember {
                 TimelinesViewModel(
-                    component.get(),
                     component.get(),
                     component.get(),
                     component.get(),

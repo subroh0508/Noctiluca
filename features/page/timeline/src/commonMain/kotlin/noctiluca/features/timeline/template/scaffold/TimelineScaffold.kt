@@ -20,6 +20,7 @@ import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.tab.TimelineTabs
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.timeline.domain.model.CurrentAuthorizedAccount
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -73,7 +74,7 @@ internal fun TimelineScaffold(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CurrentInstanceTopAppBar(
-    account: TimelinesViewModel.CurrentAuthorizedAccount,
+    account: CurrentAuthorizedAccount,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     onClickNavigationIcon: () -> Unit,
 ) = CenterAlignedTopAppBar(

@@ -18,7 +18,7 @@ internal class AuthorizedAccountRepositoryImpl(
     private val currentStateFlow: MutableStateFlow<Pair<Account, Domain>?> = MutableStateFlow(null)
     private val allStateFlow: MutableStateFlow<List<Account>> = MutableStateFlow(emptyList())
 
-    override suspend fun current() = currentStateFlow.onStart {
+    override fun current() = currentStateFlow.onStart {
         if (currentStateFlow.value != null) {
             return@onStart
         }
@@ -26,12 +26,19 @@ internal class AuthorizedAccountRepositoryImpl(
         refreshCurrent()
     }
 
-    override suspend fun others() = allStateFlow.onStart {
+    override fun others() = allStateFlow.onStart {
         if (allStateFlow.value.isNotEmpty()) {
             return@onStart
         }
 
         refreshOthers()
+    }
+
+    override suspend fun switch(id: AccountId) {
+        val token = authenticationTokenDataStore.setCurrent(id)
+
+        currentStateFlow.value = refresh(id) to token.domain
+        allStateFlow.value = authenticationTokenDataStore.getAll().drop(1).mapNotNull { accountDataStore.get(it.id) }
     }
 
     private suspend fun refreshCurrent() {
@@ -55,14 +62,16 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     private suspend fun getCurrent(): Pair<Account, Domain>? {
-        val account = getCurrentAccount() ?: return null
-        val domain = getCurrentDomain() ?: return null
+        val token = authenticationTokenDataStore.getCurrent() ?: return null
+
+        val account = accountDataStore.get(token.id) ?: return null
+        val domain = token.domain
 
         return account to domain
     }
 
     private suspend fun fetchCurrent(): Pair<Account, Domain> {
-        val domain = getCurrentDomain() ?: throw AuthorizedTokenNotFoundException
+        val domain = authenticationTokenDataStore.getCurrent()?.domain ?: throw AuthorizedTokenNotFoundException
 
         val account = runCatching {
             v1.getVerifyAccountsCredentials(domain.value)
@@ -81,12 +90,6 @@ internal class AuthorizedAccountRepositoryImpl(
 
         return account
     }
-
-    private suspend fun getCurrentAccount() = authenticationTokenDataStore.getCurrent()?.let {
-        accountDataStore.get(it.id)
-    }
-
-    private suspend fun getCurrentDomain() = authenticationTokenDataStore.getCurrent()?.domain
 
     private suspend fun getAccessToken(id: AccountId): Pair<String, Domain>? {
         val accessToken = authenticationTokenDataStore.getAccessToken(id) ?: return null

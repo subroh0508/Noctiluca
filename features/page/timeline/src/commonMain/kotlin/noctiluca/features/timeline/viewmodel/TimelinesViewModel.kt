@@ -3,12 +3,13 @@ package noctiluca.features.timeline.viewmodel
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
+import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
+import noctiluca.features.shared.viewmodel.viewModelScope
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.StreamEvent
@@ -21,33 +22,36 @@ import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel(
-    private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,
     private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
     private val updateTimelineUseCase: UpdateTimelineUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
+    private val authorizedAccountRepository: AuthorizedAccountRepository,
     authorizedUserRepository: AuthorizedUserRepository,
 ) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
     private val subscribed by lazy { MutableStateFlow(false) }
     private val mutableUiModel by lazy { MutableStateFlow(UiModel()) }
 
-    val uiModel: StateFlow<UiModel> = mutableUiModel
+    val uiModel: StateFlow<UiModel> by lazy {
+        combine(
+            authorizedAccountRepository.current(),
+            authorizedAccountRepository.others(),
+        ) { current, others ->
+            UiModel(
+                account = CurrentAuthorizedAccount(current, others),
+            )
+        }
+            .stateIn(
+                scope = viewModelScope,
+                started = SharingStarted.Lazily,
+                initialValue = UiModel(),
+            )
+    }
 
     fun switch(account: Account) {
         launch {
-            authorizedUserRepository.switch(account.id)
+            authorizedAccountRepository.switch(account.id)
             clear()
             reopen()
-        }
-    }
-
-    fun loadCurrentAuthorizedAccount() {
-        launch {
-            runCatchingWithAuth {
-                fetchCurrentAuthorizedAccountUseCase.execute()
-                    .collect {
-                        mutableUiModel.value = uiModel.value.copy(account = it)
-                    }
-            }
         }
     }
 

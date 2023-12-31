@@ -34,10 +34,6 @@ data object TimelineLaneScreen : Screen {
         val navigator = LocalNavigator.current
         val uiModel by viewModel.uiModel.collectAsState()
 
-        LaunchedEffect(uiModel.account.current) {
-            viewModel.loadCurrentAuthorizedAccount()
-        }
-
         TimelineNavigationDrawer(
             uiModel.account,
             onClickTopAccount = { navigator?.navigateToAccountDetail(it.id) },

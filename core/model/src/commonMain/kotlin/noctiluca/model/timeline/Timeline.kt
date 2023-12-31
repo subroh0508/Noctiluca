@@ -1,10 +1,9 @@
-package noctiluca.timeline.domain.model
+package noctiluca.model.timeline
 
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import noctiluca.model.status.StatusList
 import noctiluca.model.timeline.HashTag as HashTagValue
-import noctiluca.model.timeline.List as AccountList
 
 sealed class Timeline {
     abstract val statuses: StatusList

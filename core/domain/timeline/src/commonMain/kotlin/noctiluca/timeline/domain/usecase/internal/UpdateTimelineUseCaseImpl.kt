@@ -2,7 +2,7 @@ package noctiluca.timeline.domain.usecase.internal
 
 import noctiluca.data.timeline.TimelineRepository
 import noctiluca.model.status.StatusList
-import noctiluca.timeline.domain.model.Timeline
+import noctiluca.model.timeline.Timeline
 import noctiluca.timeline.domain.usecase.UpdateTimelineUseCase
 
 internal class UpdateTimelineUseCaseImpl(

@@ -5,7 +5,7 @@ import androidx.compose.ui.Modifier
 import noctiluca.features.shared.atoms.tab.PrimaryTabs
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
-import noctiluca.timeline.domain.model.Timeline
+import noctiluca.model.timeline.Timeline
 
 @Composable
 internal fun TimelineTabs(

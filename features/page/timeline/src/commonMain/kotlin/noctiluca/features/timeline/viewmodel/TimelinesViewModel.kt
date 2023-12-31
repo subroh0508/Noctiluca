@@ -14,8 +14,8 @@ import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.StreamEvent
+import noctiluca.model.timeline.Timeline
 import noctiluca.timeline.domain.model.StatusAction
-import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get

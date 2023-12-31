@@ -1,6 +1,6 @@
 package noctiluca.timeline.domain.usecase
 
-import noctiluca.timeline.domain.model.Timeline
+import noctiluca.model.timeline.Timeline
 
 interface UpdateTimelineUseCase {
     // suspend fun execute(initial: List<Timeline>): List<Timeline>

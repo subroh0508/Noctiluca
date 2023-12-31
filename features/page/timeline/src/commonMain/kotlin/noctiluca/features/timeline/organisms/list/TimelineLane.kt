@@ -19,7 +19,7 @@ import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.model.status.Status
-import noctiluca.timeline.domain.model.Timeline
+import noctiluca.model.timeline.Timeline
 
 @Composable
 internal fun TimelineLane(

@@ -8,8 +8,7 @@ import noctiluca.data.status.toEntity
 import noctiluca.data.timeline.TimelineRepository
 import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.StatusId
-import noctiluca.model.timeline.StreamEvent
-import noctiluca.model.timeline.Timeline
+import noctiluca.model.timeline.*
 import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.network.mastodon.MastodonStream
 import noctiluca.network.mastodon.data.streaming.NetworkStreamEvent
@@ -22,51 +21,39 @@ internal class TimelineRepositoryImpl(
     private val authenticationTokenDataStore: AuthenticationTokenDataStore,
     private val streamCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
 ) : TimelineRepository {
-    private val timelinesStateFlow = MutableStateFlow(emptyList<Timeline>())
-    private var stream = listOf<Job>()
+    private val streamStateFlow = StreamState.Flow(StreamState())
 
-    private val initial = listOf(
-        Timeline.Local(listOf(), onlyMedia = false),
-        Timeline.Home(listOf()),
-        Timeline.Global(listOf(), onlyRemote = false, onlyMedia = false),
+    private val initial = mapOf(
+        LocalTimelineId to Timeline.Local(listOf(), onlyMedia = false),
+        HomeTimelineId to Timeline.Home(listOf()),
+        GlobalTimelineId to Timeline.Global(listOf(), onlyRemote = false, onlyMedia = false),
     )
 
-    override fun buildStream() = timelinesStateFlow
+    override fun buildStream() = streamStateFlow.map { it.timeline }
 
     override suspend fun start() {
-        timelinesStateFlow.value = initial
+        streamStateFlow += initial
 
-        initial.foldIndexed(initial) { i, acc, timeline ->
-            val next = appendStatuses(acc, i, timeline)
-
-            timelinesStateFlow.value = next
-            subscribe(i, timeline)
-
-            next
+        initial.forEach { (timelineId, timeline) ->
+            streamStateFlow[timelineId] = appendStatuses(timeline)
+            subscribe(timelineId, timeline)
         }
     }
 
-    override suspend fun load(timeline: Timeline) {
-        val index = timelinesStateFlow.value.indexOf(timeline)
+    override suspend fun load(timelineId: TimelineId) {
+        val timeline = streamStateFlow.value.timeline[timelineId] ?: return
 
-        if (index == -1) {
-            return
-        }
-
-        appendStatuses(timelinesStateFlow.value, index, timeline)
+        appendStatuses(timeline)
     }
 
     override suspend fun close() {
-        timelinesStateFlow.value = listOf()
-        stream.forEach { it.cancel() }
-        stream = listOf()
+        streamStateFlow.clear()
+        streamStateFlow.cancelAll()
     }
 
     private suspend fun appendStatuses(
-        prev: List<Timeline>,
-        index: Int,
         timeline: Timeline,
-    ): List<Timeline> {
+    ): Timeline {
         val statuses = when (timeline) {
             is Timeline.Global -> fetchGlobal(timeline.onlyRemote, timeline.onlyMedia)
             is Timeline.Local -> fetchLocal(timeline.onlyMedia)
@@ -75,14 +62,10 @@ internal class TimelineRepositoryImpl(
             is Timeline.List -> listOf() // TODO
         }
 
-        return prev.set(index, timeline + statuses)
+        return timeline + statuses
     }
 
-    private suspend fun subscribe(index: Int, timeline: Timeline) {
-        if (stream.getOrNull(index) != null) {
-            return
-        }
-
+    private suspend fun subscribe(timelineId: TimelineId, timeline: Timeline) {
         val flow = when (timeline) {
             is Timeline.Global -> buildGlobalStream(timeline.onlyRemote, timeline.onlyMedia)
             is Timeline.Local -> buildLocalStream(timeline.onlyMedia)
@@ -91,11 +74,11 @@ internal class TimelineRepositoryImpl(
             is Timeline.List -> flow { } // TODO
         }
 
-        stream += collectEvent(index, flow)
+        streamStateFlow[timelineId] = collectEvent(timelineId, flow)
     }
 
-    private fun collectEvent(index: Int, flow: Flow<StreamEvent>) = flow.onEach { event ->
-        val current = timelinesStateFlow.value[index]
+    private fun collectEvent(timelineId: TimelineId, flow: Flow<StreamEvent>) = flow.onEach { event ->
+        val current = streamStateFlow.value.timeline[timelineId] ?: return@onEach
 
         val next = when (event) {
             is StreamEvent.Updated -> current.insert(event.status)
@@ -103,7 +86,7 @@ internal class TimelineRepositoryImpl(
             is StreamEvent.StatusEdited -> current.replace(event.status)
         }
 
-        timelinesStateFlow.value = timelinesStateFlow.value.set(index, next)
+        streamStateFlow[timelineId] = next
     }.launchIn(streamCoroutineScope)
 
     override suspend fun fetchGlobal(
@@ -164,11 +147,6 @@ internal class TimelineRepositoryImpl(
         StreamingType.SUBSCRIBE.name.lowercase(),
     ).mapNotNull { it.toValueObject() }
 
-    private fun List<Timeline>.set(
-        index: Int,
-        timeline: Timeline,
-    ): List<Timeline> = toMutableList().apply { set(index, timeline) }
-
     private suspend fun NetworkStreamEvent.toValueObject() = payload?.let {
         when (it) {
             is NetworkStreamEvent.Payload.Updated -> StreamEvent.Updated(
@@ -181,6 +159,52 @@ internal class TimelineRepositoryImpl(
 
             is NetworkStreamEvent.Payload.Deleted -> StreamEvent.Deleted(StatusId(it.id))
             else -> null
+        }
+    }
+
+    private data class StreamState(
+        val timeline: Map<TimelineId, Timeline> = emptyMap(),
+        val stream: Map<TimelineId, Job> = emptyMap(),
+    ) {
+        class Flow(
+            private val state: StreamState,
+        ) : MutableStateFlow<StreamState> by MutableStateFlow(state) {
+            @JvmName("_plusAssign1")
+            operator fun plusAssign(
+                value: Map<TimelineId, Timeline>,
+            ) {
+                this.value = state.copy(timeline = value)
+            }
+
+            @JvmName("_plusAssign2")
+            operator fun plusAssign(
+                value: Map<TimelineId, Job>,
+            ) {
+                this.value = state.copy(stream = value)
+            }
+
+            operator fun set(
+                timelineId: TimelineId,
+                timeline: Timeline,
+            ) {
+                value = value.copy(timeline = value.timeline + (timelineId to timeline))
+            }
+
+            operator fun set(
+                timelineId: TimelineId,
+                job: Job,
+            ) {
+                value = value.copy(stream = value.stream + (timelineId to job))
+            }
+
+            fun clear() {
+                value = value.copy(timeline = emptyMap())
+            }
+
+            fun cancelAll() {
+                value.stream.forEach { (_, job) -> job.cancel() }
+                value = value.copy(stream = emptyMap())
+            }
         }
     }
 }

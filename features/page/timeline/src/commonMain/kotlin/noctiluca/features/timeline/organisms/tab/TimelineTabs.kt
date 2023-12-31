@@ -18,7 +18,7 @@ internal fun TimelineTabs(
     }
 
     PrimaryTabs(
-        uiModel.timelines,
+        uiModel.toTimelineList(),
         selectedTabIndex = uiModel.currentTabIndex,
         onClick = { index, _ -> onClickTab(index) },
         transform = { (timeline) -> timeline.label() },

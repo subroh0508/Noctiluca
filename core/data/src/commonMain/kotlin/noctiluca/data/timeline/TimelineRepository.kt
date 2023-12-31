@@ -5,12 +5,13 @@ import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.StreamEvent
 import noctiluca.model.timeline.Timeline
+import noctiluca.model.timeline.TimelineId
 
 interface TimelineRepository {
-    fun buildStream(): Flow<List<Timeline>>
+    fun buildStream(): Flow<Map<TimelineId, Timeline>>
 
     suspend fun start()
-    suspend fun load(timeline: Timeline)
+    suspend fun load(timelineId: TimelineId)
     suspend fun close()
 
     suspend fun fetchGlobal(

@@ -9,13 +9,14 @@ import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.data.timeline.TimelineRepository
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
-import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope
 import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
+import noctiluca.model.timeline.LocalTimelineId
 import noctiluca.model.timeline.StreamEvent
 import noctiluca.model.timeline.Timeline
+import noctiluca.model.timeline.TimelineId
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.usecase.*
 import org.koin.core.component.KoinComponent
@@ -28,24 +29,23 @@ class TimelinesViewModel(
     private val timelineRepository: TimelineRepository,
     authorizedUserRepository: AuthorizedUserRepository,
 ) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
-    private val mutableUiModel by lazy { MutableStateFlow(UiModel()) }
-    private val foregroundIndexStateFlow by lazy { MutableStateFlow(0) }
+    private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
 
     val uiModel: StateFlow<UiModel> by lazy {
         combine(
             authorizedAccountRepository.current(),
             authorizedAccountRepository.others(),
             timelineRepository.buildStream(),
-            foregroundIndexStateFlow,
-        ) { current, others, timelines, index ->
+            foregroundIdStateFlow,
+        ) { current, others, timelines, timelineId ->
             UiModel(
                 account = CurrentAuthorizedAccount(current, others),
-                timelines = timelines.mapIndexed { i, timeline ->
-                    TimelineState(
+                timelines = timelines.map { (id, timeline) ->
+                    id to TimelineState(
                         timeline = timeline,
-                        foreground = i == index,
+                        foreground = timelineId == id,
                     )
-                },
+                }.toMap(),
             )
         }
             .stateIn(
@@ -64,12 +64,10 @@ class TimelinesViewModel(
     }
 
     fun setForeground(index: Int) {
-        foregroundIndexStateFlow.value = index
+        foregroundIdStateFlow.value = uiModel.value.findTimelineId(index)
     }
 
-    fun scrolledToTop(index: Int) {
-        set(index) { copy(scrollToTop = false) }
-    }
+    fun scrolledToTop(timelineId: TimelineId) = Unit
 
     fun subscribeAll() {
         launch {
@@ -79,7 +77,7 @@ class TimelinesViewModel(
 
     fun load(timeline: Timeline) {
         launch {
-            runCatchingWithAuth { timelineRepository.load(timeline) }
+            // runCatchingWithAuth { timelineRepository.load(timeline) }
         }
     }
 
@@ -93,42 +91,17 @@ class TimelinesViewModel(
         }
     }
 
-    private fun execute(timeline: Timeline, status: Status, action: StatusAction) {
-        val index = uiModel.value.timelines.indexOfFirst { it.timeline == timeline }
-
-        val job = launchLazy {
-            runCatchingWithAuth { executeStatusActionUseCase.execute(status, action) }
-                .onSuccess { setStatus(index, status) }
-        }
-
-        setJob(index, job)
-        job.start()
-    }
-
-    private fun setStatus(index: Int, status: Status) {
-        set(index) { copy(timeline = timeline.replace(status), jobs = jobs.filterNot { it.isCompleted }) }
-    }
-
-    private fun setJob(index: Int, job: Job) {
-        set(index) { copy(jobs = jobs + job) }
-    }
-
-    private operator fun set(index: Int, block: TimelineState.() -> TimelineState) {
-        val current = uiModel.value.timelines.toMutableList()
-        current[index] = current[index].block()
-        mutableUiModel.value = uiModel.value.copy(timelines = current)
-    }
+    private fun execute(timeline: Timeline, status: Status, action: StatusAction) = Unit
 
     data class UiModel(
         val account: CurrentAuthorizedAccount = CurrentAuthorizedAccount(),
-        val timelines: List<TimelineState> = listOf(
-            TimelineState(Timeline.Local(listOf(), onlyMedia = false), foreground = true),
-            TimelineState(Timeline.Home(listOf())),
-            TimelineState(Timeline.Global(listOf(), onlyRemote = false, onlyMedia = false)),
-        ),
+        val timelines: Map<TimelineId, TimelineState> = mapOf(),
     ) {
-        val foreground get() = timelines.find { it.foreground }
-        val currentTabIndex get() = timelines.indexOfFirst { it.foreground }
+        val foreground get() = timelines.values.find { it.foreground }
+        val currentTabIndex get() = timelines.values.indexOfFirst { it.foreground }
+
+        fun toTimelineList() = timelines.values.toList()
+        fun findTimelineId(index: Int) = timelines.keys.toList()[index]
     }
 
     data class TimelineState(

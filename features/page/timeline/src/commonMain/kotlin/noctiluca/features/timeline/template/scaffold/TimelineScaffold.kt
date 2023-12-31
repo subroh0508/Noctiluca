@@ -21,6 +21,7 @@ import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.tab.TimelineTabs
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.model.timeline.TimelineId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -98,10 +99,10 @@ private fun CurrentInstanceTopAppBar(
 @Composable
 private fun TimelineLanes(
     viewModel: TimelinesViewModel,
-    timelines: List<TimelinesViewModel.TimelineState>,
+    timelines: Map<TimelineId, TimelinesViewModel.TimelineState>,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
-    timelines.forEachIndexed { index, timelineState ->
+    timelines.forEach { (timelineId, timelineState) ->
         TimelineLane(
             timelineState,
             onLoad = { viewModel.load(it) },
@@ -113,7 +114,7 @@ private fun TimelineLanes(
                 }
             },
             onScrollToTop = {
-                viewModel.scrolledToTop(index)
+                viewModel.scrolledToTop(timelineId)
                 scrollBehavior.scrollToTop()
             },
         )

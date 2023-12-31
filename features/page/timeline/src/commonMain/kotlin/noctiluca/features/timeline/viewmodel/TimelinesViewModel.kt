@@ -75,9 +75,9 @@ class TimelinesViewModel(
         }
     }
 
-    fun load(timeline: Timeline) {
+    fun load(timelineId: TimelineId) {
         launch {
-            // runCatchingWithAuth { timelineRepository.load(timeline) }
+            runCatchingWithAuth { timelineRepository.load(timelineId) }
         }
     }
 

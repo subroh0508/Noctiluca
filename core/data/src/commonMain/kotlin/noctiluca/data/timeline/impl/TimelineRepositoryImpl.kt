@@ -6,13 +6,14 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import noctiluca.data.status.toEntity
 import noctiluca.data.timeline.TimelineRepository
+import noctiluca.data.timeline.toStream
 import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.StatusId
+import noctiluca.model.status.Status
 import noctiluca.model.timeline.*
 import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.network.mastodon.MastodonStream
 import noctiluca.network.mastodon.data.streaming.NetworkStreamEvent
-import noctiluca.network.mastodon.data.streaming.Stream
 import noctiluca.network.mastodon.data.streaming.StreamingType
 
 internal class TimelineRepositoryImpl(
@@ -43,7 +44,7 @@ internal class TimelineRepositoryImpl(
     override suspend fun load(timelineId: TimelineId) {
         val timeline = streamStateFlow.value.timeline[timelineId] ?: return
 
-        appendStatuses(timeline)
+        streamStateFlow[timelineId] = appendStatuses(timeline)
     }
 
     override suspend fun close() {
@@ -51,30 +52,10 @@ internal class TimelineRepositoryImpl(
         streamStateFlow.cancelAll()
     }
 
-    private suspend fun appendStatuses(
-        timeline: Timeline,
-    ): Timeline {
-        val statuses = when (timeline) {
-            is Timeline.Global -> fetchGlobal(timeline.onlyRemote, timeline.onlyMedia)
-            is Timeline.Local -> fetchLocal(timeline.onlyMedia)
-            is Timeline.Home -> fetchHome()
-            is Timeline.HashTag -> listOf() // TODO
-            is Timeline.List -> listOf() // TODO
-        }
-
-        return timeline + statuses
-    }
+    private suspend fun appendStatuses(timeline: Timeline) = timeline + fetchStatuses(timeline)
 
     private suspend fun subscribe(timelineId: TimelineId, timeline: Timeline) {
-        val flow = when (timeline) {
-            is Timeline.Global -> buildGlobalStream(timeline.onlyRemote, timeline.onlyMedia)
-            is Timeline.Local -> buildLocalStream(timeline.onlyMedia)
-            is Timeline.Home -> buildHomeStream()
-            is Timeline.HashTag -> flow { } // TODO
-            is Timeline.List -> flow { } // TODO
-        }
-
-        streamStateFlow[timelineId] = collectEvent(timelineId, flow)
+        streamStateFlow[timelineId] = collectEvent(timelineId, buildStream(timeline))
     }
 
     private fun collectEvent(timelineId: TimelineId, flow: Flow<StreamEvent>) = flow.onEach { event ->
@@ -89,63 +70,41 @@ internal class TimelineRepositoryImpl(
         streamStateFlow[timelineId] = next
     }.launchIn(streamCoroutineScope)
 
-    override suspend fun fetchGlobal(
-        onlyRemote: Boolean,
-        onlyMedia: Boolean,
-        maxId: StatusId?
-    ) = api.getTimelinesPublic(
-        remote = onlyRemote,
-        onlyMedia = onlyMedia,
-        maxId = maxId?.value,
-    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
+    private suspend fun fetchStatuses(
+        timeline: Timeline,
+    ): List<Status> {
+        val data = when (timeline) {
+            is Timeline.Global -> api.getTimelinesPublic(
+                remote = timeline.onlyRemote,
+                onlyMedia = timeline.onlyMedia,
+                maxId = timeline.maxId?.value,
+            )
 
-    override suspend fun fetchLocal(
-        onlyMedia: Boolean,
-        maxId: StatusId?,
-    ) = api.getTimelinesPublic(
-        local = true,
-        onlyMedia = onlyMedia,
-        maxId = maxId?.value,
-    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
+            is Timeline.Local -> api.getTimelinesPublic(
+                local = true,
+                onlyMedia = timeline.onlyMedia,
+                maxId = timeline.maxId?.value,
+            )
 
-    override suspend fun fetchHome(
-        maxId: StatusId?,
-    ) = api.getTimelinesHome(
-        maxId = maxId?.value,
-    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
+            is Timeline.Home -> api.getTimelinesHome(
+                maxId = timeline.maxId?.value,
+            )
 
-    override suspend fun buildGlobalStream(
-        onlyRemote: Boolean,
-        onlyMedia: Boolean,
-    ): Flow<StreamEvent> {
-        val stream = when {
-            onlyRemote && onlyMedia -> Stream.PUBLIC_REMOTE_MEDIA
-            onlyRemote && !onlyMedia -> Stream.PUBLIC_REMOTE
-            !onlyRemote && onlyMedia -> Stream.PUBLIC_MEDIA
-            else -> Stream.PUBLIC
+            is Timeline.HashTag -> listOf() // TODO
+            is Timeline.List -> listOf() // TODO
         }
 
+        return data.map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
+    }
+
+    private suspend fun buildStream(timeline: Timeline): Flow<StreamEvent> {
+        val stream = timeline.toStream()
+
         return webSocket.streaming(
             stream.value,
             StreamingType.SUBSCRIBE.name.lowercase(),
         ).mapNotNull { it.toValueObject() }
     }
-
-    override suspend fun buildLocalStream(
-        onlyMedia: Boolean
-    ): Flow<StreamEvent> {
-        val stream = if (onlyMedia) Stream.PUBLIC_LOCAL_MEDIA else Stream.PUBLIC_LOCAL
-
-        return webSocket.streaming(
-            stream.value,
-            StreamingType.SUBSCRIBE.name.lowercase(),
-        ).mapNotNull { it.toValueObject() }
-    }
-
-    override suspend fun buildHomeStream() = webSocket.streaming(
-        Stream.USER.value,
-        StreamingType.SUBSCRIBE.name.lowercase(),
-    ).mapNotNull { it.toValueObject() }
 
     private suspend fun NetworkStreamEvent.toValueObject() = payload?.let {
         when (it) {
@@ -169,14 +128,14 @@ internal class TimelineRepositoryImpl(
         class Flow(
             private val state: StreamState,
         ) : MutableStateFlow<StreamState> by MutableStateFlow(state) {
-            @JvmName("_plusAssign1")
+            @JvmName("_plusAssignTimeline")
             operator fun plusAssign(
                 value: Map<TimelineId, Timeline>,
             ) {
                 this.value = state.copy(timeline = value)
             }
 
-            @JvmName("_plusAssign2")
+            @JvmName("_plusAssignJob")
             operator fun plusAssign(
                 value: Map<TimelineId, Job>,
             ) {

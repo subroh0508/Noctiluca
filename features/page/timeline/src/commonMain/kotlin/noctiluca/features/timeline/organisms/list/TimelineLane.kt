@@ -20,11 +20,13 @@ import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.Timeline
+import noctiluca.model.timeline.TimelineId
 
 @Composable
 internal fun TimelineLane(
+    timelineId: TimelineId,
     timelineState: TimelinesViewModel.TimelineState,
-    onLoad: suspend CoroutineScope.(Timeline) -> Unit,
+    onLoad: suspend CoroutineScope.(TimelineId) -> Unit,
     onExecuteAction: CoroutineScope.(Timeline, Status, Action) -> Unit,
     onScrollToTop: () -> Unit,
     lazyListState: LazyListState = rememberLazyListState(),
@@ -59,7 +61,7 @@ internal fun TimelineLane(
         modifier = modifier,
         state = lazyListState,
         showDivider = true,
-        footerContent = { TimelineFooter(timelineState, onLoad) },
+        footerContent = { TimelineFooter(timelineId, timelineState, onLoad) },
     ) { _, item ->
         Status(
             item,
@@ -70,20 +72,23 @@ internal fun TimelineLane(
 
 @Composable
 private fun TimelineFooter(
+    foregroundId: TimelineId,
     foreground: TimelinesViewModel.TimelineState,
-    onLoad: suspend CoroutineScope.(Timeline) -> Unit,
+    onLoad: suspend CoroutineScope.(TimelineId) -> Unit,
     height: Dp = 64.dp,
 ) {
+    /*
     if (foreground.jobs.isEmpty()) {
         Spacer(Modifier.height(height))
         return
     }
+    */
 
     LaunchedEffect(Unit) {
         if (foreground.timeline.statuses.isEmpty()) {
             return@LaunchedEffect
         }
-        onLoad(foreground.timeline)
+        onLoad(foregroundId)
     }
 
     Box(

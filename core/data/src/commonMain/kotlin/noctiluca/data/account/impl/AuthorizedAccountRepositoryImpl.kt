@@ -54,28 +54,14 @@ internal class AuthorizedAccountRepositoryImpl(
         allStateFlow.value = cache.mapNotNull { runCatching { refresh(it.id) }.getOrNull() }
     }
 
-    override suspend fun getCurrent(): Pair<Account, Domain>? {
+    private suspend fun getCurrent(): Pair<Account, Domain>? {
         val account = getCurrentAccount() ?: return null
         val domain = getCurrentDomain() ?: return null
 
         return account to domain
     }
 
-    override suspend fun fetchAll() = authenticationTokenDataStore.getAll().mapNotNull {
-        val cache = accountDataStore.get(it.id)
-        if (cache != null) {
-            return@mapNotNull cache
-        }
-
-        val account = runCatching {
-            v1.getAccount(it.id.value).toEntity(it.domain)
-        }.getOrNull() ?: return@mapNotNull null
-
-        accountDataStore.add(account)
-        account
-    }
-
-    override suspend fun fetchCurrent(): Pair<Account, Domain> {
+    private suspend fun fetchCurrent(): Pair<Account, Domain> {
         val domain = getCurrentDomain() ?: throw AuthorizedTokenNotFoundException
 
         val account = runCatching {
@@ -87,7 +73,7 @@ internal class AuthorizedAccountRepositoryImpl(
         return account to domain
     }
 
-    override suspend fun refresh(id: AccountId): Account {
+    private suspend fun refresh(id: AccountId): Account {
         val (accessToken, domain) = getAccessToken(id) ?: throw AuthorizedAccountNotFoundException
         val account = v1.getVerifyAccountsCredentials(domain.value, accessToken).toEntity(domain)
 

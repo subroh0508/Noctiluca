@@ -8,12 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.features.timeline.template.drawer.header.CurrentAuthorizedAccountHeader
 import noctiluca.features.timeline.template.drawer.menu.AuthorizedAccountsList
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenus
 import noctiluca.model.account.Account
-import noctiluca.timeline.domain.model.CurrentAuthorizedAccount
 
 @Composable
 internal fun TimelineNavigationDrawer(

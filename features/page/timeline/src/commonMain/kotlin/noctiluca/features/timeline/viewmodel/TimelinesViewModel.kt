@@ -10,10 +10,10 @@ import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope
+import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.StreamEvent
-import noctiluca.timeline.domain.model.CurrentAuthorizedAccount
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.*

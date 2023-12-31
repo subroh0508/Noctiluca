@@ -1,4 +1,4 @@
-package noctiluca.timeline.domain.model
+package noctiluca.features.timeline.model
 
 import noctiluca.model.Domain
 import noctiluca.model.account.Account

@@ -1,13 +1,12 @@
 package noctiluca.data.timeline
 
-import kotlinx.coroutines.flow.Flow
+import noctiluca.data.timeline.impl.TimelineStreamStateFlow
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.Timeline
 import noctiluca.model.timeline.TimelineId
-import noctiluca.model.timeline.TimelineStreamState
 
 interface TimelineRepository {
-    val stream: Flow<TimelineStreamState>
+    val stream: TimelineStreamStateFlow
 
     operator fun get(timelineId: TimelineId): Timeline?
 

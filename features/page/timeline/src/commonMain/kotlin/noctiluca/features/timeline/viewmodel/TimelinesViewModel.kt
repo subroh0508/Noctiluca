@@ -1,6 +1,5 @@
 package noctiluca.features.timeline.viewmodel
 
-import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
@@ -17,11 +16,10 @@ import noctiluca.model.status.Status
 import noctiluca.model.timeline.*
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.usecase.*
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel(
+    private val switchAuthorizedAccountUseCase: SwitchAuthorizedAccountUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
@@ -62,8 +60,7 @@ class TimelinesViewModel(
 
     fun switch(account: Account) {
         launch {
-            authorizedAccountRepository.switch(account.id)
-            unsubscribeTimelineStreamUseCase.execute()
+            switchAuthorizedAccountUseCase.execute(account.id)
             reopen()
         }
     }

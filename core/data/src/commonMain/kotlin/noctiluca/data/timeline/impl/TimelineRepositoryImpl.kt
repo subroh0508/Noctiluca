@@ -36,7 +36,7 @@ internal class TimelineRepositoryImpl(
         initial: Map<TimelineId, Timeline>,
         statuses: Map<TimelineId, List<Status>>,
     ) {
-        timelineStreamStateFlow.value = TimelineStreamState(timeline = initial)
+        timelineStreamStateFlow.setInitialTimeline(initial)
 
         initial.forEach { (timelineId, timeline) ->
             timelineStreamStateFlow[timelineId] = timeline + statuses[timelineId].orEmpty()

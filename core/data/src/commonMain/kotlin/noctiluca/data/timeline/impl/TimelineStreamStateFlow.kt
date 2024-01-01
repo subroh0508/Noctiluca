@@ -2,39 +2,48 @@ package noctiluca.data.timeline.impl
 
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import noctiluca.model.timeline.StreamEvent
 import noctiluca.model.timeline.Timeline
 import noctiluca.model.timeline.TimelineId
 import noctiluca.model.timeline.TimelineStreamState
 
-internal class TimelineStreamStateFlow(
-    private val state: TimelineStreamState,
-) : MutableStateFlow<TimelineStreamState> by MutableStateFlow(state) {
-    operator fun set(
+class TimelineStreamStateFlow(
+    private val mutableStateFlow: MutableStateFlow<TimelineStreamState>,
+) : StateFlow<TimelineStreamState> by mutableStateFlow {
+    constructor(state: TimelineStreamState) : this(MutableStateFlow(state))
+
+    internal operator fun set(
         timelineId: TimelineId,
         timeline: Timeline,
     ) {
-        value += (timelineId to timeline)
+        mutableStateFlow.value += (timelineId to timeline)
     }
 
-    operator fun set(
+    internal operator fun set(
         timelineId: TimelineId,
         job: Job,
     ) {
-        value += (timelineId to job)
+        mutableStateFlow.value += (timelineId to job)
     }
 
-    operator fun set(
+    internal operator fun set(
         timelineId: TimelineId,
         event: StreamEvent,
     ) {
-        value += (timelineId to event)
+        mutableStateFlow.value += (timelineId to event)
     }
 
-    fun hasActiveJob(timelineId: TimelineId) = value.hasActiveJob(timelineId)
+    internal fun setInitialTimeline(
+        initial: Map<TimelineId, Timeline>,
+    ) {
+        mutableStateFlow.value = TimelineStreamState(timeline = initial)
+    }
 
-    fun cancelAll() = value.cancelAll()
-    fun clear() {
-        value = TimelineStreamState()
+    internal fun hasActiveJob(timelineId: TimelineId) = value.hasActiveJob(timelineId)
+
+    internal fun cancelAll() = value.cancelAll()
+    internal fun clear() {
+        mutableStateFlow.value = TimelineStreamState()
     }
 }

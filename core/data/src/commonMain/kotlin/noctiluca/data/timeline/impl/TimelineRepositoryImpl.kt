@@ -24,7 +24,7 @@ internal class TimelineRepositoryImpl(
 
     override val stream get() = timelineStreamStateFlow
 
-    override fun get(timelineId: TimelineId) = timelineStreamStateFlow.value.timeline(timelineId)
+    override fun get(timelineId: TimelineId) = timelineStreamStateFlow.timeline(timelineId)
 
     override suspend fun fetchInitialTimeline() = mapOf(
         LocalTimelineId to Timeline.Local(listOf(), onlyMedia = false),
@@ -75,7 +75,7 @@ internal class TimelineRepositoryImpl(
         timelineId: TimelineId,
         event: StreamEvent,
     ) {
-        val current = timelineStreamStateFlow.value.timeline(timelineId) ?: return
+        val current = timelineStreamStateFlow.timeline(timelineId) ?: return
 
         val next = when (event) {
             is StreamEvent.Updated -> current.insert(event.status)

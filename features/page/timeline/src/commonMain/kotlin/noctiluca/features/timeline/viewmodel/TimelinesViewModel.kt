@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
-import noctiluca.data.timeline.TimelineRepository
+import noctiluca.data.timeline.impl.TimelineStreamStateFlow
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
@@ -19,13 +19,13 @@ import noctiluca.timeline.domain.usecase.*
 
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel(
+    private val timelineStreamStateFlow: TimelineStreamStateFlow,
     private val switchAuthorizedAccountUseCase: SwitchAuthorizedAccountUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
     private val unsubscribeTimelineStreamUseCase: UnsubscribeTimelineStreamUseCase,
     private val authorizedAccountRepository: AuthorizedAccountRepository,
-    private val timelineRepository: TimelineRepository,
     authorizedUserRepository: AuthorizedUserRepository,
 ) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
     private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
@@ -35,7 +35,7 @@ class TimelinesViewModel(
         combine(
             authorizedAccountRepository.current(),
             authorizedAccountRepository.others(),
-            timelineRepository.stream,
+            timelineStreamStateFlow,
             foregroundIdStateFlow,
             loadStateFlow,
         ) { current, others, timelines, timelineId, loadState ->

@@ -97,8 +97,6 @@ class TimelinesViewModel(
     fun boost(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOST)
     fun bookmark(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOKMARK)
 
-    fun clear() = unsubscribeTimelineStreamUseCase.execute()
-
     private fun execute(timeline: Timeline, status: Status, action: StatusAction) = Unit
 
     data class UiModel(

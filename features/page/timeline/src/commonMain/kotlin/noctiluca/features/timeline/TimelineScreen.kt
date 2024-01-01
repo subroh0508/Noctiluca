@@ -43,7 +43,6 @@ data object TimelineLaneScreen : Screen {
             onClickDrawerMenu = { menu ->
                 handleOnClickDrawerItem(
                     menu,
-                    viewModel,
                     navigator,
                 )
             },
@@ -77,12 +76,8 @@ private fun Screen.TimelineFeature(
 
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,
-    viewModel: TimelinesViewModel,
     navigator: Navigator?,
 ) = when (item) {
-    is TimelineDrawerMenu.NewAccount -> {
-        viewModel.clear()
-        navigator?.navigateToSignIn()
-    }
+    is TimelineDrawerMenu.NewAccount -> navigator?.navigateToSignIn()
     is TimelineDrawerMenu.Settings -> Unit
 }

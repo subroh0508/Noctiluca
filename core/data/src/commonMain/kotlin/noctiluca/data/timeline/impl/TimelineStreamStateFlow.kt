@@ -33,12 +33,8 @@ internal class TimelineStreamStateFlow(
 
     fun hasActiveJob(timelineId: TimelineId) = value.hasActiveJob(timelineId)
 
-    fun clearTimeline() {
-        value = value.copy(timeline = emptyMap())
-    }
-
-    fun cancelAll() {
-        value.cancelAll()
-        value = value.copy(stream = emptyMap(), latestEvent = emptyMap())
+    fun cancelAll() = value.cancelAll()
+    fun clear() {
+        value = TimelineStreamState()
     }
 }

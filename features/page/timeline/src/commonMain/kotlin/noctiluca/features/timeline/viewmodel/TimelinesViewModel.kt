@@ -14,10 +14,7 @@ import noctiluca.features.shared.viewmodel.viewModelScope
 import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
-import noctiluca.model.timeline.LocalTimelineId
-import noctiluca.model.timeline.StreamEvent
-import noctiluca.model.timeline.Timeline
-import noctiluca.model.timeline.TimelineId
+import noctiluca.model.timeline.*
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.usecase.*
 import org.koin.core.component.KoinComponent
@@ -26,6 +23,9 @@ import org.koin.core.component.get
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel(
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
+    private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
+    private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
+    private val unsubscribeTimelineStreamUseCase: UnsubscribeTimelineStreamUseCase,
     private val authorizedAccountRepository: AuthorizedAccountRepository,
     private val timelineRepository: TimelineRepository,
     authorizedUserRepository: AuthorizedUserRepository,
@@ -37,7 +37,7 @@ class TimelinesViewModel(
         combine(
             authorizedAccountRepository.current(),
             authorizedAccountRepository.others(),
-            timelineRepository.buildStream(),
+            timelineRepository.stream,
             foregroundIdStateFlow,
             loadStateFlow,
         ) { current, others, timelines, timelineId, loadState ->
@@ -63,7 +63,7 @@ class TimelinesViewModel(
     fun switch(account: Account) {
         launch {
             authorizedAccountRepository.switch(account.id)
-            timelineRepository.close()
+            unsubscribeTimelineStreamUseCase.execute()
             reopen()
         }
     }
@@ -76,7 +76,7 @@ class TimelinesViewModel(
 
     fun subscribeAll() {
         val job = launchLazy {
-            runCatchingWithAuth { timelineRepository.start() }
+            runCatchingWithAuth { subscribeTimelineStreamUseCase.execute() }
                 .onSuccess { loadStateFlow.value = mapOf() }
                 .onFailure { e -> loadStateFlow.value += uiModel.value.timelines.keys.associateWith { LoadState.Error(e) } }
         }
@@ -87,7 +87,7 @@ class TimelinesViewModel(
 
     fun load(timelineId: TimelineId) {
         val job = launchLazy {
-            runCatchingWithAuth { timelineRepository.load(timelineId) }
+            runCatchingWithAuth { loadTimelineStatusesUseCase.execute(timelineId) }
                 .onSuccess { loadStateFlow.value -= timelineId }
                 .onFailure { loadStateFlow.value += timelineId to LoadState.Error(it) }
         }
@@ -100,11 +100,7 @@ class TimelinesViewModel(
     fun boost(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOST)
     fun bookmark(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOKMARK)
 
-    fun clear() {
-        launch {
-            timelineRepository.close()
-        }
-    }
+    fun clear() = unsubscribeTimelineStreamUseCase.execute()
 
     private fun execute(timeline: Timeline, status: Status, action: StatusAction) = Unit
 
@@ -126,20 +122,4 @@ class TimelinesViewModel(
         val scrollToTop: Boolean = false,
         val foreground: Boolean = false,
     )
-
-    companion object Provider {
-        @Composable
-        operator fun invoke(
-            component: KoinComponent,
-        ): TimelinesViewModel {
-            return remember {
-                TimelinesViewModel(
-                    component.get(),
-                    component.get(),
-                    component.get(),
-                    component.get(),
-                )
-            }
-        }
-    }
 }

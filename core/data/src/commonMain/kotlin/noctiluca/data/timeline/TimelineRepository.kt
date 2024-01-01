@@ -2,7 +2,6 @@ package noctiluca.data.timeline
 
 import kotlinx.coroutines.flow.Flow
 import noctiluca.model.timeline.StreamState
-import noctiluca.model.timeline.Timeline
 import noctiluca.model.timeline.TimelineId
 
 interface TimelineRepository {

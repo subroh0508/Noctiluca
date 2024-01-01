@@ -20,7 +20,7 @@ internal class TimelineRepositoryImpl(
     private val api: MastodonApiV1,
     private val webSocket: MastodonStream,
     private val authenticationTokenDataStore: AuthenticationTokenDataStore,
-    private val streamCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
+    private val streamCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO + Job()),
 ) : TimelineRepository {
     private val streamStateFlow = StreamStateFlow(StreamState())
 

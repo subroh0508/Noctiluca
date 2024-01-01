@@ -11,9 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import noctiluca.features.shared.StringResources
-import noctiluca.features.shared.atoms.text.buildTimestamp
-import noctiluca.features.shared.getString
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Action

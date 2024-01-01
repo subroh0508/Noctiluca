@@ -9,7 +9,6 @@ import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
-import noctiluca.features.shared.viewmodel.viewModelScope
 import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
@@ -32,12 +31,14 @@ class TimelinesViewModel(
     private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 
     val uiModel: StateFlow<UiModel> by lazy {
-        combine(
+        buildUiModel(
             authorizedAccountRepository.current(),
             authorizedAccountRepository.others(),
             timelineStreamStateFlow,
             foregroundIdStateFlow,
             loadStateFlow,
+            initialValue = UiModel(),
+            started = SharingStarted.Eagerly,
         ) { current, others, timelines, timelineId, loadState ->
             UiModel(
                 account = CurrentAuthorizedAccount(current, others),
@@ -51,11 +52,6 @@ class TimelinesViewModel(
                 loadState = loadState,
             )
         }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.Eagerly,
-                initialValue = UiModel(),
-            )
     }
 
     fun switch(account: Account) {

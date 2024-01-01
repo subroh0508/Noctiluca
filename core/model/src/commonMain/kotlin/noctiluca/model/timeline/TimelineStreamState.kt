@@ -2,7 +2,7 @@ package noctiluca.model.timeline
 
 import kotlinx.coroutines.Job
 
-data class StreamState(
+data class TimelineStreamState(
     private val timeline: Map<TimelineId, Timeline> = emptyMap(),
     private val stream: Map<TimelineId, Job> = emptyMap(),
     private val latestEvent: Map<TimelineId, StreamEvent> = emptyMap(),

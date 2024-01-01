@@ -3,13 +3,13 @@ package noctiluca.data.timeline.impl
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import noctiluca.model.timeline.StreamEvent
-import noctiluca.model.timeline.StreamState
 import noctiluca.model.timeline.Timeline
 import noctiluca.model.timeline.TimelineId
+import noctiluca.model.timeline.TimelineStreamState
 
-internal class StreamStateFlow(
-    private val state: StreamState,
-) : MutableStateFlow<StreamState> by MutableStateFlow(state) {
+internal class TimelineStreamStateFlow(
+    private val state: TimelineStreamState,
+) : MutableStateFlow<TimelineStreamState> by MutableStateFlow(state) {
     operator fun set(
         timelineId: TimelineId,
         timeline: Timeline,

@@ -22,7 +22,7 @@ internal class TimelineRepositoryImpl(
     private val authenticationTokenDataStore: AuthenticationTokenDataStore,
     private val streamCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO + Job()),
 ) : TimelineRepository {
-    private val streamStateFlow by lazy { StreamStateFlow(StreamState()) }
+    private val timelineStreamStateFlow by lazy { TimelineStreamStateFlow(TimelineStreamState()) }
 
     private val initial = mapOf(
         LocalTimelineId to Timeline.Local(listOf(), onlyMedia = false),
@@ -30,38 +30,38 @@ internal class TimelineRepositoryImpl(
         GlobalTimelineId to Timeline.Global(listOf(), onlyRemote = false, onlyMedia = false),
     )
 
-    override fun buildStream(): Flow<StreamState> = streamStateFlow
+    override fun buildStream(): Flow<TimelineStreamState> = timelineStreamStateFlow
 
     override suspend fun start() {
-        streamStateFlow.value = StreamState(timeline = initial)
+        timelineStreamStateFlow.value = TimelineStreamState(timeline = initial)
 
         initial.forEach { (timelineId, timeline) ->
-            streamStateFlow[timelineId] = timeline + fetchStatuses(timeline)
+            timelineStreamStateFlow[timelineId] = timeline + fetchStatuses(timeline)
             subscribe(timelineId, timeline)
         }
     }
 
     override suspend fun load(timelineId: TimelineId) {
-        val timeline = streamStateFlow.value.timeline(timelineId) ?: return
+        val timeline = timelineStreamStateFlow.value.timeline(timelineId) ?: return
 
-        streamStateFlow[timelineId] = timeline + fetchStatuses(timeline)
+        timelineStreamStateFlow[timelineId] = timeline + fetchStatuses(timeline)
     }
 
     override suspend fun close() {
-        streamStateFlow.clearTimeline()
-        streamStateFlow.cancelAll()
+        timelineStreamStateFlow.clearTimeline()
+        timelineStreamStateFlow.cancelAll()
     }
 
     private suspend fun subscribe(timelineId: TimelineId, timeline: Timeline) {
-        if (streamStateFlow.hasActiveJob(timelineId)) {
+        if (timelineStreamStateFlow.hasActiveJob(timelineId)) {
             return
         }
 
-        streamStateFlow[timelineId] = collectEvent(timelineId, buildStream(timeline))
+        timelineStreamStateFlow[timelineId] = collectEvent(timelineId, buildStream(timeline))
     }
 
     private fun collectEvent(timelineId: TimelineId, flow: Flow<StreamEvent>) = flow.onEach { event ->
-        val current = streamStateFlow.value.timeline(timelineId) ?: return@onEach
+        val current = timelineStreamStateFlow.value.timeline(timelineId) ?: return@onEach
 
         val next = when (event) {
             is StreamEvent.Updated -> current.insert(event.status)
@@ -69,8 +69,8 @@ internal class TimelineRepositoryImpl(
             is StreamEvent.StatusEdited -> current.replace(event.status)
         }
 
-        streamStateFlow[timelineId] = next
-        streamStateFlow[timelineId] = event
+        timelineStreamStateFlow[timelineId] = next
+        timelineStreamStateFlow[timelineId] = event
     }.launchIn(streamCoroutineScope)
 
     private suspend fun fetchStatuses(

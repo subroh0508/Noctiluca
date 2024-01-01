@@ -43,12 +43,13 @@ class TimelinesViewModel(
         ) { current, others, timelines, timelineId, loadState ->
             UiModel(
                 account = CurrentAuthorizedAccount(current, others),
-                timelines = timelines.map { (id, timeline) ->
+                timelines = timelines.map { id, timeline, latestEvent ->
                     id to TimelineState(
                         timeline = timeline,
+                        latestEvent = latestEvent,
                         foreground = timelineId == id,
                     )
-                }.toMap(),
+                },
                 loadState = loadState,
             )
         }

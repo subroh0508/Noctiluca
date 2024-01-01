@@ -10,12 +10,16 @@ sealed class Timeline {
 
     val maxId get() = statuses.lastOrNull()?.id
 
-    operator fun plus(list: StatusList): Timeline = when (this) {
-        is Global -> copy(statuses = statuses + list)
-        is Local -> copy(statuses = statuses + list)
-        is Home -> copy(statuses = statuses + list)
-        is HashTag -> copy(statuses = statuses + list)
-        is List -> copy(statuses = statuses + list)
+    operator fun plus(list: StatusList): Timeline {
+        val next = (statuses + list).distinctBy { it.id }
+
+        return when (this) {
+            is Global -> copy(statuses = next)
+            is Local -> copy(statuses = next)
+            is Home -> copy(statuses = next)
+            is HashTag -> copy(statuses = next)
+            is List -> copy(statuses = next)
+        }
     }
 
     operator fun minus(id: StatusId): Timeline = when (this) {
@@ -27,6 +31,10 @@ sealed class Timeline {
     }
 
     fun insert(status: Status): Timeline {
+        if (statuses.find { it.id == status.id } != null) {
+            return replace(status)
+        }
+
         val index = statuses.indexOfFirst { it.id.value < status.id.value }.takeIf { it != -1 } ?: 0
         val next = statuses.take(index) + listOf(status) + statuses.drop(index)
 

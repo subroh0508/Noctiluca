@@ -53,11 +53,9 @@ internal fun TimelineLane(
         onScrollToTop()
     }
 
-    val res = getString()
-
     LazyColumn(
         timelineState.timeline.statuses,
-        key = { it.key(res) },
+        key = { it.id.value },
         modifier = modifier,
         state = lazyListState,
         showDivider = true,
@@ -94,5 +92,3 @@ private fun TimelineFooter(
             .height(height),
     ) { CircularProgressIndicator(Modifier.align(Alignment.Center)) }
 }
-
-private fun Status.key(res: StringResources) = "${id.value}/${buildTimestamp(createdAt, res = res)}"

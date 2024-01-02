@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             NoctilucaTheme {
-                Navigator(TimelineLaneScreen)
+                Navigator(TimelineLaneScreen())
             }
         }
     }

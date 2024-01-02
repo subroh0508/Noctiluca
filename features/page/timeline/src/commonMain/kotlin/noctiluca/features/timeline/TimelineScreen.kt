@@ -4,6 +4,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -21,14 +23,16 @@ internal val LocalResources = compositionLocalOf { Resources("JA") }
 
 val featureTimelineScreenModule = screenModule {
     register<Timeline.TimelineLane> {
-        TimelineLaneScreen
+        TimelineLaneScreen()
     }
     register<Timeline.Toot> {
         TootScreen
     }
 }
 
-data object TimelineLaneScreen : Screen {
+class TimelineLaneScreen : Screen {
+    override val key: ScreenKey by lazy { uniqueScreenKey }
+
     @Composable
     override fun Content() = TimelineFeature { viewModel ->
         val navigator = LocalNavigator.current

@@ -56,8 +56,8 @@ class TimelinesViewModel(
 
     fun switch(account: Account) {
         launch {
-            switchAuthorizedAccountUseCase.execute(account.id)
-            reopen()
+            runCatchingWithAuth { switchAuthorizedAccountUseCase.execute(account.id) }
+                .onSuccess { reopen() }
         }
     }
 

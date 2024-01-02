@@ -6,6 +6,7 @@ import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.toEntity
 import noctiluca.datastore.AccountDataStore
 import noctiluca.datastore.AuthenticationTokenDataStore
+import noctiluca.datastore.getOthers
 import noctiluca.model.*
 import noctiluca.model.account.Account
 import noctiluca.network.mastodon.MastodonApiV1
@@ -38,7 +39,7 @@ internal class AuthorizedAccountRepositoryImpl(
         val token = authenticationTokenDataStore.setCurrent(id)
 
         currentStateFlow.value = refresh(id) to token.domain
-        allStateFlow.value = authenticationTokenDataStore.getAll().drop(1).mapNotNull { accountDataStore.get(it.id) }
+        allStateFlow.value = authenticationTokenDataStore.getOthers().mapNotNull { accountDataStore.get(it.id) }
     }
 
     private suspend fun refreshCurrent() {
@@ -55,7 +56,7 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     private suspend fun refreshOthers() {
-        val cache = authenticationTokenDataStore.getAll().drop(1)
+        val cache = authenticationTokenDataStore.getOthers()
 
         allStateFlow.value = cache.mapNotNull { accountDataStore.get(it.id) }
         allStateFlow.value = cache.mapNotNull { runCatching { refresh(it.id) }.getOrNull() }

@@ -23,3 +23,5 @@ interface AuthenticationTokenDataStore {
 
     suspend fun delete(id: AccountId): List<AuthorizedUser>
 }
+
+suspend fun AuthenticationTokenDataStore.getOthers() = getAll().drop(1)

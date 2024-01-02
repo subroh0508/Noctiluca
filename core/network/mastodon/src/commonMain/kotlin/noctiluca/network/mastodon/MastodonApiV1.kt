@@ -7,7 +7,6 @@ import noctiluca.network.mastodon.data.extendeddescription.NetworkExtendedDescri
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.status.NetworkStatus
 
-@Suppress("TooManyFunctions")
 interface MastodonApiV1 {
     suspend fun getInstance(
         domain: String,

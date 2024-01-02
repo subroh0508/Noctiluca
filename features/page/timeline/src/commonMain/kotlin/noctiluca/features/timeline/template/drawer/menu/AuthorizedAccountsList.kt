@@ -10,12 +10,12 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.features.shared.atoms.list.TwoLineListItem
 import noctiluca.features.shared.molecules.list.LazyColumn
-import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 
 @Composable
 internal fun AuthorizedAccountsList(
-    account: TimelinesViewModel.CurrentAuthorizedAccount,
+    account: CurrentAuthorizedAccount,
     onClick: (Account) -> Unit,
 ) = LazyColumn(
     account.others,

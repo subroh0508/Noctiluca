@@ -8,16 +8,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.features.timeline.template.drawer.header.CurrentAuthorizedAccountHeader
 import noctiluca.features.timeline.template.drawer.menu.AuthorizedAccountsList
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenus
-import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.model.account.Account
 
 @Composable
 internal fun TimelineNavigationDrawer(
-    account: TimelinesViewModel.CurrentAuthorizedAccount,
+    account: CurrentAuthorizedAccount,
     onClickTopAccount: (Account) -> Unit,
     onClickOtherAccount: (Account) -> Unit,
     onClickDrawerMenu: (TimelineDrawerMenu) -> Unit,
@@ -42,7 +42,7 @@ internal fun TimelineNavigationDrawer(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimelineDrawerSheet(
-    account: TimelinesViewModel.CurrentAuthorizedAccount,
+    account: CurrentAuthorizedAccount,
     drawerState: DrawerState,
     onClickTopAccount: (Account) -> Unit,
     onClickOtherAccount: (Account) -> Unit,

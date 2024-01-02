@@ -1,7 +1,6 @@
 package noctiluca.model.timeline
 
-data class List(
-    val id: ListId,
+data class AccountList(
     val title: String,
     val policy: RepliesPolicy,
 ) {

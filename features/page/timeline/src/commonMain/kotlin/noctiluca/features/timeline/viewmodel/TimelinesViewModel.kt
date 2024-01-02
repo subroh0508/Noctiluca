@@ -1,233 +1,118 @@
 package noctiluca.features.timeline.viewmodel
 
-import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
+import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.data.timeline.impl.TimelineStreamStateFlow
+import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
-import noctiluca.model.Domain
+import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
-import noctiluca.model.timeline.StreamEvent
+import noctiluca.model.timeline.*
 import noctiluca.timeline.domain.model.StatusAction
-import noctiluca.timeline.domain.model.Timeline
 import noctiluca.timeline.domain.usecase.*
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel(
-    private val fetchCurrentAuthorizedAccountUseCase: FetchCurrentAuthorizedAccountUseCase,
-    private val fetchAllAuthorizedAccountsUseCase: FetchAllAuthorizedAccountsUseCase,
-    private val fetchTimelineStreamUseCase: FetchTimelineStreamUseCase,
-    private val updateTimelineUseCase: UpdateTimelineUseCase,
+    private val timelineStreamStateFlow: TimelineStreamStateFlow,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
+    private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
+    private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
+    private val authorizedAccountRepository: AuthorizedAccountRepository,
     authorizedUserRepository: AuthorizedUserRepository,
 ) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
-    private val subscribed by lazy { MutableStateFlow(false) }
-    private val mutableUiModel by lazy { MutableStateFlow(UiModel()) }
+    private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
+    private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 
-    val uiModel: StateFlow<UiModel> = mutableUiModel
+    val uiModel: StateFlow<UiModel> by lazy {
+        buildUiModel(
+            authorizedAccountRepository.current(),
+            authorizedAccountRepository.others(),
+            timelineStreamStateFlow,
+            foregroundIdStateFlow,
+            loadStateFlow,
+            initialValue = UiModel(),
+            started = SharingStarted.Eagerly,
+        ) { current, others, timelines, timelineId, loadState ->
+            UiModel(
+                account = CurrentAuthorizedAccount(current, others),
+                timelines = timelines.map { id, timeline, latestEvent ->
+                    id to TimelineState(
+                        timeline = timeline,
+                        latestEvent = latestEvent,
+                        foreground = timelineId == id,
+                    )
+                },
+                loadState = loadState,
+            )
+        }
+    }
 
     fun switch(account: Account) {
         launch {
-            authorizedUserRepository.switch(account.id)
-            clear()
-            reopen()
+            runCatchingWithAuth { authorizedAccountRepository.switch(account.id) }
+                .onSuccess { reopen() }
         }
     }
 
-    fun loadCurrentAuthorizedAccount() {
-        launch {
-            runCatchingWithAuth {
-                fetchCurrentAuthorizedAccountUseCase.execute()
-                    .collect { (account, domain) ->
-                        setCurrentAuthorizedAccount(account, domain)
-                    }
-            }
-        }
-
-        launch {
-            runCatchingWithAuth {
-                fetchAllAuthorizedAccountsUseCase.execute()
-                    .collect { accounts ->
-                        setOthersAuthorizedAccount(accounts)
-                    }
-            }
-        }
+    fun setForeground(timelineId: TimelineId) {
+        foregroundIdStateFlow.value = timelineId
     }
 
-    fun setForeground(index: Int) {
-        if (uiModel.value.timelines[index].foreground) {
-            set(index) { copy(scrollToTop = true) }
-            return
-        }
-
-        mutableUiModel.value = uiModel.value.copy(
-            timelines = uiModel.value.timelines.mapIndexed { i, state ->
-                state.copy(foreground = i == index)
-            }
-        )
-    }
-
-    fun scrolledToTop(index: Int) {
-        set(index) { copy(scrollToTop = false) }
-    }
-
-    fun subscribeAll() {
-        if (subscribed.value) {
-            return
-        }
-
-        subscribed.value = true
-        uiModel.value.timelines.forEachIndexed { index, (timeline) -> subscribe(index, timeline) }
-    }
-
-    fun loadAll() {
-        uiModel.value.timelines.forEach { (timeline) -> load(timeline) }
-    }
-
-    fun load(timeline: Timeline) {
-        val index = uiModel.value.timelines.indexOfFirst { it.timeline == timeline }
-
+    fun subscribe() {
         val job = launchLazy {
-            runCatchingWithAuth { updateTimelineUseCase.execute(timeline) }
-                .onSuccess { setTimeline(index, it) }
+            runCatchingWithAuth { subscribeTimelineStreamUseCase.execute() }
+                .onSuccess { loadStateFlow.value = mapOf() }
+                .onFailure { e -> loadStateFlow.value += uiModel.value.timelines.keys.associateWith { LoadState.Error(e) } }
         }
 
-        setJob(index, job)
+        loadStateFlow.value += uiModel.value.timelines.keys.associateWith { LoadState.Loading(job) }
         job.start()
     }
 
-    fun favourite(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.FAVOURITE)
-    fun boost(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOST)
-    fun bookmark(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOKMARK)
+    fun load(timelineId: TimelineId) {
+        val job = launchLazy {
+            runCatchingWithAuth { loadTimelineStatusesUseCase.execute(timelineId) }
+                .onSuccess { loadStateFlow.value -= timelineId }
+                .onFailure { loadStateFlow.value += timelineId to LoadState.Error(it) }
+        }
 
-    fun clear() {
-        mutableUiModel.value = UiModel()
-        subscribed.value = false
+        loadStateFlow.value += timelineId to LoadState.Loading(job)
+        job.start()
     }
 
-    private fun execute(timeline: Timeline, status: Status, action: StatusAction) {
-        val index = uiModel.value.timelines.indexOfFirst { it.timeline == timeline }
+    fun favourite(status: Status) = execute(status, StatusAction.FAVOURITE)
+    fun boost(status: Status) = execute(status, StatusAction.BOOST)
+    fun bookmark(status: Status) = execute(status, StatusAction.BOOKMARK)
 
-        val job = launchLazy {
+    private fun execute(
+        status: Status,
+        action: StatusAction
+    ) {
+        launch {
             runCatchingWithAuth { executeStatusActionUseCase.execute(status, action) }
-                .onSuccess { setStatus(index, status) }
         }
-
-        setJob(index, job)
-        job.start()
-    }
-
-    private fun setCurrentAuthorizedAccount(account: Account, domain: Domain) {
-        val currentAuthorizedAccount = uiModel.value.account
-
-        mutableUiModel.value = uiModel.value.copy(
-            account = currentAuthorizedAccount.copy(
-                current = account,
-                domain = domain,
-            ),
-        )
-    }
-
-    private fun setOthersAuthorizedAccount(account: Account) {
-        val currentAuthorizedAccount = uiModel.value.account
-        val nextOthers = currentAuthorizedAccount.others.filterNot {
-            it.id == account.id
-        } + account
-
-        mutableUiModel.value = uiModel.value.copy(
-            account = currentAuthorizedAccount.copy(
-                others = nextOthers,
-            ),
-        )
-    }
-
-    private fun subscribe(index: Int, timeline: Timeline) {
-        launch {
-            runCatchingWithAuth {
-                fetchTimelineStreamUseCase.execute(timeline)
-                    .collect { receiveEvent(index, it) }
-            }
-        }
-    }
-
-    private fun receiveEvent(index: Int, event: StreamEvent) {
-        val current = uiModel.value.timelines[index]
-
-        val next = when (event) {
-            is StreamEvent.Updated -> current.timeline.insert(event.status)
-            is StreamEvent.Deleted -> current.timeline - event.id
-            is StreamEvent.StatusEdited -> current.timeline.replace(event.status)
-        }
-
-        set(index) { copy(timeline = next, latestEvent = event) }
-    }
-
-    private fun setTimeline(index: Int, timeline: Timeline) {
-        set(index) { copy(timeline = timeline, jobs = jobs.filterNot { it.isCompleted }) }
-    }
-
-    private fun setStatus(index: Int, status: Status) {
-        set(index) { copy(timeline = timeline.replace(status), jobs = jobs.filterNot { it.isCompleted }) }
-    }
-
-    private fun setJob(index: Int, job: Job) {
-        set(index) { copy(jobs = jobs + job) }
-    }
-
-    private operator fun set(index: Int, block: TimelineState.() -> TimelineState) {
-        val current = uiModel.value.timelines.toMutableList()
-        current[index] = current[index].block()
-        mutableUiModel.value = uiModel.value.copy(timelines = current)
     }
 
     data class UiModel(
         val account: CurrentAuthorizedAccount = CurrentAuthorizedAccount(),
-        val timelines: List<TimelineState> = listOf(
-            TimelineState(Timeline.Local(listOf(), onlyMedia = false), foreground = true),
-            TimelineState(Timeline.Home(listOf())),
-            TimelineState(Timeline.Global(listOf(), onlyRemote = false, onlyMedia = false)),
-        ),
+        val timelines: Map<TimelineId, TimelineState> = mapOf(),
+        val loadState: Map<TimelineId, LoadState> = mapOf(),
     ) {
-        val foreground get() = timelines.find { it.foreground }
-        val currentTabIndex get() = timelines.indexOfFirst { it.foreground }
-    }
+        val foreground get() = timelines.values.find { it.foreground }
+        val currentTabIndex get() = timelines.values.indexOfFirst { it.foreground }
 
-    data class CurrentAuthorizedAccount(
-        val current: Account? = null,
-        val domain: Domain? = null,
-        val others: List<Account> = listOf(),
-    )
+        fun toTimelineList() = timelines.values.toList()
+        fun findTimelineId(index: Int) = timelines.keys.toList()[index]
+    }
 
     data class TimelineState(
         val timeline: Timeline,
-        val jobs: List<Job> = listOf(),
         val latestEvent: StreamEvent? = null,
-        val scrollToTop: Boolean = false,
         val foreground: Boolean = false,
     )
-
-    companion object Provider {
-        @Composable
-        operator fun invoke(
-            component: KoinComponent,
-        ): TimelinesViewModel {
-            return remember {
-                TimelinesViewModel(
-                    component.get(),
-                    component.get(),
-                    component.get(),
-                    component.get(),
-                    component.get(),
-                    component.get(),
-                )
-            }
-        }
-    }
 }

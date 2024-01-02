@@ -1,4 +1,4 @@
-package noctiluca.timeline.domain.usecase.json
+package noctiluca.data.json
 
 import noctiluca.test.JSON_ACCOUNT_CREDENTIAL
 import noctiluca.test.URL_SAMPLE_COM

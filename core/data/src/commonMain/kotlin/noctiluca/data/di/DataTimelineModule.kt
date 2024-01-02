@@ -6,5 +6,5 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.DataTimelineModule() {
-    single<TimelineRepository> { TimelineRepositoryImpl(get(), get(), get()) }
+    single<TimelineRepository> { TimelineRepositoryImpl(get(), get()) }
 }

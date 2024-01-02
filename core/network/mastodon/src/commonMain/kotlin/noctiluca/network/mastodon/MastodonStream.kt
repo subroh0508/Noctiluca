@@ -10,4 +10,6 @@ interface MastodonStream {
         listId: String? = null,
         tag: String? = null,
     ): Flow<NetworkStreamEvent>
+
+    suspend fun close()
 }

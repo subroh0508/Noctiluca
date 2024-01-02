@@ -4,6 +4,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
+import cafe.adriel.voyager.core.screen.ScreenKey
+import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
@@ -21,22 +23,20 @@ internal val LocalResources = compositionLocalOf { Resources("JA") }
 
 val featureTimelineScreenModule = screenModule {
     register<Timeline.TimelineLane> {
-        TimelineLaneScreen
+        TimelineLaneScreen()
     }
     register<Timeline.Toot> {
         TootScreen
     }
 }
 
-data object TimelineLaneScreen : Screen {
+class TimelineLaneScreen : Screen {
+    override val key: ScreenKey by lazy { uniqueScreenKey }
+
     @Composable
     override fun Content() = TimelineFeature { viewModel ->
         val navigator = LocalNavigator.current
         val uiModel by viewModel.uiModel.collectAsState()
-
-        LaunchedEffect(uiModel.account.current) {
-            viewModel.loadCurrentAuthorizedAccount()
-        }
 
         TimelineNavigationDrawer(
             uiModel.account,
@@ -47,7 +47,6 @@ data object TimelineLaneScreen : Screen {
             onClickDrawerMenu = { menu ->
                 handleOnClickDrawerItem(
                     menu,
-                    viewModel,
                     navigator,
                 )
             },
@@ -81,12 +80,8 @@ private fun Screen.TimelineFeature(
 
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,
-    viewModel: TimelinesViewModel,
     navigator: Navigator?,
 ) = when (item) {
-    is TimelineDrawerMenu.NewAccount -> {
-        viewModel.clear()
-        navigator?.navigateToSignIn()
-    }
+    is TimelineDrawerMenu.NewAccount -> navigator?.navigateToSignIn()
     is TimelineDrawerMenu.Settings -> Unit
 }

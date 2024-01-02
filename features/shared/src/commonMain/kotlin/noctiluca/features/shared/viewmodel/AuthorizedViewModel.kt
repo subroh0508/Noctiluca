@@ -1,7 +1,6 @@
 package noctiluca.features.shared.viewmodel
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.*
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.HttpUnauthorizedException
@@ -50,4 +49,28 @@ abstract class AuthorizedViewModel(
     protected fun requestSignIn() {
         mutableEvent.value = Event.SIGN_IN
     }
+
+    protected fun <T1, T2, T3, T4, T5, R> buildUiModel(
+        flow: Flow<T1>,
+        flow2: Flow<T2>,
+        flow3: Flow<T3>,
+        flow4: Flow<T4>,
+        flow5: Flow<T5>,
+        initialValue: R,
+        started: SharingStarted = SharingStarted.WhileSubscribed(),
+        transform: suspend (T1, T2, T3, T4, T5) -> R,
+    ) = combine(
+        flow,
+        flow2,
+        flow3,
+        flow4,
+        flow5,
+        transform,
+    ).catch { e ->
+        handleException(e)
+    }.stateIn(
+        scope = viewModelScope,
+        started = started,
+        initialValue = initialValue,
+    )
 }

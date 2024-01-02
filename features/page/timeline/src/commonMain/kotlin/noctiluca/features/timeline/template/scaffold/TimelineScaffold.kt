@@ -1,6 +1,8 @@
 package noctiluca.features.timeline.template.scaffold
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -13,13 +15,16 @@ import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.shared.atoms.appbar.NavigateIconSize
 import noctiluca.features.shared.atoms.appbar.scrollToTop
 import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.getString
+import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.tab.TimelineTabs
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.model.timeline.TimelineId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,12 +35,15 @@ internal fun TimelineScaffold(
     val uiModel by viewModel.uiModel.collectAsState()
 
     LaunchedEffect(uiModel.account.current) {
-        viewModel.subscribeAll()
-        viewModel.loadAll()
+        viewModel.subscribe()
     }
 
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val lazyListState = remember(
+        uiModel.account.current,
+        uiModel.timelines.keys,
+    ) { uiModel.timelines.mapValues { (_, _) -> LazyListState() } }
 
     TabbedScaffold(
         scrollBehavior,
@@ -58,14 +66,22 @@ internal fun TimelineScaffold(
         tabs = {
             TimelineTabs(
                 uiModel,
-                onClickTab = { viewModel.setForeground(it) },
+                onClickTab = { timelineId ->
+                    if (uiModel.timelines[timelineId]?.foreground == true) {
+                        scope.launch { lazyListState[timelineId]?.animateScrollToItem(0) }
+                        scrollBehavior.scrollToTop()
+                    }
+
+                    viewModel.setForeground(timelineId)
+                },
             )
         },
     ) {
         TimelineLanes(
             viewModel,
             uiModel.timelines,
-            scrollBehavior,
+            uiModel.loadState,
+            lazyListState,
         )
     }
 }
@@ -73,7 +89,7 @@ internal fun TimelineScaffold(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CurrentInstanceTopAppBar(
-    account: TimelinesViewModel.CurrentAuthorizedAccount,
+    account: CurrentAuthorizedAccount,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     onClickNavigationIcon: () -> Unit,
 ) = CenterAlignedTopAppBar(
@@ -94,27 +110,25 @@ private fun CurrentInstanceTopAppBar(
     scrollBehavior = topAppBarScrollBehavior,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimelineLanes(
     viewModel: TimelinesViewModel,
-    timelines: List<TimelinesViewModel.TimelineState>,
-    scrollBehavior: TopAppBarScrollBehavior,
+    timelines: Map<TimelineId, TimelinesViewModel.TimelineState>,
+    loadState: Map<TimelineId, LoadState>,
+    lazyListState: Map<TimelineId, LazyListState>,
 ) {
-    timelines.forEachIndexed { index, timelineState ->
+    timelines.forEach { (timelineId, timelineState) ->
         TimelineLane(
             timelineState,
-            onLoad = { viewModel.load(it) },
-            onExecuteAction = { timeline, status, action ->
+            loadState[timelineId],
+            lazyListState = lazyListState[timelineId] ?: rememberLazyListState(),
+            onLoad = { viewModel.load(timelineId) },
+            onExecuteAction = { _, status, action ->
                 when (action) {
-                    Action.FAVOURITE -> viewModel.favourite(timeline, status)
-                    Action.BOOST -> viewModel.boost(timeline, status)
+                    Action.FAVOURITE -> viewModel.favourite(status)
+                    Action.BOOST -> viewModel.boost(status)
                     else -> Unit
                 }
-            },
-            onScrollToTop = {
-                viewModel.scrolledToTop(index)
-                scrollBehavior.scrollToTop()
             },
         )
     }

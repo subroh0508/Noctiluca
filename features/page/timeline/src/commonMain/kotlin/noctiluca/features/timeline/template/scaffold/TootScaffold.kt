@@ -15,10 +15,6 @@ import noctiluca.model.status.Status
 internal fun TootScaffold(
     viewModel: TimelinesViewModel,
 ) {
-    LaunchedEffect(Unit) {
-        viewModel.loadCurrentAuthorizedAccount()
-    }
-
     val uiModel by viewModel.uiModel.collectAsState()
 
     val navigator = LocalNavigator.current

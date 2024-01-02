@@ -13,7 +13,6 @@ import noctiluca.network.mastodon.data.extendeddescription.NetworkExtendedDescri
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.status.NetworkStatus
 
-@Suppress("TooManyFunctions")
 internal class MastodonApiV1Client(
     token: AuthenticationTokenProvider,
     private val client: HttpClient,

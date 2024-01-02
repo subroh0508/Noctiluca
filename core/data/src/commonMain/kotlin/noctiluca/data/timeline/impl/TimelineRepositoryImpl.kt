@@ -1,80 +1,96 @@
 package noctiluca.data.timeline.impl
 
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapNotNull
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
 import noctiluca.data.status.toEntity
 import noctiluca.data.timeline.TimelineRepository
+import noctiluca.data.timeline.toStream
 import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.StatusId
-import noctiluca.model.timeline.StreamEvent
-import noctiluca.network.mastodon.MastodonApiV1
+import noctiluca.model.status.Status
+import noctiluca.model.timeline.*
 import noctiluca.network.mastodon.MastodonStream
 import noctiluca.network.mastodon.data.streaming.NetworkStreamEvent
-import noctiluca.network.mastodon.data.streaming.Stream
 import noctiluca.network.mastodon.data.streaming.StreamingType
 
 internal class TimelineRepositoryImpl(
-    private val api: MastodonApiV1,
     private val webSocket: MastodonStream,
     private val authenticationTokenDataStore: AuthenticationTokenDataStore,
+    private val streamCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO + Job()),
 ) : TimelineRepository {
-    override suspend fun fetchGlobal(
-        onlyRemote: Boolean,
-        onlyMedia: Boolean,
-        maxId: StatusId?
-    ) = api.getTimelinesPublic(
-        remote = onlyRemote,
-        onlyMedia = onlyMedia,
-        maxId = maxId?.value,
-    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
+    private val timelineStreamStateFlow by lazy { TimelineStreamStateFlow(TimelineStreamState()) }
 
-    override suspend fun fetchLocal(
-        onlyMedia: Boolean,
-        maxId: StatusId?,
-    ) = api.getTimelinesPublic(
-        local = true,
-        onlyMedia = onlyMedia,
-        maxId = maxId?.value,
-    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
+    override val stream get() = timelineStreamStateFlow
 
-    override suspend fun fetchHome(
-        maxId: StatusId?,
-    ) = api.getTimelinesHome(
-        maxId = maxId?.value,
-    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
+    override fun get(timelineId: TimelineId) = timelineStreamStateFlow.timeline(timelineId)
 
-    override suspend fun buildGlobalStream(
-        onlyRemote: Boolean,
-        onlyMedia: Boolean,
-    ): Flow<StreamEvent> {
-        val stream = when {
-            onlyRemote && onlyMedia -> Stream.PUBLIC_REMOTE_MEDIA
-            onlyRemote && !onlyMedia -> Stream.PUBLIC_REMOTE
-            !onlyRemote && onlyMedia -> Stream.PUBLIC_MEDIA
-            else -> Stream.PUBLIC
+    override suspend fun fetchInitialTimeline() = mapOf(
+        LocalTimelineId to Timeline.Local(listOf(), onlyMedia = false),
+        HomeTimelineId to Timeline.Home(listOf()),
+        GlobalTimelineId to Timeline.Global(listOf(), onlyRemote = false, onlyMedia = false),
+    )
+
+    override suspend fun subscribe(
+        initial: Map<TimelineId, Timeline>,
+        statuses: Map<TimelineId, List<Status>>,
+    ) {
+        timelineStreamStateFlow.cancelAll()
+        timelineStreamStateFlow.clear()
+        timelineStreamStateFlow.setInitialTimeline(initial)
+
+        initial.forEach { (timelineId, timeline) ->
+            timelineStreamStateFlow[timelineId] = timeline + statuses[timelineId].orEmpty()
+
+            if (!timelineStreamStateFlow.hasActiveJob(timelineId)) {
+                timelineStreamStateFlow[timelineId] = buildStream(timelineId, timeline)
+            }
+        }
+    }
+
+    override fun load(
+        timelineId: TimelineId,
+        timeline: Timeline,
+    ) {
+        timelineStreamStateFlow[timelineId] = timeline
+    }
+
+    override fun update(status: Status) = timelineStreamStateFlow.update(status)
+
+    override fun favourite(status: Status) = timelineStreamStateFlow.favourite(status)
+
+    override fun boost(status: Status) = timelineStreamStateFlow.boost(status)
+
+    override fun bookmark(status: Status) = timelineStreamStateFlow.bookmark(status)
+
+    private suspend fun buildStream(
+        timelineId: TimelineId,
+        timeline: Timeline,
+    ) = webSocket.streaming(
+        timeline.toStream().value,
+        StreamingType.SUBSCRIBE.name.lowercase(),
+    ).mapNotNull {
+        it.toValueObject()
+    }.onEach { event ->
+        collectEvent(timelineId, event)
+    }.launchIn(streamCoroutineScope)
+
+    private fun collectEvent(
+        timelineId: TimelineId,
+        event: StreamEvent,
+    ) {
+        val current = timelineStreamStateFlow.timeline(timelineId) ?: return
+
+        val next = when (event) {
+            is StreamEvent.Updated -> current.insert(event.status)
+            is StreamEvent.Deleted -> current - event.id
+            is StreamEvent.StatusEdited -> current.replace(event.status)
         }
 
-        return webSocket.streaming(
-            stream.value,
-            StreamingType.SUBSCRIBE.name.lowercase(),
-        ).mapNotNull { it.toValueObject() }
+        timelineStreamStateFlow[timelineId] = next
+        timelineStreamStateFlow[timelineId] = event
     }
-
-    override suspend fun buildLocalStream(
-        onlyMedia: Boolean
-    ): Flow<StreamEvent> {
-        val stream = if (onlyMedia) Stream.PUBLIC_LOCAL_MEDIA else Stream.PUBLIC_LOCAL
-
-        return webSocket.streaming(
-            stream.value,
-            StreamingType.SUBSCRIBE.name.lowercase(),
-        ).mapNotNull { it.toValueObject() }
-    }
-
-    override suspend fun buildHomeStream() = webSocket.streaming(
-        Stream.USER.value,
-        StreamingType.SUBSCRIBE.name.lowercase(),
-    ).mapNotNull { it.toValueObject() }
 
     private suspend fun NetworkStreamEvent.toValueObject() = payload?.let {
         when (it) {

@@ -1,34 +1,32 @@
 package noctiluca.data.timeline
 
-import kotlinx.coroutines.flow.Flow
-import noctiluca.model.StatusId
+import noctiluca.data.timeline.impl.TimelineStreamStateFlow
 import noctiluca.model.status.Status
-import noctiluca.model.timeline.StreamEvent
+import noctiluca.model.timeline.Timeline
+import noctiluca.model.timeline.TimelineId
 
 interface TimelineRepository {
-    suspend fun fetchGlobal(
-        onlyRemote: Boolean = false,
-        onlyMedia: Boolean = false,
-        maxId: StatusId? = null,
-    ): List<Status>
+    val stream: TimelineStreamStateFlow
 
-    suspend fun fetchLocal(
-        onlyMedia: Boolean = false,
-        maxId: StatusId? = null,
-    ): List<Status>
+    operator fun get(timelineId: TimelineId): Timeline?
 
-    suspend fun fetchHome(
-        maxId: StatusId? = null,
-    ): List<Status>
+    suspend fun fetchInitialTimeline(): Map<TimelineId, Timeline>
 
-    suspend fun buildGlobalStream(
-        onlyRemote: Boolean = false,
-        onlyMedia: Boolean = false,
-    ): Flow<StreamEvent>
+    suspend fun subscribe(
+        initial: Map<TimelineId, Timeline>,
+        statuses: Map<TimelineId, List<Status>>,
+    )
 
-    suspend fun buildLocalStream(
-        onlyMedia: Boolean = false,
-    ): Flow<StreamEvent>
+    fun load(
+        timelineId: TimelineId,
+        timeline: Timeline,
+    )
 
-    suspend fun buildHomeStream(): Flow<StreamEvent>
+    fun update(status: Status)
+
+    fun favourite(status: Status)
+
+    fun boost(status: Status)
+
+    fun bookmark(status: Status)
 }

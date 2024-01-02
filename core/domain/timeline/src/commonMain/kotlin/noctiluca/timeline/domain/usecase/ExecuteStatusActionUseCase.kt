@@ -7,5 +7,5 @@ interface ExecuteStatusActionUseCase {
     suspend fun execute(
         status: Status,
         action: StatusAction,
-    ): Status
+    )
 }

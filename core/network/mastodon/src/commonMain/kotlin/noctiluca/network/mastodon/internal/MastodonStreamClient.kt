@@ -50,6 +50,8 @@ internal class MastodonStreamClient(
         }
     }
 
+    override suspend fun close() = client.close()
+
     private suspend fun HttpClient.websocket(
         domain: String? = null,
         skipAuthorization: Boolean = false,

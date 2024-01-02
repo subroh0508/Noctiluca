@@ -23,7 +23,6 @@ class TimelinesViewModel(
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
-    private val unsubscribeTimelineStreamUseCase: UnsubscribeTimelineStreamUseCase,
     private val authorizedAccountRepository: AuthorizedAccountRepository,
     authorizedUserRepository: AuthorizedUserRepository,
 ) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {

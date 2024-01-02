@@ -36,6 +36,7 @@ internal class TimelineRepositoryImpl(
         initial: Map<TimelineId, Timeline>,
         statuses: Map<TimelineId, List<Status>>,
     ) {
+        unsubscribe()
         timelineStreamStateFlow.setInitialTimeline(initial)
 
         initial.forEach { (timelineId, timeline) ->
@@ -54,7 +55,7 @@ internal class TimelineRepositoryImpl(
         timelineStreamStateFlow[timelineId] = timeline
     }
 
-    override fun unsubscribe() {
+    private fun unsubscribe() {
         timelineStreamStateFlow.cancelAll()
         timelineStreamStateFlow.clear()
     }

@@ -21,6 +21,4 @@ interface TimelineRepository {
         timelineId: TimelineId,
         timeline: Timeline,
     )
-
-    fun unsubscribe()
 }

@@ -40,9 +40,10 @@ internal fun TimelineScaffold(
 
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
-    val lazyListState: Map<TimelineId, LazyListState> = remember(uiModel.timelines.keys) {
-        uiModel.timelines.map { (timelineId, _) -> timelineId to LazyListState() }.toMap()
-    }
+    val lazyListState = remember(
+        uiModel.account.current,
+        uiModel.timelines.keys,
+    ) { uiModel.timelines.mapValues { (_, _) -> LazyListState() } }
 
     TabbedScaffold(
         scrollBehavior,

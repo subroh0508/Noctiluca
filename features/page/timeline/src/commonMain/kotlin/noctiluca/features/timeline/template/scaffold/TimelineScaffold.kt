@@ -1,6 +1,8 @@
 package noctiluca.features.timeline.template.scaffold
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -33,11 +35,14 @@ internal fun TimelineScaffold(
     val uiModel by viewModel.uiModel.collectAsState()
 
     LaunchedEffect(uiModel.account.current) {
-        viewModel.subscribeAll()
+        viewModel.subscribe()
     }
 
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+    val lazyListState: Map<TimelineId, LazyListState> = remember(uiModel.timelines.keys) {
+        uiModel.timelines.map { (timelineId, _) -> timelineId to LazyListState() }.toMap()
+    }
 
     TabbedScaffold(
         scrollBehavior,
@@ -60,7 +65,14 @@ internal fun TimelineScaffold(
         tabs = {
             TimelineTabs(
                 uiModel,
-                onClickTab = { viewModel.setForeground(it) },
+                onClickTab = { timelineId ->
+                    if (uiModel.timelines[timelineId]?.foreground == true) {
+                        scope.launch { lazyListState[timelineId]?.animateScrollToItem(0) }
+                        scrollBehavior.scrollToTop()
+                    }
+
+                    viewModel.setForeground(timelineId)
+                },
             )
         },
     ) {
@@ -68,7 +80,7 @@ internal fun TimelineScaffold(
             viewModel,
             uiModel.timelines,
             uiModel.loadState,
-            scrollBehavior,
+            lazyListState,
         )
     }
 }
@@ -97,18 +109,18 @@ private fun CurrentInstanceTopAppBar(
     scrollBehavior = topAppBarScrollBehavior,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TimelineLanes(
     viewModel: TimelinesViewModel,
     timelines: Map<TimelineId, TimelinesViewModel.TimelineState>,
     loadState: Map<TimelineId, LoadState>,
-    scrollBehavior: TopAppBarScrollBehavior,
+    lazyListState: Map<TimelineId, LazyListState>,
 ) {
     timelines.forEach { (timelineId, timelineState) ->
         TimelineLane(
             timelineState,
             loadState[timelineId],
+            lazyListState = lazyListState[timelineId] ?: rememberLazyListState(),
             onLoad = { viewModel.load(timelineId) },
             onExecuteAction = { _, status, action ->
                 when (action) {
@@ -116,10 +128,6 @@ private fun TimelineLanes(
                     Action.BOOST -> viewModel.boost(status)
                     else -> Unit
                 }
-            },
-            onScrollToTop = {
-                viewModel.scrolledToTop(timelineId)
-                scrollBehavior.scrollToTop()
             },
         )
     }

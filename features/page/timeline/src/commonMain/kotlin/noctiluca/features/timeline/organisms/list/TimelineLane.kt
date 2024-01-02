@@ -25,7 +25,6 @@ internal fun TimelineLane(
     loadState: LoadState?,
     onLoad: suspend CoroutineScope.() -> Unit,
     onExecuteAction: CoroutineScope.(Timeline, Status, Action) -> Unit,
-    onScrollToTop: () -> Unit,
     lazyListState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
 ) {
@@ -39,15 +38,6 @@ internal fun TimelineLane(
         }
 
         lazyListState.scrollToItem(0)
-    }
-
-    LaunchedEffect(timelineState.scrollToTop) {
-        if (!timelineState.scrollToTop) {
-            return@LaunchedEffect
-        }
-
-        lazyListState.animateScrollToItem(0)
-        onScrollToTop()
     }
 
     LazyColumn(

@@ -59,13 +59,11 @@ class TimelinesViewModel(
         }
     }
 
-    fun setForeground(index: Int) {
-        foregroundIdStateFlow.value = uiModel.value.findTimelineId(index)
+    fun setForeground(timelineId: TimelineId) {
+        foregroundIdStateFlow.value = timelineId
     }
 
-    fun scrolledToTop(timelineId: TimelineId) = Unit
-
-    fun subscribeAll() {
+    fun subscribe() {
         val job = launchLazy {
             runCatchingWithAuth { subscribeTimelineStreamUseCase.execute() }
                 .onSuccess { loadStateFlow.value = mapOf() }
@@ -115,7 +113,6 @@ class TimelinesViewModel(
     data class TimelineState(
         val timeline: Timeline,
         val latestEvent: StreamEvent? = null,
-        val scrollToTop: Boolean = false,
         val foreground: Boolean = false,
     )
 }

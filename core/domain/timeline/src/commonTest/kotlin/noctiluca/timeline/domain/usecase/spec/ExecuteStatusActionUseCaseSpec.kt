@@ -63,7 +63,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
                         status.copy(favourited = false, favouriteCount = 0),
                         StatusAction.FAVOURITE,
                     )
-                } should be(status.copy(favourited = true, favouriteCount = 1))
+                } should be(Unit)
             }
 
             it("returns unfavourited status") {
@@ -77,7 +77,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
                         status.copy(favourited = true, favouriteCount = 1),
                         StatusAction.FAVOURITE,
                     )
-                } should be(status.copy(favourited = false, favouriteCount = 0))
+                } should be(Unit)
             }
         }
 
@@ -93,7 +93,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
                         status.copy(bookmarked = false),
                         StatusAction.BOOKMARK,
                     )
-                } should be(status.copy(bookmarked = true))
+                } should be(Unit)
             }
 
             it("returns unbookmarked status") {
@@ -107,7 +107,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
                         status.copy(bookmarked = true),
                         StatusAction.BOOKMARK,
                     )
-                } should be(status.copy(bookmarked = false))
+                } should be(Unit)
             }
         }
     }

@@ -22,6 +22,8 @@ interface TimelineRepository {
         timeline: Timeline,
     )
 
+    fun update(status: Status)
+
     fun favourite(status: Status)
 
     fun boost(status: Status)

@@ -13,11 +13,13 @@ internal class ExecuteStatusActionUseCaseImpl(
     override suspend fun execute(
         status: Status,
         action: StatusAction,
-    ) = when (action) {
-        StatusAction.FAVOURITE -> favourite(status)
-        StatusAction.BOOST -> boost(status)
-        StatusAction.BOOKMARK -> bookmark(status)
-    }
+    ) = timelineRepository.update(
+        when (action) {
+            StatusAction.FAVOURITE -> favourite(status)
+            StatusAction.BOOST -> boost(status)
+            StatusAction.BOOKMARK -> bookmark(status)
+        },
+    )
 
     private suspend fun favourite(status: Status): Status {
         timelineRepository.favourite(status)

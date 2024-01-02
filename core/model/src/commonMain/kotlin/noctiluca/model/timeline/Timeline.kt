@@ -23,7 +23,8 @@ sealed class Timeline {
             return replace(status)
         }
 
-        val index = statuses.indexOfFirst { it.id.value < status.id.value }.takeIf { it != -1 } ?: 0
+        val index = statuses.indexOfFirst { it.id.value < status.id.value }
+            .takeIf { it != -1 } ?: 0
         val next = statuses.take(index) + listOf(status) + statuses.drop(index)
 
         return replace(next)
@@ -31,6 +32,7 @@ sealed class Timeline {
 
     fun replace(status: Status): Timeline {
         val index = statuses.indexOfFirst { it.id == status.id }
+            .takeIf { it != -1 } ?: return this
         val next = statuses.toMutableList().apply {
             set(index, status)
         }.toList()
@@ -42,11 +44,14 @@ sealed class Timeline {
         status: Status,
     ) = replace(
         statuses.map {
-            if (it.id == status.id) {
-                it.copy(favourited = !status.favourited)
-            } else {
-                it
+            if (it.id != status.id) {
+                return@map it
             }
+
+            it.copy(
+                favourited = !status.favourited,
+                favouriteCount = status.favouriteCount + if (status.favourited) -1 else 1,
+            )
         },
     )
 
@@ -54,11 +59,14 @@ sealed class Timeline {
         status: Status,
     ) = replace(
         statuses.map {
-            if (it.id == status.id) {
-                it.copy(reblogged = !status.reblogged)
-            } else {
-                it
+            if (it.id != status.id) {
+                return@map it
             }
+
+            it.copy(
+                reblogged = !status.reblogged,
+                reblogCount = status.reblogCount + if (status.reblogged) -1 else 1,
+            )
         },
     )
 
@@ -66,11 +74,11 @@ sealed class Timeline {
         status: Status,
     ) = replace(
         statuses.map {
-            if (it.id == status.id) {
-                it.copy(bookmarked = !status.bookmarked)
-            } else {
-                it
+            if (it.id != status.id) {
+                return@map it
             }
+
+            it.copy(bookmarked = !status.bookmarked)
         },
     )
 

@@ -56,6 +56,8 @@ internal class TimelineRepositoryImpl(
         timelineStreamStateFlow[timelineId] = timeline
     }
 
+    override fun update(status: Status) = timelineStreamStateFlow.update(status)
+
     override fun favourite(status: Status) = timelineStreamStateFlow.favourite(status)
 
     override fun boost(status: Status) = timelineStreamStateFlow.boost(status)

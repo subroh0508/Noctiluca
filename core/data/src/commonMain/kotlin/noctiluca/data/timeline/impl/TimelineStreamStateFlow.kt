@@ -62,6 +62,10 @@ class TimelineStreamStateFlow(
         status: Status,
     ) = execute { timeline -> timeline.bookmark(status) }
 
+    internal fun update(
+        status: Status,
+    ) = execute { timeline -> timeline.replace(status) }
+
     internal fun cancelAll() = mutableStateFlow.value.cancelAll()
     internal fun clear() {
         mutableStateFlow.value = TimelineStreamState()

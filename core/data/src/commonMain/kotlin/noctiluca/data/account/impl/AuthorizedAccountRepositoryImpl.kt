@@ -1,7 +1,6 @@
 package noctiluca.data.account.impl
 
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.toEntity
 import noctiluca.datastore.AccountDataStore
@@ -39,7 +38,8 @@ internal class AuthorizedAccountRepositoryImpl(
         val token = authenticationTokenDataStore.setCurrent(id)
 
         currentStateFlow.value = refresh(id) to token.domain
-        allStateFlow.value = authenticationTokenDataStore.getOthers().mapNotNull { accountDataStore.get(it.id) }
+        allStateFlow.value = authenticationTokenDataStore.getOthers()
+            .mapNotNull { accountDataStore.get(it.id) }
     }
 
     private suspend fun refreshCurrent() {
@@ -50,16 +50,22 @@ internal class AuthorizedAccountRepositoryImpl(
             return
         }
 
-        val (account, domain) = cache
         currentStateFlow.value = cache
-        currentStateFlow.value = refresh(account.id) to domain
+        runCatching { fetchCurrent() }
+            .onSuccess { currentStateFlow.value = it }
+            .onFailure { if (it is AuthorizedTokenNotFoundException) throw it }
     }
 
     private suspend fun refreshOthers() {
         val cache = authenticationTokenDataStore.getOthers()
 
-        allStateFlow.value = cache.mapNotNull { accountDataStore.get(it.id) }
-        allStateFlow.value = cache.mapNotNull { runCatching { refresh(it.id) }.getOrNull() }
+        allStateFlow.value = cache.mapNotNull {
+            accountDataStore.get(it.id)
+        }
+        allStateFlow.value = cache.mapNotNull {
+            runCatching { refresh(it.id) }.getOrNull()
+                ?: accountDataStore.get(it.id)
+        }
     }
 
     private suspend fun getCurrent(): Pair<Account, Domain>? {
@@ -73,10 +79,7 @@ internal class AuthorizedAccountRepositoryImpl(
 
     private suspend fun fetchCurrent(): Pair<Account, Domain> {
         val domain = authenticationTokenDataStore.getCurrent()?.domain ?: throw AuthorizedTokenNotFoundException
-
-        val account = runCatching {
-            v1.getVerifyAccountsCredentials(domain.value)
-        }.getOrNull()?.toEntity(domain) ?: throw AuthorizedTokenNotFoundException
+        val account = v1.getVerifyAccountsCredentials(domain.value).toEntity(domain)
 
         accountDataStore.add(account)
 

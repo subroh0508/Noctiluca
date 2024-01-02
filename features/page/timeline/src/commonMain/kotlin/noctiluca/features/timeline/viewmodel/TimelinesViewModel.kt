@@ -19,7 +19,6 @@ import noctiluca.timeline.domain.usecase.*
 @Suppress("TooManyFunctions", "LongParameterList")
 class TimelinesViewModel(
     private val timelineStreamStateFlow: TimelineStreamStateFlow,
-    private val switchAuthorizedAccountUseCase: SwitchAuthorizedAccountUseCase,
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
@@ -55,7 +54,7 @@ class TimelinesViewModel(
 
     fun switch(account: Account) {
         launch {
-            runCatchingWithAuth { switchAuthorizedAccountUseCase.execute(account.id) }
+            runCatchingWithAuth { authorizedAccountRepository.switch(account.id) }
                 .onSuccess { reopen() }
         }
     }
@@ -88,11 +87,18 @@ class TimelinesViewModel(
         job.start()
     }
 
-    fun favourite(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.FAVOURITE)
-    fun boost(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOST)
-    fun bookmark(timeline: Timeline, status: Status) = execute(timeline, status, StatusAction.BOOKMARK)
+    fun favourite(status: Status) = execute(status, StatusAction.FAVOURITE)
+    fun boost(status: Status) = execute(status, StatusAction.BOOST)
+    fun bookmark(status: Status) = execute(status, StatusAction.BOOKMARK)
 
-    private fun execute(timeline: Timeline, status: Status, action: StatusAction) = Unit
+    private fun execute(
+        status: Status,
+        action: StatusAction
+    ) {
+        launch {
+            runCatchingWithAuth { executeStatusActionUseCase.execute(status, action) }
+        }
+    }
 
     data class UiModel(
         val account: CurrentAuthorizedAccount = CurrentAuthorizedAccount(),

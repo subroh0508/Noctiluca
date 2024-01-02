@@ -36,7 +36,8 @@ internal class TimelineRepositoryImpl(
         initial: Map<TimelineId, Timeline>,
         statuses: Map<TimelineId, List<Status>>,
     ) {
-        unsubscribe()
+        timelineStreamStateFlow.cancelAll()
+        timelineStreamStateFlow.clear()
         timelineStreamStateFlow.setInitialTimeline(initial)
 
         initial.forEach { (timelineId, timeline) ->
@@ -48,17 +49,18 @@ internal class TimelineRepositoryImpl(
         }
     }
 
-    override suspend fun load(
+    override fun load(
         timelineId: TimelineId,
         timeline: Timeline,
     ) {
         timelineStreamStateFlow[timelineId] = timeline
     }
 
-    private fun unsubscribe() {
-        timelineStreamStateFlow.cancelAll()
-        timelineStreamStateFlow.clear()
-    }
+    override fun favourite(status: Status) = timelineStreamStateFlow.favourite(status)
+
+    override fun boost(status: Status) = timelineStreamStateFlow.boost(status)
+
+    override fun bookmark(status: Status) = timelineStreamStateFlow.bookmark(status)
 
     private suspend fun buildStream(
         timelineId: TimelineId,

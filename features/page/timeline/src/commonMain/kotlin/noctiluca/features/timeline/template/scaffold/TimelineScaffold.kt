@@ -110,10 +110,10 @@ private fun TimelineLanes(
             timelineState,
             loadState[timelineId],
             onLoad = { viewModel.load(timelineId) },
-            onExecuteAction = { timeline, status, action ->
+            onExecuteAction = { _, status, action ->
                 when (action) {
-                    Action.FAVOURITE -> viewModel.favourite(timeline, status)
-                    Action.BOOST -> viewModel.boost(timeline, status)
+                    Action.FAVOURITE -> viewModel.favourite(status)
+                    Action.BOOST -> viewModel.boost(status)
                     else -> Unit
                 }
             },

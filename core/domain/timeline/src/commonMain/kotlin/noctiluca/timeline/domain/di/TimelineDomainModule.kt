@@ -9,8 +9,7 @@ import org.koin.core.module.Module
 @Suppress("FunctionName")
 fun Module.TimelineDomainModule() {
     single<TimelineStreamStateFlow> { get<TimelineRepository>().stream }
-    single<SwitchAuthorizedAccountUseCase> { SwitchAuthorizedAccountUseCaseImpl(get(), get()) }
-    single<ExecuteStatusActionUseCase> { ExecuteStatusActionUseCaseImpl(get()) }
+    single<ExecuteStatusActionUseCase> { ExecuteStatusActionUseCaseImpl(get(), get()) }
     single<SubscribeTimelineStreamUseCase> { SubscribeTimelineStreamUseCaseImpl(get(), get()) }
     single<LoadTimelineStatusesUseCase> { LoadTimelineStatusesUseCaseImpl(get(), get()) }
 }

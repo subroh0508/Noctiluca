@@ -10,25 +10,13 @@ sealed class Timeline {
 
     val maxId get() = statuses.lastOrNull()?.id
 
-    operator fun plus(list: StatusList): Timeline {
-        val next = (statuses + list).distinctBy { it.id }
+    operator fun plus(
+        list: StatusList,
+    ) = replace((statuses + list).distinctBy { it.id })
 
-        return when (this) {
-            is Global -> copy(statuses = next)
-            is Local -> copy(statuses = next)
-            is Home -> copy(statuses = next)
-            is HashTag -> copy(statuses = next)
-            is List -> copy(statuses = next)
-        }
-    }
-
-    operator fun minus(id: StatusId): Timeline = when (this) {
-        is Global -> copy(statuses = statuses.filterNot { it.id == id })
-        is Local -> copy(statuses = statuses.filterNot { it.id == id })
-        is Home -> copy(statuses = statuses.filterNot { it.id == id })
-        is HashTag -> copy(statuses = statuses.filterNot { it.id == id })
-        is List -> copy(statuses = statuses.filterNot { it.id == id })
-    }
+    operator fun minus(
+        id: StatusId,
+    ) = replace(statuses.filterNot { it.id == id })
 
     fun insert(status: Status): Timeline {
         if (statuses.find { it.id == status.id } != null) {
@@ -38,13 +26,7 @@ sealed class Timeline {
         val index = statuses.indexOfFirst { it.id.value < status.id.value }.takeIf { it != -1 } ?: 0
         val next = statuses.take(index) + listOf(status) + statuses.drop(index)
 
-        return when (this) {
-            is Global -> copy(statuses = next)
-            is Local -> copy(statuses = next)
-            is Home -> copy(statuses = next)
-            is HashTag -> copy(statuses = next)
-            is List -> copy(statuses = next)
-        }
+        return replace(next)
     }
 
     fun replace(status: Status): Timeline {
@@ -53,13 +35,51 @@ sealed class Timeline {
             set(index, status)
         }.toList()
 
-        return when (this) {
-            is Global -> copy(statuses = next)
-            is Local -> copy(statuses = next)
-            is Home -> copy(statuses = next)
-            is HashTag -> copy(statuses = next)
-            is List -> copy(statuses = next)
-        }
+        return replace(next)
+    }
+
+    fun favourite(
+        status: Status,
+    ) = replace(
+        statuses.map {
+            if (it.id == status.id) {
+                it.copy(favourited = !status.favourited)
+            } else {
+                it
+            }
+        },
+    )
+
+    fun boost(
+        status: Status,
+    ) = replace(
+        statuses.map {
+            if (it.id == status.id) {
+                it.copy(reblogged = !status.reblogged)
+            } else {
+                it
+            }
+        },
+    )
+
+    fun bookmark(
+        status: Status,
+    ) = replace(
+        statuses.map {
+            if (it.id == status.id) {
+                it.copy(bookmarked = !status.bookmarked)
+            } else {
+                it
+            }
+        },
+    )
+
+    private fun replace(statuses: StatusList) = when (this) {
+        is Global -> copy(statuses = statuses)
+        is Local -> copy(statuses = statuses)
+        is Home -> copy(statuses = statuses)
+        is HashTag -> copy(statuses = statuses)
+        is List -> copy(statuses = statuses)
     }
 
     data class Global(

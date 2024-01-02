@@ -17,8 +17,14 @@ interface TimelineRepository {
         statuses: Map<TimelineId, List<Status>>,
     )
 
-    suspend fun load(
+    fun load(
         timelineId: TimelineId,
         timeline: Timeline,
     )
+
+    fun favourite(status: Status)
+
+    fun boost(status: Status)
+
+    fun bookmark(status: Status)
 }

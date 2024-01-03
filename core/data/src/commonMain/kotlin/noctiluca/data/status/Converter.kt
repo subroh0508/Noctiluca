@@ -30,6 +30,7 @@ fun NetworkStatus.toEntity(accountId: AccountId?) = Status(
     } else {
         null
     },
+    application?.let { Status.Via(it.name, it.website?.let(::Uri)) },
 )
 
 private fun NetworkAccount.toTooter() = Account(

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <resources>
     <string name="status_detail_title">投稿</string>
+    <string name="status_detail_boost">ブースト</string>
+    <string name="status_detail_favourite">お気に入り</string>
+    <string name="status_detail_bookmark">ブックマーク</string>
 </resources>

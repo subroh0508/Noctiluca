@@ -6,23 +6,24 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import kotlinx.datetime.LocalDateTime
 import noctiluca.features.shared.account.TooterName
+import noctiluca.features.shared.atoms.divider.Divider
 import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.features.shared.atoms.image.imageResources
 import noctiluca.features.shared.atoms.text.HtmlText
 import noctiluca.features.shared.getDrawables
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.VisibilityIcon
-import noctiluca.features.shared.utils.baseline
+import noctiluca.features.shared.utils.format
 import noctiluca.features.shared.utils.toDp
 import noctiluca.features.shared.utils.toYearMonthDayTime
+import noctiluca.features.statusdetail.getString
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 
@@ -45,10 +46,12 @@ internal fun StatusDetail(
 
     HtmlText(
         status.content,
-        style = MaterialTheme.typography.titleLarge,
+        style = MaterialTheme.typography.bodyLarge,
     )
 
-    CreatedAt(status.createdAt)
+    CreatedAtAndVia(status)
+    Divider(Modifier.fillMaxWidth())
+    StatusDetailCount(status)
     StatusDetailActions(
         status,
         onClickAction = {},
@@ -80,27 +83,87 @@ private fun StatusDetailHeader(
 
                 layout(placeable.width, placeable.height) { placeable.place(0, 0) }
             },
-        trailing = { baselineModifier ->
+        trailing = {
             VisibilityIcon(
                 visibility,
                 tint = MaterialTheme.colorScheme.outline,
-                modifier = Modifier.size(MaterialTheme.typography.titleMedium.fontSize.toDp())
-                    .baseline(Alignment.Bottom, topOffset = 8)
-                    .then(baselineModifier),
+                modifier = Modifier.size(MaterialTheme.typography.titleMedium.fontSize.toDp()),
             )
         },
     )
 }
 
 @Composable
-private fun CreatedAt(
-    createdAt: LocalDateTime,
-) = Text(
-    createdAt.toYearMonthDayTime(),
-    color = MaterialTheme.colorScheme.outline,
-    style = MaterialTheme.typography.titleMedium,
-)
+private fun CreatedAtAndVia(
+    status: Status,
+) = CompositionLocalProvider(
+    LocalContentColor provides MaterialTheme.colorScheme.outline,
+    LocalTextStyle provides MaterialTheme.typography.titleSmall,
+) {
+    Row(modifier = Modifier.padding(bottom = 8.dp)) {
+        Text(status.createdAt.toYearMonthDayTime())
+        Spacer(Modifier.width(8.dp))
 
+        val via = status.via
+        if (via != null) {
+            Text("･")
+            Spacer(Modifier.width(8.dp))
+            Text("via ${via.name}")
+        }
+    }
+}
+
+@Composable
+private fun StatusDetailCount(
+    status: Status,
+) {
+    if (status.reblogCount == 0 && status.favouriteCount == 0) {
+        return
+    }
+
+    Column(Modifier.fillMaxWidth()) {
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+            modifier = Modifier.padding(vertical = 8.dp),
+        ) {
+            if (status.reblogCount != 0) {
+                Text(
+                    format(status.reblogCount),
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                    ),
+                    modifier = Modifier.alignByBaseline(),
+                )
+                Text(
+                    getString().status_detail_boost,
+                    color = MaterialTheme.colorScheme.outline,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.alignByBaseline(),
+                )
+                Spacer(modifier = Modifier.width(8.dp))
+            }
+
+            if (status.favouriteCount != 0) {
+                Text(
+                    format(status.favouriteCount),
+                    style = MaterialTheme.typography.bodyLarge.copy(
+                        fontWeight = FontWeight.Bold,
+                    ),
+                    modifier = Modifier.alignByBaseline(),
+                )
+                Text(
+                    getString().status_detail_favourite,
+                    color = MaterialTheme.colorScheme.outline,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.alignByBaseline(),
+                )
+            }
+        }
+        Divider(Modifier.fillMaxWidth())
+    }
+}
+
+@Suppress("LongMethod")
 @Composable
 private fun StatusDetailActions(
     status: Status,

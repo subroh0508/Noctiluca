@@ -6,14 +6,14 @@ import app.noctiluca.di.ImageLoaderModule
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
-import noctiluca.features.statusdetail.di.FeatureStatusDetailModule
-import noctiluca.features.statusdetail.featureStatusDetailScreenModule
 import noctiluca.data.di.DataModule
 import noctiluca.datastore.di.DataStoreModule
 import noctiluca.features.accountdetail.di.FeatureAccountDetailModule
 import noctiluca.features.accountdetail.featureAccountDetailScreenModule
 import noctiluca.features.authentication.di.FeatureSignInModule
 import noctiluca.features.authentication.featureSignInScreenModule
+import noctiluca.features.statusdetail.di.FeatureStatusDetailModule
+import noctiluca.features.statusdetail.featureStatusDetailScreenModule
 import noctiluca.features.timeline.di.FeatureTimelineModule
 import noctiluca.features.timeline.featureTimelineScreenModule
 import noctiluca.network.authentication.di.AuthenticationApiModule

@@ -20,6 +20,7 @@ import noctiluca.features.statusdetail.component.StatusDetailTopAppBar
 import noctiluca.features.statusdetail.viewmodel.StatusDetailViewModel
 import noctiluca.model.StatusId
 import noctiluca.model.status.StatusList
+import androidx.compose.material3.Divider as MaterialDivider
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -64,22 +65,29 @@ private fun StatusContext(
     statuses: StatusList,
     lazyListState: LazyListState,
     paddingValues: PaddingValues,
-) = LazyColumn(
-    state = lazyListState,
-    contentPadding = PaddingValues(
-        start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
-        top = paddingValues.calculateTopPadding(),
-        end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
-        bottom = 64.dp,
-    ),
-    modifier = Modifier.fillMaxSize(),
 ) {
-    items(
-        statuses.size,
-        key = { i -> statuses[i].id.value },
-    ) { i ->
-        if (statuses[i].id == primary) {
-            StatusDetail(statuses[i])
+    MaterialDivider(
+        modifier = Modifier.fillMaxWidth()
+            .offset(y = paddingValues.calculateTopPadding()),
+    )
+
+    LazyColumn(
+        state = lazyListState,
+        contentPadding = PaddingValues(
+            start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
+            top = paddingValues.calculateTopPadding(),
+            end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
+            bottom = 64.dp,
+        ),
+        modifier = Modifier.fillMaxSize(),
+    ) {
+        items(
+            statuses.size,
+            key = { i -> statuses[i].id.value },
+        ) { i ->
+            if (statuses[i].id == primary) {
+                StatusDetail(statuses[i])
+            }
         }
     }
 }

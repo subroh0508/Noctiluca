@@ -5,8 +5,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.features.statusdetail.LocalResources
 import noctiluca.features.shared.molecules.scaffold.HeadlineTopAppBar
+import noctiluca.features.statusdetail.LocalResources
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -17,10 +17,6 @@ internal class StatusRepositoryImpl(
     private val statusContextStateFlow: MutableStateFlow<List<Status>> by lazy { MutableStateFlow(listOf()) }
 
     override fun context(id: StatusId) = statusContextStateFlow.onStart {
-        if (statusContextStateFlow.value.isNotEmpty()) {
-            return@onStart
-        }
-
         val status = fetch(id)
         statusContextStateFlow.value = listOf(status)
         statusContextStateFlow.value = fetchContext(status)

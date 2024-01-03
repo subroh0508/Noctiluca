@@ -127,7 +127,7 @@ private fun TimelineLanes(
             loadState[timelineId],
             lazyListState = lazyListState[timelineId] ?: rememberLazyListState(),
             onLoad = { viewModel.load(timelineId) },
-            onStatusClick = { navigator?.navigateToStatusDetail(it.value) },
+            onStatusClick = { navigator?.navigateToStatusDetail(it) },
             onExecuteAction = { _, status, action ->
                 when (action) {
                     Action.FAVOURITE -> viewModel.favourite(status)

@@ -1,5 +1,6 @@
 package noctiluca.features.statusdetail.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -12,6 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import noctiluca.features.shared.account.TooterName
 import noctiluca.features.shared.atoms.divider.Divider
 import noctiluca.features.shared.atoms.image.AsyncImage
@@ -30,6 +32,7 @@ import noctiluca.model.status.Status
 @Composable
 internal fun StatusDetail(
     status: Status,
+    onClickAction: (Action) -> Unit,
 ) = Column(
     modifier = Modifier.padding(
         start = 16.dp,
@@ -46,7 +49,10 @@ internal fun StatusDetail(
 
     HtmlText(
         status.content,
-        style = MaterialTheme.typography.bodyLarge,
+        style = MaterialTheme.typography.bodyLarge.copy(
+            fontSize = 20.sp,
+            lineHeight = 28.sp,
+        ),
     )
 
     CreatedAtAndVia(status)
@@ -54,7 +60,7 @@ internal fun StatusDetail(
     StatusDetailCount(status)
     StatusDetailActions(
         status,
-        onClickAction = {},
+        onClickAction = onClickAction,
     )
 }
 

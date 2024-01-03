@@ -4,12 +4,14 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.organisms.tab.AccountStatusesTabs
 import noctiluca.features.accountdetail.organisms.tab.rememberTabbedAccountStatusesState
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.AccountDetailCaption
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.StatuseTab
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
+import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.molecules.scaffold.HeadlineAvatar
 import noctiluca.features.shared.molecules.scaffold.HeadlineHeader
 import noctiluca.features.shared.molecules.scaffold.LoadStateLargeHeadlinedScaffold
@@ -26,6 +28,8 @@ fun AccountDetailScaffold(
     }
 
     val uiModel by viewModel.uiModel.collectAsState()
+
+    val navigator = LocalNavigator.current
     val statusesScrollState = rememberTabbedAccountStatusesState(uiModel.tab)
 
     LoadStateLargeHeadlinedScaffold<AccountAttributes>(
@@ -70,6 +74,7 @@ fun AccountDetailScaffold(
         StatuseTab(
             tabs,
             uiModel.foreground,
+            onClickStatus = { navigator?.navigateToStatusDetail(it) },
             loadMore = { viewModel.loadStatusesMore() },
         )
     }

@@ -5,12 +5,14 @@ import androidx.compose.runtime.Composable
 import noctiluca.features.shared.molecules.list.infiniteScrollFooter
 import noctiluca.features.shared.molecules.list.items
 import noctiluca.features.shared.status.Status
+import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 
 @Suppress("FunctionNaming")
 internal fun LazyListScope.StatuseTab(
     tabs: @Composable () -> Unit,
     statuses: List<Status>,
+    onClickStatus: (StatusId) -> Unit,
     loadMore: () -> Unit,
 ) {
     item { tabs() }
@@ -21,7 +23,7 @@ internal fun LazyListScope.StatuseTab(
     ) { _, status ->
         Status(
             status,
-            onClick = {},
+            onClick = { onClickStatus(it) },
             onClickAction = {},
         )
     }

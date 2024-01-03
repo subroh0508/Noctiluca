@@ -202,7 +202,7 @@ private fun RowScope.ActionIcon(
         Icon(
             imageVector,
             contentDescription,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(20.dp)
                 .align(Alignment.CenterVertically)
                 .clickable(
                     indication = null,
@@ -212,6 +212,7 @@ private fun RowScope.ActionIcon(
         )
         Text(
             count?.takeIf { it > 0 }?.toString() ?: "",
+            style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.padding(horizontal = 4.dp)
                 .align(Alignment.CenterVertically),
         )

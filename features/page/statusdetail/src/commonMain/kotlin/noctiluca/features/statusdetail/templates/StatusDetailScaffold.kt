@@ -14,7 +14,6 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.shared.molecules.list.LazyColumn
-import noctiluca.features.shared.status.Status
 import noctiluca.features.statusdetail.LocalResources
 import noctiluca.features.statusdetail.component.Position
 import noctiluca.features.statusdetail.component.StatusDetail

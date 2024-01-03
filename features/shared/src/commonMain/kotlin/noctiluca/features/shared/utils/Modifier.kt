@@ -12,7 +12,6 @@ import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.dp
 
 // @see: https://matsudamper.hatenablog.com/entry/2021/08/16/045025
 fun Modifier.baseline(

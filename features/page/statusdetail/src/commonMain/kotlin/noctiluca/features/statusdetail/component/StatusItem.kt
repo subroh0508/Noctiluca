@@ -3,20 +3,17 @@ package noctiluca.features.statusdetail.component
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Divider as MaterialDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.shared.status.Action
 import noctiluca.model.StatusId
-import noctiluca.features.shared.status.Status as ComposableStatus
 import noctiluca.model.status.Status
+import androidx.compose.material3.Divider as MaterialDivider
+import noctiluca.features.shared.status.Status as ComposableStatus
 
 internal enum class Position { TOP, MIDDLE, BOTTOM }
 

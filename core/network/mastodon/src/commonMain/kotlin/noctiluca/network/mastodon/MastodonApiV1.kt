@@ -6,6 +6,7 @@ import noctiluca.network.mastodon.data.account.NetworkRelationship
 import noctiluca.network.mastodon.data.extendeddescription.NetworkExtendedDescription
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.status.NetworkStatus
+import noctiluca.network.mastodon.data.status.NetworkStatusesContext
 
 interface MastodonApiV1 {
     suspend fun getInstance(
@@ -43,6 +44,18 @@ interface MastodonApiV1 {
         minId: String? = null,
         limit: Int = 20,
     ): List<NetworkStatus>
+
+    suspend fun getStatus(
+        id: String,
+    ): NetworkStatus
+
+    suspend fun deleteStatus(
+        id: String
+    ): NetworkStatus
+
+    suspend fun getStatusesContext(
+        id: String,
+    ): NetworkStatusesContext
 
     suspend fun postStatusesFavourite(
         id: String,

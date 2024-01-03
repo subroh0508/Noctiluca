@@ -59,6 +59,12 @@ object Api {
             @Resource("{id}")
             @Serializable
             class Id(val parent: Statuses = Statuses(), val id: String) {
+                @Resource("context")
+                @Serializable
+                class Context(val parent: Id) {
+                    constructor(id: String) : this(Id(id = id))
+                }
+
                 @Resource("favourite")
                 @Serializable
                 class Favourite(val parent: Id) {

@@ -45,6 +45,7 @@ class FetchAccountStatusesUseCaseSpec : DescribeSpec({
             myAccount.screen,
         ),
         rebloggedBy = null,
+        via = Status.Via("Web", website = null),
     )
 
     val media = Status(
@@ -68,6 +69,7 @@ class FetchAccountStatusesUseCaseSpec : DescribeSpec({
             myAccount.screen,
         ),
         rebloggedBy = null,
+        via = Status.Via("Web", website = null),
     )
 
     describe("#execute") {

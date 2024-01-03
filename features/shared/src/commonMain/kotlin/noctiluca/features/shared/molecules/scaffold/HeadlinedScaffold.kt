@@ -73,6 +73,25 @@ fun <T : Any> LoadStateLargeHeadlinedScaffold(
 fun <T : Any> LoadStateSmallHeadlinedScaffold(
     loadState: LoadState,
     lazyListState: LazyListState,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    topAppBar: @Composable (TopAppBarScrollBehavior, Job?, T?) -> Unit = { _, _, _ -> },
+    bottomBar: @Composable BoxScope.(T, Dp) -> Unit = { _, _ -> },
+    fallback: @Composable (Throwable?, PaddingValues) -> Unit = { _, _ -> },
+    content: LazyListScope.(T, Dp) -> Unit,
+) = LoadStateSmallHeadlinedScaffold(
+    loadState,
+    lazyListState,
+    snackbarHostState = snackbarHostState,
+    topAppBar = topAppBar,
+    bottomBar = bottomBar,
+    fallback = fallback,
+) { data, _, horizontalPadding -> content(data, horizontalPadding) }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun <T : Any> LoadStateSmallHeadlinedScaffold(
+    loadState: LoadState,
+    lazyListState: LazyListState,
     tabComposeIndex: Int = Int.MAX_VALUE,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     topAppBar: @Composable (TopAppBarScrollBehavior, Job?, T?) -> Unit = { _, _, _ -> },

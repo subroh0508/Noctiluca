@@ -12,6 +12,7 @@ import noctiluca.network.mastodon.data.account.NetworkRelationship
 import noctiluca.network.mastodon.data.extendeddescription.NetworkExtendedDescription
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.status.NetworkStatus
+import noctiluca.network.mastodon.data.status.NetworkStatusesContext
 
 internal class MastodonApiV1Client(
     token: AuthenticationTokenProvider,
@@ -90,6 +91,24 @@ internal class MastodonApiV1Client(
         parameter("min_id", minId)
         parameter("limit", limit.toString())
     }.body()
+
+    override suspend fun getStatus(
+        id: String
+    ): NetworkStatus = client.get(
+        Api.V1.Statuses.Id(id = id),
+    ).body()
+
+    override suspend fun deleteStatus(
+        id: String,
+    ): NetworkStatus = client.delete(
+        Api.V1.Statuses.Id(id = id),
+    ).body()
+
+    override suspend fun getStatusesContext(
+        id: String,
+    ): NetworkStatusesContext = client.get(
+        Api.V1.Statuses.Id.Context(id = id),
+    ).body()
 
     override suspend fun postStatusesFavourite(
         id: String,

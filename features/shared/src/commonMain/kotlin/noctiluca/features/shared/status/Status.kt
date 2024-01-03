@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDateTime
 import noctiluca.features.shared.account.TooterName
+import noctiluca.features.shared.atoms.clickable
 import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.features.shared.atoms.image.imageResources
 import noctiluca.features.shared.atoms.text.HtmlText
@@ -25,6 +26,7 @@ import noctiluca.features.shared.atoms.text.RelativeTime
 import noctiluca.features.shared.getDrawables
 import noctiluca.features.shared.utils.baseline
 import noctiluca.features.shared.utils.toDp
+import noctiluca.model.StatusId
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 
@@ -35,32 +37,45 @@ enum class Action {
 @Composable
 fun Status(
     status: Status,
-    onClickAction: CoroutineScope.(Action) -> Unit,
+    onClick: (CoroutineScope.(StatusId) -> Unit)? = null,
+    onClickAction: (CoroutineScope.(Action) -> Unit)? = null,
     modifier: Modifier = Modifier,
-) = Column(
-    modifier = Modifier.padding(
-        start = 16.dp,
-        end = 16.dp,
-        top = 16.dp,
-    ).then(modifier),
 ) {
-    StatusHeader(
-        status.tooter,
-        status.visibility,
-        status.createdAt,
-    )
+    val scope = rememberCoroutineScope()
 
-    Spacer(Modifier.height(8.dp))
+    Column(
+        modifier = Modifier.run {
+            if (onClick != null) {
+                clickable { onClick(scope, status.id) }
+            } else {
+                this
+            }
+        }.padding(
+            start = 16.dp,
+            end = 16.dp,
+            top = 16.dp,
+        ).then(modifier),
+    ) {
+        StatusHeader(
+            status.tooter,
+            status.visibility,
+            status.createdAt,
+        )
 
-    HtmlText(
-        status.content,
-        style = MaterialTheme.typography.bodyLarge,
-    )
+        Spacer(Modifier.height(8.dp))
 
-    StatusActions(
-        status,
-        onClickAction,
-    )
+        HtmlText(
+            status.content,
+            style = MaterialTheme.typography.bodyLarge,
+        )
+
+        if (onClickAction != null) {
+            StatusActions(
+                status,
+                onClickAction,
+            )
+        }
+    }
 }
 
 @Composable
@@ -109,7 +124,7 @@ private fun StatusHeader(
 }
 
 @Composable
-internal fun VisibilityIcon(
+fun VisibilityIcon(
     visibility: Status.Visibility,
     tint: Color = LocalContentColor.current,
     modifier: Modifier = Modifier,
@@ -192,7 +207,7 @@ private fun RowScope.ActionIcon(
         Icon(
             imageVector,
             contentDescription,
-            modifier = Modifier.size(24.dp)
+            modifier = Modifier.size(20.dp)
                 .align(Alignment.CenterVertically)
                 .clickable(
                     indication = null,
@@ -202,6 +217,7 @@ private fun RowScope.ActionIcon(
         )
         Text(
             count?.takeIf { it > 0 }?.toString() ?: "",
+            style = MaterialTheme.typography.titleSmall,
             modifier = Modifier.padding(horizontal = 4.dp)
                 .align(Alignment.CenterVertically),
         )

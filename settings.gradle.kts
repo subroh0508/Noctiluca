@@ -36,5 +36,6 @@ include(
     ":features:designsystem",
     ":features:page:accountdetail",
     ":features:page:authentication",
+    ":features:page:statusdetail",
     ":features:page:timeline",
 )

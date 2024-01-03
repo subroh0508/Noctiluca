@@ -50,6 +50,57 @@ abstract class AuthorizedViewModel(
         mutableEvent.value = Event.SIGN_IN
     }
 
+    protected fun <T1, T2, R> buildUiModel(
+        flow: Flow<T1>,
+        flow2: Flow<T2>,
+        initialValue: R,
+        started: SharingStarted = SharingStarted.WhileSubscribed(),
+        transform: suspend (T1, T2) -> R,
+    ) = combine(
+        flow,
+        flow2,
+        transform,
+    ).stateInWithAuth(
+        started = started,
+        initialValue = initialValue,
+    )
+
+    protected fun <T1, T2, T3, R> buildUiModel(
+        flow: Flow<T1>,
+        flow2: Flow<T2>,
+        flow3: Flow<T3>,
+        initialValue: R,
+        started: SharingStarted = SharingStarted.WhileSubscribed(),
+        transform: suspend (T1, T2, T3) -> R,
+    ) = combine(
+        flow,
+        flow2,
+        flow3,
+        transform,
+    ).stateInWithAuth(
+        started = started,
+        initialValue = initialValue,
+    )
+
+    protected fun <T1, T2, T3, T4, R> buildUiModel(
+        flow: Flow<T1>,
+        flow2: Flow<T2>,
+        flow3: Flow<T3>,
+        flow4: Flow<T4>,
+        initialValue: R,
+        started: SharingStarted = SharingStarted.WhileSubscribed(),
+        transform: suspend (T1, T2, T3, T4) -> R,
+    ) = combine(
+        flow,
+        flow2,
+        flow3,
+        flow4,
+        transform,
+    ).stateInWithAuth(
+        started = started,
+        initialValue = initialValue,
+    )
+
     protected fun <T1, T2, T3, T4, T5, R> buildUiModel(
         flow: Flow<T1>,
         flow2: Flow<T2>,
@@ -66,7 +117,15 @@ abstract class AuthorizedViewModel(
         flow4,
         flow5,
         transform,
-    ).catch { e ->
+    ).stateInWithAuth(
+        started = started,
+        initialValue = initialValue,
+    )
+
+    private fun <R> Flow<R>.stateInWithAuth(
+        started: SharingStarted,
+        initialValue: R,
+    ) = catch { e ->
         handleException(e)
     }.stateIn(
         scope = viewModelScope,

@@ -49,6 +49,16 @@ abstract class AbstractMastodonApiClient(
         }
     }
 
+    protected suspend inline fun <reified T : Any> HttpClient.delete(
+        resource: T,
+        domain: String? = null,
+        skipAuthorization: Boolean = false,
+    ) = handleResponseException {
+        delete(resource) {
+            setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
+        }
+    }
+
     protected suspend fun HttpRequestBuilder.setAccessTokenAndHost(
         domain: String? = null,
         accessToken: String? = null,

@@ -10,7 +10,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.launch
+import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.shared.atoms.appbar.NavigateIconSize
 import noctiluca.features.shared.atoms.appbar.scrollToTop
@@ -117,12 +119,15 @@ private fun TimelineLanes(
     loadState: Map<TimelineId, LoadState>,
     lazyListState: Map<TimelineId, LazyListState>,
 ) {
+    val navigator = LocalNavigator.current
+
     timelines.forEach { (timelineId, timelineState) ->
         TimelineLane(
             timelineState,
             loadState[timelineId],
             lazyListState = lazyListState[timelineId] ?: rememberLazyListState(),
             onLoad = { viewModel.load(timelineId) },
+            onStatusClick = { navigator?.navigateToStatusDetail(it) },
             onExecuteAction = { _, status, action ->
                 when (action) {
                     Action.FAVOURITE -> viewModel.favourite(status)

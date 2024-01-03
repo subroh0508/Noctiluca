@@ -58,7 +58,7 @@ data class NetworkStatus(
 ) {
     @Serializable
     data class Application(
-        val name: String?,
+        val name: String,
         val website: String?,
     )
 

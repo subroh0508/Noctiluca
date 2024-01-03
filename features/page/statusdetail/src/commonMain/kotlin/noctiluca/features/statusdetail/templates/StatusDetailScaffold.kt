@@ -13,6 +13,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
+import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.statusdetail.LocalResources
 import noctiluca.features.statusdetail.component.Position
@@ -56,6 +57,7 @@ internal fun StatusDetailScaffold(
                 uiModel.getValue(),
                 lazyListState,
                 paddingValues,
+                onClickStatus = { navigator?.navigateToStatusDetail(it) },
             )
         }
     }
@@ -67,6 +69,7 @@ private fun StatusContext(
     statuses: StatusList,
     lazyListState: LazyListState,
     paddingValues: PaddingValues,
+    onClickStatus: (StatusId) -> Unit,
 ) {
     MaterialDivider(
         modifier = Modifier.fillMaxWidth()
@@ -102,7 +105,7 @@ private fun StatusContext(
         StatusItem(
             status,
             position,
-            onClickStatus = { },
+            onClickStatus = onClickStatus,
             onClickAction = { },
         )
     }

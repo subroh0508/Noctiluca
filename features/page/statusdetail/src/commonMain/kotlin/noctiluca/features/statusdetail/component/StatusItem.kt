@@ -1,6 +1,7 @@
 package noctiluca.features.statusdetail.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -8,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.shared.status.Action
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
@@ -21,10 +21,11 @@ internal enum class Position { TOP, MIDDLE, BOTTOM }
 internal fun StatusItem(
     status: Status,
     position: Position,
-    onClickStatus: CoroutineScope.(StatusId) -> Unit,
-    onClickAction: CoroutineScope.(Action) -> Unit,
+    onClickStatus: (StatusId) -> Unit,
+    onClickAction: (Action) -> Unit,
 ) = Row(
-    modifier = Modifier.height(IntrinsicSize.Min)
+    modifier = Modifier.clickable { onClickStatus(status.id) }
+        .height(IntrinsicSize.Min)
         .padding(start = 8.dp),
 ) {
     when (position) {
@@ -33,7 +34,10 @@ internal fun StatusItem(
         Position.BOTTOM -> TimelineAxisBottom()
     }
 
-    ComposableStatus(status, onClickStatus, onClickAction)
+    ComposableStatus(
+        status,
+        onClickAction = { onClickAction(it) },
+    )
 }
 
 @Composable

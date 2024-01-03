@@ -44,12 +44,17 @@ fun Status(
     val scope = rememberCoroutineScope()
 
     Column(
-        modifier = Modifier.clickable { onClick?.invoke(scope, status.id) }
-            .padding(
-                start = 16.dp,
-                end = 16.dp,
-                top = 16.dp,
-            ).then(modifier),
+        modifier = Modifier.run {
+            if (onClick != null) {
+                clickable { onClick(scope, status.id) }
+            } else {
+                this
+            }
+        }.padding(
+            start = 16.dp,
+            end = 16.dp,
+            top = 16.dp,
+        ).then(modifier),
     ) {
         StatusHeader(
             status.tooter,

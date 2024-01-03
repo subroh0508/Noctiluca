@@ -1,11 +1,13 @@
 package noctiluca.data.status
 
+import kotlinx.coroutines.flow.Flow
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
+import noctiluca.model.status.StatusList
 
 interface StatusRepository {
-    suspend fun fetch(id: StatusId): Status
-    suspend fun fetchContext(id: StatusId): List<Status>
+    fun context(id: StatusId): Flow<StatusList>
+
     suspend fun delete(id: StatusId): Status
 
     suspend fun favourite(status: Status): Status

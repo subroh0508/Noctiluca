@@ -21,7 +21,8 @@ internal fun LazyListScope.StatuseTab(
     ) { _, status ->
         Status(
             status,
-            onClickAction = { },
+            onClick = {},
+            onClickAction = {},
         )
     }
 

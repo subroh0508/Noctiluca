@@ -16,10 +16,7 @@ internal fun LazyListScope.InstanceLocalTimelineTab(
         key = { _, status -> status.id.value },
         showDivider = true,
     ) { _, status ->
-        Status(
-            status,
-            onClickAction = {},
-        )
+        Status(status)
     }
 
     infiniteScrollFooter(

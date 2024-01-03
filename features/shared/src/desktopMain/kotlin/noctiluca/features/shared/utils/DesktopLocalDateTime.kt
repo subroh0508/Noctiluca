@@ -4,9 +4,11 @@ import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.toJavaLocalDateTime
 import java.time.format.DateTimeFormatter
 
-@Suppress("NewApi")
-actual fun LocalDateTime.toMonthDay() = DateTimeFormatter.ofPattern(FORMAT_MONTH_DAY).format(this.toJavaLocalDateTime())
+actual fun LocalDateTime.toMonthDay(): String =
+    DateTimeFormatter.ofPattern(FORMAT_MONTH_DAY).format(this.toJavaLocalDateTime())
 
-@Suppress("NewApi")
-actual fun LocalDateTime.toYearMonthDay() =
+actual fun LocalDateTime.toYearMonthDay(): String =
     DateTimeFormatter.ofPattern(FORMAT_YEAR_MONTH_DAY).format(this.toJavaLocalDateTime())
+
+actual fun LocalDateTime.toYearMonthDayTime(): String =
+    DateTimeFormatter.ofPattern(FORMAT_YEAR_MONTH_DAY_TIME).format(this.toJavaLocalDateTime())

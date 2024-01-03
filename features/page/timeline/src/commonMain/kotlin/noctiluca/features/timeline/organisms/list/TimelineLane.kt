@@ -16,6 +16,7 @@ import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.Timeline
 
@@ -24,6 +25,7 @@ internal fun TimelineLane(
     timelineState: TimelinesViewModel.TimelineState,
     loadState: LoadState?,
     onLoad: suspend CoroutineScope.() -> Unit,
+    onStatusClick: CoroutineScope.(StatusId) -> Unit,
     onExecuteAction: CoroutineScope.(Timeline, Status, Action) -> Unit,
     lazyListState: LazyListState = rememberLazyListState(),
     modifier: Modifier = Modifier,
@@ -50,6 +52,7 @@ internal fun TimelineLane(
     ) { _, item ->
         Status(
             item,
+            onClick = { onStatusClick(it) },
             onClickAction = { onExecuteAction(timelineState.timeline, item, it) },
         )
     }

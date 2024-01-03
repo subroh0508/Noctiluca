@@ -6,7 +6,8 @@ import app.noctiluca.di.ImageLoaderModule
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import io.ktor.client.engine.okhttp.*
 import kotlinx.serialization.json.Json
-import noctilca.features.statusdetail.featureStatusDetailScreenModule
+import noctiluca.features.statusdetail.di.FeatureStatusDetailModule
+import noctiluca.features.statusdetail.featureStatusDetailScreenModule
 import noctiluca.data.di.DataModule
 import noctiluca.datastore.di.DataStoreModule
 import noctiluca.features.accountdetail.di.FeatureAccountDetailModule
@@ -86,5 +87,6 @@ class NoctilucaApplication : Application() {
         FeatureSignInModule()
         FeatureTimelineModule()
         FeatureAccountDetailModule()
+        FeatureStatusDetailModule()
     }
 }

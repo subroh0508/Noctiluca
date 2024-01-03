@@ -16,8 +16,10 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.shared.status.Status
 import noctiluca.features.statusdetail.LocalResources
+import noctiluca.features.statusdetail.component.Position
 import noctiluca.features.statusdetail.component.StatusDetail
 import noctiluca.features.statusdetail.component.StatusDetailTopAppBar
+import noctiluca.features.statusdetail.component.StatusItem
 import noctiluca.features.statusdetail.viewmodel.StatusDetailViewModel
 import noctiluca.model.StatusId
 import noctiluca.model.status.StatusList
@@ -76,7 +78,6 @@ private fun StatusContext(
         statuses,
         key = { it.id.value },
         state = lazyListState,
-        showDivider = true,
         contentPadding = PaddingValues(
             start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
             top = paddingValues.calculateTopPadding(),
@@ -84,18 +85,26 @@ private fun StatusContext(
             bottom = 64.dp,
         ),
         modifier = Modifier.fillMaxSize(),
-    ) { _, status ->
+    ) { index, status ->
         if (status.id == primary) {
             StatusDetail(
                 status,
                 onClickAction = { },
             )
-        } else {
-            Status(
-                status,
-                onClick = { },
-                onClickAction = { },
-            )
+            return@LazyColumn
         }
+
+        val position = when (index) {
+            0 -> Position.TOP
+            statuses.size - 1 -> Position.BOTTOM
+            else -> Position.MIDDLE
+        }
+
+        StatusItem(
+            status,
+            position,
+            onClickStatus = { },
+            onClickAction = { },
+        )
     }
 }

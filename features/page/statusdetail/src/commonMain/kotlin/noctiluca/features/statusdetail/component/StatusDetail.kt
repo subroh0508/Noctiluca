@@ -8,10 +8,14 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import noctiluca.features.shared.account.TooterName
@@ -22,6 +26,7 @@ import noctiluca.features.shared.atoms.text.HtmlText
 import noctiluca.features.shared.getDrawables
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.VisibilityIcon
+import noctiluca.features.shared.utils.border
 import noctiluca.features.shared.utils.format
 import noctiluca.features.shared.utils.toDp
 import noctiluca.features.shared.utils.toYearMonthDayTime
@@ -34,7 +39,10 @@ internal fun StatusDetail(
     status: Status,
     onClickAction: (Action) -> Unit,
 ) = Column(
-    modifier = Modifier.padding(
+    modifier = Modifier.border(
+        top = Dp.Hairline,
+        bottom = Dp.Hairline,
+    ).padding(
         start = 16.dp,
         end = 16.dp,
         top = 16.dp,

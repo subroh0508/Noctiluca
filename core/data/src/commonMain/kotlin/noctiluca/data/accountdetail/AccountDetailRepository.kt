@@ -2,17 +2,16 @@ package noctiluca.data.accountdetail
 
 import kotlinx.coroutines.flow.Flow
 import noctiluca.model.AccountId
-import noctiluca.model.StatusId
 import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.StatusesQuery
 import noctiluca.model.status.Status
 
 interface AccountDetailRepository {
     fun attributes(id: AccountId): Flow<AccountAttributes>
+    fun statuses(id: AccountId): Flow<Map<StatusesQuery, List<Status>>>
 
-    suspend fun fetchStatuses(
+    suspend fun loadStatuses(
         id: AccountId,
-        maxId: StatusId? = null,
-        onlyMedia: Boolean = false,
-        excludeReplies: Boolean = true,
-    ): List<Status>
+        query: StatusesQuery,
+    )
 }

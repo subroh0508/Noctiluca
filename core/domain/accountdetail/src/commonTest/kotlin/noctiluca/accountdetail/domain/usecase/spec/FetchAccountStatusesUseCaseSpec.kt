@@ -11,12 +11,12 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import noctiluca.accountdetail.domain.TestAccountDetailUseCaseComponent
-import noctiluca.accountdetail.domain.model.StatusesQuery
 import noctiluca.accountdetail.domain.myAccount
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
 import noctiluca.model.HttpUnauthorizedException
 import noctiluca.model.StatusId
 import noctiluca.model.account.Account
+import noctiluca.model.accountdetail.StatusesQuery
 import noctiluca.model.status.Status
 import noctiluca.network.mastodon.Api
 import noctiluca.test.JSON_STATUS_MEDIA

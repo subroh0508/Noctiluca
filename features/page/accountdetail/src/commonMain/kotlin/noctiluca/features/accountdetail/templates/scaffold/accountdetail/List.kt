@@ -29,7 +29,7 @@ internal fun LazyListScope.StatuseTab(
     }
 
     infiniteScrollFooter(
-        isLoading = false,
+        isLoading = true,
         onLoad = {
             if (statuses.isNotEmpty()) {
                 loadMore()

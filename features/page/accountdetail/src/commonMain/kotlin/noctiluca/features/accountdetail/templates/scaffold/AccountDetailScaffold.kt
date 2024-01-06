@@ -19,6 +19,7 @@ import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.shared.molecules.scaffold.*
 import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.StatusesQuery
 import noctiluca.model.status.Status
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -26,10 +27,6 @@ import noctiluca.model.status.Status
 fun AccountDetailScaffold(
     viewModel: AccountDetailViewModel,
 ) {
-    LaunchedEffect(viewModel.id) {
-        viewModel.refreshStatuses()
-    }
-
     val uiModel by viewModel.uiModel.collectAsState()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -54,7 +51,7 @@ fun AccountDetailScaffold(
             is AccountDetailViewModel.UiModel.Loaded -> AccountDetailContent(
                 tabs = { statusesScrollState ->
                     AccountStatusesTabs(
-                        state.tab,
+                        state.query,
                         statusesScrollState,
                         onSwitch = { tab ->
                             statusesScrollState.cacheScrollPosition(tab)
@@ -64,7 +61,7 @@ fun AccountDetailScaffold(
                 },
                 paddingValues,
                 state.account,
-                state.tab,
+                state.query,
                 state.foreground,
                 scrollBehavior,
                 loadMore = { viewModel.loadStatusesMore() },
@@ -79,7 +76,7 @@ private fun AccountDetailContent(
     tabs: @Composable (AccountStatusesScrollState) -> Unit,
     paddingValues: PaddingValues,
     account: AccountAttributes,
-    tab: AccountDetailViewModel.UiModel.Tab,
+    tab: StatusesQuery,
     statuses: List<Status>,
     scrollBehavior: TopAppBarScrollBehavior,
     loadMore: () -> Unit,

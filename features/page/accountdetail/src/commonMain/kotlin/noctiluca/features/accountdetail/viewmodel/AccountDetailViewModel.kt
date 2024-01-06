@@ -5,57 +5,40 @@ import androidx.compose.runtime.remember
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.accountdetail.domain.model.StatusesQuery
-import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
 import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
+import noctiluca.data.accountdetail.AccountDetailRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
-import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
-import noctiluca.features.shared.viewmodel.launch
-import noctiluca.features.shared.viewmodel.launchLazy
-import noctiluca.features.shared.viewmodel.viewModelScope
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
+import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.status.Status
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 class AccountDetailViewModel(
     val id: AccountId,
-    private val fetchAccountAttributesUseCase: FetchAccountAttributesUseCase,
+    private val accountDetailRepository: AccountDetailRepository,
     private val fetchAccountStatusesUseCase: FetchAccountStatusesUseCase,
     authorizedUserRepository: AuthorizedUserRepository,
 ) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
-    private val accountDetailLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val tab by lazy { MutableStateFlow(UiModel.Tab.STATUSES) }
     private val statuses by lazy { MutableStateFlow<Map<UiModel.Tab, List<Status>>>(mapOf()) }
 
     val uiModel by lazy {
-        combine(
-            accountDetailLoadState,
+        buildUiModel(
+            accountDetailRepository.attributes(id),
             tab,
             statuses,
-        ) { accountDetailLoadState, tab, statuses ->
-            UiModel(
-                accountDetailLoadState,
+            initialValue = UiModel.Loading,
+            started = SharingStarted.WhileSubscribed(5_000),
+        ) { account, tab, statuses ->
+            UiModel.Loaded(
+                account = account,
                 tab = tab,
                 statuses = statuses,
             )
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(),
-            initialValue = UiModel(),
-        )
-    }
-
-    fun load() {
-        val job = launchLazy {
-            runCatchingWithAuth { fetchAccountAttributesUseCase.execute(id) }
-                .onSuccess { accountDetailLoadState.value = LoadState.Loaded(it) }
-                .onFailure { accountDetailLoadState.value = LoadState.Error(it) }
         }
-
-        accountDetailLoadState.value = LoadState.Loading(job)
-        job.start()
     }
 
     fun switch(tab: UiModel.Tab) {
@@ -65,6 +48,7 @@ class AccountDetailViewModel(
     fun refreshStatuses() {
         val tabs = UiModel.Tab.entries.toTypedArray()
 
+        /*
         tabs.forEach { t ->
             if (uiModel.value.statuses[t]?.isNotEmpty() == true) {
                 return@forEach
@@ -81,9 +65,11 @@ class AccountDetailViewModel(
                     .onFailure { }
             }
         }
+        */
     }
 
     fun loadStatusesMore() {
+        /*
         val tab = uiModel.value.tab
         val foregroundStatuses = uiModel.value.foreground
 
@@ -101,13 +87,19 @@ class AccountDetailViewModel(
                 }
                 .onFailure { }
         }
+        */
     }
 
-    data class UiModel(
-        val account: LoadState = LoadState.Initial,
-        val tab: Tab = Tab.STATUSES,
-        val statuses: Map<Tab, List<Status>> = mapOf(),
-    ) {
+    sealed class UiModel {
+        data object Loading : UiModel()
+        data class Loaded(
+            val account: AccountAttributes,
+            val tab: Tab,
+            val statuses: Map<Tab, List<Status>>,
+        ) : UiModel() {
+            val foreground = statuses[tab] ?: listOf()
+        }
+
         enum class Tab {
             STATUSES, STATUSES_AND_REPLIES, MEDIA;
 
@@ -117,8 +109,6 @@ class AccountDetailViewModel(
                 MEDIA -> StatusesQuery.OnlyMedia(maxId = maxId)
             }
         }
-
-        val foreground get() = statuses[tab] ?: listOf()
     }
 
     companion object Provider {

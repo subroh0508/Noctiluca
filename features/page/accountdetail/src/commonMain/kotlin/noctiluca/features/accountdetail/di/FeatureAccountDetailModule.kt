@@ -5,5 +5,5 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.FeatureAccountDetailModule() {
-    factory { params -> AccountDetailViewModel(params.get(), get(), get()) }
+    factory { params -> AccountDetailViewModel(params.get(), get(), get(), get()) }
 }

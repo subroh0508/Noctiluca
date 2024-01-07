@@ -3,6 +3,7 @@ package noctiluca.features.accountdetail.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.accountdetail.AccountDetailRepository
+import noctiluca.data.accountdetail.AccountStatusRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
@@ -14,6 +15,7 @@ import noctiluca.model.status.Status
 class AccountDetailViewModel(
     val id: AccountId,
     private val accountDetailRepository: AccountDetailRepository,
+    private val accountStatusRepository: AccountStatusRepository,
     authorizedUserRepository: AuthorizedUserRepository,
 ) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
     private val query by lazy { MutableStateFlow(StatusesQuery.DEFAULT) }
@@ -21,7 +23,7 @@ class AccountDetailViewModel(
     val uiModel by lazy {
         buildUiModel(
             accountDetailRepository.attributes(id),
-            accountDetailRepository.statuses(id),
+            accountStatusRepository.statuses(id),
             query,
             initialValue = UiModel.Loading,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -42,7 +44,7 @@ class AccountDetailViewModel(
         val query = (uiModel.value as? UiModel.Loaded)?.query ?: return
 
         launch {
-            runCatchingWithAuth { accountDetailRepository.loadStatuses(id, query) }
+            runCatchingWithAuth { accountStatusRepository.loadStatuses(id, query) }
                 .onFailure { }
         }
     }

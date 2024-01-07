@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.status.Action
+import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import androidx.compose.material3.Divider as MaterialDivider
@@ -22,6 +23,7 @@ internal fun StatusItem(
     status: Status,
     position: Position,
     onClickStatus: (StatusId) -> Unit,
+    onClickAvatar: (AccountId) -> Unit,
     onClickAction: (Action) -> Unit,
 ) = Row(
     modifier = Modifier.clickable { onClickStatus(status.id) }
@@ -36,6 +38,7 @@ internal fun StatusItem(
 
     ComposableStatus(
         status,
+        onClickAvatar = { onClickAvatar(it) },
         onClickAction = { onClickAction(it) },
     )
 }

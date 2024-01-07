@@ -24,12 +24,13 @@ internal fun LazyListScope.StatuseTab(
         Status(
             status,
             onClick = { onClickStatus(it) },
+            onClickAvatar = {},
             onClickAction = {},
         )
     }
 
     infiniteScrollFooter(
-        isLoading = false,
+        isLoading = true,
         onLoad = {
             if (statuses.isNotEmpty()) {
                 loadMore()

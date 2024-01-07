@@ -26,6 +26,7 @@ import noctiluca.features.shared.atoms.text.RelativeTime
 import noctiluca.features.shared.getDrawables
 import noctiluca.features.shared.utils.baseline
 import noctiluca.features.shared.utils.toDp
+import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
@@ -38,6 +39,7 @@ enum class Action {
 fun Status(
     status: Status,
     onClick: (CoroutineScope.(StatusId) -> Unit)? = null,
+    onClickAvatar: (CoroutineScope.(AccountId) -> Unit)? = null,
     onClickAction: (CoroutineScope.(Action) -> Unit)? = null,
     modifier: Modifier = Modifier,
 ) {
@@ -60,6 +62,7 @@ fun Status(
             status.tooter,
             status.visibility,
             status.createdAt,
+            onClickAvatar,
         )
 
         Spacer(Modifier.height(8.dp))
@@ -83,14 +86,17 @@ private fun StatusHeader(
     tooter: Account,
     visibility: Status.Visibility,
     createdAt: LocalDateTime,
+    onClickAvatar: (CoroutineScope.(AccountId) -> Unit)?,
 ) = Row {
+    val scope = rememberCoroutineScope()
     var tooterIconSize by remember { mutableStateOf(0) }
 
     AsyncImage(
         tooter.avatar,
         fallback = imageResources(getDrawables().icon_mastodon),
         modifier = Modifier.size(tooterIconSize.toDp())
-            .clip(RoundedCornerShape(8.dp)),
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onClickAvatar?.invoke(scope, tooter.id) },
     )
 
     Spacer(Modifier.width(16.dp))

@@ -13,6 +13,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
+import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.statusdetail.LocalResources
@@ -21,6 +22,7 @@ import noctiluca.features.statusdetail.component.StatusDetail
 import noctiluca.features.statusdetail.component.StatusDetailTopAppBar
 import noctiluca.features.statusdetail.component.StatusItem
 import noctiluca.features.statusdetail.viewmodel.StatusDetailViewModel
+import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.status.StatusList
 import androidx.compose.material3.Divider as MaterialDivider
@@ -58,6 +60,7 @@ internal fun StatusDetailScaffold(
                 lazyListState,
                 paddingValues,
                 onClickStatus = { navigator?.navigateToStatusDetail(it) },
+                onClickAvatar = { navigator?.navigateToAccountDetail(it) },
             )
         }
     }
@@ -70,6 +73,7 @@ private fun StatusContext(
     lazyListState: LazyListState,
     paddingValues: PaddingValues,
     onClickStatus: (StatusId) -> Unit,
+    onClickAvatar: (AccountId) -> Unit,
 ) {
     MaterialDivider(
         modifier = Modifier.fillMaxWidth()
@@ -91,6 +95,7 @@ private fun StatusContext(
         if (status.id == primary) {
             StatusDetail(
                 status,
+                onClickAvatar = onClickAvatar,
                 onClickAction = { },
             )
             return@LazyColumn
@@ -106,6 +111,7 @@ private fun StatusContext(
             status,
             position,
             onClickStatus = onClickStatus,
+            onClickAvatar = onClickAvatar,
             onClickAction = { },
         )
     }

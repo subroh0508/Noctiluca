@@ -28,7 +28,6 @@ include(
     ":core:data",
     ":core:test:shared",
     ":core:model",
-    ":core:domain:accountdetail",
     ":core:domain:authentication",
     ":core:domain:timeline",
     ":features:navigation",

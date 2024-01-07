@@ -16,10 +16,12 @@ import kotlinx.coroutines.test.*
 import noctiluca.data.TestDataComponent
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.impl.AuthorizedAccountRepositoryImpl
+import noctiluca.data.di.DataAuthenticationModule
 import noctiluca.data.json.JSON_ACCOUNT_CREDENTIAL_1
 import noctiluca.data.json.JSON_ACCOUNT_CREDENTIAL_2
 import noctiluca.data.json.JSON_ACCOUNT_CREDENTIAL_3
 import noctiluca.data.mock.MockAccountDataStore
+import noctiluca.data.mock.buildEmptyMockAccountDataStore
 import noctiluca.datastore.AccountDataStore
 import noctiluca.model.*
 import noctiluca.model.account.Account
@@ -28,8 +30,7 @@ import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.DUMMY_ACCESS_TOKEN
 import noctiluca.test.URL_SAMPLE_COM
 import noctiluca.test.me
-import noctiluca.test.mock.MockAuthenticationTokenDataStore
-import noctiluca.test.mock.MockHttpClientEngine
+import noctiluca.test.mock.*
 import noctiluca.test.mock.MockHttpClientEngine.mockError
 import noctiluca.test.model.MockAuthorizedUser
 import org.koin.core.component.get
@@ -71,11 +72,11 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
     describe("#current") {
         context("when the local cache does not exist") {
             context("and the sever returns valid response") {
-                val mockAccountDataStore = MockAccountDataStore()
+                val mockAccountDataStore = buildEmptyMockAccountDataStore()
                 val repository = buildRepository(
                     Api.V1.Accounts.VerifyCredentials(),
                     JSON_ACCOUNT_CREDENTIAL_1,
-                    MockAuthenticationTokenDataStore(me.id, me.domain),
+                    buildFilledMockAuthenticationTokenDataStore(),
                     mockAccountDataStore,
                 )
 
@@ -94,6 +95,8 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
                 val repository = buildRepository(
                     Api.V1.Accounts.VerifyCredentials(),
                     JSON_ACCOUNT_CREDENTIAL_1,
+                    buildEmptyMockAuthenticationTokenDataStore(),
+                    buildEmptyMockAccountDataStore(),
                 )
 
                 it("raises AuthorizedTokenNotFoundException") {
@@ -107,7 +110,8 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
                 val repository = buildRepository(
                     Api.V1.Accounts.VerifyCredentials(),
                     HttpStatusCode.BadRequest,
-                    MockAuthenticationTokenDataStore(me.id, me.domain),
+                    buildFilledMockAuthenticationTokenDataStore(),
+                    buildEmptyMockAccountDataStore(),
                 )
 
                 it("raises HttpException") {
@@ -119,13 +123,10 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
         }
 
         context("when the local cache exists") {
-            val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(
-                init = listOf(MockAuthorizedUser(me.id, me.domain)),
-                getCache = { DUMMY_ACCESS_TOKEN to me.domain },
-            )
+            val mockAuthenticationTokenDataStore = buildFilledMockAuthenticationTokenDataStore()
 
             context("and the sever returns valid response") {
-                val mockAccountDataStore = MockAccountDataStore(current)
+                val mockAccountDataStore = MockAccountDataStore(listOf(current))
                 val repository = buildRepository(
                     Api.V1.Accounts.VerifyCredentials(),
                     JSON_ACCOUNT_CREDENTIAL_1,
@@ -145,7 +146,7 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
             }
 
             context("and the sever returns error response") {
-                val mockAccountDataStore = MockAccountDataStore(current)
+                val mockAccountDataStore = MockAccountDataStore(listOf(current))
                 val repository = buildRepository(
                     Api.V1.Accounts.VerifyCredentials(),
                     HttpStatusCode.BadRequest,
@@ -167,6 +168,8 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
             val repository = buildRepository(
                 Api.V1.Accounts.VerifyCredentials(),
                 listOf(),
+                buildEmptyMockAuthenticationTokenDataStore(),
+                buildEmptyMockAccountDataStore(),
             )
 
             it("returns flow with empty list") {
@@ -181,8 +184,8 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
                 val repository = buildRepository(
                     Api.V1.Accounts.VerifyCredentials(),
                     listOf(),
-                    MockAuthenticationTokenDataStore(current to Domain(DOMAIN_SAMPLE_COM)),
-                    MockAccountDataStore(current),
+                    buildFilledMockAuthenticationTokenDataStore(),
+                    MockAccountDataStore(listOf(current)),
                 )
 
                 it("returns flow with empty list") {
@@ -195,7 +198,7 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
             context("and the local cache has multiple accounts") {
                 context("and the sever returns valid response") {
                     val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(
-                        accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
+                        init = accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
                         getCache = {
                             when (it) {
                                 accounts[0].id -> DUMMY_ACCESS_TOKEN to Domain(DOMAIN_SAMPLE_COM)
@@ -231,7 +234,7 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
                 }
                 context("and the sever returns error response") {
                     val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(
-                        accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
+                        init = accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
                         getCache = {
                             when (it) {
                                 accounts[0].id -> DUMMY_ACCESS_TOKEN to Domain(DOMAIN_SAMPLE_COM)
@@ -241,7 +244,7 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
                             }
                         },
                     )
-                    val mockAccountDataStore = MockAccountDataStore(accounts)
+                    val mockAccountDataStore = MockAccountDataStore(init = accounts)
 
                     val repository = buildRepository(
                         Api.V1.Accounts.VerifyCredentials(),
@@ -270,8 +273,8 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
 private inline fun <reified T> buildRepository(
     resource: T,
     expected: String,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
-    mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore,
+    mockAccountDataStore: AccountDataStore,
 ) = buildRepository(
     MockHttpClientEngine(resource, expected),
     mockAuthenticationTokenDataStore,
@@ -281,8 +284,8 @@ private inline fun <reified T> buildRepository(
 private inline fun <reified T> buildRepository(
     resource: T,
     expected: List<Pair<String, String>>,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
-    mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore,
+    mockAccountDataStore: AccountDataStore,
 ) = buildRepository(
     MockHttpClientEngine(
         resource,
@@ -307,8 +310,8 @@ private inline fun <reified T> buildRepository(
 private inline fun <reified T> buildRepository(
     resource: T,
     errorStatusCode: HttpStatusCode,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
-    mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore,
+    mockAccountDataStore: AccountDataStore,
 ) = buildRepository(
     MockHttpClientEngine(resource, errorStatusCode),
     mockAuthenticationTokenDataStore,
@@ -317,14 +320,16 @@ private inline fun <reified T> buildRepository(
 
 private fun buildRepository(
     mockEngine: MockEngine,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
-    mockAccountDataStore: AccountDataStore = MockAccountDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore,
+    mockAccountDataStore: AccountDataStore,
 ): AuthorizedAccountRepository {
     val component = TestDataComponent(
         mockEngine,
         mockAuthenticationTokenDataStore,
-        mockAccountDataStore,
-    )
+    ) {
+        single<AccountDataStore> { mockAccountDataStore }
+        DataAuthenticationModule()
+    }
 
     return AuthorizedAccountRepositoryImpl(
         component.get(),

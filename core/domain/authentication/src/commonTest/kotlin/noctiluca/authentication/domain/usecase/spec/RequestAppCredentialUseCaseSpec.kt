@@ -18,8 +18,8 @@ import noctiluca.model.HttpException
 import noctiluca.model.Uri
 import noctiluca.network.authentication.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
-import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
+import noctiluca.test.mock.buildEmptyMockAuthenticationTokenDataStore
 
 class RequestAppCredentialUseCaseSpec : DescribeSpec({
     describe("#execute") {
@@ -84,5 +84,5 @@ private fun buildAuthenticationUseCase(
 ): RequestAppCredentialUseCase = TestAuthenticationUseCaseComponent(
     engine,
     mockAppCredentialDataStore,
-    MockAuthenticationTokenDataStore(),
+    buildEmptyMockAuthenticationTokenDataStore(),
 ).scope.get()

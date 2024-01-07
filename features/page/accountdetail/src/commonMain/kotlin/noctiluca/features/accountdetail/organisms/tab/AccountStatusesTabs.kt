@@ -5,14 +5,14 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.shared.atoms.tab.PrimaryTabs
+import noctiluca.model.accountdetail.StatusesQuery
 
 @Composable
 internal fun AccountStatusesTabs(
-    currentTab: AccountDetailViewModel.UiModel.Tab,
+    currentTab: StatusesQuery,
     statusesScrollState: AccountStatusesScrollState,
-    onSwitch: (AccountDetailViewModel.UiModel.Tab) -> Unit = {},
+    onSwitch: (StatusesQuery) -> Unit = {},
     modifier: Modifier = Modifier,
 ) = PrimaryTabs(
     statusesScrollState.tabs,
@@ -27,7 +27,7 @@ internal fun AccountStatusesTabs(
 
 @Composable
 internal fun rememberTabbedAccountStatusesState(
-    tab: AccountDetailViewModel.UiModel.Tab,
+    tab: StatusesQuery,
 ): AccountStatusesScrollState {
     val scrollState = AccountStatusesScrollState()
 
@@ -36,7 +36,7 @@ internal fun rememberTabbedAccountStatusesState(
 }
 
 internal class AccountStatusesScrollState private constructor(
-    val tabs: List<Pair<AccountDetailViewModel.UiModel.Tab, String>>,
+    val tabs: List<Pair<StatusesQuery, String>>,
     val lazyListState: LazyListState,
     private val scrollPositions: MutableState<List<Pair<Int, Int>>>,
 ) {
@@ -46,9 +46,9 @@ internal class AccountStatusesScrollState private constructor(
             lazyListState: LazyListState = rememberLazyListState(),
         ): AccountStatusesScrollState {
             val tabTitles = listOf(
-                AccountDetailViewModel.UiModel.Tab.STATUSES to getString().account_detail_tab_statuses,
-                AccountDetailViewModel.UiModel.Tab.STATUSES_AND_REPLIES to getString().account_detail_tab_statuses_and_replies,
-                AccountDetailViewModel.UiModel.Tab.MEDIA to getString().account_detail_tab_media,
+                StatusesQuery.DEFAULT to getString().account_detail_tab_statuses,
+                StatusesQuery.WITH_REPLIES to getString().account_detail_tab_statuses_and_replies,
+                StatusesQuery.ONLY_MEDIA to getString().account_detail_tab_media,
             )
 
             val scrollPositions = remember {
@@ -65,7 +65,7 @@ internal class AccountStatusesScrollState private constructor(
         }
     }
 
-    fun cacheScrollPosition(prev: AccountDetailViewModel.UiModel.Tab) {
+    fun cacheScrollPosition(prev: StatusesQuery) {
         scrollPositions.value = scrollPositions.value.mapIndexed { index, state ->
             if (lazyListState.firstVisibleItemIndex > 0 && index == prev.ordinal) {
                 lazyListState.firstVisibleItemIndex to lazyListState.firstVisibleItemScrollOffset
@@ -75,7 +75,7 @@ internal class AccountStatusesScrollState private constructor(
         }
     }
 
-    suspend fun restoreScrollPosition(tab: AccountDetailViewModel.UiModel.Tab) {
+    suspend fun restoreScrollPosition(tab: StatusesQuery) {
         if (lazyListState.firstVisibleItemIndex == 0) {
             return
         }

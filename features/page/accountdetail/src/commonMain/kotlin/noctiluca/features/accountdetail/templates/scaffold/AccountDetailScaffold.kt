@@ -4,7 +4,11 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.unit.LayoutDirection
+import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
+import noctiluca.features.accountdetail.organisms.tab.AccountStatusesScrollState
 import noctiluca.features.accountdetail.organisms.tab.AccountStatusesTabs
 import noctiluca.features.accountdetail.organisms.tab.rememberTabbedAccountStatusesState
 import noctiluca.features.accountdetail.organisms.topappbar.AccountHeaderTopAppBar
@@ -12,70 +16,120 @@ import noctiluca.features.accountdetail.templates.scaffold.accountdetail.Account
 import noctiluca.features.accountdetail.templates.scaffold.accountdetail.StatuseTab
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.navigation.navigateToStatusDetail
-import noctiluca.features.shared.molecules.scaffold.HeadlineAvatar
-import noctiluca.features.shared.molecules.scaffold.HeadlineHeader
-import noctiluca.features.shared.molecules.scaffold.LoadStateLargeHeadlinedScaffold
+import noctiluca.features.shared.molecules.list.LazyColumn
+import noctiluca.features.shared.molecules.scaffold.*
 import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.StatusesQuery
+import noctiluca.model.status.Status
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountDetailScaffold(
     viewModel: AccountDetailViewModel,
 ) {
-    LaunchedEffect(viewModel.id) {
-        viewModel.load()
-        viewModel.refreshStatuses()
-    }
-
     val uiModel by viewModel.uiModel.collectAsState()
 
-    val navigator = LocalNavigator.current
-    val statusesScrollState = rememberTabbedAccountStatusesState(uiModel.tab)
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val snackbarHostState = remember { SnackbarHostState() }
 
-    LoadStateLargeHeadlinedScaffold<AccountAttributes>(
-        uiModel.account,
-        statusesScrollState.lazyListState,
-        tabComposeIndex = 1,
-        topAppBar = { scrollBehavior, _, attributes ->
+    Scaffold(
+        topBar = {
             AccountHeaderTopAppBar(
-                attributes,
+                uiModel.account,
                 scrollBehavior,
             )
         },
-        header = { scrollBehavior, attributes ->
-            HeadlineHeader(
-                attributes.header,
-                scrollBehavior,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) { paddingValues ->
+        when (val state = uiModel) {
+            is AccountDetailViewModel.UiModel.Loading -> LinearProgressIndicator(
+                modifier = Modifier.fillMaxWidth()
+                    .offset(y = paddingValues.calculateTopPadding()),
             )
-        },
-        avatar = { scrollBehavior, attributes ->
-            HeadlineAvatar(
-                attributes.avatar,
-                scrollBehavior,
-            )
-        },
-        tabs = {
-            AccountStatusesTabs(
-                uiModel.tab,
-                statusesScrollState,
-                onSwitch = { tab ->
-                    statusesScrollState.cacheScrollPosition(tab)
-                    viewModel.switch(tab)
+
+            is AccountDetailViewModel.UiModel.Loaded -> AccountDetailContent(
+                tabs = { statusesScrollState ->
+                    AccountStatusesTabs(
+                        state.query,
+                        statusesScrollState,
+                        onSwitch = { tab ->
+                            statusesScrollState.cacheScrollPosition(tab)
+                            viewModel.switch(tab)
+                        },
+                    )
                 },
-            )
-        },
-    ) { attributes, tabs, horizontalPadding ->
-        item {
-            AccountDetailCaption(
-                attributes,
-                modifier = Modifier.padding(horizontal = horizontalPadding),
+                paddingValues,
+                state.account,
+                state.query,
+                state.foreground,
+                scrollBehavior,
+                loadMore = { viewModel.loadStatusesMore() },
             )
         }
-        StatuseTab(
-            tabs,
-            uiModel.foreground,
-            onClickStatus = { navigator?.navigateToStatusDetail(it) },
-            loadMore = { viewModel.loadStatusesMore() },
-        )
     }
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun AccountDetailContent(
+    tabs: @Composable (AccountStatusesScrollState) -> Unit,
+    paddingValues: PaddingValues,
+    account: AccountAttributes,
+    tab: StatusesQuery,
+    statuses: List<Status>,
+    scrollBehavior: TopAppBarScrollBehavior,
+    loadMore: () -> Unit,
+) {
+    val navigator = LocalNavigator.current
+    val statusesScrollState = rememberTabbedAccountStatusesState(tab)
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        LazyColumn(
+            state = statusesScrollState.lazyListState,
+            contentPadding = PaddingValues(
+                start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
+                top = paddingValues.calculateTopPadding(),
+                end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
+                bottom = 64.dp,
+            ),
+            modifier = Modifier.fillMaxSize(),
+        ) {
+            item {
+                AccountDetailCaption(
+                    account,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+            }
+
+            StatuseTab(
+                tabs = { tabs(statusesScrollState) },
+                statuses,
+                onClickStatus = { navigator?.navigateToStatusDetail(it) },
+                loadMore = loadMore,
+            )
+        }
+
+        HeadlineHeader(
+            account.header,
+            scrollBehavior,
+        )
+
+        HeadlineAvatar(
+            account.avatar,
+            scrollBehavior,
+        )
+
+        if (statusesScrollState.lazyListState.firstVisibleItemIndex >= 1) {
+            Box(
+                modifier = Modifier.offset(y = 64.dp),
+            ) { tabs(statusesScrollState) }
+        }
+    }
+}
+
+private val AccountDetailViewModel.UiModel.account: AccountAttributes?
+    get() = when (this) {
+        is AccountDetailViewModel.UiModel.Loaded -> account
+        else -> null
+    }

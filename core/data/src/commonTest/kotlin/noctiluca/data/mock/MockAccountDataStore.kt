@@ -4,11 +4,9 @@ import noctiluca.datastore.AccountDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.account.Account
 
-class MockAccountDataStore(
-    init: List<Account> = emptyList(),
-) : AccountDataStore {
-    constructor(vararg init: Account) : this(init.toList())
+fun buildEmptyMockAccountDataStore() = MockAccountDataStore(emptyList())
 
+class MockAccountDataStore(init: List<Account>) : AccountDataStore {
     private var accounts = init
 
     override suspend fun get(id: AccountId) = accounts.find { it.id == id }

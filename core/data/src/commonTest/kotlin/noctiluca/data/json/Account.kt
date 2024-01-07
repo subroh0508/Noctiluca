@@ -1,4 +1,4 @@
-package noctiluca.accountdetail.domain.usecase.json
+package noctiluca.data.json
 
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.URL_SAMPLE_COM

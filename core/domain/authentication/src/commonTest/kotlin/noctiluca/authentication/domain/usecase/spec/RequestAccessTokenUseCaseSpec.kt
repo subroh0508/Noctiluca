@@ -28,8 +28,8 @@ import noctiluca.network.mastodon.Api
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.JSON_ACCOUNT_CREDENTIAL
-import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
+import noctiluca.test.mock.buildEmptyMockAuthenticationTokenDataStore
 
 class RequestAccessTokenUseCaseSpec : DescribeSpec({
     describe("#execute") {
@@ -53,7 +53,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
 
         context("when the local cache exists") {
             context("and the server returns valid response") {
-                val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore()
+                val mockAuthenticationTokenDataStore = buildEmptyMockAuthenticationTokenDataStore()
                 val testCase = buildAuthenticationUseCase(
                     MockHttpClientEngine
                         .mock(OAuth.Token(), JSON_OAUTH_TOKEN)
@@ -88,7 +88,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
         }
 
         context("when the server returns error response") {
-            val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore()
+            val mockAuthenticationTokenDataStore = buildEmptyMockAuthenticationTokenDataStore()
             val testCase = buildAuthenticationUseCase(
                 MockHttpClientEngine
                     .mock(OAuth.Token(), HttpStatusCode.BadRequest)
@@ -124,7 +124,7 @@ class RequestAccessTokenUseCaseSpec : DescribeSpec({
 private fun buildAuthenticationUseCase(
     engine: MockEngine,
     mockAppCredentialDataStore: AppCredentialDataStore = MockAppCredentialDataStore(),
-    mockAuthenticationTokenDataStore: AuthenticationTokenDataStore = MockAuthenticationTokenDataStore(),
+    mockAuthenticationTokenDataStore: AuthenticationTokenDataStore = buildEmptyMockAuthenticationTokenDataStore(),
 ): RequestAccessTokenUseCase = TestAuthenticationUseCaseComponent(
     engine,
     mockAppCredentialDataStore,

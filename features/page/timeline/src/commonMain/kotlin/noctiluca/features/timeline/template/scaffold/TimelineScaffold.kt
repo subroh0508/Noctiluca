@@ -12,6 +12,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.launch
+import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.shared.atoms.appbar.NavigateIconSize
@@ -127,7 +128,8 @@ private fun TimelineLanes(
             loadState[timelineId],
             lazyListState = lazyListState[timelineId] ?: rememberLazyListState(),
             onLoad = { viewModel.load(timelineId) },
-            onStatusClick = { navigator?.navigateToStatusDetail(it) },
+            onClickStatus = { navigator?.navigateToStatusDetail(it) },
+            onClickAvatar = { navigator?.navigateToAccountDetail(it) },
             onExecuteAction = { _, status, action ->
                 when (action) {
                     Action.FAVOURITE -> viewModel.favourite(status)

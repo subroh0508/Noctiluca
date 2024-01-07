@@ -4,24 +4,28 @@ import noctiluca.datastore.AuthenticationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
-import noctiluca.model.account.Account
-import noctiluca.test.model.MockAuthorizedUser
+import noctiluca.test.DUMMY_ACCESS_TOKEN
+import noctiluca.test.me
 
-class MockAuthenticationTokenDataStore(
-    init: List<AuthorizedUser> = emptyList(),
-    private val currentAccessToken: String? = null,
+fun buildEmptyMockAuthenticationTokenDataStore() = MockAuthenticationTokenDataStore(
+    init = emptyList(),
+    currentAccessToken = null,
+)
+
+fun buildFilledMockAuthenticationTokenDataStore() = MockAuthenticationTokenDataStore(
+    init = listOf(me),
+    currentAccessToken = DUMMY_ACCESS_TOKEN,
+)
+
+class MockAuthenticationTokenDataStore internal constructor(
+    init: List<AuthorizedUser>,
+    private val currentAccessToken: String?,
     private val getCache: (AccountId) -> Pair<String, Domain>? = { null },
 ) : AuthenticationTokenDataStore {
     constructor(
-        id: AccountId,
-        domain: Domain,
-    ) : this(listOf(MockAuthorizedUser(id, domain)))
-
-    constructor(
-        vararg init: Pair<Account, Domain>,
-    ) : this(
-        init.map { (account, domain) -> MockAuthorizedUser(account.id, domain) },
-    )
+        init: List<AuthorizedUser>,
+        getCache: (AccountId) -> Pair<String, Domain>?
+    ) : this(init, null, getCache)
 
     private var cache = init
 

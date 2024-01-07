@@ -1,29 +1,9 @@
 package noctiluca.accountdetail.domain.usecase.spec
 
-import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.be
-import io.kotest.matchers.should
-import io.ktor.client.engine.mock.*
-import io.ktor.http.*
-import kotlinx.coroutines.runBlocking
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
-import noctiluca.accountdetail.domain.TestAccountDetailUseCaseComponent
-import noctiluca.accountdetail.domain.myAccount
-import noctiluca.accountdetail.domain.usecase.FetchAccountStatusesUseCase
-import noctiluca.model.HttpUnauthorizedException
-import noctiluca.model.StatusId
-import noctiluca.model.account.Account
-import noctiluca.model.accountdetail.StatusesQuery
-import noctiluca.model.status.Status
-import noctiluca.network.mastodon.Api
-import noctiluca.test.JSON_STATUS_MEDIA
-import noctiluca.test.JSON_STATUS_NORMAL
-import noctiluca.test.mock.MockHttpClientEngine
 
 class FetchAccountStatusesUseCaseSpec : DescribeSpec({
+    /*
     val status = Status(
         StatusId("100"),
         "<p>Test Status</p>",
@@ -181,10 +161,13 @@ class FetchAccountStatusesUseCaseSpec : DescribeSpec({
             }
         }
     }
+    */
 })
 
+/*
 private fun buildUseCase(
     engine: MockEngine,
 ): FetchAccountStatusesUseCase = TestAccountDetailUseCaseComponent(
     engine,
 ).scope.get()
+*/

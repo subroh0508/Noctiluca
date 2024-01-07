@@ -4,9 +4,12 @@ import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
 import noctiluca.model.AccountId
+import noctiluca.model.StatusId
 import noctiluca.model.Uri
+import noctiluca.model.account.Account
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationships
+import noctiluca.model.status.Status
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.URL_SAMPLE_COM
 
@@ -54,4 +57,100 @@ val otherAccount = AccountAttributes(
     ),
     "2019-04-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     null,
+)
+
+val status = Status(
+    StatusId("100"),
+    "<p>Test Status</p>",
+    warningText = null,
+    "2023-03-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
+    Status.Visibility.PUBLIC,
+    0,
+    0,
+    0,
+    favourited = false,
+    reblogged = false,
+    bookmarked = false,
+    tooter = Account(
+        myAccount.id,
+        myAccount.username,
+        myAccount.displayName,
+        myAccount.url,
+        myAccount.avatar,
+        myAccount.screen,
+    ),
+    rebloggedBy = null,
+    via = Status.Via("Web", website = null),
+)
+
+val prevStatus = Status(
+    StatusId("99"),
+    "<p>Test Status</p>",
+    warningText = null,
+    "2023-02-28T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
+    Status.Visibility.PUBLIC,
+    0,
+    0,
+    0,
+    favourited = false,
+    reblogged = false,
+    bookmarked = false,
+    tooter = Account(
+        myAccount.id,
+        myAccount.username,
+        myAccount.displayName,
+        myAccount.url,
+        myAccount.avatar,
+        myAccount.screen,
+    ),
+    rebloggedBy = null,
+    via = Status.Via("Web", website = null),
+)
+
+val media = Status(
+    StatusId("200"),
+    "<p>Test Media</p>",
+    warningText = null,
+    "2023-03-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
+    Status.Visibility.PUBLIC,
+    0,
+    0,
+    0,
+    favourited = false,
+    reblogged = false,
+    bookmarked = false,
+    tooter = Account(
+        myAccount.id,
+        myAccount.username,
+        myAccount.displayName,
+        myAccount.url,
+        myAccount.avatar,
+        myAccount.screen,
+    ),
+    rebloggedBy = null,
+    via = Status.Via("Web", website = null),
+)
+
+val prevMedia = Status(
+    StatusId("199"),
+    "<p>Test Media</p>",
+    warningText = null,
+    "2023-02-28T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
+    Status.Visibility.PUBLIC,
+    0,
+    0,
+    0,
+    favourited = false,
+    reblogged = false,
+    bookmarked = false,
+    tooter = Account(
+        myAccount.id,
+        myAccount.username,
+        myAccount.displayName,
+        myAccount.url,
+        myAccount.avatar,
+        myAccount.screen,
+    ),
+    rebloggedBy = null,
+    via = Status.Via("Web", website = null),
 )

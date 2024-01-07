@@ -25,8 +25,7 @@ internal class AccountDetailRepositoryImpl(
 
         accountAttributeStateFlow.value = account
         accountAttributeStateFlow.value = account.copy(relationships = fetchRelationships(id))
-    }
-        .filterNotNull()
+    }.filterNotNull()
 
     private suspend fun fetch(id: AccountId) = v1.getAccount(id.value).toAttributeEntity()
 

@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import noctiluca.features.shared.account.TooterName
+import noctiluca.features.shared.atoms.clickable
 import noctiluca.features.shared.atoms.divider.Divider
 import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.features.shared.atoms.image.imageResources
@@ -27,12 +28,14 @@ import noctiluca.features.shared.utils.format
 import noctiluca.features.shared.utils.toDp
 import noctiluca.features.shared.utils.toYearMonthDayTime
 import noctiluca.features.statusdetail.getString
+import noctiluca.model.AccountId
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 
 @Composable
 internal fun StatusDetail(
     status: Status,
+    onClickAvatar: (AccountId) -> Unit,
     onClickAction: (Action) -> Unit,
 ) = Column(
     modifier = Modifier.border(
@@ -47,6 +50,7 @@ internal fun StatusDetail(
     StatusDetailHeader(
         status.tooter,
         status.visibility,
+        onClickAvatar,
     )
 
     Spacer(Modifier.height(8.dp))
@@ -72,6 +76,7 @@ internal fun StatusDetail(
 private fun StatusDetailHeader(
     tooter: Account,
     visibility: Status.Visibility,
+    onClickAvatar: (AccountId) -> Unit,
 ) = Row {
     var tooterIconSize by remember { mutableStateOf(0) }
 
@@ -79,7 +84,8 @@ private fun StatusDetailHeader(
         tooter.avatar,
         fallback = imageResources(getDrawables().icon_mastodon),
         modifier = Modifier.size(tooterIconSize.toDp())
-            .clip(RoundedCornerShape(8.dp)),
+            .clip(RoundedCornerShape(8.dp))
+            .clickable { onClickAvatar(tooter.id) },
     )
 
     Spacer(Modifier.width(16.dp))

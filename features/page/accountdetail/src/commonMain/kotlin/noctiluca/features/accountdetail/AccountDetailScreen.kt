@@ -23,6 +23,8 @@ val featureAccountDetailScreenModule = screenModule {
 internal data class AccountDetailScreen(
     private val id: String,
 ) : Screen {
+    override val key = "AccountDetail#$id"
+
     @Composable
     override fun Content() {
         val viewModel: AccountDetailViewModel = getScreenModel { parametersOf(AccountId(id)) }

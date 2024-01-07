@@ -24,6 +24,7 @@ internal fun LazyListScope.StatuseTab(
         Status(
             status,
             onClick = { onClickStatus(it) },
+            onClickAvatar = {},
             onClickAction = {},
         )
     }

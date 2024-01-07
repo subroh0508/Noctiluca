@@ -15,6 +15,7 @@ object MockHttpClientEngine {
         val valid: MutableList<Pair<String, String>> = mutableListOf()
         val invalid: MutableList<Pair<String, HttpStatusCode>> = mutableListOf()
         val error: MutableList<Pair<String, Exception>> = mutableListOf()
+        val validWithParameters: MutableList<Pair<String, String>> = mutableListOf()
 
         inline fun <reified T> mock(resource: T, expected: String): Builder {
             valid.add(href(format, resource) to expected)
@@ -28,6 +29,18 @@ object MockHttpClientEngine {
 
         inline fun <reified T> mock(resource: T, exception: Exception): Builder {
             error.add(href(format, resource) to exception)
+            return this
+        }
+
+        inline fun <reified T> mock(resource: T, vararg expected: Pair<(ParametersBuilder) -> Unit, String>): Builder {
+            validWithParameters.addAll(
+                expected.map { (block, expected) ->
+                    URLBuilder().also {
+                        block(it.parameters)
+                        href(format, resource, it)
+                    }.build().fullPath to expected
+                }
+            )
             return this
         }
 
@@ -58,6 +71,16 @@ object MockHttpClientEngine {
                 }
             }
 
+            validWithParameters.forEach { (url, expected) ->
+                if (request.url.toString().endsWith(url)) {
+                    return@MockEngine respond(
+                        content = ByteReadChannel(expected),
+                        status = HttpStatusCode.OK,
+                        headers = headersOf(HttpHeaders.ContentType, "application/json"),
+                    )
+                }
+            }
+
             mockError()
         }
 
@@ -70,6 +93,10 @@ object MockHttpClientEngine {
     inline fun <reified T> mock(resource: T, expected: String) = Builder().mock(resource, expected)
     inline fun <reified T> mock(resource: T, expected: HttpStatusCode) = Builder().mock(resource, expected)
     inline fun <reified T> mock(resource: T, exception: Exception) = Builder().mock(resource, exception)
+    inline fun <reified T> mock(
+        resource: T,
+        vararg expected: Pair<(ParametersBuilder) -> Unit, String>,
+    ) = Builder().mock(resource, *expected)
 
     inline operator fun <reified T> invoke(
         resource: T,

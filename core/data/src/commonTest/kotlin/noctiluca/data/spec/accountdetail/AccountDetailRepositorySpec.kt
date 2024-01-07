@@ -9,75 +9,22 @@ import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.flow.toList
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toInstant
-import kotlinx.datetime.toLocalDateTime
 import noctiluca.data.TestDataComponent
 import noctiluca.data.accountdetail.AccountDetailRepository
 import noctiluca.data.accountdetail.impl.AccountDetailRepositoryImpl
-import noctiluca.data.di.DataAccountDetailModule
 import noctiluca.data.json.*
-import noctiluca.model.AccountId
 import noctiluca.model.HttpUnauthorizedException
-import noctiluca.model.Uri
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationship
 import noctiluca.model.accountdetail.Relationships
 import noctiluca.network.mastodon.Api
 import noctiluca.test.ACCOUNT_ID
-import noctiluca.test.URL_SAMPLE_COM
 import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 
 class AccountDetailRepositorySpec : DescribeSpec({
-    val myAccount = AccountAttributes(
-        AccountId(ACCOUNT_ID),
-        "test1",
-        "サンプル太郎",
-        Uri("$URL_SAMPLE_COM/@test1"),
-        Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
-        Uri("$URL_SAMPLE_COM/accounts/headers/header.png"),
-        "@test1",
-        "<p>note</p>",
-        100,
-        100,
-        1000,
-        locked = false,
-        bot = false,
-        Relationships.ME,
-        null,
-        listOf(
-            AccountAttributes.Field("フィールド1", "ほげほげ"),
-        ),
-        "2019-04-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
-        null,
-    )
-
-    val otherAccount = AccountAttributes(
-        AccountId("10"),
-        "test2",
-        "サンプル次郎",
-        Uri("$URL_SAMPLE_COM/@test2"),
-        Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
-        Uri("$URL_SAMPLE_COM/accounts/headers/header.png"),
-        "@test2",
-        "<p>note</p>",
-        100,
-        100,
-        1000,
-        locked = false,
-        bot = false,
-        Relationships.NONE,
-        null,
-        listOf(
-            AccountAttributes.Field("フィールド1", "ふがふが"),
-        ),
-        "2019-04-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
-        null,
-    )
-
     describe("#execute") {
         context("when the server returns valid response") {
             context("and the id is mine") {
@@ -243,9 +190,7 @@ private fun buildRepository(
     val component = TestDataComponent(
         mockEngine,
         mockAuthenticationTokenDataStore,
-    ) {
-        DataAccountDetailModule()
-    }
+    )
 
     return AccountDetailRepositoryImpl(
         component.get(),

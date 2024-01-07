@@ -2,12 +2,11 @@ package noctiluca.data.spec.accountdetail
 
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.core.test.testCoroutineScheduler
 import io.kotest.matchers.be
+import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
 import noctiluca.data.TestDataComponent
@@ -27,7 +26,6 @@ import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 
-@OptIn(ExperimentalStdlibApi::class, ExperimentalCoroutinesApi::class)
 class AccountStatusRepositorySpec : DescribeSpec({
     coroutineTestScope = true
 
@@ -41,15 +39,16 @@ class AccountStatusRepositorySpec : DescribeSpec({
                 )
 
                 it("returns the statuses") {
-                    runBlocking {
-                        repository.statuses(myAccount.id).first()
-                    } should be(
-                        mapOf(
-                            StatusesQuery.DEFAULT to listOf(status),
-                            StatusesQuery.WITH_REPLIES to listOf(status),
-                            StatusesQuery.ONLY_MEDIA to listOf(media),
-                        ),
-                    )
+                    flowToList(repository.statuses(myAccount.id)).let {
+                        it should haveSize(1)
+                        it.first() should be(
+                            mapOf(
+                                StatusesQuery.DEFAULT to listOf(status),
+                                StatusesQuery.WITH_REPLIES to listOf(status),
+                                StatusesQuery.ONLY_MEDIA to listOf(media),
+                            ),
+                        )
+                    }
                 }
             }
         }
@@ -60,18 +59,16 @@ class AccountStatusRepositorySpec : DescribeSpec({
                         Api.V1.Accounts.Id.Statuses(
                             Api.V1.Accounts.Id(
                                 id = myAccount.id.value
-                            )
+                            ),
                         ),
-                        HttpStatusCode.Unauthorized
+                        HttpStatusCode.Unauthorized,
                     )
                     .build(),
             )
 
             it("raises HttpUnauthorizedException") {
                 shouldThrowExactly<HttpUnauthorizedException> {
-                    runBlocking {
-                        repository.statuses(myAccount.id).first()
-                    }
+                    runBlocking { repository.statuses(myAccount.id).first() }
                 }
             }
         }
@@ -93,16 +90,18 @@ class AccountStatusRepositorySpec : DescribeSpec({
                     runBlocking {
                         StatusesQuery.entries.forEach { query ->
                             repository.loadStatuses(myAccount.id, query)
-                            testCoroutineScheduler.runCurrent()
                         }
 
-                        instances.last() should be(
-                            mapOf(
-                                StatusesQuery.DEFAULT to listOf(status, prevStatus),
-                                StatusesQuery.WITH_REPLIES to listOf(status, prevStatus),
-                                StatusesQuery.ONLY_MEDIA to listOf(media, prevMedia),
-                            ),
-                        )
+                        instances.let {
+                            it should haveSize(4)
+                            it.last() should be(
+                                mapOf(
+                                    StatusesQuery.DEFAULT to listOf(status, prevStatus),
+                                    StatusesQuery.WITH_REPLIES to listOf(status, prevStatus),
+                                    StatusesQuery.ONLY_MEDIA to listOf(media, prevMedia),
+                                ),
+                            )
+                        }
                     }
                 }
             }
@@ -123,17 +122,19 @@ class AccountStatusRepositorySpec : DescribeSpec({
                         shouldThrowExactly<HttpException> {
                             StatusesQuery.entries.forEach { query ->
                                 repository.loadStatuses(myAccount.id, query)
-                                testCoroutineScheduler.runCurrent()
                             }
                         }
 
-                        instances.last() should be(
-                            mapOf(
-                                StatusesQuery.DEFAULT to listOf(status),
-                                StatusesQuery.WITH_REPLIES to listOf(status),
-                                StatusesQuery.ONLY_MEDIA to listOf(media),
-                            ),
-                        )
+                        instances.let {
+                            it should haveSize(1)
+                            it.last() should be(
+                                mapOf(
+                                    StatusesQuery.DEFAULT to listOf(status),
+                                    StatusesQuery.WITH_REPLIES to listOf(status),
+                                    StatusesQuery.ONLY_MEDIA to listOf(media),
+                                ),
+                            )
+                        }
                     }
                 }
             }
@@ -145,7 +146,7 @@ private fun MockHttpClientEngine.mockGetInitialStatuses() = mock(
     Api.V1.Accounts.Id.Statuses(
         Api.V1.Accounts.Id(
             id = myAccount.id.value,
-        )
+        ),
     ),
     { parameters: ParametersBuilder ->
         with(parameters) {

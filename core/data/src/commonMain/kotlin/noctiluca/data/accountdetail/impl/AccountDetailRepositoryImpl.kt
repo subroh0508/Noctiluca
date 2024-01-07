@@ -18,13 +18,14 @@ internal class AccountDetailRepositoryImpl(
 
     override fun attributes(
         id: AccountId,
-    ): Flow<AccountAttributes> = accountAttributeStateFlow
-        .onSubscription {
-            val account = fetch(id)
+    ): Flow<AccountAttributes> = flow {
+        emitAll(accountAttributeStateFlow)
+    }.onStart {
+        val account = fetch(id)
 
-            emit(fetch(id))
-            emit(account.copy(relationships = fetchRelationships(id)))
-        }
+        accountAttributeStateFlow.value = account
+        accountAttributeStateFlow.value = account.copy(relationships = fetchRelationships(id))
+    }
         .filterNotNull()
 
     private suspend fun fetch(id: AccountId) = v1.getAccount(id.value).toAttributeEntity()

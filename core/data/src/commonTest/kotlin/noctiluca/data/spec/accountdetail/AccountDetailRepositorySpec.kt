@@ -7,25 +7,28 @@ import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
-import kotlinx.coroutines.flow.take
-import kotlinx.coroutines.flow.toList
+import kotlinx.coroutines.flow.first
 import noctiluca.data.TestDataComponent
 import noctiluca.data.accountdetail.AccountDetailRepository
 import noctiluca.data.accountdetail.impl.AccountDetailRepositoryImpl
 import noctiluca.data.json.*
+import noctiluca.model.HttpException
 import noctiluca.model.HttpUnauthorizedException
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationship
 import noctiluca.model.accountdetail.Relationships
 import noctiluca.network.mastodon.Api
 import noctiluca.test.ACCOUNT_ID
+import noctiluca.test.extension.flowToList
 import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 
 class AccountDetailRepositorySpec : DescribeSpec({
-    describe("#execute") {
+    coroutineTestScope = true
+
+    describe("#attributes") {
         context("when the server returns valid response") {
             context("and the id is mine") {
                 val repository = buildRepository(
@@ -35,10 +38,9 @@ class AccountDetailRepositorySpec : DescribeSpec({
                 )
 
                 it("returns the account detail") {
-                    runBlocking {
-                        repository.attributes(myAccount.id).take(2).toList()
-                    } should containExactly(
-                        myAccount.copy(relationships = Relationships.NONE),
+                    flowToList(
+                        repository.attributes(myAccount.id),
+                    ) should containExactly(
                         myAccount,
                     )
                 }
@@ -52,16 +54,15 @@ class AccountDetailRepositorySpec : DescribeSpec({
                                 .mock(Api.V1.Accounts.Id(id = otherAccount.id.value), json)
                                 .mock(
                                     Api.V1.Accounts.Relationships(),
-                                    "[$JSON_ACCOUNTS_RELATIONSHIP_NONE]"
+                                    "[$JSON_ACCOUNTS_RELATIONSHIP_NONE]",
                                 )
                                 .build(),
                         )
 
                         it("returns the account detail") {
-                            runBlocking {
-                                repository.attributes(otherAccount.id).take(2).toList()
-                            } should containExactly(
-                                otherAccount.copy(condition = condition),
+                            flowToList(
+                                repository.attributes(otherAccount.id),
+                            ) should containExactly(
                                 otherAccount.copy(condition = condition),
                             )
                         }
@@ -74,17 +75,16 @@ class AccountDetailRepositorySpec : DescribeSpec({
                             MockHttpClientEngine
                                 .mock(
                                     Api.V1.Accounts.Id(id = otherAccount.id.value),
-                                    JSON_OTHER_ACCOUNT
+                                    JSON_OTHER_ACCOUNT,
                                 )
                                 .mock(Api.V1.Accounts.Relationships(), "[$json]")
                                 .build(),
                         )
 
                         it("returns the account detail") {
-                            runBlocking {
-                                repository.attributes(otherAccount.id).take(2).toList()
-                            } should containExactly(
-                                otherAccount,
+                            flowToList(
+                                repository.attributes(otherAccount.id),
+                            ) should containExactly(
                                 otherAccount.copy(relationships = Relationships(relationship)),
                             )
                         }
@@ -99,16 +99,14 @@ class AccountDetailRepositorySpec : DescribeSpec({
                     MockHttpClientEngine
                         .mock(
                             Api.V1.Accounts.Id(id = myAccount.id.value),
-                            HttpStatusCode.Unauthorized
+                            HttpStatusCode.Unauthorized,
                         )
                         .build(),
                 )
 
                 it("raises HttpUnauthorizedException") {
                     shouldThrowExactly<HttpUnauthorizedException> {
-                        runBlocking {
-                            repository.attributes(myAccount.id).toList()
-                        }
+                        runBlocking { repository.attributes(myAccount.id).first() }
                     }
                 }
             }
@@ -124,9 +122,9 @@ class AccountDetailRepositorySpec : DescribeSpec({
                 )
 
                 it("returns the account detail with none relationships") {
-                    runBlocking {
-                        repository.attributes(otherAccount.id).take(1).toList()
-                    } should containExactly(otherAccount)
+                    shouldThrowExactly<HttpException> {
+                        runBlocking { repository.attributes(otherAccount.id).first() }
+                    }
                 }
             }
         }

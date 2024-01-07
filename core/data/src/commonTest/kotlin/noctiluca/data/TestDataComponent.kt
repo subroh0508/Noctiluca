@@ -7,7 +7,6 @@ import noctiluca.network.mastodon.AuthenticationTokenProvider
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.network.mastodon.di.buildWebSocketClient
-import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import org.koin.core.component.KoinScopeComponent
 import org.koin.core.component.newScope
 import org.koin.core.scope.Scope

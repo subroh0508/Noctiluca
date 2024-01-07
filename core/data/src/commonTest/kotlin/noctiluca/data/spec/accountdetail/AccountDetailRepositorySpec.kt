@@ -1,31 +1,87 @@
-package noctiluca.accountdetail.domain.usecase.spec
+package noctiluca.data.spec.accountdetail
 
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.be
+import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.should
 import io.ktor.client.engine.mock.*
 import io.ktor.http.*
-import noctiluca.accountdetail.domain.TestAccountDetailUseCaseComponent
-import noctiluca.accountdetail.domain.myAccount
-import noctiluca.accountdetail.domain.otherAccount
-import noctiluca.accountdetail.domain.usecase.FetchAccountAttributesUseCase
-import noctiluca.accountdetail.domain.usecase.json.*
+import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.toList
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
+import kotlinx.datetime.toLocalDateTime
+import noctiluca.data.TestDataComponent
+import noctiluca.data.accountdetail.AccountDetailRepository
+import noctiluca.data.accountdetail.impl.AccountDetailRepositoryImpl
+import noctiluca.data.di.DataAccountDetailModule
+import noctiluca.data.json.*
 import noctiluca.model.AccountId
 import noctiluca.model.HttpUnauthorizedException
+import noctiluca.model.Uri
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationship
 import noctiluca.model.accountdetail.Relationships
 import noctiluca.network.mastodon.Api
 import noctiluca.test.ACCOUNT_ID
+import noctiluca.test.URL_SAMPLE_COM
+import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
+import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
+import org.koin.core.component.get
 
-class FetchAccountAttributesUseCaseSpec : DescribeSpec({
+class AccountDetailRepositorySpec : DescribeSpec({
+    val myAccount = AccountAttributes(
+        AccountId(ACCOUNT_ID),
+        "test1",
+        "サンプル太郎",
+        Uri("$URL_SAMPLE_COM/@test1"),
+        Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
+        Uri("$URL_SAMPLE_COM/accounts/headers/header.png"),
+        "@test1",
+        "<p>note</p>",
+        100,
+        100,
+        1000,
+        locked = false,
+        bot = false,
+        Relationships.ME,
+        null,
+        listOf(
+            AccountAttributes.Field("フィールド1", "ほげほげ"),
+        ),
+        "2019-04-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
+        null,
+    )
+
+    val otherAccount = AccountAttributes(
+        AccountId("10"),
+        "test2",
+        "サンプル次郎",
+        Uri("$URL_SAMPLE_COM/@test2"),
+        Uri("$URL_SAMPLE_COM/accounts/avatars/avater.png"),
+        Uri("$URL_SAMPLE_COM/accounts/headers/header.png"),
+        "@test2",
+        "<p>note</p>",
+        100,
+        100,
+        1000,
+        locked = false,
+        bot = false,
+        Relationships.NONE,
+        null,
+        listOf(
+            AccountAttributes.Field("フィールド1", "ふがふが"),
+        ),
+        "2019-04-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
+        null,
+    )
+
     describe("#execute") {
         context("when the server returns valid response") {
             context("and the id is mine") {
-                val testCase = buildUseCase(
+                val repository = buildRepository(
                     MockHttpClientEngine
                         .mock(Api.V1.Accounts.Id(id = ACCOUNT_ID), JSON_MY_ACCOUNT)
                         .build(),
@@ -33,17 +89,20 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
 
                 it("returns the account detail") {
                     runBlocking {
-                        testCase.execute(AccountId(ACCOUNT_ID))
-                    } should be(myAccount)
+                        repository.attributes(myAccount.id).take(2).toList()
+                    } should containExactly(
+                        myAccount.copy(relationships = Relationships.NONE),
+                        myAccount,
+                    )
                 }
             }
 
             context("and the id is not mine") {
                 eachAccountCondition { json, name, condition ->
                     context("and the $name") {
-                        val testCase = buildUseCase(
+                        val repository = buildRepository(
                             MockHttpClientEngine
-                                .mock(Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID), json)
+                                .mock(Api.V1.Accounts.Id(id = otherAccount.id.value), json)
                                 .mock(
                                     Api.V1.Accounts.Relationships(),
                                     "[$JSON_ACCOUNTS_RELATIONSHIP_NONE]"
@@ -53,18 +112,21 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
 
                         it("returns the account detail") {
                             runBlocking {
-                                testCase.execute(AccountId(OTHER_ACCOUNT_ID))
-                            } should be(otherAccount.copy(condition = condition))
+                                repository.attributes(otherAccount.id).take(2).toList()
+                            } should containExactly(
+                                otherAccount.copy(condition = condition),
+                                otherAccount.copy(condition = condition),
+                            )
                         }
                     }
                 }
 
                 eachRelationship { json, relationship ->
                     context("and the ${relationship.name.lowercase()} is true") {
-                        val testCase = buildUseCase(
+                        val repository = buildRepository(
                             MockHttpClientEngine
                                 .mock(
-                                    Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID),
+                                    Api.V1.Accounts.Id(id = otherAccount.id.value),
                                     JSON_OTHER_ACCOUNT
                                 )
                                 .mock(Api.V1.Accounts.Relationships(), "[$json]")
@@ -73,8 +135,11 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
 
                         it("returns the account detail") {
                             runBlocking {
-                                testCase.execute(AccountId(OTHER_ACCOUNT_ID))
-                            } should be(otherAccount.copy(relationships = Relationships(relationship)))
+                                repository.attributes(otherAccount.id).take(2).toList()
+                            } should containExactly(
+                                otherAccount,
+                                otherAccount.copy(relationships = Relationships(relationship)),
+                            )
                         }
                     }
                 }
@@ -83,10 +148,10 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
 
         context("when the server returns invalid response") {
             context("and the id is mine") {
-                val testCase = buildUseCase(
+                val repository = buildRepository(
                     MockHttpClientEngine
                         .mock(
-                            Api.V1.Accounts.Id(id = ACCOUNT_ID),
+                            Api.V1.Accounts.Id(id = myAccount.id.value),
                             HttpStatusCode.Unauthorized
                         )
                         .build(),
@@ -95,26 +160,26 @@ class FetchAccountAttributesUseCaseSpec : DescribeSpec({
                 it("raises HttpUnauthorizedException") {
                     shouldThrowExactly<HttpUnauthorizedException> {
                         runBlocking {
-                            testCase.execute(AccountId(ACCOUNT_ID))
+                            repository.attributes(myAccount.id).toList()
                         }
                     }
                 }
             }
             context("and the id is not mine") {
-                val testCase = buildUseCase(
+                val repository = buildRepository(
                     MockHttpClientEngine
-                        .mock(Api.V1.Accounts.Id(id = OTHER_ACCOUNT_ID), JSON_OTHER_ACCOUNT)
+                        .mock(Api.V1.Accounts.Id(id = otherAccount.id.value), JSON_OTHER_ACCOUNT)
                         .mock(
                             Api.V1.Accounts.Relationships(),
-                            HttpStatusCode.UnprocessableEntity
+                            HttpStatusCode.BadRequest,
                         )
                         .build(),
                 )
 
                 it("returns the account detail with none relationships") {
                     runBlocking {
-                        testCase.execute(AccountId(OTHER_ACCOUNT_ID))
-                    } should be(otherAccount)
+                        repository.attributes(otherAccount.id).take(1).toList()
+                    } should containExactly(otherAccount)
                 }
             }
         }
@@ -171,8 +236,19 @@ private inline fun eachRelationship(
     block(json, relationship)
 }
 
-private fun buildUseCase(
-    engine: MockEngine,
-): FetchAccountAttributesUseCase = TestAccountDetailUseCaseComponent(
-    engine,
-).scope.get()
+private fun buildRepository(
+    mockEngine: MockEngine,
+    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = buildFilledMockAuthenticationTokenDataStore(),
+): AccountDetailRepository {
+    val component = TestDataComponent(
+        mockEngine,
+        mockAuthenticationTokenDataStore,
+    ) {
+        DataAccountDetailModule()
+    }
+
+    return AccountDetailRepositoryImpl(
+        component.get(),
+        component.get(),
+    )
+}

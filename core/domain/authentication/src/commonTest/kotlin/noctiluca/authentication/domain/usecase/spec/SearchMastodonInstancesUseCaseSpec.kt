@@ -18,8 +18,8 @@ import noctiluca.model.HttpException
 import noctiluca.model.authentication.Instance
 import noctiluca.network.mastodon.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
-import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
+import noctiluca.test.mock.buildEmptyMockAuthenticationTokenDataStore
 import java.net.UnknownHostException
 import noctiluca.network.instancessocial.Api as InstancesSocialApi
 
@@ -176,5 +176,5 @@ private fun buildUseCase(
 ): SearchMastodonInstancesUseCase = TestAuthenticationUseCaseComponent(
     engine,
     MockAppCredentialDataStore(),
-    MockAuthenticationTokenDataStore(),
+    buildEmptyMockAuthenticationTokenDataStore(),
 ).scope.get()

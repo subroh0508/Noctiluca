@@ -15,8 +15,8 @@ import noctiluca.authentication.domain.usecase.json.*
 import noctiluca.model.HttpException
 import noctiluca.network.mastodon.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
-import noctiluca.test.mock.MockAuthenticationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
+import noctiluca.test.mock.buildEmptyMockAuthenticationTokenDataStore
 
 class FetchMastodonInstanceUseCaseSpec : DescribeSpec({
     describe("#execute: for v4") {
@@ -89,5 +89,5 @@ private fun buildUseCase(
 ): FetchMastodonInstanceUseCase = TestAuthenticationUseCaseComponent(
     engine,
     MockAppCredentialDataStore(),
-    MockAuthenticationTokenDataStore(),
+    buildEmptyMockAuthenticationTokenDataStore(),
 ).scope.get()

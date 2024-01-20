@@ -5,7 +5,6 @@ plugins {
     id("multiplatform-library")
     id("org.jetbrains.compose")
     id("kotlin-parcelize")
-    id("has-resources")
 }
 
 kotlin {

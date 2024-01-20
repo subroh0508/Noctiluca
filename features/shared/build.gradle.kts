@@ -1,5 +1,6 @@
 plugins {
     id("features")
+    id("has-resources")
 }
 
 kotlin {

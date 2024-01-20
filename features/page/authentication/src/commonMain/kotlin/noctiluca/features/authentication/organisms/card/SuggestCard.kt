@@ -62,15 +62,15 @@ internal fun SuggestCard(
 ) { measurables, constraints ->
     val backgroundPlaceable = measurables.find {
         it.layoutId == BACKGROUND_ID
-    }!!.measure(constraints)
+    }?.measure(constraints)
     val foregroundPlaceable = measurables.find {
         it.layoutId == FOREGROUND_ID
-    }!!.measure(constraints)
+    }?.measure(constraints)
 
-    layout(constraints.maxWidth, foregroundPlaceable.height) {
-        val backgroundY = -(backgroundPlaceable.height - foregroundPlaceable.height) / 2
+    layout(constraints.maxWidth, foregroundPlaceable?.height ?: 0) {
+        val backgroundY = -((backgroundPlaceable?.height ?: 0) - (foregroundPlaceable?.height ?: 0)) / 2
 
-        backgroundPlaceable.placeRelative(x = 0, y = backgroundY)
-        foregroundPlaceable.placeRelative(x = 0, y = 0)
+        backgroundPlaceable?.placeRelative(x = 0, y = backgroundY)
+        foregroundPlaceable?.placeRelative(x = 0, y = 0)
     }
 }

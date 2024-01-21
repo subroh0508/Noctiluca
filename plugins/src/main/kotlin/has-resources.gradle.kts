@@ -16,7 +16,7 @@ kotlin {
 }
 
 android {
-    sourceSets["main"].res.srcDirs("src/androidMain/res", "src/commonMain/resources")
+    sourceSets["main"].res.srcDirs("src/commonMain/composeResources")
 }
 
 val generateSharedResources by project.tasks.registering(ResourceGeneratorTask::class) {

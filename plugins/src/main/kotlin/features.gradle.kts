@@ -1,5 +1,4 @@
 import extension.*
-import org.jetbrains.compose.ExperimentalComposeLibrary
 
 plugins {
     id("multiplatform-library")
@@ -18,8 +17,6 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
                 implementation(compose.preview)
-                @OptIn(ExperimentalComposeLibrary::class)
-                implementation(compose.components.resources)
 
                 implementation(libs.coroutinesCore)
 

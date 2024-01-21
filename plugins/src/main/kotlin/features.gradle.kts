@@ -14,7 +14,6 @@ kotlin {
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)
-                @OptIn(org.jetbrains.compose.ExperimentalComposeLibrary::class)
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
                 implementation(compose.preview)
@@ -36,6 +35,8 @@ kotlin {
         named("androidMain") {
             dependencies {
                 implementation(libs.androidxActivities)
+                // Workaround for https://stackoverflow.com/q/77341341
+                implementation(libs.androidxComposeMaterial3)
 
                 implementation(libs.koinAndroid)
             }

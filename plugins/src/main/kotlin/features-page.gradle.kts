@@ -1,7 +1,7 @@
 plugins {
     id("features")
-    id("has-resources")
     id("org.jetbrains.compose")
+    id("has-resources")
 }
 
 kotlin {

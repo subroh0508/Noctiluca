@@ -8,6 +8,12 @@ plugins {
 
 kotlin {
     sourceSets {
+        all {
+            languageSettings {
+                optIn("org.jetbrains.compose.resources.ExperimentalResourceApi")
+            }
+        }
+
         named("commonMain") {
             dependencies {
                 implementation(project(":core:model"))

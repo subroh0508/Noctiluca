@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.LocalDateTime
-import noctiluca.features.accountdetail.getString
+import noctiluca.features.page.accountdetail.generated.resources.Res
 import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.atoms.card.FilledCard
 import noctiluca.features.shared.atoms.divider.Divider
@@ -15,6 +15,7 @@ import noctiluca.features.shared.atoms.text.HtmlText
 import noctiluca.features.shared.utils.format
 import noctiluca.features.shared.utils.toYearMonthDay
 import noctiluca.model.accountdetail.AccountAttributes
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun AccountDetailCaption(
@@ -70,7 +71,7 @@ private fun RelationshipCount(
         ),
     )
     Text(
-        getString().account_detail_follows,
+        stringResource(Res.string.account_detail_follows),
         color = MaterialTheme.colorScheme.outline,
         style = MaterialTheme.typography.bodyLarge,
     )
@@ -82,7 +83,7 @@ private fun RelationshipCount(
         ),
     )
     Text(
-        getString().account_detail_followers,
+        stringResource(Res.string.account_detail_followers),
         color = MaterialTheme.colorScheme.outline,
         style = MaterialTheme.typography.bodyLarge,
     )
@@ -95,7 +96,7 @@ private fun CustomFields(
 ) = FilledCard {
     val items = listOf(
         AccountAttributes.Field(
-            name = getString().account_detail_account_created_at,
+            name = stringResource(Res.string.account_detail_account_created_at),
             value = createdAt.toYearMonthDay(),
         ),
     ) + fields

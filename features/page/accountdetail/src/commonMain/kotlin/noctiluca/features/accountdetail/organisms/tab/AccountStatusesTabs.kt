@@ -4,9 +4,10 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import noctiluca.features.accountdetail.getString
+import noctiluca.features.page.accountdetail.generated.resources.Res
 import noctiluca.features.shared.atoms.tab.PrimaryTabs
 import noctiluca.model.accountdetail.StatusesQuery
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 internal fun AccountStatusesTabs(
@@ -46,9 +47,9 @@ internal class AccountStatusesScrollState private constructor(
             lazyListState: LazyListState = rememberLazyListState(),
         ): AccountStatusesScrollState {
             val tabTitles = listOf(
-                StatusesQuery.DEFAULT to getString().account_detail_tab_statuses,
-                StatusesQuery.WITH_REPLIES to getString().account_detail_tab_statuses_and_replies,
-                StatusesQuery.ONLY_MEDIA to getString().account_detail_tab_media,
+                StatusesQuery.DEFAULT to stringResource(Res.string.account_detail_tab_statuses),
+                StatusesQuery.WITH_REPLIES to stringResource(Res.string.account_detail_tab_statuses_and_replies),
+                StatusesQuery.ONLY_MEDIA to stringResource(Res.string.account_detail_tab_media),
             )
 
             val scrollPositions = remember {

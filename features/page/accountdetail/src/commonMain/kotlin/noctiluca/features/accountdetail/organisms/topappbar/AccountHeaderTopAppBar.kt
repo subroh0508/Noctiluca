@@ -5,10 +5,11 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.features.accountdetail.getString
+import noctiluca.features.page.accountdetail.generated.resources.Res
 import noctiluca.features.shared.molecules.scaffold.HeadlineText
 import noctiluca.features.shared.molecules.scaffold.LargeHeadlineTopAppBar
 import noctiluca.model.accountdetail.AccountAttributes
+import org.jetbrains.compose.resources.stringResource
 
 private const val CONTENT_SCROLL_OFFSET = -400F
 
@@ -54,7 +55,7 @@ private fun HeadlineText(
 
     HeadlineText(
         attributes.displayName,
-        getString().account_detail_statuses.format(attributes.statusesCount),
+        stringResource(Res.string.account_detail_statuses, attributes.statusesCount),
         isHiddenHeadlineText,
     )
 }

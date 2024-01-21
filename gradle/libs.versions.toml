@@ -11,6 +11,8 @@ androidx-browser = "1.7.0"
 androidx-activity = "1.8.2"
 androidx-datastore = "1.0.0"
 
+androidx-compose-material3 = "1.2.0-beta02"
+
 android-desugarjdk = "2.0.4"
 
 kotlinx-datetime = "0.5.0"
@@ -68,6 +70,8 @@ androidx-browser = { module = "androidx.browser:browser", version.ref = "android
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 androidx-datastore-core = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
+
+androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
 
 android-desugarjdk = { module = "com.android.tools:desugar_jdk_libs", version.ref = "android-desugarjdk" }
 

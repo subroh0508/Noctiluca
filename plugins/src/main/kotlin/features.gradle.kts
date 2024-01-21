@@ -36,7 +36,7 @@ kotlin {
             dependencies {
                 implementation(libs.androidxActivities)
                 // Workaround for https://stackoverflow.com/q/77341341
-                implementation("androidx.compose.material3:material3:1.2.0-beta02")
+                implementation(libs.androidxComposeMaterial3)
 
                 implementation(libs.koinAndroid)
             }

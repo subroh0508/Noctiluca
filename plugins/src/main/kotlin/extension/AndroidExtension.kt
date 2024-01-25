@@ -58,8 +58,6 @@ private fun CommonExtension<*, *, *, *, *>.androidConfig() {
         resources {
             excludes.add("META-INF/**")
             excludes.add("META-INF/licenses/**")
-            // Workaround
-            excludes.add("values/**")
             pickFirsts.add("**/attach_hotspot_windows.dll")
         }
     }

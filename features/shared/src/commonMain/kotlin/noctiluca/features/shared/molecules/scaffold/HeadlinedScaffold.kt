@@ -1,6 +1,5 @@
 package noctiluca.features.shared.molecules.scaffold
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
@@ -10,10 +9,9 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -197,44 +195,6 @@ fun HeadlineTopAppBar(
     scrollBehavior = scrollBehavior,
 )
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun LargeHeadlineTopAppBar(
-    title: @Composable (TopAppBarState) -> Unit,
-    modifier: Modifier = Modifier,
-    onBackPressed: () -> Unit = {},
-    actions: @Composable RowScope.() -> Unit = {},
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
-) {
-    val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
-
-    LargeTopAppBar(
-        { title(scrollBehavior.state) },
-        modifier = modifier.background(
-            Brush.verticalGradient(
-                colors = listOf(
-                    Color.Black.copy(alpha = 0.75F),
-                    Color.Black.copy(alpha = alpha),
-                ),
-            ),
-        ),
-        navigationIcon = {
-            IconButton(onClick = onBackPressed) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                )
-            }
-        },
-        actions = actions,
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = Color.Transparent,
-            scrolledContainerColor = Color.Transparent,
-        ),
-        scrollBehavior = scrollBehavior,
-    )
-}
-
 @Composable
 fun HeadlineText(
     text: String,
@@ -248,24 +208,19 @@ fun HeadlineText(
     Column {
         Text(
             text,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             style = MaterialTheme.typography.titleLarge.copy(
                 fontWeight = FontWeight.Medium,
             ),
         )
         Text(
             supportingText,
+            overflow = TextOverflow.Ellipsis,
+            maxLines = 1,
             style = MaterialTheme.typography.titleSmall.copy(
                 fontWeight = FontWeight.Normal,
             ),
         )
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-@Suppress("MagicNumber")
-private fun rememberScrolledContainerColorAlpha(
-    scrollBehavior: TopAppBarScrollBehavior,
-): State<Float> = remember {
-    derivedStateOf { scrollBehavior.state.collapsedFraction * 0.75F }
 }

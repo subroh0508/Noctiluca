@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.organisms.tab
+package noctiluca.features.accountdetail.component
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState

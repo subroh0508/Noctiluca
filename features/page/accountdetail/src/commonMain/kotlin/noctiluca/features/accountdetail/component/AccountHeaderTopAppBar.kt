@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.organisms.topappbar
+package noctiluca.features.accountdetail.component
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit

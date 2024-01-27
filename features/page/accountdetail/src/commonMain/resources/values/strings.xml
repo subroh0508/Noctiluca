@@ -9,6 +9,11 @@
     <string name="account_detail_cancel_follow_request">フォローリクエストの取り消し</string>
     <string name="account_detail_unblock">ブロック解除</string>
     <string name="account_detail_edit_profile">プロフィールを編集</string>
+    <string name="account_detail_followed">フォローされています</string>
+    <string name="account_detail_sending_follow_request">フォローリクエスト送信済み</string>
+    <string name="account_detail_blocking">ブロック済み</string>
+    <string name="account_detail_blocked">ブロックされています</string>
+    <string name="account_detail_muting">ミュート済み</string>
 
     <string name="account_detail_tab_statuses">投稿</string>
     <string name="account_detail_tab_statuses_and_replies">投稿と返信</string>

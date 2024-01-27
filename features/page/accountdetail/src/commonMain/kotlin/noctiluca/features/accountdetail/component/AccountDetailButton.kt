@@ -40,8 +40,8 @@ private fun Relationships.state() = when {
     me -> ButtonType.EDIT_PROFILE
     blocking -> ButtonType.UNBLOCK
     requested -> ButtonType.CANCEL_FOLLOW_REQUEST
-    following && !blocked -> ButtonType.UNFOLLOW
-    !following && !blocked -> ButtonType.FOLLOW
+    following && !blockedBy -> ButtonType.UNFOLLOW
+    !following && !blockedBy -> ButtonType.FOLLOW
     else -> ButtonType.EMPTY
 }
 

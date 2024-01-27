@@ -73,14 +73,17 @@ private fun HeadlineHeader(
         } else {
             AsyncImage(
                 attributes.header,
-                contentScale = ContentScale.FillHeight,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
             )
         }
 
         RelationshipStateChips(
             relationships = attributes.relationships,
-            modifier = Modifier.align(Alignment.BottomEnd),
+            modifier = Modifier.align(Alignment.BottomEnd)
+                .graphicsLayer {
+                    alpha = 1.0F - scrollBehavior.state.collapsedFraction
+                },
         )
     }
 }

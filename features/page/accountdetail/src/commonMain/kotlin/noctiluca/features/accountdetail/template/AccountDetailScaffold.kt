@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.templates.scaffold
+package noctiluca.features.accountdetail.template
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -12,8 +12,8 @@ import noctiluca.features.accountdetail.component.AccountStatusesScrollState
 import noctiluca.features.accountdetail.component.AccountStatusesTabs
 import noctiluca.features.accountdetail.component.rememberTabbedAccountStatusesState
 import noctiluca.features.accountdetail.component.AccountHeaderTopAppBar
-import noctiluca.features.accountdetail.templates.scaffold.accountdetail.AccountDetailCaption
-import noctiluca.features.accountdetail.templates.scaffold.accountdetail.StatuseTab
+import noctiluca.features.accountdetail.template.accountdetail.AccountDetailCaption
+import noctiluca.features.accountdetail.template.accountdetail.StatuseTab
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.molecules.list.LazyColumn

@@ -1,14 +1,9 @@
 package noctiluca.features.accountdetail.component
 
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
-import androidx.compose.material3.FilledTonalButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -19,17 +14,35 @@ import noctiluca.model.accountdetail.Relationships
 fun RelationshipButton(
     relationships: Relationships,
     onClick: () -> Unit,
-) {
-    if (relationships == Relationships.ME) {
-        EditProfileButton(onClick)
-        return
-    }
+) = when (relationships.state()) {
+    ButtonType.EDIT_PROFILE -> EditProfileButton(onClick)
+    ButtonType.FOLLOW -> FollowButton(onClick)
+    ButtonType.UNFOLLOW -> UnfollowButton(onClick)
+    ButtonType.CANCEL_FOLLOW_REQUEST -> CancelFollowRequestButton(onClick)
+    ButtonType.UNBLOCK -> UnblockButton(onClick)
+    ButtonType.EMPTY -> Spacer(
+        modifier = Modifier.width(ButtonDefaults.MinWidth)
+            .padding(vertical = 4.dp)
+            .height(ButtonDefaults.MinHeight),
+    )
+}
 
-    if (relationships.following) {
-        UnfollowButton(onClick)
-    } else {
-        FollowButton(onClick)
-    }
+private enum class ButtonType {
+    EDIT_PROFILE,
+    FOLLOW,
+    UNFOLLOW,
+    CANCEL_FOLLOW_REQUEST,
+    UNBLOCK,
+    EMPTY
+}
+
+private fun Relationships.state() = when {
+    me -> ButtonType.EDIT_PROFILE
+    blocking -> ButtonType.UNBLOCK
+    requested -> ButtonType.CANCEL_FOLLOW_REQUEST
+    following && !blocked -> ButtonType.UNFOLLOW
+    !following && !blocked -> ButtonType.FOLLOW
+    else -> ButtonType.EMPTY
 }
 
 @Composable
@@ -54,7 +67,7 @@ private fun UnfollowButton(
 ) = FilledTonalButton(
     onClick = onClick,
 ) {
-    Text(getString().account_detail_following)
+    Text(getString().account_detail_unfollow)
 }
 
 @Composable
@@ -63,12 +76,23 @@ private fun FollowButton(
 ) = Button(
     onClick = onClick,
 ) {
-    Icon(
-        Icons.Default.Add,
-        contentDescription = "Follow",
-        modifier = Modifier.padding(end = 8.dp)
-            .size(18.dp),
-    )
-
     Text(getString().account_detail_follow)
+}
+
+@Composable
+private fun CancelFollowRequestButton(
+    onClick: () -> Unit,
+) = FilledTonalButton(
+    onClick = onClick,
+) {
+    Text(getString().account_detail_cancel_follow_request)
+}
+
+@Composable
+private fun UnblockButton(
+    onClick: () -> Unit,
+) = FilledTonalButton(
+    onClick = onClick,
+) {
+    Text(getString().account_detail_unblock)
 }

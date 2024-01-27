@@ -5,7 +5,9 @@
     <string name="account_detail_followers">フォロワー</string>
     <string name="account_detail_account_created_at">登録日</string>
     <string name="account_detail_follow">フォロー</string>
-    <string name="account_detail_following">フォロー中</string>
+    <string name="account_detail_unfollow">フォロー解除</string>
+    <string name="account_detail_cancel_follow_request">フォローリクエストの取り消し</string>
+    <string name="account_detail_unblock">ブロック解除</string>
     <string name="account_detail_edit_profile">プロフィールを編集</string>
 
     <string name="account_detail_tab_statuses">投稿</string>

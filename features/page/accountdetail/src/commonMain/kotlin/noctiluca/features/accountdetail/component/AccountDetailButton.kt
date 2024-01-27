@@ -1,8 +1,10 @@
 package noctiluca.features.accountdetail.component
 
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.Icon
@@ -19,6 +21,7 @@ fun RelationshipButton(
     onClick: () -> Unit,
 ) {
     if (relationships == Relationships.ME) {
+        EditProfileButton(onClick)
         return
     }
 
@@ -27,6 +30,22 @@ fun RelationshipButton(
     } else {
         FollowButton(onClick)
     }
+}
+
+@Composable
+private fun EditProfileButton(
+    onClick: () -> Unit,
+) = Button(
+    onClick = onClick,
+) {
+    Icon(
+        Icons.Default.Edit,
+        contentDescription = "Edit Profile",
+        modifier = Modifier.padding(end = 8.dp)
+            .size(18.dp),
+    )
+
+    Text(getString().account_detail_edit_profile)
 }
 
 @Composable
@@ -47,7 +66,8 @@ private fun FollowButton(
     Icon(
         Icons.Default.Add,
         contentDescription = "Follow",
-        modifier = Modifier.padding(end = 8.dp),
+        modifier = Modifier.padding(end = 8.dp)
+            .size(18.dp),
     )
 
     Text(getString().account_detail_follow)

@@ -1,7 +1,5 @@
 package noctiluca.features.accountdetail.component
 
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.navigator.LocalNavigator
@@ -28,14 +26,7 @@ fun AccountHeaderTopAppBar(
             )
         },
         onBackPressed = { navigator?.pop() },
-        actions = {
-            IconButton(onClick = {}) {
-                Icon(
-                    Icons.Default.Edit,
-                    contentDescription = "Edit",
-                )
-            }
-        },
+        actions = {},
         scrollBehavior = scrollBehavior,
     )
 }

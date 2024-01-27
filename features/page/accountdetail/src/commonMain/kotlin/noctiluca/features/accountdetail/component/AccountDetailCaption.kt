@@ -27,8 +27,7 @@ internal fun AccountDetailCaption(
     Row(
         horizontalArrangement = Arrangement.End,
         modifier = Modifier.fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .height(ButtonDefaults.MinHeight),
+            .padding(vertical = 4.dp),
     ) {
         RelationshipButton(
             attributes.relationships,

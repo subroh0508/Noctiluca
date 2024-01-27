@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.template.accountdetail
+package noctiluca.features.accountdetail.component
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*

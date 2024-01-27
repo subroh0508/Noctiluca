@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.template
+package noctiluca.features.accountdetail
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -9,11 +9,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.component.AccountStatusesScrollState
-import noctiluca.features.accountdetail.component.AccountStatusesTabs
+import noctiluca.features.accountdetail.component.AccountDetailTabs
 import noctiluca.features.accountdetail.component.rememberTabbedAccountStatusesState
 import noctiluca.features.accountdetail.component.AccountHeaderTopAppBar
-import noctiluca.features.accountdetail.template.accountdetail.AccountDetailCaption
-import noctiluca.features.accountdetail.template.accountdetail.StatuseTab
+import noctiluca.features.accountdetail.component.AccountDetailCaption
+import noctiluca.features.accountdetail.component.AccountStatusesTab
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.molecules.list.LazyColumn
@@ -50,7 +50,7 @@ fun AccountDetailScaffold(
 
             is AccountDetailViewModel.UiModel.Loaded -> AccountDetailContent(
                 tabs = { statusesScrollState ->
-                    AccountStatusesTabs(
+                    AccountDetailTabs(
                         state.query,
                         statusesScrollState,
                         onSwitch = { tab ->
@@ -102,7 +102,7 @@ private fun AccountDetailContent(
                 )
             }
 
-            StatuseTab(
+            AccountStatusesTab(
                 tabs = { tabs(statusesScrollState) },
                 statuses,
                 onClickStatus = { navigator?.navigateToStatusDetail(it) },

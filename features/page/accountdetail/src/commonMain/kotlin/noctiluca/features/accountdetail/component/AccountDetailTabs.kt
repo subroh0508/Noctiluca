@@ -9,7 +9,7 @@ import noctiluca.features.shared.atoms.tab.PrimaryTabs
 import noctiluca.model.accountdetail.StatusesQuery
 
 @Composable
-internal fun AccountStatusesTabs(
+internal fun AccountDetailTabs(
     currentTab: StatusesQuery,
     statusesScrollState: AccountStatusesScrollState,
     onSwitch: (StatusesQuery) -> Unit = {},

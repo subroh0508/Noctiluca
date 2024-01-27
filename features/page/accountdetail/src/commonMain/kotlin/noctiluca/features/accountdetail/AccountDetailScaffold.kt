@@ -8,16 +8,16 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.features.accountdetail.component.AccountStatusesScrollState
-import noctiluca.features.accountdetail.component.AccountDetailTabs
-import noctiluca.features.accountdetail.component.rememberTabbedAccountStatusesState
-import noctiluca.features.accountdetail.component.AccountHeaderTopAppBar
+import noctiluca.features.accountdetail.component.*
 import noctiluca.features.accountdetail.component.AccountDetailCaption
+import noctiluca.features.accountdetail.component.AccountDetailHeadline
+import noctiluca.features.accountdetail.component.AccountDetailTabs
+import noctiluca.features.accountdetail.component.AccountStatusesScrollState
 import noctiluca.features.accountdetail.component.AccountStatusesTab
+import noctiluca.features.accountdetail.component.rememberTabbedAccountStatusesState
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.molecules.list.LazyColumn
-import noctiluca.features.shared.molecules.scaffold.*
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.StatusesQuery
 import noctiluca.model.status.Status
@@ -110,13 +110,8 @@ private fun AccountDetailContent(
             )
         }
 
-        HeadlineHeader(
-            account.header,
-            scrollBehavior,
-        )
-
-        HeadlineAvatar(
-            account.avatar,
+        AccountDetailHeadline(
+            account,
             scrollBehavior,
         )
 

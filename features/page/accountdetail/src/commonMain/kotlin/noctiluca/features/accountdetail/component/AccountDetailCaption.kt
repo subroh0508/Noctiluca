@@ -27,17 +27,25 @@ internal fun AccountDetailCaption(
     Row(
         horizontalArrangement = Arrangement.End,
         modifier = Modifier.fillMaxWidth()
-            .padding(top = 24.dp, bottom = 8.dp),
+            .padding(vertical = 8.dp)
+            .height(ButtonDefaults.MinHeight),
     ) {
-        RelationshipCount(
-            attributes.followingCount,
-            attributes.followersCount,
+        RelationshipButton(
+            attributes.relationships,
+            onClick = {},
         )
     }
 
     AccountName(
         attributes.displayName,
         attributes.screen,
+    )
+
+    Spacer(modifier = Modifier.height(8.dp))
+
+    RelationshipCount(
+        attributes.followingCount,
+        attributes.followersCount,
     )
 
     Spacer(modifier = Modifier.height(8.dp))

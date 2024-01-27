@@ -14,4 +14,6 @@ value class Relationships(val value: Set<Relationship>?) {
         val ME = Relationships(null)
         val NONE = Relationships(setOf())
     }
+
+    val following get() = value?.contains(Relationship.FOLLOWING) ?: false
 }

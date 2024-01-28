@@ -171,8 +171,10 @@ internal class MastodonApiV1Client(
     ) {
         parameter("max_id", maxId)
         parameter("only_media", onlyMedia)
-        parameter("exclude_replies", excludeReplies)
-        parameter("exclude_reblogs", false)
+        if (!onlyMedia) {
+            parameter("exclude_replies", excludeReplies)
+            parameter("exclude_reblogs", false)
+        }
         parameter("limit", limit.toString())
     }.body()
 }

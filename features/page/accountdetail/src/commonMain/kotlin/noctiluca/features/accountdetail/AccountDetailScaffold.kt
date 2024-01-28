@@ -8,13 +8,13 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.features.accountdetail.component.*
-import noctiluca.features.accountdetail.component.AccountDetailCaption
-import noctiluca.features.accountdetail.component.AccountDetailHeadline
 import noctiluca.features.accountdetail.component.AccountDetailTabs
 import noctiluca.features.accountdetail.component.AccountStatusesScrollState
 import noctiluca.features.accountdetail.component.AccountStatusesTab
 import noctiluca.features.accountdetail.component.rememberTabbedAccountStatusesState
+import noctiluca.features.accountdetail.section.AccountDetailCaption
+import noctiluca.features.accountdetail.section.AccountDetailHeadline
+import noctiluca.features.accountdetail.section.AccountDetailTopAppBar
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.molecules.list.LazyColumn

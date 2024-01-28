@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.component
+package noctiluca.features.accountdetail.component.caption
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -11,7 +11,7 @@ import noctiluca.features.accountdetail.getString
 import noctiluca.model.accountdetail.Relationships
 
 @Composable
-fun RelationshipButton(
+internal fun RelationshipButton(
     relationships: Relationships,
     onClick: () -> Unit,
 ) = when (relationships.state()) {

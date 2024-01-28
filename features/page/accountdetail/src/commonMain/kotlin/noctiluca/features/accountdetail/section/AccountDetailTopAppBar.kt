@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.component
+package noctiluca.features.accountdetail.section
 
 import androidx.compose.foundation.background
 import androidx.compose.material.icons.Icons

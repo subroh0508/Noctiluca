@@ -34,7 +34,7 @@ fun AccountDetailScaffold(
 
     Scaffold(
         topBar = {
-            AccountHeaderTopAppBar(
+            AccountDetailTopAppBar(
                 uiModel.account,
                 scrollBehavior,
             )

@@ -18,7 +18,7 @@ private const val CONTENT_SCROLL_OFFSET = -300F
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AccountHeaderTopAppBar(
+fun AccountDetailTopAppBar(
     detail: AccountAttributes?,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {

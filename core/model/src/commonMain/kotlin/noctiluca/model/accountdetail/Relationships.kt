@@ -18,6 +18,7 @@ value class Relationships(val value: Set<Relationship>?) {
     val me get() = this == ME
     val following get() = value?.contains(Relationship.FOLLOWING) ?: false
     val followedBy get() = value?.contains(Relationship.FOLLOWED_BY) ?: false
+    val showReblogs get() = value?.contains(Relationship.SHOWING_REBLOGS) ?: false
     val requested get() = value?.contains(Relationship.REQUESTED) ?: false
     val blocking get() = value?.contains(Relationship.BLOCKING) ?: false
     val blockedBy get() = value?.contains(Relationship.BLOCKED_BY) ?: false

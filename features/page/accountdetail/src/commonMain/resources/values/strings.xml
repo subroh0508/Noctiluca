@@ -15,6 +15,15 @@
     <string name="account_detail_blocked">ブロックされています</string>
     <string name="account_detail_muting">ミュート済み</string>
 
+    <string name="account_detail_menu_add_list">リストに追加</string>
+    <string name="account_detail_menu_mute">@%sさんをミュート</string>
+    <string name="account_detail_menu_unmute">@%sさんのミュートを解除</string>
+    <string name="account_detail_menu_block">@%sさんをブロック</string>
+    <string name="account_detail_menu_report">@%sさんを通報</string>
+    <string name="account_detail_menu_hide_reblogs">@%sさんからのブーストを非表示</string>
+    <string name="account_detail_menu_show_reblogs">@%sさんからのブーストを表示</string>
+    <string name="account_detail_menu_open_browser">ブラウザで開く</string>
+
     <string name="account_detail_tab_statuses">投稿</string>
     <string name="account_detail_tab_statuses_and_replies">投稿と返信</string>
     <string name="account_detail_tab_media">メディア</string>

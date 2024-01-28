@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.navigator.LocalNavigator
+import noctiluca.features.accountdetail.component.topappbar.ActionMenu
 import noctiluca.features.accountdetail.component.topappbar.Title
 import noctiluca.model.accountdetail.AccountAttributes
 
@@ -41,7 +42,7 @@ fun AccountDetailTopAppBar(
                 )
             }
         },
-        actions = {},
+        actions = { ActionMenu(detail) },
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = Color.Transparent,
             scrolledContainerColor = Color.Transparent,

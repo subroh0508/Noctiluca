@@ -5,9 +5,9 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.automirrored.filled.VolumeOff
 import androidx.compose.material.icons.filled.Block
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Error
 import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -29,7 +29,7 @@ internal fun RelationshipStateChips(
     modifier = modifier.padding(bottom = 8.dp, end = 16.dp),
 ) {
     if (relationships.muting) {
-        RelationshipStateChip(Icons.Default.Error, getString().account_detail_muting)
+        RelationshipStateChip(Icons.AutoMirrored.Filled.VolumeOff, getString().account_detail_muting)
     }
 
     relationships.assets()?.let { (label, icon) ->

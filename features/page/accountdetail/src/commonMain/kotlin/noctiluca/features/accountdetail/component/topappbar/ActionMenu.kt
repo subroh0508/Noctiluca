@@ -4,7 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
-import androidx.compose.material.icons.automirrored.filled.VolumeMute
+import androidx.compose.material.icons.automirrored.filled.VolumeOff
 import androidx.compose.material.icons.automirrored.filled.VolumeUp
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
@@ -17,7 +17,9 @@ import noctiluca.model.accountdetail.AccountAttributes
 internal fun ActionMenu(
     detail: AccountAttributes?,
 ) {
-    detail ?: return
+    if (detail?.relationships?.me != false) {
+        return
+    }
 
     var expanded by remember { mutableStateOf(false) }
 
@@ -75,7 +77,7 @@ private fun Mute(
 
     DropdownMenuItem(
         text = { Text(getString().account_detail_menu_mute.format(detail.username)) },
-        leadingIcon = { Icon(Icons.AutoMirrored.Filled.VolumeMute, contentDescription = "Mute") },
+        leadingIcon = { Icon(Icons.AutoMirrored.Filled.VolumeOff, contentDescription = "Mute") },
         onClick = onClick,
     )
 }

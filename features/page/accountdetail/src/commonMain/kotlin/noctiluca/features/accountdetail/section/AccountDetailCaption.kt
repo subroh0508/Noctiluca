@@ -5,10 +5,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import noctiluca.features.accountdetail.component.caption.AccountName
 import noctiluca.features.accountdetail.component.caption.CustomFields
 import noctiluca.features.accountdetail.component.caption.RelationshipButton
 import noctiluca.features.accountdetail.component.caption.RelationshipCount
-import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.atoms.text.HtmlText
 import noctiluca.model.accountdetail.AccountAttributes
 
@@ -26,15 +26,12 @@ internal fun AccountDetailCaption(
             .padding(vertical = 4.dp),
     ) {
         RelationshipButton(
-            attributes.relationships,
+            attributes,
             onClick = {},
         )
     }
 
-    AccountName(
-        attributes.displayName,
-        attributes.screen,
-    )
+    AccountName(attributes)
 
     Spacer(modifier = Modifier.height(8.dp))
 

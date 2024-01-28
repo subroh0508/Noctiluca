@@ -6,6 +6,7 @@
     <string name="account_detail_account_created_at">登録日</string>
     <string name="account_detail_follow">フォロー</string>
     <string name="account_detail_unfollow">フォロー解除</string>
+    <string name="account_detail_send_follow_request">フォローリクエストを送信</string>
     <string name="account_detail_cancel_follow_request">フォローリクエストの取り消し</string>
     <string name="account_detail_unblock">ブロック解除</string>
     <string name="account_detail_edit_profile">プロフィールを編集</string>

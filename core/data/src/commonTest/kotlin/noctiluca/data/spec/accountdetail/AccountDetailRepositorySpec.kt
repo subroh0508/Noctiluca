@@ -85,7 +85,7 @@ class AccountDetailRepositorySpec : DescribeSpec({
                             flowToList(
                                 repository.attributes(otherAccount.id),
                             ) should containExactly(
-                                otherAccount.copy(relationships = Relationships(relationship)),
+                                otherAccount,
                             )
                         }
                     }
@@ -191,7 +191,6 @@ private fun buildRepository(
     )
 
     return AccountDetailRepositoryImpl(
-        component.get(),
         component.get(),
     )
 }

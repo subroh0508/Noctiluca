@@ -27,7 +27,6 @@ val myAccount = AccountAttributes(
     1000,
     locked = false,
     bot = false,
-    Relationships.ME,
     null,
     listOf(
         AccountAttributes.Field("フィールド1", "ほげほげ"),
@@ -50,7 +49,6 @@ val otherAccount = AccountAttributes(
     1000,
     locked = false,
     bot = false,
-    Relationships.NONE,
     null,
     listOf(
         AccountAttributes.Field("フィールド1", "ふがふが"),

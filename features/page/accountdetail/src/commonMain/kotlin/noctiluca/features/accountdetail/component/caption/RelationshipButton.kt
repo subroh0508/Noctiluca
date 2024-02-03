@@ -11,8 +11,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.model.RelationshipsStateModel
-import noctiluca.model.accountdetail.AccountAttributes
-import noctiluca.model.accountdetail.Relationships
 
 @Composable
 internal fun RelationshipButton(
@@ -20,18 +18,25 @@ internal fun RelationshipButton(
     relationshipsStateModel: RelationshipsStateModel,
     follow: () -> Unit,
     block: () -> Unit,
-) = when (relationshipsStateModel.relationships.state(locked)) {
-    ButtonType.EDIT_PROFILE -> EditProfileButton {}
-    ButtonType.FOLLOW -> FollowButton(follow)
-    ButtonType.UNFOLLOW -> UnfollowButton(follow)
-    ButtonType.SEND_FOLLOW_REQUEST -> SendFollowRequestButton(follow)
-    ButtonType.CANCEL_FOLLOW_REQUEST -> CancelFollowRequestButton(follow)
-    ButtonType.UNBLOCK -> UnblockButton(block)
-    ButtonType.EMPTY -> Spacer(
-        modifier = Modifier.width(ButtonDefaults.MinWidth)
-            .padding(vertical = 4.dp)
-            .height(ButtonDefaults.MinHeight),
-    )
+) {
+    if (relationshipsStateModel.state.loading) {
+        ProgressButton()
+        return
+    }
+
+    when (getButtonType(locked, relationshipsStateModel)) {
+        ButtonType.EDIT_PROFILE -> EditProfileButton {}
+        ButtonType.FOLLOW -> FollowButton(follow)
+        ButtonType.UNFOLLOW -> UnfollowButton(follow)
+        ButtonType.SEND_FOLLOW_REQUEST -> SendFollowRequestButton(follow)
+        ButtonType.CANCEL_FOLLOW_REQUEST -> CancelFollowRequestButton(follow)
+        ButtonType.UNBLOCK -> UnblockButton(block)
+        ButtonType.EMPTY -> Spacer(
+            modifier = Modifier.width(ButtonDefaults.MinWidth)
+                .padding(vertical = 4.dp)
+                .height(ButtonDefaults.MinHeight),
+        )
+    }
 }
 
 private enum class ButtonType {
@@ -44,14 +49,19 @@ private enum class ButtonType {
     EMPTY
 }
 
-private fun Relationships.state(locked: Boolean) = when {
-    me -> ButtonType.EDIT_PROFILE
-    blocking -> ButtonType.UNBLOCK
-    requested -> ButtonType.CANCEL_FOLLOW_REQUEST
-    locked && !following && !blockedBy -> ButtonType.SEND_FOLLOW_REQUEST
-    following && !blockedBy -> ButtonType.UNFOLLOW
-    !following && !blockedBy -> ButtonType.FOLLOW
-    else -> ButtonType.EMPTY
+private fun getButtonType(
+    locked: Boolean,
+    state: RelationshipsStateModel
+) = with(state.relationships) {
+    when {
+        me -> ButtonType.EDIT_PROFILE
+        blocking -> ButtonType.UNBLOCK
+        requested -> ButtonType.CANCEL_FOLLOW_REQUEST
+        locked && !following && !blockedBy -> ButtonType.SEND_FOLLOW_REQUEST
+        following && !blockedBy -> ButtonType.UNFOLLOW
+        !following && !blockedBy -> ButtonType.FOLLOW
+        else -> ButtonType.EMPTY
+    }
 }
 
 @Composable
@@ -127,4 +137,13 @@ private fun UnblockButton(
     onClick = onClick,
 ) {
     Text(getString().account_detail_unblock)
+}
+
+@Composable
+private fun ProgressButton() = OutlinedButton(
+    onClick = {},
+) {
+    CircularProgressIndicator(
+        modifier = Modifier.size(18.dp),
+    )
 }

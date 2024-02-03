@@ -36,6 +36,7 @@ class AccountRelationshipsViewModel(
     fun follow() {
         val job = launch {
             runCatchingWithAuth { accountRelationshipsRepository.follow(id) }
+                .onSuccess { state.value = LoadState.Initial }
                 .onFailure { e -> state.value = LoadState.Error(e) }
         }
 
@@ -45,6 +46,7 @@ class AccountRelationshipsViewModel(
     fun block() {
         val job = launch {
             runCatchingWithAuth { accountRelationshipsRepository.block(id) }
+                .onSuccess { state.value = LoadState.Initial }
                 .onFailure { e -> state.value = LoadState.Error(e) }
         }
 
@@ -54,6 +56,7 @@ class AccountRelationshipsViewModel(
     fun mute() {
         val job = launch {
             runCatchingWithAuth { accountRelationshipsRepository.mute(id) }
+                .onSuccess { state.value = LoadState.Initial }
                 .onFailure { e -> state.value = LoadState.Error(e) }
         }
 

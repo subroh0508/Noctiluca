@@ -10,7 +10,7 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.DataAccountDetailModule() {
-    single<AccountDetailRepository> { AccountDetailRepositoryImpl(get(), get()) }
+    single<AccountDetailRepository> { AccountDetailRepositoryImpl(get()) }
     single<AccountRelationshipsRepository> { AccountRelationshipsRepositoryImpl(get(), get()) }
     single<AccountStatusRepository> { AccountStatusRepositoryImpl(get(), get()) }
 }

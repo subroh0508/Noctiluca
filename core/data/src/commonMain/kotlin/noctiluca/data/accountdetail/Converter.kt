@@ -28,7 +28,6 @@ internal fun NetworkAccount.toAttributeEntity() = AccountAttributes(
     statusesCount,
     locked,
     bot,
-    Relationships.NONE,
     condition,
     fields.map { it.toValueObject() },
     createdAt.toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),

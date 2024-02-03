@@ -19,7 +19,6 @@ data class AccountAttributes(
     val statusesCount: Int,
     val locked: Boolean,
     val bot: Boolean,
-    val relationships: Relationships,
     val condition: Condition?,
     val fields: List<Field>,
     val createdAt: LocalDateTime,

@@ -10,19 +10,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.accountdetail.getString
+import noctiluca.features.accountdetail.model.RelationshipsStateModel
 import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.Relationships
 
 @Composable
 internal fun RelationshipButton(
-    detail: AccountAttributes,
-    onClick: () -> Unit,
-) = when (detail.state()) {
-    ButtonType.EDIT_PROFILE -> EditProfileButton(onClick)
-    ButtonType.FOLLOW -> FollowButton(onClick)
-    ButtonType.UNFOLLOW -> UnfollowButton(onClick)
-    ButtonType.SEND_FOLLOW_REQUEST -> SendFollowRequestButton(onClick)
-    ButtonType.CANCEL_FOLLOW_REQUEST -> CancelFollowRequestButton(onClick)
-    ButtonType.UNBLOCK -> UnblockButton(onClick)
+    locked: Boolean,
+    relationshipsStateModel: RelationshipsStateModel,
+    follow: () -> Unit,
+    block: () -> Unit,
+) = when (relationshipsStateModel.relationships.state(locked)) {
+    ButtonType.EDIT_PROFILE -> EditProfileButton {}
+    ButtonType.FOLLOW -> FollowButton(follow)
+    ButtonType.UNFOLLOW -> UnfollowButton(follow)
+    ButtonType.SEND_FOLLOW_REQUEST -> SendFollowRequestButton(follow)
+    ButtonType.CANCEL_FOLLOW_REQUEST -> CancelFollowRequestButton(follow)
+    ButtonType.UNBLOCK -> UnblockButton(block)
     ButtonType.EMPTY -> Spacer(
         modifier = Modifier.width(ButtonDefaults.MinWidth)
             .padding(vertical = 4.dp)
@@ -40,13 +44,13 @@ private enum class ButtonType {
     EMPTY
 }
 
-private fun AccountAttributes.state() = when {
-    relationships.me -> ButtonType.EDIT_PROFILE
-    relationships.blocking -> ButtonType.UNBLOCK
-    relationships.requested -> ButtonType.CANCEL_FOLLOW_REQUEST
-    locked && !relationships.following && !relationships.blockedBy -> ButtonType.SEND_FOLLOW_REQUEST
-    relationships.following && !relationships.blockedBy -> ButtonType.UNFOLLOW
-    !relationships.following && !relationships.blockedBy -> ButtonType.FOLLOW
+private fun Relationships.state(locked: Boolean) = when {
+    me -> ButtonType.EDIT_PROFILE
+    blocking -> ButtonType.UNBLOCK
+    requested -> ButtonType.CANCEL_FOLLOW_REQUEST
+    locked && !following && !blockedBy -> ButtonType.SEND_FOLLOW_REQUEST
+    following && !blockedBy -> ButtonType.UNFOLLOW
+    !following && !blockedBy -> ButtonType.FOLLOW
     else -> ButtonType.EMPTY
 }
 

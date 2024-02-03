@@ -9,12 +9,16 @@ import noctiluca.features.accountdetail.component.caption.AccountName
 import noctiluca.features.accountdetail.component.caption.CustomFields
 import noctiluca.features.accountdetail.component.caption.RelationshipButton
 import noctiluca.features.accountdetail.component.caption.RelationshipCount
+import noctiluca.features.accountdetail.model.RelationshipsStateModel
 import noctiluca.features.shared.atoms.text.HtmlText
 import noctiluca.model.accountdetail.AccountAttributes
 
 @Composable
 internal fun AccountDetailCaption(
     attributes: AccountAttributes,
+    relationshipsStateModel: RelationshipsStateModel,
+    follow: () -> Unit,
+    block: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = Modifier.fillMaxWidth()
@@ -26,8 +30,10 @@ internal fun AccountDetailCaption(
             .padding(vertical = 4.dp),
     ) {
         RelationshipButton(
-            attributes,
-            onClick = {},
+            attributes.locked,
+            relationshipsStateModel,
+            follow = follow,
+            block = block,
         )
     }
 

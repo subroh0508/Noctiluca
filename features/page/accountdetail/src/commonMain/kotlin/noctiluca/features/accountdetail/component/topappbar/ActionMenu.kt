@@ -11,13 +11,18 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import noctiluca.features.accountdetail.getString
+import noctiluca.features.accountdetail.viewmodel.AccountRelationshipsViewModel
 import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.Relationships
 
 @Composable
 internal fun ActionMenu(
-    detail: AccountAttributes?,
+    username: String?,
+    viewModel: AccountRelationshipsViewModel,
 ) {
-    if (detail?.relationships?.me != false) {
+    val uiModel by viewModel.uiModel.collectAsState()
+
+    if (username == null || uiModel.relationships.me) {
         return
     }
 
@@ -41,16 +46,16 @@ internal fun ActionMenu(
             onDismissRequest = { expanded = false },
         ) {
             AddList(onClick = {})
-            if (detail.relationships.following) {
+            if (uiModel.relationships.following) {
                 Divider(Modifier.fillMaxWidth())
-                HideReblogs(detail, onClick = {})
-                ShowReblogs(detail, onClick = {})
+                HideReblogs(username, uiModel.relationships, onClick = {})
+                ShowReblogs(username, uiModel.relationships, onClick = {})
             }
             Divider(Modifier.fillMaxWidth())
-            Mute(detail, onClick = {})
-            Unmute(detail, onClick = {})
-            Block(detail, onClick = {})
-            Report(detail, onClick = {})
+            Mute(username, uiModel.relationships, onClick = { viewModel.mute() })
+            Unmute(username, uiModel.relationships, onClick = { viewModel.mute() })
+            Block(username, uiModel.relationships, onClick = { viewModel.block() })
+            Report(username, uiModel.relationships, onClick = {})
             Divider(Modifier.fillMaxWidth())
             OpenBrowser(onClick = {})
         }
@@ -68,15 +73,16 @@ private fun AddList(
 
 @Composable
 private fun Mute(
-    detail: AccountAttributes,
+    username: String,
+    relationships: Relationships,
     onClick: () -> Unit,
 ) {
-    if (detail.relationships.muting) {
+    if (relationships.muting) {
         return
     }
 
     DropdownMenuItem(
-        text = { Text(getString().account_detail_menu_mute.format(detail.username)) },
+        text = { Text(getString().account_detail_menu_mute.format(username)) },
         leadingIcon = { Icon(Icons.AutoMirrored.Filled.VolumeOff, contentDescription = "Mute") },
         onClick = onClick,
     )
@@ -84,15 +90,16 @@ private fun Mute(
 
 @Composable
 private fun Unmute(
-    detail: AccountAttributes,
+    username: String,
+    relationships: Relationships,
     onClick: () -> Unit,
 ) {
-    if (!detail.relationships.muting) {
+    if (!relationships.muting) {
         return
     }
 
     DropdownMenuItem(
-        text = { Text(getString().account_detail_menu_unmute.format(detail.username)) },
+        text = { Text(getString().account_detail_menu_unmute.format(username)) },
         leadingIcon = { Icon(Icons.AutoMirrored.Filled.VolumeUp, contentDescription = "Unmute") },
         onClick = onClick,
     )
@@ -100,15 +107,16 @@ private fun Unmute(
 
 @Composable
 private fun Block(
-    detail: AccountAttributes,
+    username: String,
+    relationships: Relationships,
     onClick: () -> Unit,
 ) {
-    if (detail.relationships.blocking) {
+    if (relationships.blocking) {
         return
     }
 
     DropdownMenuItem(
-        text = { Text(getString().account_detail_menu_block.format(detail.username)) },
+        text = { Text(getString().account_detail_menu_block.format(username)) },
         leadingIcon = { Icon(Icons.Default.Block, contentDescription = "Block") },
         onClick = onClick,
     )
@@ -116,15 +124,16 @@ private fun Block(
 
 @Composable
 private fun Report(
-    detail: AccountAttributes,
+    username: String,
+    relationships: Relationships,
     onClick: () -> Unit,
 ) {
-    if (detail.relationships.blocking) {
+    if (relationships.blocking) {
         return
     }
 
     DropdownMenuItem(
-        text = { Text(getString().account_detail_menu_report.format(detail.username)) },
+        text = { Text(getString().account_detail_menu_report.format(username)) },
         leadingIcon = { Icon(Icons.Default.Report, contentDescription = "Report") },
         onClick = onClick,
     )
@@ -132,15 +141,16 @@ private fun Report(
 
 @Composable
 private fun HideReblogs(
-    detail: AccountAttributes,
+    username: String,
+    relationships: Relationships,
     onClick: () -> Unit,
 ) {
-    if (!detail.relationships.showReblogs) {
+    if (!relationships.showReblogs) {
         return
     }
 
     DropdownMenuItem(
-        text = { Text(getString().account_detail_menu_hide_reblogs.format(detail.username)) },
+        text = { Text(getString().account_detail_menu_hide_reblogs.format(username)) },
         leadingIcon = { Icon(Icons.Default.VisibilityOff, contentDescription = "Hide Reblogs") },
         onClick = onClick,
     )
@@ -148,15 +158,16 @@ private fun HideReblogs(
 
 @Composable
 private fun ShowReblogs(
-    detail: AccountAttributes,
+    username: String,
+    relationships: Relationships,
     onClick: () -> Unit,
 ) {
-    if (detail.relationships.showReblogs) {
+    if (relationships.showReblogs) {
         return
     }
 
     DropdownMenuItem(
-        text = { Text(getString().account_detail_menu_show_reblogs.format(detail.username)) },
+        text = { Text(getString().account_detail_menu_show_reblogs.format(username)) },
         leadingIcon = { Icon(Icons.Default.Visibility, contentDescription = "Show Reblogs") },
         onClick = onClick,
     )

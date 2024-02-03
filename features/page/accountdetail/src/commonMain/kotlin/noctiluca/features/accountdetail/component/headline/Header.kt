@@ -11,12 +11,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.model.Uri
 import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.accountdetail.Relationships
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun Header(
-    attributes: AccountAttributes,
+    header: Uri?,
+    relationships: Relationships,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     val modifier = Modifier.height(ExpandedTopAppBarHeight)
@@ -26,21 +29,21 @@ internal fun Header(
         }
 
     Box(modifier) {
-        if (attributes.header == null) {
+        if (header == null) {
             Spacer(
                 modifier = Modifier.fillMaxSize()
                     .background(MaterialTheme.colorScheme.surface),
             )
         } else {
             AsyncImage(
-                attributes.header,
+                header,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.fillMaxSize(),
             )
         }
 
         RelationshipStateChips(
-            relationships = attributes.relationships,
+            relationships = relationships,
             modifier = Modifier.align(Alignment.BottomEnd)
                 .graphicsLayer {
                     alpha = 1.0F - scrollBehavior.state.collapsedFraction

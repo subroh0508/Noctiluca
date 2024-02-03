@@ -11,6 +11,7 @@ import androidx.compose.ui.graphics.Color
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.component.topappbar.ActionMenu
 import noctiluca.features.accountdetail.component.topappbar.Title
+import noctiluca.features.accountdetail.viewmodel.AccountRelationshipsViewModel
 import noctiluca.model.accountdetail.AccountAttributes
 
 private const val CONTAINER_COLOR_ALPHA = 0.75F
@@ -19,6 +20,7 @@ private const val CONTAINER_COLOR_ALPHA = 0.75F
 @Composable
 fun AccountDetailTopAppBar(
     detail: AccountAttributes?,
+    viewModel: AccountRelationshipsViewModel,
     scrollBehavior: TopAppBarScrollBehavior,
 ) {
     val navigator = LocalNavigator.current
@@ -42,7 +44,7 @@ fun AccountDetailTopAppBar(
                 )
             }
         },
-        actions = { ActionMenu(detail) },
+        actions = { ActionMenu(detail?.username, viewModel) },
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = Color.Transparent,
             scrolledContainerColor = Color.Transparent,

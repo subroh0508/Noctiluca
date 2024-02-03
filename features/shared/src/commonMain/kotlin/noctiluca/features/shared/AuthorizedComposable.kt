@@ -55,7 +55,6 @@ class AuthorizeEventStateFlow(
     fun requestSignIn() {
         state.value = AuthorizedViewModel.Event.SIGN_IN
     }
-
 }
 
 @Composable

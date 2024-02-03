@@ -44,7 +44,13 @@ fun AccountDetailTopAppBar(
                 )
             }
         },
-        actions = { ActionMenu(detail?.username, viewModel) },
+        actions = {
+            ActionMenu(
+                detail?.username,
+                detail?.condition,
+                viewModel,
+            )
+        },
         colors = TopAppBarDefaults.largeTopAppBarColors(
             containerColor = Color.Transparent,
             scrolledContainerColor = Color.Transparent,

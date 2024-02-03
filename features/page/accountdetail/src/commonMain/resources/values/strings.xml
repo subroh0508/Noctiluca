@@ -25,6 +25,12 @@
     <string name="account_detail_menu_show_reblogs">@%sさんからのブーストを表示</string>
     <string name="account_detail_menu_open_browser">ブラウザで開く</string>
 
+    <string name="account_detail_menu_mute_description">本当に@%sさんをミュートしますか？\nこれにより相手の投稿と返信は見えなくなりますが、相手はあなたをフォローし続け投稿を見ることができます。</string>
+    <string name="account_detail_menu_mute_confirm">ミュート</string>
+
+    <string name="account_detail_menu_block_description">本当に@%sさんをブロックしますか？</string>
+    <string name="account_detail_menu_block_confirm">ブロック</string>
+
     <string name="account_detail_tab_statuses">投稿</string>
     <string name="account_detail_tab_statuses_and_replies">投稿と返信</string>
     <string name="account_detail_tab_media">メディア</string>

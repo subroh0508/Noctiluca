@@ -8,7 +8,6 @@ import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.model.account.Account
 import noctiluca.model.accountdetail.AccountAttributes
-import noctiluca.model.accountdetail.Relationships
 import noctiluca.model.status.Status
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.URL_SAMPLE_COM

@@ -2,6 +2,7 @@
 <resources>
     <string name="back">戻る</string>
     <string name="close">閉じる</string>
+    <string name="cancel">キャンセル</string>
 
     <string name="time_now">今</string>
     <string name="time_seconds">%d秒前</string>

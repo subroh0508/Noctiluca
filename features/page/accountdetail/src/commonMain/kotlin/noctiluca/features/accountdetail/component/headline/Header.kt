@@ -12,7 +12,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
 import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.model.Uri
-import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationships
 
 @OptIn(ExperimentalMaterial3Api::class)

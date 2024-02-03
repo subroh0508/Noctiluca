@@ -29,7 +29,6 @@ import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.StatusesQuery
 import noctiluca.model.status.Status
 import org.koin.core.parameter.parametersOf
-import org.koin.mp.KoinPlatform.getKoin
 import noctiluca.features.navigation.AccountDetail as NavigationAccountDetailScreen
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }

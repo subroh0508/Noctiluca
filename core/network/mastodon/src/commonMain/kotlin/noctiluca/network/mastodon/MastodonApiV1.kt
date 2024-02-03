@@ -89,27 +89,27 @@ interface MastodonApiV1 {
         id: List<String>,
     ): List<NetworkRelationship>
 
-    suspend fun postFollow(
+    suspend fun postAccountsFollow(
         id: String,
     ): NetworkRelationship
 
-    suspend fun postUnfollow(
+    suspend fun postAccountsUnfollow(
         id: String,
     ): NetworkRelationship
 
-    suspend fun postBlock(
+    suspend fun postAccountsBlock(
         id: String,
     ): NetworkRelationship
 
-    suspend fun postUnblock(
+    suspend fun postAccountsUnblock(
         id: String,
     ): NetworkRelationship
 
-    suspend fun postMute(
+    suspend fun postAccountsMute(
         id: String,
     ): NetworkRelationship
 
-    suspend fun postUnmute(
+    suspend fun postAccountsUnmute(
         id: String,
     ): NetworkRelationship
 

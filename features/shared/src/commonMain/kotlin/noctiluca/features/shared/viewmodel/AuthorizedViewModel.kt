@@ -55,6 +55,7 @@ abstract class AuthorizedViewModel(
         flow2: Flow<T2>,
         initialValue: R,
         started: SharingStarted = SharingStarted.WhileSubscribed(),
+        catch: suspend (Throwable) -> Unit = {},
         transform: suspend (T1, T2) -> R,
     ) = combine(
         flow,
@@ -62,6 +63,7 @@ abstract class AuthorizedViewModel(
         transform,
     ).stateInWithAuth(
         started = started,
+        catch = catch,
         initialValue = initialValue,
     )
 
@@ -71,6 +73,7 @@ abstract class AuthorizedViewModel(
         flow3: Flow<T3>,
         initialValue: R,
         started: SharingStarted = SharingStarted.WhileSubscribed(),
+        catch: suspend (Throwable) -> Unit = {},
         transform: suspend (T1, T2, T3) -> R,
     ) = combine(
         flow,
@@ -79,6 +82,7 @@ abstract class AuthorizedViewModel(
         transform,
     ).stateInWithAuth(
         started = started,
+        catch = catch,
         initialValue = initialValue,
     )
 
@@ -89,6 +93,7 @@ abstract class AuthorizedViewModel(
         flow4: Flow<T4>,
         initialValue: R,
         started: SharingStarted = SharingStarted.WhileSubscribed(),
+        catch: suspend (Throwable) -> Unit = {},
         transform: suspend (T1, T2, T3, T4) -> R,
     ) = combine(
         flow,
@@ -98,6 +103,7 @@ abstract class AuthorizedViewModel(
         transform,
     ).stateInWithAuth(
         started = started,
+        catch = catch,
         initialValue = initialValue,
     )
 
@@ -109,6 +115,7 @@ abstract class AuthorizedViewModel(
         flow5: Flow<T5>,
         initialValue: R,
         started: SharingStarted = SharingStarted.WhileSubscribed(),
+        catch: suspend (Throwable) -> Unit = {},
         transform: suspend (T1, T2, T3, T4, T5) -> R,
     ) = combine(
         flow,
@@ -119,14 +126,17 @@ abstract class AuthorizedViewModel(
         transform,
     ).stateInWithAuth(
         started = started,
+        catch = catch,
         initialValue = initialValue,
     )
 
     private fun <R> Flow<R>.stateInWithAuth(
         started: SharingStarted,
+        catch: suspend (Throwable) -> Unit,
         initialValue: R,
     ) = catch { e ->
         handleException(e)
+        catch(e)
     }.stateIn(
         scope = viewModelScope,
         started = started,

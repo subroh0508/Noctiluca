@@ -5,9 +5,7 @@ import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
-import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.shared.AuthorizedComposable
-import noctiluca.features.shared.EventStateFlow
 import noctiluca.model.AccountId
 import org.koin.core.parameter.parametersOf
 import org.koin.mp.KoinPlatform.getKoin
@@ -28,7 +26,6 @@ internal data class AccountDetailScreen(
 
     @Composable
     override fun Content() = AuthorizedComposable(
-        eventStateFlow = remember { getKoin().get() },
         LocalResources provides Resources(Locale.current.language),
     ) {
         AccountDetailScaffold(

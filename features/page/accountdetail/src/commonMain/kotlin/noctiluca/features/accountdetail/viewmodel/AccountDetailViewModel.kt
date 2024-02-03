@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.*
 import noctiluca.data.accountdetail.AccountDetailRepository
 import noctiluca.data.accountdetail.AccountStatusRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
-import noctiluca.features.shared.EventStateFlow
+import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.model.AccountId
@@ -18,7 +18,7 @@ class AccountDetailViewModel(
     private val accountDetailRepository: AccountDetailRepository,
     private val accountStatusRepository: AccountStatusRepository,
     authorizedUserRepository: AuthorizedUserRepository,
-    eventStateFlow: EventStateFlow,
+    eventStateFlow: AuthorizeEventStateFlow,
 ) : AuthorizedViewModel(authorizedUserRepository, eventStateFlow), ScreenModel {
     private val query by lazy { MutableStateFlow(StatusesQuery.DEFAULT) }
 

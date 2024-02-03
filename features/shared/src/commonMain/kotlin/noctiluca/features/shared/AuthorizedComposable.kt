@@ -6,11 +6,12 @@ import kotlinx.coroutines.flow.StateFlow
 import noctiluca.features.navigation.backToSignIn
 import noctiluca.features.navigation.navigateToTimelines
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
+import org.koin.mp.KoinPlatform.getKoin
 
 @Composable
 fun AuthorizedComposable(
-    eventStateFlow: EventStateFlow,
     vararg values: ProvidedValue<*>,
+    eventStateFlow: AuthorizeEventStateFlow = rememberAuthorizeEventStateFlow(),
     content: @Composable () -> Unit,
 ) = FeatureComposable(*values) {
     val event by eventStateFlow.collectAsState()
@@ -29,7 +30,12 @@ fun AuthorizedComposable(
     }
 }
 
-class EventStateFlow(
+@Composable
+fun rememberAuthorizeEventStateFlow() = remember {
+    getKoin().get<AuthorizeEventStateFlow>()
+}
+
+class AuthorizeEventStateFlow(
     private val state: MutableStateFlow<AuthorizedViewModel.Event>,
 ) : StateFlow<AuthorizedViewModel.Event> by state {
     constructor(

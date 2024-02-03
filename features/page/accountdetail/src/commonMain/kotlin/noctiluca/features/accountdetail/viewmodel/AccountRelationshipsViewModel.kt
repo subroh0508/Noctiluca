@@ -5,6 +5,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import noctiluca.data.accountdetail.AccountRelationshipsRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.features.shared.EventStateFlow
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
@@ -15,7 +16,8 @@ class AccountRelationshipsViewModel(
     private val id: AccountId,
     private val accountRelationshipsRepository: AccountRelationshipsRepository,
     authorizedUserRepository: AuthorizedUserRepository,
-) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
+    eventStateFlow: EventStateFlow,
+) : AuthorizedViewModel(authorizedUserRepository, eventStateFlow), ScreenModel {
     private val state by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
 
     val uiModel by lazy {

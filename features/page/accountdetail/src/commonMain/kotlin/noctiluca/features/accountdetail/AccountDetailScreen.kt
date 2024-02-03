@@ -7,8 +7,10 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.shared.AuthorizedComposable
+import noctiluca.features.shared.EventStateFlow
 import noctiluca.model.AccountId
 import org.koin.core.parameter.parametersOf
+import org.koin.mp.KoinPlatform.getKoin
 import noctiluca.features.navigation.AccountDetail as NavigationAccountDetailScreen
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
@@ -25,12 +27,12 @@ internal data class AccountDetailScreen(
     override val key = "AccountDetail#$id"
 
     @Composable
-    override fun Content() {
-        val viewModel: AccountDetailViewModel = getScreenModel { parametersOf(AccountId(id)) }
-
-        AuthorizedComposable(
-            viewModel,
-            LocalResources provides Resources(Locale.current.language),
-        ) { AccountDetailScaffold(viewModel) }
+    override fun Content() = AuthorizedComposable(
+        eventStateFlow = remember { getKoin().get() },
+        LocalResources provides Resources(Locale.current.language),
+    ) {
+        AccountDetailScaffold(
+            getScreenModel { parametersOf(AccountId(id)) },
+        )
     }
 }

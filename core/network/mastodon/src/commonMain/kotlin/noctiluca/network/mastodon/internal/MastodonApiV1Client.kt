@@ -160,6 +160,42 @@ internal class MastodonApiV1Client(
         parameter("id", id)
     }.body()
 
+    override suspend fun postFollow(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Follow(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
+    override suspend fun postUnfollow(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Unfollow(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
+    override suspend fun postBlock(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Block(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
+    override suspend fun postUnblock(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Unblock(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
+    override suspend fun postMute(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Mute(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
+    override suspend fun postUnmute(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Unmute(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
     override suspend fun getAccountsStatuses(
         id: String,
         maxId: String?,

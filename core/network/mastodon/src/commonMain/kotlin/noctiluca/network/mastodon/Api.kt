@@ -26,6 +26,30 @@ object Api {
                 @Resource("statuses")
                 @Serializable
                 class Statuses(val parent: Id)
+
+                @Resource("follow")
+                @Serializable
+                class Follow(val parent: Id)
+
+                @Resource("unfollow")
+                @Serializable
+                class Unfollow(val parent: Id)
+
+                @Resource("block")
+                @Serializable
+                class Block(val parent: Id)
+
+                @Resource("unblock")
+                @Serializable
+                class Unblock(val parent: Id)
+
+                @Resource("mute")
+                @Serializable
+                class Mute(val parent: Id)
+
+                @Resource("unmute")
+                @Serializable
+                class Unmute(val parent: Id)
             }
 
             @Resource("relationships")

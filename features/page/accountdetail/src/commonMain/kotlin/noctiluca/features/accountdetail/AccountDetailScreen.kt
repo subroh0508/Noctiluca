@@ -17,7 +17,7 @@ import noctiluca.features.accountdetail.model.RelationshipsModel
 import noctiluca.features.accountdetail.section.AccountDetailCaption
 import noctiluca.features.accountdetail.section.AccountDetailScrollableFrame
 import noctiluca.features.accountdetail.section.AccountDetailTopAppBar
-import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
+import noctiluca.features.accountdetail.viewmodel.AccountAttributesViewModel
 import noctiluca.features.accountdetail.viewmodel.AccountRelationshipsViewModel
 import noctiluca.features.accountdetail.viewmodel.AccountStatusesViewModel
 import noctiluca.features.navigation.navigateToStatusDetail
@@ -86,7 +86,7 @@ internal data class AccountDetailScreen(
         topBar: @Composable (AccountAttributes?, TopAppBarScrollBehavior) -> Unit,
         content: @Composable (AttributesModel, PaddingValues, TopAppBarScrollBehavior) -> Unit,
     ) {
-        val viewModel: AccountDetailViewModel = getScreenModel {
+        val viewModel: AccountAttributesViewModel = getScreenModel {
             parametersOf(AccountId(id))
         }
         val uiModel by viewModel.uiModel.collectAsState()

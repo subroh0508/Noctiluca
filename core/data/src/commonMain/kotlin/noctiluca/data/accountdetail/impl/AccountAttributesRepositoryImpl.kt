@@ -1,15 +1,15 @@
 package noctiluca.data.accountdetail.impl
 
 import kotlinx.coroutines.flow.*
-import noctiluca.data.accountdetail.AccountDetailRepository
+import noctiluca.data.accountdetail.AccountAttributesRepository
 import noctiluca.data.accountdetail.toAttributeEntity
 import noctiluca.model.AccountId
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.network.mastodon.MastodonApiV1
 
-internal class AccountDetailRepositoryImpl(
+internal class AccountAttributesRepositoryImpl(
     private val v1: MastodonApiV1,
-) : AccountDetailRepository {
+) : AccountAttributesRepository {
     private val accountAttributeStateFlow by lazy { MutableStateFlow<AccountAttributes?>(null) }
 
     override fun attributes(

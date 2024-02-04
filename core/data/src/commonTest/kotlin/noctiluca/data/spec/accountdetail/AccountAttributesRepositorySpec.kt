@@ -9,8 +9,8 @@ import io.ktor.client.engine.mock.*
 import io.ktor.http.*
 import kotlinx.coroutines.flow.first
 import noctiluca.data.TestDataComponent
-import noctiluca.data.accountdetail.AccountDetailRepository
-import noctiluca.data.accountdetail.impl.AccountDetailRepositoryImpl
+import noctiluca.data.accountdetail.AccountAttributesRepository
+import noctiluca.data.accountdetail.impl.AccountAttributesRepositoryImpl
 import noctiluca.data.json.*
 import noctiluca.model.HttpException
 import noctiluca.model.HttpUnauthorizedException
@@ -23,7 +23,7 @@ import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 
-class AccountDetailRepositorySpec : DescribeSpec({
+class AccountAttributesRepositorySpec : DescribeSpec({
     coroutineTestScope = true
 
     describe("#attributes") {
@@ -122,13 +122,13 @@ private inline fun eachAccountCondition(
 private fun buildRepository(
     mockEngine: MockEngine,
     mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = buildFilledMockAuthenticationTokenDataStore(),
-): AccountDetailRepository {
+): AccountAttributesRepository {
     val component = TestDataComponent(
         mockEngine,
         mockAuthenticationTokenDataStore,
     )
 
-    return AccountDetailRepositoryImpl(
+    return AccountAttributesRepositoryImpl(
         component.get(),
     )
 }

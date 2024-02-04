@@ -154,6 +154,7 @@ internal data class AccountDetailScreen(
                         uiModel,
                         follow = { viewModel.follow() },
                         block = { viewModel.block() },
+                        notifyNewStatus = { viewModel.toggleNotify() },
                         modifier = Modifier.padding(horizontal = 16.dp),
                     )
                 }

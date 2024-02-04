@@ -5,32 +5,40 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Notifications
+import androidx.compose.material.icons.outlined.NotificationAdd
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.model.RelationshipsStateModel
+import noctiluca.model.accountdetail.Relationships
 
 @Composable
 internal fun RelationshipButton(
     locked: Boolean,
-    relationshipsStateModel: RelationshipsStateModel,
+    model: RelationshipsStateModel,
     follow: () -> Unit,
     block: () -> Unit,
-) {
-    if (relationshipsStateModel.state.loading) {
-        ProgressButton()
-        return
+    notifyNewStatus: () -> Unit,
+) = Row {
+    if (model.relationships.showNotifyingIcon) {
+        NotifyNewStatusIcon(
+            onClick = notifyNewStatus,
+            model.relationships,
+            !model.state.loading,
+        )
     }
 
-    when (getButtonType(locked, relationshipsStateModel)) {
+    when (getButtonType(locked, model)) {
         ButtonType.EDIT_PROFILE -> EditProfileButton {}
-        ButtonType.FOLLOW -> FollowButton(follow)
-        ButtonType.UNFOLLOW -> UnfollowButton(follow)
-        ButtonType.SEND_FOLLOW_REQUEST -> SendFollowRequestButton(follow)
-        ButtonType.CANCEL_FOLLOW_REQUEST -> CancelFollowRequestButton(follow)
-        ButtonType.UNBLOCK -> UnblockButton(block)
+        ButtonType.FOLLOW -> FollowButton(follow, !model.state.loading)
+        ButtonType.UNFOLLOW -> UnfollowButton(follow, !model.state.loading)
+        ButtonType.SEND_FOLLOW_REQUEST -> SendFollowRequestButton(follow, !model.state.loading)
+        ButtonType.CANCEL_FOLLOW_REQUEST -> CancelFollowRequestButton(follow, !model.state.loading)
+        ButtonType.UNBLOCK -> UnblockButton(block, !model.state.loading)
         ButtonType.EMPTY -> Spacer(
             modifier = Modifier.width(ButtonDefaults.MinWidth)
                 .padding(vertical = 4.dp)
@@ -65,6 +73,28 @@ private fun getButtonType(
 }
 
 @Composable
+private fun NotifyNewStatusIcon(
+    onClick: () -> Unit,
+    relationships: Relationships,
+    enabled: Boolean,
+) {
+    val icon =
+        if (relationships.notifying) {
+            Icons.Default.Notifications
+        } else {
+            Icons.Outlined.NotificationAdd
+        }
+
+    FilledTonalIconButton(
+        onClick = onClick,
+        enabled = enabled,
+        modifier = Modifier.padding(end = 8.dp),
+    ) {
+        Icon(icon, contentDescription = "Notify New Status")
+    }
+}
+
+@Composable
 private fun EditProfileButton(
     onClick: () -> Unit,
 ) = Button(
@@ -83,8 +113,10 @@ private fun EditProfileButton(
 @Composable
 private fun FollowButton(
     onClick: () -> Unit,
+    enabled: Boolean,
 ) = Button(
     onClick = onClick,
+    enabled = enabled,
 ) {
     Icon(
         Icons.Default.Add,
@@ -99,8 +131,10 @@ private fun FollowButton(
 @Composable
 private fun UnfollowButton(
     onClick: () -> Unit,
+    enabled: Boolean,
 ) = FilledTonalButton(
     onClick = onClick,
+    enabled = enabled,
 ) {
     Text(getString().account_detail_unfollow)
 }
@@ -108,8 +142,10 @@ private fun UnfollowButton(
 @Composable
 private fun SendFollowRequestButton(
     onClick: () -> Unit,
+    enabled: Boolean,
 ) = FilledTonalButton(
     onClick = onClick,
+    enabled = enabled,
 ) {
     Icon(
         Icons.Default.Lock,
@@ -124,8 +160,10 @@ private fun SendFollowRequestButton(
 @Composable
 private fun CancelFollowRequestButton(
     onClick: () -> Unit,
+    enabled: Boolean,
 ) = FilledTonalButton(
     onClick = onClick,
+    enabled = enabled,
 ) {
     Text(getString().account_detail_cancel_follow_request)
 }
@@ -133,17 +171,12 @@ private fun CancelFollowRequestButton(
 @Composable
 private fun UnblockButton(
     onClick: () -> Unit,
+    enabled: Boolean,
 ) = FilledTonalButton(
     onClick = onClick,
+    enabled = enabled,
 ) {
     Text(getString().account_detail_unblock)
 }
 
-@Composable
-private fun ProgressButton() = OutlinedButton(
-    onClick = {},
-) {
-    CircularProgressIndicator(
-        modifier = Modifier.size(18.dp),
-    )
-}
+private val Relationships.showNotifyingIcon get() = !blocking && !blockedBy && following

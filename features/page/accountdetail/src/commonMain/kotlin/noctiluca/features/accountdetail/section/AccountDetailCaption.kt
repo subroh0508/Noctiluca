@@ -19,6 +19,7 @@ internal fun AccountDetailCaption(
     relationshipsStateModel: RelationshipsStateModel,
     follow: () -> Unit,
     block: () -> Unit,
+    notifyNewStatus: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = Modifier.fillMaxWidth()
@@ -34,6 +35,7 @@ internal fun AccountDetailCaption(
             relationshipsStateModel,
             follow = follow,
             block = block,
+            notifyNewStatus = notifyNewStatus,
         )
     }
 

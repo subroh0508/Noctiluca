@@ -149,6 +149,13 @@ complexity:
   LargeClass:
     active: true
     threshold: 600
+    excludes:
+      - '**/test/**'
+      - '**/androidTest/**'
+      - '**/commonTest/**'
+      - '**/jvmTest/**'
+      - '**/jsTest/**'
+      - '**/iosTest/**'
   LongMethod:
     active: true
     threshold: 60

@@ -33,5 +33,5 @@ internal fun ReportFullScreenDialog(
         return
     }
 
-    // TODO: Implement full screen dialog
+    // Implement full screen dialog
 }

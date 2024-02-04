@@ -26,7 +26,6 @@ fun AccountDetailTopAppBar(
     report: () -> Unit,
     toggleReblogs: () -> Unit,
 ) {
-    val navigator = LocalNavigator.current
     val alpha by rememberScrolledContainerColorAlpha(scrollBehavior)
 
     LargeTopAppBar(

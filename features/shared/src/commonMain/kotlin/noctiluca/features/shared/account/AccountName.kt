@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
@@ -20,6 +21,8 @@ fun TooterName(
     trailing: (@Composable (Modifier) -> Unit)? = null,
 ) = Column(modifier) {
     Row {
+        val baselineModifier = remember { Modifier.alignByBaseline() }
+
         Text(
             tooter.displayName,
             modifier = Modifier.weight(1F, true)
@@ -31,7 +34,7 @@ fun TooterName(
 
         trailing?.let {
             Spacer(Modifier.width(16.dp))
-            it.invoke(Modifier.alignByBaseline())
+            it.invoke(baselineModifier)
         }
     }
 

@@ -13,6 +13,7 @@ import noctiluca.network.mastodon.data.extendeddescription.NetworkExtendedDescri
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.status.NetworkStatus
 import noctiluca.network.mastodon.data.status.NetworkStatusesContext
+import noctiluca.network.mastodon.paramaters.account.AccountFollowParameter
 
 internal class MastodonApiV1Client(
     token: AuthenticationTokenProvider,
@@ -160,6 +161,45 @@ internal class MastodonApiV1Client(
         parameter("id", id)
     }.body()
 
+    override suspend fun postAccountsFollow(
+        id: String,
+        reblogs: Boolean,
+        notify: Boolean,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Follow(Api.V1.Accounts.Id(id = id)),
+        AccountFollowParameter(reblogs, notify),
+    ).body()
+
+    override suspend fun postAccountsUnfollow(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Unfollow(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
+    override suspend fun postAccountsBlock(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Block(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
+    override suspend fun postAccountsUnblock(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Unblock(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
+    override suspend fun postAccountsMute(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Mute(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
+    override suspend fun postAccountsUnmute(
+        id: String,
+    ): NetworkRelationship = client.post(
+        Api.V1.Accounts.Id.Unmute(Api.V1.Accounts.Id(id = id)),
+    ).body()
+
     override suspend fun getAccountsStatuses(
         id: String,
         maxId: String?,
@@ -171,8 +211,10 @@ internal class MastodonApiV1Client(
     ) {
         parameter("max_id", maxId)
         parameter("only_media", onlyMedia)
-        parameter("exclude_replies", excludeReplies)
-        parameter("exclude_reblogs", false)
+        if (!onlyMedia) {
+            parameter("exclude_replies", excludeReplies)
+            parameter("exclude_reblogs", false)
+        }
         parameter("limit", limit.toString())
     }.body()
 }

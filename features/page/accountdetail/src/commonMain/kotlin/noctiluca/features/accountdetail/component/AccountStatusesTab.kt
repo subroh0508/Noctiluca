@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.templates.scaffold.accountdetail
+package noctiluca.features.accountdetail.component
 
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
@@ -9,7 +9,7 @@ import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 
 @Suppress("FunctionNaming")
-internal fun LazyListScope.StatuseTab(
+internal fun LazyListScope.AccountStatusesTab(
     tabs: @Composable () -> Unit,
     statuses: List<Status>,
     onClickStatus: (StatusId) -> Unit,

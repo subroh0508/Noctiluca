@@ -4,6 +4,32 @@
     <string name="account_detail_follows">フォロー</string>
     <string name="account_detail_followers">フォロワー</string>
     <string name="account_detail_account_created_at">登録日</string>
+    <string name="account_detail_follow">フォロー</string>
+    <string name="account_detail_unfollow">フォロー解除</string>
+    <string name="account_detail_send_follow_request">フォローリクエストを送信</string>
+    <string name="account_detail_cancel_follow_request">フォローリクエストの取り消し</string>
+    <string name="account_detail_unblock">ブロック解除</string>
+    <string name="account_detail_edit_profile">プロフィールを編集</string>
+    <string name="account_detail_followed">フォローされています</string>
+    <string name="account_detail_sending_follow_request">フォローリクエスト送信済み</string>
+    <string name="account_detail_blocking">ブロック済み</string>
+    <string name="account_detail_blocked">ブロックされています</string>
+    <string name="account_detail_muting">ミュート済み</string>
+
+    <string name="account_detail_menu_add_list">リストに追加</string>
+    <string name="account_detail_menu_mute">@%sさんをミュート</string>
+    <string name="account_detail_menu_unmute">@%sさんのミュートを解除</string>
+    <string name="account_detail_menu_block">@%sさんをブロック</string>
+    <string name="account_detail_menu_report">@%sさんを通報</string>
+    <string name="account_detail_menu_hide_reblogs">@%sさんからのブーストを非表示</string>
+    <string name="account_detail_menu_show_reblogs">@%sさんからのブーストを表示</string>
+    <string name="account_detail_menu_open_browser">ブラウザで開く</string>
+
+    <string name="account_detail_menu_mute_description">本当に@%sさんをミュートしますか？\nこれにより相手の投稿と返信は見えなくなりますが、相手はあなたをフォローし続け投稿を見ることができます。</string>
+    <string name="account_detail_menu_mute_confirm">ミュート</string>
+
+    <string name="account_detail_menu_block_description">本当に@%sさんをブロックしますか？</string>
+    <string name="account_detail_menu_block_confirm">ブロック</string>
 
     <string name="account_detail_tab_statuses">投稿</string>
     <string name="account_detail_tab_statuses_and_replies">投稿と返信</string>

@@ -73,7 +73,7 @@ abstract class ResourceGeneratorTask : DefaultTask() {
                 continue
             }
             val name = lineContent.attributes.getNamedItem("name").textContent
-            val value = lineContent.textContent.replace("\\", "")
+            val value = lineContent.textContent.replace("\\n", "\n")
             parsedElements[name] = value
         }
         return parsedElements

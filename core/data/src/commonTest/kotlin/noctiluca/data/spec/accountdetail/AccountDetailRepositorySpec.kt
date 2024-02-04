@@ -15,8 +15,6 @@ import noctiluca.data.json.*
 import noctiluca.model.HttpException
 import noctiluca.model.HttpUnauthorizedException
 import noctiluca.model.accountdetail.AccountAttributes
-import noctiluca.model.accountdetail.Relationship
-import noctiluca.model.accountdetail.Relationships
 import noctiluca.network.mastodon.Api
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.extension.flowToList
@@ -52,10 +50,6 @@ class AccountDetailRepositorySpec : DescribeSpec({
                         val repository = buildRepository(
                             MockHttpClientEngine
                                 .mock(Api.V1.Accounts.Id(id = otherAccount.id.value), json)
-                                .mock(
-                                    Api.V1.Accounts.Relationships(),
-                                    "[$JSON_ACCOUNTS_RELATIONSHIP_NONE]",
-                                )
                                 .build(),
                         )
 
@@ -64,28 +58,6 @@ class AccountDetailRepositorySpec : DescribeSpec({
                                 repository.attributes(otherAccount.id),
                             ) should containExactly(
                                 otherAccount.copy(condition = condition),
-                            )
-                        }
-                    }
-                }
-
-                eachRelationship { json, relationship ->
-                    context("and the ${relationship.name.lowercase()} is true") {
-                        val repository = buildRepository(
-                            MockHttpClientEngine
-                                .mock(
-                                    Api.V1.Accounts.Id(id = otherAccount.id.value),
-                                    JSON_OTHER_ACCOUNT,
-                                )
-                                .mock(Api.V1.Accounts.Relationships(), "[$json]")
-                                .build(),
-                        )
-
-                        it("returns the account detail") {
-                            flowToList(
-                                repository.attributes(otherAccount.id),
-                            ) should containExactly(
-                                otherAccount.copy(relationships = Relationships(relationship)),
                             )
                         }
                     }
@@ -113,9 +85,8 @@ class AccountDetailRepositorySpec : DescribeSpec({
             context("and the id is not mine") {
                 val repository = buildRepository(
                     MockHttpClientEngine
-                        .mock(Api.V1.Accounts.Id(id = otherAccount.id.value), JSON_OTHER_ACCOUNT)
                         .mock(
-                            Api.V1.Accounts.Relationships(),
+                            Api.V1.Accounts.Id(id = otherAccount.id.value),
                             HttpStatusCode.BadRequest,
                         )
                         .build(),
@@ -148,39 +119,6 @@ private inline fun eachAccountCondition(
     block(json, name, condition)
 }
 
-private inline fun eachRelationship(
-    block: (String, Relationship) -> Unit,
-) = listOf(
-    JSON_ACCOUNTS_RELATIONSHIP_FOLLOWING,
-    JSON_ACCOUNTS_RELATIONSHIP_SHOWING_REBLOGS,
-    JSON_ACCOUNTS_RELATIONSHIP_NOTIFYING,
-    JSON_ACCOUNTS_RELATIONSHIP_FOLLOWED_BY,
-    JSON_ACCOUNTS_RELATIONSHIP_BLOCKING,
-    JSON_ACCOUNTS_RELATIONSHIP_BLOCKED_BY,
-    JSON_ACCOUNTS_RELATIONSHIP_MUTING,
-    JSON_ACCOUNTS_RELATIONSHIP_MUTING_NOTIFICATIONS,
-    JSON_ACCOUNTS_RELATIONSHIP_REQUESTED,
-    JSON_ACCOUNTS_RELATIONSHIP_DOMAIN_BLOCKING,
-    JSON_ACCOUNTS_RELATIONSHIP_ENDORSED,
-).forEach { json ->
-    val relationship = when (json) {
-        JSON_ACCOUNTS_RELATIONSHIP_FOLLOWING -> Relationship.FOLLOWING
-        JSON_ACCOUNTS_RELATIONSHIP_SHOWING_REBLOGS -> Relationship.SHOWING_REBLOGS
-        JSON_ACCOUNTS_RELATIONSHIP_NOTIFYING -> Relationship.NOTIFYING
-        JSON_ACCOUNTS_RELATIONSHIP_FOLLOWED_BY -> Relationship.FOLLOWED_BY
-        JSON_ACCOUNTS_RELATIONSHIP_BLOCKING -> Relationship.BLOCKING
-        JSON_ACCOUNTS_RELATIONSHIP_BLOCKED_BY -> Relationship.BLOCKED_BY
-        JSON_ACCOUNTS_RELATIONSHIP_MUTING -> Relationship.MUTING
-        JSON_ACCOUNTS_RELATIONSHIP_MUTING_NOTIFICATIONS -> Relationship.MUTING_NOTIFICATIONS
-        JSON_ACCOUNTS_RELATIONSHIP_REQUESTED -> Relationship.REQUESTED
-        JSON_ACCOUNTS_RELATIONSHIP_DOMAIN_BLOCKING -> Relationship.DOMAIN_BLOCKING
-        JSON_ACCOUNTS_RELATIONSHIP_ENDORSED -> Relationship.ENDORSED
-        else -> error("invalid json: $json")
-    }
-
-    block(json, relationship)
-}
-
 private fun buildRepository(
     mockEngine: MockEngine,
     mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = buildFilledMockAuthenticationTokenDataStore(),
@@ -191,7 +129,6 @@ private fun buildRepository(
     )
 
     return AccountDetailRepositoryImpl(
-        component.get(),
         component.get(),
     )
 }

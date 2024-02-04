@@ -1,4 +1,4 @@
-package noctiluca.features.accountdetail.organisms.tab
+package noctiluca.features.accountdetail.component
 
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -9,7 +9,7 @@ import noctiluca.features.shared.atoms.tab.PrimaryTabs
 import noctiluca.model.accountdetail.StatusesQuery
 
 @Composable
-internal fun AccountStatusesTabs(
+internal fun AccountDetailTabs(
     currentTab: StatusesQuery,
     statusesScrollState: AccountStatusesScrollState,
     onSwitch: (StatusesQuery) -> Unit = {},

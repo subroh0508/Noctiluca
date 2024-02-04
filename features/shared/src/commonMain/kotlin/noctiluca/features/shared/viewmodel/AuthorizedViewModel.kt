@@ -2,18 +2,30 @@ package noctiluca.features.shared.viewmodel
 
 import kotlinx.coroutines.flow.*
 import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.features.shared.AuthorizeEventStateFlow
+import noctiluca.features.shared.model.LoadState
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.HttpUnauthorizedException
 import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class AuthorizedViewModel(
     protected val authorizedUserRepository: AuthorizedUserRepository,
+    internal val event: AuthorizeEventStateFlow = AuthorizeEventStateFlow(MutableStateFlow(Event.OK)),
 ) : ViewModel() {
     enum class Event { OK, REOPEN, SIGN_IN }
 
-    private val mutableEvent by lazy { MutableStateFlow(Event.OK) }
+    protected inline fun launchWithAuth(
+        state: MutableStateFlow<LoadState>,
+        crossinline block: suspend () -> Unit,
+    ) {
+        val job = launch {
+            runCatchingWithAuth { block() }
+                .onSuccess { state.value = LoadState.Initial }
+                .onFailure { e -> state.value = LoadState.Error(e) }
+        }
 
-    internal val event: StateFlow<Event> = mutableEvent
+        state.value = LoadState.Loading(job)
+    }
 
     protected inline fun <R> runCatchingWithAuth(
         block: () -> R,
@@ -38,23 +50,18 @@ abstract class AuthorizedViewModel(
         }
     }
 
-    internal fun reset() {
-        mutableEvent.value = Event.OK
-    }
+    internal fun reset() = event.reset()
 
-    protected fun reopen() {
-        mutableEvent.value = Event.REOPEN
-    }
+    protected fun reopen() = event.reopen()
 
-    protected fun requestSignIn() {
-        mutableEvent.value = Event.SIGN_IN
-    }
+    protected fun requestSignIn() = event.requestSignIn()
 
     protected fun <T1, T2, R> buildUiModel(
         flow: Flow<T1>,
         flow2: Flow<T2>,
         initialValue: R,
         started: SharingStarted = SharingStarted.WhileSubscribed(),
+        catch: suspend (Throwable) -> Unit = {},
         transform: suspend (T1, T2) -> R,
     ) = combine(
         flow,
@@ -62,6 +69,7 @@ abstract class AuthorizedViewModel(
         transform,
     ).stateInWithAuth(
         started = started,
+        catch = catch,
         initialValue = initialValue,
     )
 
@@ -71,6 +79,7 @@ abstract class AuthorizedViewModel(
         flow3: Flow<T3>,
         initialValue: R,
         started: SharingStarted = SharingStarted.WhileSubscribed(),
+        catch: suspend (Throwable) -> Unit = {},
         transform: suspend (T1, T2, T3) -> R,
     ) = combine(
         flow,
@@ -79,6 +88,7 @@ abstract class AuthorizedViewModel(
         transform,
     ).stateInWithAuth(
         started = started,
+        catch = catch,
         initialValue = initialValue,
     )
 
@@ -89,6 +99,7 @@ abstract class AuthorizedViewModel(
         flow4: Flow<T4>,
         initialValue: R,
         started: SharingStarted = SharingStarted.WhileSubscribed(),
+        catch: suspend (Throwable) -> Unit = {},
         transform: suspend (T1, T2, T3, T4) -> R,
     ) = combine(
         flow,
@@ -98,6 +109,7 @@ abstract class AuthorizedViewModel(
         transform,
     ).stateInWithAuth(
         started = started,
+        catch = catch,
         initialValue = initialValue,
     )
 
@@ -109,6 +121,7 @@ abstract class AuthorizedViewModel(
         flow5: Flow<T5>,
         initialValue: R,
         started: SharingStarted = SharingStarted.WhileSubscribed(),
+        catch: suspend (Throwable) -> Unit = {},
         transform: suspend (T1, T2, T3, T4, T5) -> R,
     ) = combine(
         flow,
@@ -119,14 +132,17 @@ abstract class AuthorizedViewModel(
         transform,
     ).stateInWithAuth(
         started = started,
+        catch = catch,
         initialValue = initialValue,
     )
 
     private fun <R> Flow<R>.stateInWithAuth(
         started: SharingStarted,
+        catch: suspend (Throwable) -> Unit,
         initialValue: R,
     ) = catch { e ->
         handleException(e)
+        catch(e)
     }.stateIn(
         scope = viewModelScope,
         started = started,

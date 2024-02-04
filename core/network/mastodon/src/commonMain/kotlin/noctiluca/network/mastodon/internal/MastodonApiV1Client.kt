@@ -13,6 +13,7 @@ import noctiluca.network.mastodon.data.extendeddescription.NetworkExtendedDescri
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.status.NetworkStatus
 import noctiluca.network.mastodon.data.status.NetworkStatusesContext
+import noctiluca.network.mastodon.paramaters.account.AccountFollowParameter
 
 internal class MastodonApiV1Client(
     token: AuthenticationTokenProvider,
@@ -162,8 +163,11 @@ internal class MastodonApiV1Client(
 
     override suspend fun postAccountsFollow(
         id: String,
+        reblogs: Boolean,
+        notify: Boolean,
     ): NetworkRelationship = client.post(
         Api.V1.Accounts.Id.Follow(Api.V1.Accounts.Id(id = id)),
+        AccountFollowParameter(reblogs, notify),
     ).body()
 
     override suspend fun postAccountsUnfollow(

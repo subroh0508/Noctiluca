@@ -91,6 +91,8 @@ interface MastodonApiV1 {
 
     suspend fun postAccountsFollow(
         id: String,
+        reblogs: Boolean = true,
+        notify: Boolean = false,
     ): NetworkRelationship
 
     suspend fun postAccountsUnfollow(

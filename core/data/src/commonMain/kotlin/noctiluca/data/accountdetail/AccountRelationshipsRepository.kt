@@ -10,4 +10,7 @@ interface AccountRelationshipsRepository {
     suspend fun follow(id: AccountId)
     suspend fun block(id: AccountId)
     suspend fun mute(id: AccountId)
+
+    suspend fun toggleReblog(id: AccountId)
+    suspend fun toggleNotify(id: AccountId)
 }

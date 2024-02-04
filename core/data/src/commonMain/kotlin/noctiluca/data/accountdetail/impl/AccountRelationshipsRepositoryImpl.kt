@@ -69,6 +69,30 @@ internal class AccountRelationshipsRepositoryImpl(
         accountRelationshipsStateFlow.value = json.toValueObject()
     }
 
+    override suspend fun toggleReblog(id: AccountId) {
+        if (current.me) {
+            return
+        }
+
+        accountRelationshipsStateFlow.value = v1.postAccountsFollow(
+            id.value,
+            reblogs = !current.showReblogs,
+            notify = current.notifying,
+        ).toValueObject()
+    }
+
+    override suspend fun toggleNotify(id: AccountId) {
+        if (current.me) {
+            return
+        }
+
+        accountRelationshipsStateFlow.value = v1.postAccountsFollow(
+            id.value,
+            reblogs = current.showReblogs,
+            notify = !current.notifying,
+        ).toValueObject()
+    }
+
     private suspend fun fetchRelationships(
         id: AccountId,
     ): Relationships {

@@ -6,28 +6,28 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.component.AccountDetailTabs
-import noctiluca.features.accountdetail.component.AccountStatusesScrollState
-import noctiluca.features.accountdetail.component.AccountStatusesTab
-import noctiluca.features.accountdetail.component.rememberTabbedAccountStatusesState
+import noctiluca.features.accountdetail.model.AttributesModel
+import noctiluca.features.accountdetail.model.RelationshipsModel
 import noctiluca.features.accountdetail.section.AccountDetailCaption
-import noctiluca.features.accountdetail.section.AccountDetailHeadline
+import noctiluca.features.accountdetail.section.AccountDetailScrollableFrame
 import noctiluca.features.accountdetail.section.AccountDetailTopAppBar
 import noctiluca.features.accountdetail.viewmodel.AccountDetailViewModel
 import noctiluca.features.accountdetail.viewmodel.AccountRelationshipsViewModel
+import noctiluca.features.accountdetail.viewmodel.AccountStatusesViewModel
 import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.AuthorizedComposable
-import noctiluca.features.shared.molecules.list.LazyColumn
+import noctiluca.features.shared.model.LoadState
+import noctiluca.features.shared.molecules.list.infiniteScrollFooter
+import noctiluca.features.shared.molecules.list.items
+import noctiluca.features.shared.status.Status
 import noctiluca.model.AccountId
 import noctiluca.model.accountdetail.AccountAttributes
-import noctiluca.model.accountdetail.StatusesQuery
-import noctiluca.model.status.Status
 import org.koin.core.parameter.parametersOf
 import noctiluca.features.navigation.AccountDetail as NavigationAccountDetailScreen
 
@@ -49,41 +49,33 @@ internal data class AccountDetailScreen(
     override fun Content() = AuthorizedComposable(
         LocalResources provides Resources(Locale.current.language),
     ) {
-        val accountDetailViewModel: AccountDetailViewModel = getScreenModel {
-            parametersOf(AccountId(id))
-        }
-        val accountRelationshipsViewModel: AccountRelationshipsViewModel = getScreenModel {
+        val viewModel: AccountRelationshipsViewModel = getScreenModel {
             parametersOf(AccountId(id))
         }
 
+        val uiModel by viewModel.uiModel.collectAsState()
+
         AccountDetailScaffold(
-            accountDetailViewModel,
             topBar = { account, scrollBehavior ->
                 AccountDetailTopAppBar(
                     account,
-                    accountRelationshipsViewModel,
+                    uiModel,
                     scrollBehavior,
+                    mute = { viewModel.mute() },
+                    block = { viewModel.block() },
+                    report = {},
+                    toggleReblogs = { viewModel.toggleReblogs() },
                 )
             },
-        ) { uiModel, paddingValues, scrollBehavior ->
+        ) { attributesUiModel, paddingValues, scrollBehavior ->
             AccountDetailContent(
-                tabs = { statusesScrollState ->
-                    AccountDetailTabs(
-                        uiModel.query,
-                        statusesScrollState,
-                        onSwitch = { tab ->
-                            statusesScrollState.cacheScrollPosition(tab)
-                            accountDetailViewModel.switch(tab)
-                        },
-                    )
-                },
                 paddingValues,
-                accountRelationshipsViewModel,
-                uiModel.account,
-                uiModel.query,
-                uiModel.foreground,
+                attributesUiModel,
+                uiModel,
                 scrollBehavior,
-                loadMore = { accountDetailViewModel.loadStatusesMore() },
+                follow = { viewModel.follow() },
+                block = { viewModel.block() },
+                notifyNewStatus = { viewModel.toggleNotify() },
             )
         }
     }
@@ -91,99 +83,104 @@ internal data class AccountDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun AccountDetailScaffold(
-        viewModel: AccountDetailViewModel,
         topBar: @Composable (AccountAttributes?, TopAppBarScrollBehavior) -> Unit,
-        content: @Composable (AccountDetailViewModel.UiModel.Loaded, PaddingValues, TopAppBarScrollBehavior) -> Unit,
+        content: @Composable (AttributesModel, PaddingValues, TopAppBarScrollBehavior) -> Unit,
     ) {
+        val viewModel: AccountDetailViewModel = getScreenModel {
+            parametersOf(AccountId(id))
+        }
         val uiModel by viewModel.uiModel.collectAsState()
 
         val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
         val snackbarHostState = remember { SnackbarHostState() }
 
         Scaffold(
-            topBar = { topBar(uiModel.account, scrollBehavior) },
+            topBar = { topBar(uiModel.attributes, scrollBehavior) },
             snackbarHost = { SnackbarHost(snackbarHostState) },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         ) { paddingValues ->
-            when (val state = uiModel) {
-                is AccountDetailViewModel.UiModel.Loading -> LinearProgressIndicator(
+            if (uiModel.state is LoadState.Loading) {
+                LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth()
                         .offset(y = paddingValues.calculateTopPadding()),
                 )
-
-                is AccountDetailViewModel.UiModel.Loaded -> content(
-                    state,
-                    paddingValues,
-                    scrollBehavior,
-                )
+                return@Scaffold
             }
+
+            content(
+                uiModel,
+                paddingValues,
+                scrollBehavior,
+            )
         }
     }
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun AccountDetailContent(
-        tabs: @Composable (AccountStatusesScrollState) -> Unit,
         paddingValues: PaddingValues,
-        viewModel: AccountRelationshipsViewModel,
-        account: AccountAttributes,
-        tab: StatusesQuery,
-        statuses: List<Status>,
+        attributesModel: AttributesModel,
+        relationshipsModel: RelationshipsModel,
         scrollBehavior: TopAppBarScrollBehavior,
-        loadMore: () -> Unit,
+        follow: () -> Unit,
+        block: () -> Unit,
+        notifyNewStatus: () -> Unit,
     ) {
+        val viewModel: AccountStatusesViewModel = getScreenModel {
+            parametersOf(AccountId(id))
+        }
         val uiModel by viewModel.uiModel.collectAsState()
 
         val navigator = LocalNavigator.current
-        val statusesScrollState = rememberTabbedAccountStatusesState(tab)
 
-        Box(modifier = Modifier.fillMaxSize()) {
-            LazyColumn(
-                state = statusesScrollState.lazyListState,
-                contentPadding = PaddingValues(
-                    start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
-                    top = paddingValues.calculateTopPadding(),
-                    end = paddingValues.calculateEndPadding(LayoutDirection.Ltr),
-                    bottom = 64.dp,
-                ),
-                modifier = Modifier.fillMaxSize(),
-            ) {
-                item {
-                    AccountDetailCaption(
-                        account,
-                        uiModel,
-                        follow = { viewModel.follow() },
-                        block = { viewModel.block() },
-                        notifyNewStatus = { viewModel.toggleNotify() },
-                        modifier = Modifier.padding(horizontal = 16.dp),
-                    )
-                }
-
-                AccountStatusesTab(
-                    tabs = { tabs(statusesScrollState) },
-                    statuses,
-                    onClickStatus = { navigator?.navigateToStatusDetail(it) },
-                    loadMore = loadMore,
+        AccountDetailScrollableFrame(
+            paddingValues,
+            attributesModel.attributes,
+            relationshipsModel.relationships,
+            uiModel.query,
+            scrollBehavior,
+            caption = { attributes ->
+                AccountDetailCaption(
+                    attributes,
+                    relationshipsModel,
+                    follow = follow,
+                    block = block,
+                    notifyNewStatus = notifyNewStatus,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                )
+            },
+            tabs = { scrollState ->
+                AccountDetailTabs(
+                    uiModel.query,
+                    scrollState,
+                    onSwitch = { tab ->
+                        scrollState.cacheScrollPosition(tab)
+                        viewModel.switch(tab)
+                    },
+                )
+            },
+        ) {
+            items(
+                uiModel.foreground,
+                key = { _, status -> status.id.value },
+                showDivider = true,
+            ) { _, status ->
+                Status(
+                    status,
+                    onClick = { navigator?.navigateToStatusDetail(it) },
+                    onClickAvatar = {},
+                    onClickAction = {},
                 )
             }
 
-            AccountDetailHeadline(
-                account,
-                uiModel.relationships,
-                scrollBehavior,
+            infiniteScrollFooter(
+                isLoading = uiModel.state.loading,
+                onLoad = {
+                    if (uiModel.foreground.isNotEmpty()) {
+                        viewModel.loadStatusesMore()
+                    }
+                },
             )
-
-            if (statusesScrollState.lazyListState.firstVisibleItemIndex >= 1) {
-                Box(
-                    modifier = Modifier.offset(y = 64.dp),
-                ) { tabs(statusesScrollState) }
-            }
         }
     }
-
-    private val AccountDetailViewModel.UiModel.account: AccountAttributes?
-        get() = when (this) {
-            is AccountDetailViewModel.UiModel.Loaded -> account
-            else -> null
-        }
 }

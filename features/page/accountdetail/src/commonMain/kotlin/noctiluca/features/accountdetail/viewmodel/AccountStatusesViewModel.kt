@@ -2,15 +2,12 @@ package noctiluca.features.accountdetail.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import noctiluca.data.accountdetail.AccountDetailRepository
 import noctiluca.data.accountdetail.AccountStatusRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.features.accountdetail.model.StatusesTabModel
 import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
-import noctiluca.features.shared.viewmodel.launch
 import noctiluca.model.AccountId
 import noctiluca.model.accountdetail.StatusesQuery
 

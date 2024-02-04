@@ -1,8 +1,6 @@
 package noctiluca.features.accountdetail.section
 
 import androidx.compose.foundation.background
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -12,6 +10,7 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.component.topappbar.ActionMenu
 import noctiluca.features.accountdetail.component.topappbar.Title
 import noctiluca.features.accountdetail.model.RelationshipsModel
+import noctiluca.features.navigation.component.Back
 import noctiluca.model.accountdetail.AccountAttributes
 
 private const val CONTAINER_COLOR_ALPHA = 0.75F
@@ -40,14 +39,7 @@ fun AccountDetailTopAppBar(
                 ),
             ),
         ),
-        navigationIcon = {
-            IconButton(onClick = { navigator?.pop() }) {
-                Icon(
-                    Icons.AutoMirrored.Filled.ArrowBack,
-                    contentDescription = "Back",
-                )
-            }
-        },
+        navigationIcon = { Back() },
         actions = {
             ActionMenu(
                 detail?.username,

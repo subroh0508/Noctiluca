@@ -183,6 +183,6 @@ internal data class AccountDetailScreen(
         attributesModel: AttributesModel,
         relationshipsModel: RelationshipsModel,
     ) = attributesModel.attributes == null ||
-            attributesModel.state.loading ||
-            relationshipsModel.state.loading
+        attributesModel.state.loading ||
+        relationshipsModel.state.loading
 }

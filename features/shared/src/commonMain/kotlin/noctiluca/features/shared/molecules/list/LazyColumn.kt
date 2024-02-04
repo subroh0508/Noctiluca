@@ -74,12 +74,12 @@ fun InfiniteScrollFooter(
     onLoad: suspend CoroutineScope.() -> Unit,
     height: Dp = InfiniteScrollFooterHeight,
 ) {
+    LaunchedEffect(Unit) { onLoad() }
+
     if (!isLoading) {
         Spacer(Modifier.height(height))
         return
     }
-
-    LaunchedEffect(Unit) { onLoad() }
 
     Box(
         modifier = Modifier.fillMaxWidth()

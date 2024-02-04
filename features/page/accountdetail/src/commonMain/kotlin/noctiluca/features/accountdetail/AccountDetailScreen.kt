@@ -22,7 +22,6 @@ import noctiluca.features.accountdetail.viewmodel.AccountRelationshipsViewModel
 import noctiluca.features.accountdetail.viewmodel.AccountStatusesViewModel
 import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.AuthorizedComposable
-import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.list.infiniteScrollFooter
 import noctiluca.features.shared.molecules.list.items
 import noctiluca.features.shared.status.Status
@@ -52,10 +51,10 @@ internal data class AccountDetailScreen(
         val viewModel: AccountRelationshipsViewModel = getScreenModel {
             parametersOf(AccountId(id))
         }
-
         val uiModel by viewModel.uiModel.collectAsState()
 
         AccountDetailScaffold(
+            uiModel,
             topBar = { account, scrollBehavior ->
                 AccountDetailTopAppBar(
                     account,
@@ -83,6 +82,7 @@ internal data class AccountDetailScreen(
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     private fun AccountDetailScaffold(
+        relationshipsModel: RelationshipsModel,
         topBar: @Composable (AccountAttributes?, TopAppBarScrollBehavior) -> Unit,
         content: @Composable (AttributesModel, PaddingValues, TopAppBarScrollBehavior) -> Unit,
     ) {
@@ -99,12 +99,11 @@ internal data class AccountDetailScreen(
             snackbarHost = { SnackbarHost(snackbarHostState) },
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         ) { paddingValues ->
-            if (uiModel.state is LoadState.Loading) {
+            if (showProgress(uiModel, relationshipsModel)) {
                 LinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth()
                         .offset(y = paddingValues.calculateTopPadding()),
                 )
-                return@Scaffold
             }
 
             content(
@@ -175,12 +174,15 @@ internal data class AccountDetailScreen(
 
             infiniteScrollFooter(
                 isLoading = uiModel.state.loading,
-                onLoad = {
-                    if (uiModel.foreground.isNotEmpty()) {
-                        viewModel.loadStatusesMore()
-                    }
-                },
+                onLoad = { viewModel.loadStatusesMore() },
             )
         }
     }
+
+    private fun showProgress(
+        attributesModel: AttributesModel,
+        relationshipsModel: RelationshipsModel,
+    ) = attributesModel.attributes == null ||
+            attributesModel.state.loading ||
+            relationshipsModel.state.loading
 }

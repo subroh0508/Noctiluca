@@ -8,7 +8,6 @@ import noctiluca.features.accountdetail.model.RelationshipsStateModel
 import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
-import noctiluca.features.shared.viewmodel.launch
 import noctiluca.model.AccountId
 
 class AccountRelationshipsViewModel(
@@ -33,53 +32,23 @@ class AccountRelationshipsViewModel(
         }
     }
 
-    fun follow() {
-        val job = launch {
-            runCatchingWithAuth { accountRelationshipsRepository.follow(id) }
-                .onSuccess { state.value = LoadState.Initial }
-                .onFailure { e -> state.value = LoadState.Error(e) }
-        }
-
-        state.value = LoadState.Loading(job)
+    fun follow() = launchWithAuth(state) {
+        accountRelationshipsRepository.follow(id)
     }
 
-    fun block() {
-        val job = launch {
-            runCatchingWithAuth { accountRelationshipsRepository.block(id) }
-                .onSuccess { state.value = LoadState.Initial }
-                .onFailure { e -> state.value = LoadState.Error(e) }
-        }
-
-        state.value = LoadState.Loading(job)
+    fun block() = launchWithAuth(state) {
+        accountRelationshipsRepository.block(id)
     }
 
-    fun mute() {
-        val job = launch {
-            runCatchingWithAuth { accountRelationshipsRepository.mute(id) }
-                .onSuccess { state.value = LoadState.Initial }
-                .onFailure { e -> state.value = LoadState.Error(e) }
-        }
-
-        state.value = LoadState.Loading(job)
+    fun mute() = launchWithAuth(state) {
+        accountRelationshipsRepository.mute(id)
     }
 
-    fun toggleReblogs() {
-        val job = launch {
-            runCatchingWithAuth { accountRelationshipsRepository.toggleReblog(id) }
-                .onSuccess { state.value = LoadState.Initial }
-                .onFailure { e -> state.value = LoadState.Error(e) }
-        }
-
-        state.value = LoadState.Loading(job)
+    fun toggleReblogs() = launchWithAuth(state) {
+        accountRelationshipsRepository.toggleReblog(id)
     }
 
-    fun toggleNotify() {
-        val job = launch {
-            runCatchingWithAuth { accountRelationshipsRepository.toggleNotify(id) }
-                .onSuccess { state.value = LoadState.Initial }
-                .onFailure { e -> state.value = LoadState.Error(e) }
-        }
-
-        state.value = LoadState.Loading(job)
+    fun toggleNotify() = launchWithAuth(state) {
+        accountRelationshipsRepository.toggleNotify(id)
     }
 }

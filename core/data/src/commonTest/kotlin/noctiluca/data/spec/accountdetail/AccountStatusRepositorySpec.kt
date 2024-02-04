@@ -167,8 +167,6 @@ private fun MockHttpClientEngine.mockGetInitialStatuses() = mock(
     { parameters: ParametersBuilder ->
         with(parameters) {
             append("only_media", "true")
-            append("exclude_replies", "true")
-            append("exclude_reblogs", "false")
             append("limit", "20")
         }
     } to "[$JSON_STATUS_MEDIA]",
@@ -202,8 +200,6 @@ private fun MockHttpClientEngine.Builder.mockGetNextStatuses() = mock(
         with(parameters) {
             append("max_id", media.id.value)
             append("only_media", "true")
-            append("exclude_replies", "true")
-            append("exclude_reblogs", "false")
             append("limit", "20")
         }
     } to "[$JSON_STATUS_MEDIA_ID_199]",

@@ -113,9 +113,8 @@ class AccountDetailRepositorySpec : DescribeSpec({
             context("and the id is not mine") {
                 val repository = buildRepository(
                     MockHttpClientEngine
-                        .mock(Api.V1.Accounts.Id(id = otherAccount.id.value), JSON_OTHER_ACCOUNT)
                         .mock(
-                            Api.V1.Accounts.Relationships(),
+                            Api.V1.Accounts.Id(id = otherAccount.id.value),
                             HttpStatusCode.BadRequest,
                         )
                         .build(),

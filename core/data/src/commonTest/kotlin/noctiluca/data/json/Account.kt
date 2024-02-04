@@ -374,3 +374,39 @@ val JSON_ACCOUNTS_RELATIONSHIP_ENDORSED = """
       "note": "<p>note</p>"
     }
 """.trim()
+
+val JSON_ACCOUNTS_RELATIONSHIP_FOLLOWING_AND_SHOWING_REBLOGS = """
+    {
+      "id": "$OTHER_ACCOUNT_ID",
+      "following": true,
+      "showing_reblogs": true,
+      "notifying": false,
+      "followed_by": false,
+      "blocking": false,
+      "blocked_by": false,
+      "muting": false,
+      "muting_notifications": false,
+      "requested": false,
+      "domain_blocking": false,
+      "endorsed": false,
+      "note": "<p>note</p>"
+    }
+""".trim()
+
+val JSON_ACCOUNTS_RELATIONSHIP_FOLLOWING_AND_NOTIFYING = """
+    {
+      "id": "$OTHER_ACCOUNT_ID",
+      "following": true,
+      "showing_reblogs": false,
+      "notifying": true,
+      "followed_by": false,
+      "blocking": false,
+      "blocked_by": false,
+      "muting": false,
+      "muting_notifications": false,
+      "requested": false,
+      "domain_blocking": false,
+      "endorsed": false,
+      "note": "<p>note</p>"
+    }
+""".trim()

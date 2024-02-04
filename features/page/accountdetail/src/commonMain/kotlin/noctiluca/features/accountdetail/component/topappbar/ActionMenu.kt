@@ -61,8 +61,7 @@ internal fun ActionMenu(
                 username,
                 uiModel.relationships,
                 onDismissRequest = { expanded = false },
-                hideReblogs = {},
-                showReblogs = {},
+                toggleReblogs = { viewModel.toggleReblogs() },
             )
             CommonMenu(
                 username,

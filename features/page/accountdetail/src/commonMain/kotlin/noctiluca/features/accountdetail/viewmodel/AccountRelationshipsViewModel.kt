@@ -62,4 +62,24 @@ class AccountRelationshipsViewModel(
 
         state.value = LoadState.Loading(job)
     }
+
+    fun toggleReblogs() {
+        val job = launch {
+            runCatchingWithAuth { accountRelationshipsRepository.toggleReblog(id) }
+                .onSuccess { state.value = LoadState.Initial }
+                .onFailure { e -> state.value = LoadState.Error(e) }
+        }
+
+        state.value = LoadState.Loading(job)
+    }
+
+    fun toggleNotify() {
+        val job = launch {
+            runCatchingWithAuth { accountRelationshipsRepository.toggleNotify(id) }
+                .onSuccess { state.value = LoadState.Initial }
+                .onFailure { e -> state.value = LoadState.Error(e) }
+        }
+
+        state.value = LoadState.Loading(job)
+    }
 }

@@ -13,8 +13,7 @@ internal fun FollowingAccountMenu(
     username: String,
     relationships: Relationships,
     onDismissRequest: () -> Unit,
-    hideReblogs: () -> Unit,
-    showReblogs: () -> Unit,
+    toggleReblogs: () -> Unit,
 ) {
     if (!relationships.following) {
         return
@@ -24,13 +23,13 @@ internal fun FollowingAccountMenu(
         username,
         relationships,
         onDismissRequest = onDismissRequest,
-        hideReblogs = hideReblogs,
+        hideReblogs = toggleReblogs,
     )
     ShowReblogs(
         username,
         relationships,
         onDismissRequest = onDismissRequest,
-        showReblogs = showReblogs,
+        showReblogs = toggleReblogs,
     )
     Divider(Modifier.fillMaxWidth())
 }

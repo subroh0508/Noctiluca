@@ -1,4 +1,4 @@
-package noctiluca.features.authentication.templates.scaffold
+package noctiluca.features.authentication.screen
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -8,11 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.authentication.SignInScreen
+import noctiluca.features.authentication.component.InstanceSuggestsList
+import noctiluca.features.authentication.component.QueryTextField
 import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.organisms.list.InstanceSuggestsList
-import noctiluca.features.authentication.organisms.textfield.SearchInstanceQueryTextField
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
+import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.HeadlineWithProgress
 
 private val HorizontalPadding = 16.dp
@@ -28,22 +29,25 @@ internal fun SearchInstanceScaffold(
     Scaffold(
         topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
     ) { paddingValues ->
-        SearchInstanceQueryTextField(
-            uiModel = uiModel,
-            paddingValues = paddingValues,
-            onDebouncedTextChange = {
-                viewModel.search(it)
-            },
+        Headline(uiModel.state.loading)
+
+        QueryTextField(
+            paddingValues,
+            onDebouncedTextChange = { viewModel.search(it) },
             modifier = Modifier.padding(horizontal = HorizontalPadding),
-            headline = { loading -> Headline(loading) },
-            listContent = { suggests ->
-                InstanceSuggestsList(
-                    suggests,
-                    onSelect = {
-                        navigator?.push(SignInScreen(it.domain))
-                    },
-                )
+        )
+
+        InstanceSuggestsList(
+            uiModel.suggests,
+            uiModel.state is LoadState.Loaded<*>,
+            onSelect = {
+                navigator?.push(SignInScreen(it.domain))
             },
+            modifier = Modifier.padding(
+                top = 8.dp,
+                start = HorizontalPadding,
+                end = HorizontalPadding,
+            ),
         )
     }
 }

@@ -7,19 +7,18 @@ import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.outlined.NotificationAdd
-import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.accountdetail.model.RelationshipsStateModel
+import noctiluca.features.accountdetail.model.RelationshipsModel
 import noctiluca.model.accountdetail.Relationships
 
 @Composable
 internal fun RelationshipButton(
     locked: Boolean,
-    model: RelationshipsStateModel,
+    model: RelationshipsModel,
     follow: () -> Unit,
     block: () -> Unit,
     notifyNewStatus: () -> Unit,
@@ -59,7 +58,7 @@ private enum class ButtonType {
 
 private fun getButtonType(
     locked: Boolean,
-    state: RelationshipsStateModel
+    state: RelationshipsModel
 ) = with(state.relationships) {
     when {
         me -> ButtonType.EDIT_PROFILE

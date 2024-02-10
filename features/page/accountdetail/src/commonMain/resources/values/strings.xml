@@ -16,6 +16,8 @@
     <string name="account_detail_blocked">ブロックされています</string>
     <string name="account_detail_muting">ミュート済み</string>
 
+    <string name="account_detail_statuses_empty">投稿がありません</string>
+
     <string name="account_detail_menu_add_list">リストに追加</string>
     <string name="account_detail_menu_mute">@%sさんをミュート</string>
     <string name="account_detail_menu_unmute">@%sさんのミュートを解除</string>

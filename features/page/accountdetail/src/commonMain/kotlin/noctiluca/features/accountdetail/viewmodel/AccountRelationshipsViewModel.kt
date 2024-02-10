@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import noctiluca.data.accountdetail.AccountRelationshipsRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
-import noctiluca.features.accountdetail.model.RelationshipsStateModel
+import noctiluca.features.accountdetail.model.RelationshipsModel
 import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
@@ -22,10 +22,10 @@ class AccountRelationshipsViewModel(
         buildUiModel(
             accountRelationshipsRepository.relationships(id),
             state,
-            initialValue = RelationshipsStateModel(),
+            initialValue = RelationshipsModel(),
             catch = { e -> state.value = LoadState.Error(e) },
         ) { relationships, state ->
-            RelationshipsStateModel(
+            RelationshipsModel(
                 relationships = relationships,
                 state = state,
             )

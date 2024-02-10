@@ -13,18 +13,22 @@ import noctiluca.features.accountdetail.component.topappbar.dropdownmenu.item.Bl
 import noctiluca.features.accountdetail.component.topappbar.dropdownmenu.item.MuteDialog
 import noctiluca.features.accountdetail.component.topappbar.dropdownmenu.item.ReportFullScreenDialog
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.accountdetail.viewmodel.AccountRelationshipsViewModel
+import noctiluca.features.accountdetail.model.RelationshipsModel
 import noctiluca.model.accountdetail.AccountAttributes
 
 @Composable
 internal fun ActionMenu(
     username: String?,
     condition: AccountAttributes.Condition?,
-    viewModel: AccountRelationshipsViewModel,
+    relationshipsModel: RelationshipsModel,
+    openAddList: () -> Unit,
+    openBrowser: () -> Unit,
+    mute: () -> Unit,
+    block: () -> Unit,
+    report: () -> Unit,
+    toggleReblogs: () -> Unit,
 ) {
-    val uiModel by viewModel.uiModel.collectAsState()
-
-    if (username == null || condition == AccountAttributes.Condition.SUSPENDED || uiModel.relationships.me) {
+    if (username == null || condition == AccountAttributes.Condition.SUSPENDED || relationshipsModel.relationships.me) {
         return
     }
 
@@ -33,7 +37,12 @@ internal fun ActionMenu(
         openMuteDialog,
         openBlockDialog,
         openReportDialog,
-    ) = Dialogs(username, viewModel)
+    ) = Dialogs(
+        username,
+        mute = mute,
+        block = block,
+        report = report,
+    )
 
     IconButton(
         onClick = {}
@@ -53,27 +62,27 @@ internal fun ActionMenu(
             onDismissRequest = { expanded = false },
         ) {
             AddListMenu(
-                uiModel.relationships,
+                relationshipsModel.relationships,
                 onDismissRequest = { expanded = false },
-                onClick = {},
+                onClick = openAddList,
             )
             FollowingAccountMenu(
                 username,
-                uiModel.relationships,
+                relationshipsModel.relationships,
                 onDismissRequest = { expanded = false },
-                toggleReblogs = { viewModel.toggleReblogs() },
+                toggleReblogs = toggleReblogs,
             )
             CommonMenu(
                 username,
-                uiModel.relationships,
+                relationshipsModel.relationships,
                 onDismissRequest = { expanded = false },
                 openMuteDialog,
                 openBlockDialog,
                 openReportDialog,
-                unmute = { viewModel.mute() },
+                unmute = mute,
             )
             Divider(Modifier.fillMaxWidth())
-            OpenBrowser(onClick = {})
+            OpenBrowser(onClick = openBrowser)
         }
     }
 }
@@ -90,7 +99,9 @@ private fun OpenBrowser(
 @Composable
 private fun Dialogs(
     username: String,
-    viewModel: AccountRelationshipsViewModel,
+    mute: () -> Unit,
+    block: () -> Unit,
+    report: () -> Unit,
 ): List<MutableState<Boolean>> {
     val openMuteDialog = remember { mutableStateOf(false) }
     val openBlockDialog = remember { mutableStateOf(false) }
@@ -99,19 +110,19 @@ private fun Dialogs(
     MuteDialog(
         username,
         openMuteDialog,
-        mute = { viewModel.mute() },
+        mute = mute,
     )
 
     BlockDialog(
         username,
         openBlockDialog,
-        block = { viewModel.block() },
+        block = block,
     )
 
     ReportFullScreenDialog(
         username,
         openReportDialog,
-        report = {},
+        report = report,
     )
 
     return listOf(openMuteDialog, openBlockDialog, openReportDialog)

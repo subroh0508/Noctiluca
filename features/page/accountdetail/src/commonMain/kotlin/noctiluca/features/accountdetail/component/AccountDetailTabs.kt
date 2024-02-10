@@ -7,15 +7,20 @@ import noctiluca.features.accountdetail.section.scrollableframe.AccountDetailScr
 import noctiluca.features.shared.atoms.tab.PrimaryTabs
 import noctiluca.model.accountdetail.StatusesQuery
 
+internal val AccountDetailTabList = listOf(
+    StatusesQuery.DEFAULT,
+    StatusesQuery.WITH_REPLIES,
+    StatusesQuery.ONLY_MEDIA,
+)
+
 @Composable
 internal fun AccountDetailTabs(
     current: StatusesQuery,
-    queries: List<StatusesQuery>,
     scrollableFrameState: AccountDetailScrollableFrameState,
     onSwitch: (StatusesQuery) -> Unit = {},
     modifier: Modifier = Modifier,
 ) = PrimaryTabs(
-    queries.mapTitles(),
+    AccountDetailTabList.mapTitles(),
     current.ordinal,
     onClick = { _, (tab, _) ->
         scrollableFrameState.cacheScrollPosition(current, tab)

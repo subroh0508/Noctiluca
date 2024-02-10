@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
+import noctiluca.features.accountdetail.component.AccountDetailTabList
 import noctiluca.model.accountdetail.StatusesQuery
 
 internal class AccountDetailScrollableFrameState private constructor(
@@ -74,10 +75,9 @@ internal class AccountDetailScrollableFrameState private constructor(
 @Composable
 internal fun rememberAccountDetailScrollableFrameState(
     current: StatusesQuery,
-    queries: List<StatusesQuery>,
 ): AccountDetailScrollableFrameState {
     val scrollState = rememberSaveable(saver = AccountDetailScrollableFrameState.Saver) {
-        AccountDetailScrollableFrameState(queries)
+        AccountDetailScrollableFrameState(AccountDetailTabList)
     }
 
     LaunchedEffect(current) { scrollState.restoreScrollPosition(current) }

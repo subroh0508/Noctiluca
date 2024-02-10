@@ -25,7 +25,6 @@ import noctiluca.features.shared.molecules.list.infiniteScrollFooter
 import noctiluca.features.shared.molecules.list.items
 import noctiluca.features.shared.status.Status
 import noctiluca.model.AccountId
-import noctiluca.model.accountdetail.StatusesQuery
 import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,11 +42,6 @@ internal fun AccountDetailScreen.AccountDetailContent(
         parametersOf(AccountId(id))
     }
     val statusesModel by viewModel.uiModel.collectAsState()
-    val queries = listOf(
-        StatusesQuery.DEFAULT,
-        StatusesQuery.WITH_REPLIES,
-        StatusesQuery.ONLY_MEDIA,
-    )
 
     val navigator = LocalNavigator.current
 
@@ -55,10 +49,7 @@ internal fun AccountDetailScreen.AccountDetailContent(
         paddingValues,
         attributesModel.attributes,
         relationshipsModel.relationships,
-        rememberAccountDetailScrollableFrameState(
-            statusesModel.query,
-            queries,
-        ),
+        rememberAccountDetailScrollableFrameState(statusesModel.query),
         scrollBehavior,
         caption = { attributes ->
             AccountDetailCaption(
@@ -73,7 +64,6 @@ internal fun AccountDetailScreen.AccountDetailContent(
         tabs = { scrollState ->
             AccountDetailTabs(
                 statusesModel.query,
-                queries,
                 scrollState,
                 onSwitch = { tab -> viewModel.switch(tab) },
             )

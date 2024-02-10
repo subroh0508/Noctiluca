@@ -3,53 +3,46 @@ package noctiluca.features.authentication.viewmodel
 import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
-import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
+import noctiluca.data.instance.InstanceRepository
+import noctiluca.features.authentication.model.InstanceSuggestsModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.ViewModel
-import noctiluca.features.shared.viewmodel.launchLazy
+import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.viewModelScope
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
 
 class MastodonInstanceListViewModel(
-    private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
+    private val repository: InstanceRepository,
 ) : ViewModel(), ScreenModel {
-    private val instanceSuggests by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
-    private val query by lazy { MutableStateFlow("") }
+    private val state by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
 
     val uiModel by lazy {
         combine(
-            instanceSuggests,
-            query,
-        ) { suggests, query -> UiModel(query, suggests) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = UiModel(),
+            repository.suggests(),
+            state,
+        ) { suggests, state ->
+            InstanceSuggestsModel(
+                suggests = if (state.loading) listOf() else suggests,
+                state = state,
             )
+        }.catch {
+            state.value = LoadState.Error(it)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = InstanceSuggestsModel(),
+        )
     }
 
     fun search(query: String) {
-        val prevQuery = uiModel.value.query
-
-        if (query == prevQuery) {
-            return
+        val job = launch {
+            runCatching { repository.search(query) }
+                .onSuccess { state.value = LoadState.Loaded(Unit) }
+                .onFailure { state.value = LoadState.Error(it) }
         }
 
-        this.query.value = query
-        if (query.isBlank()) {
-            instanceSuggests.value = LoadState.Initial
-            return
-        }
-
-        val job = launchLazy {
-            runCatching { searchMastodonInstancesUseCase.execute(query) }
-                .onSuccess { instanceSuggests.value = LoadState.Loaded(it) }
-                .onFailure { instanceSuggests.value = LoadState.Error(it) }
-        }
-
-        instanceSuggests.value = LoadState.Loading(job)
-        job.start()
+        state.value = LoadState.Loading(job)
     }
 
     data class UiModel(

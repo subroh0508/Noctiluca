@@ -8,6 +8,8 @@ kotlin {
     sourceSets {
         named("commonMain") {
             dependencies {
+                implementation(project(":core:data"))
+
                 implementation(project(":features:designsystem"))
                 implementation(project(":features:navigation"))
                 implementation(project(":features:shared"))

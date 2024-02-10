@@ -1,8 +1,9 @@
-package noctiluca.features.authentication.organisms.tab.info
+package noctiluca.features.authentication.component.tab.info
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Mail
@@ -21,14 +22,20 @@ import noctiluca.features.shared.atoms.list.Section
 import noctiluca.features.shared.atoms.list.SectionItem
 import noctiluca.model.authentication.Instance
 
-@Composable
-internal fun InstanceInformationTab(
-    instance: Instance,
-) = Column {
-    AdministratorSection(instance.administrator)
-    StatsSection(instance)
-    RulesSection(instance.rules)
-    VersionSection(instance.version)
+@Suppress("FunctionNaming")
+internal fun LazyListScope.InstanceInformationTab(
+    instance: Instance?,
+) {
+    instance ?: return
+
+    item {
+        Column {
+            AdministratorSection(instance.administrator)
+            StatsSection(instance)
+            RulesSection(instance.rules)
+            VersionSection(instance.version)
+        }
+    }
 }
 
 @Composable

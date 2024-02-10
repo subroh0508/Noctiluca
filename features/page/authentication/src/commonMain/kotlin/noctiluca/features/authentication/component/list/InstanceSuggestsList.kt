@@ -1,11 +1,10 @@
-package noctiluca.features.authentication.organisms.list
+package noctiluca.features.authentication.component.list
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import noctiluca.features.authentication.organisms.card.SuggestCard
 import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.model.authentication.Instance
 

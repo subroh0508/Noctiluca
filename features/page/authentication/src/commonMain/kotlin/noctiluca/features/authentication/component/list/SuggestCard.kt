@@ -1,4 +1,4 @@
-package noctiluca.features.authentication.organisms.card
+package noctiluca.features.authentication.component.list
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

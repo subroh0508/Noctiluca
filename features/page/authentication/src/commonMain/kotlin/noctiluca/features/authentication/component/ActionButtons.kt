@@ -1,4 +1,4 @@
-package noctiluca.features.authentication.templates.scaffold.instancedetail
+package noctiluca.features.authentication.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
@@ -12,26 +12,30 @@ import noctiluca.features.authentication.getString
 import noctiluca.model.authentication.Instance
 
 @Composable
-internal fun BoxScope.InstanceDetailActionButtons(
-    instance: Instance,
+internal fun BoxScope.ActionButtons(
+    instance: Instance?,
     isSignInProgress: Boolean,
     horizontalPadding: Dp,
     onClickAuthorize: (Instance) -> Unit,
-) = Column(
-    modifier = Modifier.fillMaxWidth()
-        .align(Alignment.BottomCenter)
-        .background(MaterialTheme.colorScheme.surface),
 ) {
-    Divider(Modifier.fillMaxWidth())
+    instance ?: return
 
-    Row(
+    Column(
         modifier = Modifier.fillMaxWidth()
-            .padding(
-                vertical = 8.dp,
-                horizontal = horizontalPadding,
-            ),
-        horizontalArrangement = Arrangement.End
-    ) { AuthorizeButton(instance, isSignInProgress, onClickAuthorize) }
+            .align(Alignment.BottomCenter)
+            .background(MaterialTheme.colorScheme.surface),
+    ) {
+        HorizontalDivider()
+
+        Row(
+            modifier = Modifier.fillMaxWidth()
+                .padding(
+                    vertical = 8.dp,
+                    horizontal = horizontalPadding,
+                ),
+            horizontalArrangement = Arrangement.End
+        ) { AuthorizeButton(instance, isSignInProgress, onClickAuthorize) }
+    }
 }
 
 @Composable

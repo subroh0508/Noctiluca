@@ -8,9 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.authentication.SignInScreen
-import noctiluca.features.authentication.component.InstanceSuggestsList
 import noctiluca.features.authentication.component.QueryTextField
 import noctiluca.features.authentication.getString
+import noctiluca.features.authentication.section.InstanceSuggestsList
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.shared.model.LoadState

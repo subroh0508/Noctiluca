@@ -1,4 +1,4 @@
-package noctiluca.features.authentication.organisms.tab.localtimeline
+package noctiluca.features.authentication.component.tab.localtimeline
 
 import androidx.compose.foundation.lazy.LazyListScope
 import noctiluca.features.shared.molecules.list.infiniteScrollFooter
@@ -9,6 +9,7 @@ import noctiluca.model.status.Status
 @Suppress("FunctionNaming")
 internal fun LazyListScope.InstanceLocalTimelineTab(
     statuses: List<Status>,
+    isLoading: Boolean,
     loadMore: () -> Unit,
 ) {
     items(
@@ -20,7 +21,7 @@ internal fun LazyListScope.InstanceLocalTimelineTab(
     }
 
     infiniteScrollFooter(
-        isLoading = true,
+        isLoading = isLoading,
         onLoad = { loadMore() },
     )
 }

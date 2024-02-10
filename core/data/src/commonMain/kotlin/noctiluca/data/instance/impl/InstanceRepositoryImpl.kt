@@ -46,7 +46,7 @@ internal class InstanceRepositoryImpl(
     }
 
     override suspend fun loadStatuses(domain: String) {
-        statuses.value = v1.getTimelinesPublic(
+        statuses.value += v1.getTimelinesPublic(
             domain,
             statuses.value.lastOrNull()?.id?.value,
         ).map {

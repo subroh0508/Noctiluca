@@ -1,4 +1,4 @@
-package noctiluca.features.authentication.component
+package noctiluca.features.authentication.section
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
@@ -10,8 +10,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import noctiluca.features.authentication.component.list.SuggestCard
 import noctiluca.features.authentication.getString
-import noctiluca.features.authentication.organisms.card.SuggestCard
 import noctiluca.model.authentication.Instance
 
 @Composable

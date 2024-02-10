@@ -8,8 +8,8 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildAuthorizeResult
+import noctiluca.features.authentication.screen.InstanceDetailScaffold
 import noctiluca.features.authentication.screen.SearchInstanceScaffold
-import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
 import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
 import noctiluca.features.navigation.MastodonInstanceDetailParams
 import noctiluca.features.navigation.MastodonInstanceListParams

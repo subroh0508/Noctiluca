@@ -58,7 +58,7 @@ internal fun InstanceDetailScaffold(
             horizontalPadding,
         )
 
-        when (scrollableFrameState.tab) {
+        when (scrollableFrameState.tab ?: return@InstanceDetailScrollableFrame) {
             InstancesTab.INFO -> InstanceInformationTab(uiModel.instance)
             InstancesTab.EXTENDED_DESCRIPTION -> InstanceExtendedDescriptionTab(uiModel.instance)
             InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(

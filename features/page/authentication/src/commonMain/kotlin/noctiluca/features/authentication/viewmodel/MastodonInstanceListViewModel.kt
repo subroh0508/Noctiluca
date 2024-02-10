@@ -7,6 +7,7 @@ import noctiluca.features.authentication.model.InstanceSuggestsModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.ViewModel
 import noctiluca.features.shared.viewmodel.launch
+import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope
 
 class MastodonInstanceListViewModel(
@@ -16,15 +17,14 @@ class MastodonInstanceListViewModel(
 
     val uiModel by lazy {
         combine(
-            repository.suggests(),
+            repository.suggests()
+                .catch { state.value = LoadState.Error(it) },
             state,
         ) { suggests, state ->
             InstanceSuggestsModel(
                 suggests = if (state.loading) listOf() else suggests,
                 state = state,
             )
-        }.catch {
-            state.value = LoadState.Error(it)
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(),
@@ -33,12 +33,13 @@ class MastodonInstanceListViewModel(
     }
 
     fun search(query: String) {
-        val job = launch {
+        val job = launchLazy {
             runCatching { repository.search(query) }
                 .onSuccess { state.value = LoadState.Loaded(Unit) }
                 .onFailure { state.value = LoadState.Error(it) }
         }
 
         state.value = LoadState.Loading(job)
+        job.start()
     }
 }

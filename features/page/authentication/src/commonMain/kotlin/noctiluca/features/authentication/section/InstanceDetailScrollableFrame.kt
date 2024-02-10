@@ -18,6 +18,7 @@ import noctiluca.features.authentication.getString
 import noctiluca.features.shared.atoms.card.CardHeader
 import noctiluca.features.shared.atoms.card.CardSupporting
 import noctiluca.features.shared.atoms.card.FilledCard
+import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
 import noctiluca.features.shared.getCommonString
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.utils.description
@@ -43,7 +44,7 @@ internal fun InstanceDetailScrollableFrame(
 
     Scaffold(
         topBar = { topBar(scrollableFrameState, scrollBehavior) },
-        snackbarHost = {},
+        snackbarHost = { SnackbarHost(LocalSnackbarHostState.current) },
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
     ) { paddingValues ->
         when (instanceLoadState) {
@@ -52,7 +53,6 @@ internal fun InstanceDetailScrollableFrame(
                 modifier = Modifier.fillMaxWidth()
                     .offset(y = paddingValues.calculateTopPadding()),
             )
-
             is LoadState.Error -> Fallback(
                 instanceLoadState.getErrorOrNull(),
                 PaddingValues(
@@ -61,7 +61,6 @@ internal fun InstanceDetailScrollableFrame(
                     end = HeadlinedScaffoldHorizontalPadding,
                 ),
             )
-
             is LoadState.Loaded<*> -> Box(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
@@ -173,7 +172,7 @@ internal class InstanceDetailScrollState private constructor(
         }
     }
 
-    val tab get() = tabs[currentTabIndex.value].first
+    val tab get() = tabs.getOrNull(currentIndex)?.first
     val currentIndex get() = currentTabIndex.value
 
     fun cacheScrollPosition(next: InstancesTab) {

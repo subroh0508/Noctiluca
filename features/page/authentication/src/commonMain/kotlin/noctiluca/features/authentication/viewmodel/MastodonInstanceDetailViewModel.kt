@@ -19,7 +19,8 @@ class MastodonInstanceDetailViewModel(
     val uiModel by lazy {
         combine(
             repository.instance(domain)
-                .catch { instanceLoadState.value = LoadState.Error(it) },
+                .catch { instanceLoadState.value = LoadState.Error(it) }
+                .onCompletion { instanceLoadState.value = LoadState.Loaded(Unit) },
             repository.statuses(domain)
                 .catch { statusesLoadState.value = LoadState.Error(it) },
             instanceLoadState,

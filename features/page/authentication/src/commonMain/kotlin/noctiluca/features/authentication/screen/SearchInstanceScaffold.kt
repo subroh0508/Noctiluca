@@ -1,5 +1,6 @@
 package noctiluca.features.authentication.screen
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -29,26 +30,26 @@ internal fun SearchInstanceScaffold(
     Scaffold(
         topBar = { CenterAlignedTopAppBar(getString().sign_in_page_title) },
     ) { paddingValues ->
-        Headline(uiModel.state.loading)
+        Column(
+            modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
+        ) {
+            Headline(uiModel.state.loading)
 
-        QueryTextField(
-            paddingValues,
-            onDebouncedTextChange = { viewModel.search(it) },
-            modifier = Modifier.padding(horizontal = HorizontalPadding),
-        )
+            QueryTextField(
+                paddingValues,
+                onDebouncedTextChange = { viewModel.search(it) },
+                modifier = Modifier.padding(horizontal = HorizontalPadding),
+            )
 
-        InstanceSuggestsList(
-            uiModel.suggests,
-            uiModel.state is LoadState.Loaded<*>,
-            onSelect = {
-                navigator?.push(SignInScreen(it.domain))
-            },
-            modifier = Modifier.padding(
-                top = 8.dp,
-                start = HorizontalPadding,
-                end = HorizontalPadding,
-            ),
-        )
+            InstanceSuggestsList(
+                uiModel.suggests,
+                uiModel.state is LoadState.Loaded<*>,
+                onSelect = {
+                    navigator?.push(SignInScreen(it.domain))
+                },
+                modifier = Modifier.padding(top = 8.dp),
+            )
+        }
     }
 }
 

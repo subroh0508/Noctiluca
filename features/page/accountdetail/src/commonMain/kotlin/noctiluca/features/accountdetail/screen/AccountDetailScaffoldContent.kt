@@ -63,10 +63,7 @@ internal fun AccountDetailScreen.AccountDetailContent(
             AccountDetailTabs(
                 statusesModel.query,
                 scrollState,
-                onSwitch = { tab ->
-                    scrollState.cacheScrollPosition(tab)
-                    viewModel.switch(tab)
-                },
+                onSwitch = { tab -> viewModel.switch(tab) },
             )
         },
     ) {

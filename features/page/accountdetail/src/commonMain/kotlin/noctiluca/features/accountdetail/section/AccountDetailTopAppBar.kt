@@ -6,7 +6,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.component.topappbar.ActionMenu
 import noctiluca.features.accountdetail.component.topappbar.Title
 import noctiluca.features.accountdetail.model.RelationshipsModel

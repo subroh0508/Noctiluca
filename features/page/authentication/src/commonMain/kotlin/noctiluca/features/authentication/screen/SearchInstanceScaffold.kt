@@ -36,7 +36,7 @@ internal fun SearchInstanceScaffold(
             Headline(uiModel.state.loading)
 
             QueryTextField(
-                paddingValues,
+                uiModel.query,
                 onDebouncedTextChange = { viewModel.search(it) },
                 modifier = Modifier.padding(horizontal = HorizontalPadding),
             )

@@ -20,13 +20,13 @@ private const val DEBOUNCE_TIME_MILLIS = 500L
 
 @Composable
 internal fun QueryTextField(
-    paddingValues: PaddingValues,
+    initQuery: String,
     onDebouncedTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = Modifier.padding()
 ) {
-    var query by remember { mutableStateOf("") }
+    var query by remember(initQuery) { mutableStateOf(initQuery) }
 
     DebouncedTextForm(
         query,

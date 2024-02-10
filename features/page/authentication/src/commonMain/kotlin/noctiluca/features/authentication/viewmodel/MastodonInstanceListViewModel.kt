@@ -1,6 +1,5 @@
 package noctiluca.features.authentication.viewmodel
 
-import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.instance.InstanceRepository
@@ -9,8 +8,6 @@ import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.ViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.viewModelScope
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 class MastodonInstanceListViewModel(
     private val repository: InstanceRepository,
@@ -43,23 +40,5 @@ class MastodonInstanceListViewModel(
         }
 
         state.value = LoadState.Loading(job)
-    }
-
-    data class UiModel(
-        val query: String = "",
-        val suggests: LoadState = LoadState.Initial,
-    ) : ScreenModel
-
-    companion object Provider {
-        @Composable
-        operator fun invoke(
-            koinComponent: KoinComponent,
-        ): MastodonInstanceListViewModel {
-            return remember {
-                MastodonInstanceListViewModel(
-                    koinComponent.get(),
-                )
-            }
-        }
     }
 }

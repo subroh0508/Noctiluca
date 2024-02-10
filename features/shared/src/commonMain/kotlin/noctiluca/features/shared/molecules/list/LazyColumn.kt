@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.*
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -72,12 +73,13 @@ fun LazyColumn(
 fun InfiniteScrollFooter(
     isLoading: Boolean,
     onLoad: suspend CoroutineScope.() -> Unit,
+    content: @Composable (Dp) -> Unit = { dp -> Spacer(Modifier.height(dp)) },
     height: Dp = InfiniteScrollFooterHeight,
 ) {
     LaunchedEffect(Unit) { onLoad() }
 
     if (!isLoading) {
-        Spacer(Modifier.height(height))
+        content(height)
         return
     }
 
@@ -85,6 +87,22 @@ fun InfiniteScrollFooter(
         modifier = Modifier.fillMaxWidth()
             .height(height),
     ) { CircularProgressIndicator(Modifier.align(Alignment.Center)) }
+}
+
+@Composable
+fun EmptyMessage(
+    message: String,
+    height: Dp,
+) = Box(
+    modifier = Modifier.fillMaxWidth()
+        .height(height),
+    contentAlignment = Alignment.Center,
+) {
+    Text(
+        message,
+        style = MaterialTheme.typography.bodyLarge,
+        color = MaterialTheme.colorScheme.outline,
+    )
 }
 
 inline fun <T : Any> LazyListScope.items(
@@ -115,4 +133,5 @@ inline fun LazyListScope.footer(
 fun LazyListScope.infiniteScrollFooter(
     isLoading: Boolean,
     onLoad: suspend CoroutineScope.() -> Unit,
-) = footer { InfiniteScrollFooter(isLoading, onLoad) }
+    content: @Composable (Dp) -> Unit = { dp -> Spacer(Modifier.height(dp)) },
+) = footer { InfiniteScrollFooter(isLoading, onLoad, content) }

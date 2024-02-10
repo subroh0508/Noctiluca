@@ -1,6 +1,8 @@
 package noctiluca.features.accountdetail.screen
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -14,13 +16,17 @@ import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.AccountDetailScreen
 import noctiluca.features.accountdetail.component.AccountDetailTabs
+import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.model.AttributesModel
 import noctiluca.features.accountdetail.model.RelationshipsModel
 import noctiluca.features.accountdetail.section.AccountDetailCaption
 import noctiluca.features.accountdetail.section.AccountDetailScrollableFrame
 import noctiluca.features.accountdetail.section.scrollableframe.rememberAccountDetailScrollableFrameState
 import noctiluca.features.accountdetail.viewmodel.AccountStatusesViewModel
+import noctiluca.features.navigation.AccountDetail
 import noctiluca.features.navigation.StatusDetail
+import noctiluca.features.shared.model.LoadState
+import noctiluca.features.shared.molecules.list.EmptyMessage
 import noctiluca.features.shared.molecules.list.infiniteScrollFooter
 import noctiluca.features.shared.molecules.list.items
 import noctiluca.features.shared.status.Status
@@ -75,18 +81,24 @@ internal fun AccountDetailScreen.AccountDetailContent(
             showDivider = true,
         ) { _, status ->
             val statusDetail = rememberScreen(StatusDetail(status.id.value))
+            val accountDetail = rememberScreen(AccountDetail(status.tooter.id.value))
 
             Status(
                 status,
                 onClick = { navigator?.push(statusDetail) },
-                onClickAvatar = {},
+                onClickAvatar = { navigator?.push(accountDetail) },
                 onClickAction = {},
             )
         }
 
         infiniteScrollFooter(
-            isLoading = statusesModel.state.loading,
+            isLoading = statusesModel.state.let { it.loading || it is LoadState.Initial },
             onLoad = { viewModel.loadStatusesMore() },
-        )
+        ) { height ->
+            when (statusesModel.foreground.isEmpty()) {
+                true -> EmptyMessage(getString().account_detail_statuses_empty, height)
+                false -> Spacer(Modifier.height(height))
+            }
+        }
     }
 }

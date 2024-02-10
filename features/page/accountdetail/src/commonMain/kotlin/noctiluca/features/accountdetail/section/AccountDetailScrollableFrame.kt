@@ -1,6 +1,7 @@
 package noctiluca.features.accountdetail.section
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -8,14 +9,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
-import noctiluca.features.accountdetail.component.AccountStatusesScrollState
 import noctiluca.features.accountdetail.component.headline.Avatar
 import noctiluca.features.accountdetail.component.headline.Header
-import noctiluca.features.accountdetail.component.rememberTabbedAccountStatusesState
-import noctiluca.features.shared.molecules.list.LazyColumn
+import noctiluca.features.accountdetail.section.scrollableframe.AccountDetailScrollableFrameState
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationships
-import noctiluca.model.accountdetail.StatusesQuery
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,19 +21,17 @@ internal fun AccountDetailScrollableFrame(
     paddingValues: PaddingValues,
     attributes: AccountAttributes?,
     relationships: Relationships,
-    query: StatusesQuery,
+    scrollableFrameState: AccountDetailScrollableFrameState,
     scrollBehavior: TopAppBarScrollBehavior,
     caption: @Composable (AccountAttributes) -> Unit,
-    tabs: @Composable (AccountStatusesScrollState) -> Unit,
+    tabs: @Composable (AccountDetailScrollableFrameState) -> Unit,
     content: LazyListScope.() -> Unit,
 ) {
     attributes ?: return
 
-    val statusesScrollState = rememberTabbedAccountStatusesState(query)
-
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
-            state = statusesScrollState.lazyListState,
+            state = scrollableFrameState.lazyListState,
             contentPadding = PaddingValues(
                 start = paddingValues.calculateStartPadding(LayoutDirection.Ltr),
                 top = paddingValues.calculateTopPadding(),
@@ -45,7 +41,7 @@ internal fun AccountDetailScrollableFrame(
             modifier = Modifier.fillMaxSize(),
         ) {
             item { caption(attributes) }
-            item { tabs(statusesScrollState) }
+            item { tabs(scrollableFrameState) }
 
             content()
         }
@@ -56,10 +52,10 @@ internal fun AccountDetailScrollableFrame(
             scrollBehavior,
         )
 
-        if (statusesScrollState.lazyListState.firstVisibleItemIndex >= 1) {
+        if (scrollableFrameState.firstVisibleItemIndex >= 1) {
             Box(
                 modifier = Modifier.offset(y = 64.dp),
-            ) { tabs(statusesScrollState) }
+            ) { tabs(scrollableFrameState) }
         }
     }
 }

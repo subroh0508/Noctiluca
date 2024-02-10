@@ -9,6 +9,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.AccountDetailScreen
@@ -17,12 +18,14 @@ import noctiluca.features.accountdetail.model.AttributesModel
 import noctiluca.features.accountdetail.model.RelationshipsModel
 import noctiluca.features.accountdetail.section.AccountDetailCaption
 import noctiluca.features.accountdetail.section.AccountDetailScrollableFrame
+import noctiluca.features.accountdetail.section.scrollableframe.rememberAccountDetailScrollableFrameState
 import noctiluca.features.accountdetail.viewmodel.AccountStatusesViewModel
-import noctiluca.features.navigation.navigateToStatusDetail
+import noctiluca.features.navigation.StatusDetail
 import noctiluca.features.shared.molecules.list.infiniteScrollFooter
 import noctiluca.features.shared.molecules.list.items
 import noctiluca.features.shared.status.Status
 import noctiluca.model.AccountId
+import noctiluca.model.accountdetail.StatusesQuery
 import org.koin.core.parameter.parametersOf
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,6 +43,11 @@ internal fun AccountDetailScreen.AccountDetailContent(
         parametersOf(AccountId(id))
     }
     val statusesModel by viewModel.uiModel.collectAsState()
+    val queries = listOf(
+        StatusesQuery.DEFAULT,
+        StatusesQuery.WITH_REPLIES,
+        StatusesQuery.ONLY_MEDIA,
+    )
 
     val navigator = LocalNavigator.current
 
@@ -47,7 +55,10 @@ internal fun AccountDetailScreen.AccountDetailContent(
         paddingValues,
         attributesModel.attributes,
         relationshipsModel.relationships,
-        statusesModel.query,
+        rememberAccountDetailScrollableFrameState(
+            statusesModel.query,
+            queries,
+        ),
         scrollBehavior,
         caption = { attributes ->
             AccountDetailCaption(
@@ -62,6 +73,7 @@ internal fun AccountDetailScreen.AccountDetailContent(
         tabs = { scrollState ->
             AccountDetailTabs(
                 statusesModel.query,
+                queries,
                 scrollState,
                 onSwitch = { tab -> viewModel.switch(tab) },
             )
@@ -72,9 +84,11 @@ internal fun AccountDetailScreen.AccountDetailContent(
             key = { _, status -> status.id.value },
             showDivider = true,
         ) { _, status ->
+            val statusDetail = rememberScreen(StatusDetail(status.id.value))
+
             Status(
                 status,
-                onClick = { navigator?.navigateToStatusDetail(it) },
+                onClick = { navigator?.push(statusDetail) },
                 onClickAvatar = {},
                 onClickAction = {},
             )

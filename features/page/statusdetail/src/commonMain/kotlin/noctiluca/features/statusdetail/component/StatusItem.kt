@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -13,7 +14,6 @@ import noctiluca.features.shared.status.Action
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
-import androidx.compose.material3.Divider as MaterialDivider
 import noctiluca.features.shared.status.Status as ComposableStatus
 
 internal enum class Position { TOP, MIDDLE, BOTTOM }
@@ -47,12 +47,12 @@ internal fun StatusItem(
 private fun TimelineAxisTop() = Box(
     modifier = Modifier.fillMaxHeight(),
 ) {
-    MaterialDivider(
+    VerticalDivider(
         modifier = Modifier.padding(
             top = 16.dp,
             start = 7.dp,
         )
-            .fillMaxHeight()
+            // .fillMaxHeight()
             .width(2.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
     )
@@ -63,9 +63,9 @@ private fun TimelineAxisTop() = Box(
 private fun TimelineAxisMiddle() = Box(
     modifier = Modifier.fillMaxHeight(),
 ) {
-    MaterialDivider(
+    VerticalDivider(
         modifier = Modifier.padding(start = 7.dp)
-            .fillMaxHeight()
+            // .fillMaxHeight()
             .width(2.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
     )
@@ -74,7 +74,7 @@ private fun TimelineAxisMiddle() = Box(
 
 @Composable
 private fun TimelineAxisBottom() = Box {
-    MaterialDivider(
+    VerticalDivider(
         modifier = Modifier.padding(start = 7.dp)
             .height(16.dp)
             .width(2.dp),

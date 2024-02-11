@@ -1,9 +1,7 @@
 package noctiluca.features.accountdetail.component.topappbar.dropdownmenu
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import noctiluca.features.accountdetail.component.topappbar.dropdownmenu.item.HideReblogs
 import noctiluca.features.accountdetail.component.topappbar.dropdownmenu.item.ShowReblogs
 import noctiluca.model.accountdetail.Relationships
@@ -31,5 +29,5 @@ internal fun FollowingAccountMenu(
         onDismissRequest = onDismissRequest,
         showReblogs = toggleReblogs,
     )
-    Divider(Modifier.fillMaxWidth())
+    HorizontalDivider()
 }

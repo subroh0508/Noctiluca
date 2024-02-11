@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import noctiluca.features.shared.account.TooterName
 import noctiluca.features.shared.atoms.clickable
-import noctiluca.features.shared.atoms.divider.Divider
 import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.features.shared.atoms.image.imageResources
 import noctiluca.features.shared.atoms.text.HtmlText
@@ -64,7 +63,7 @@ internal fun StatusDetail(
     )
 
     CreatedAtAndVia(status)
-    Divider(Modifier.fillMaxWidth())
+    HorizontalDivider()
     StatusDetailCount(status)
     StatusDetailActions(
         status,
@@ -175,7 +174,7 @@ private fun StatusDetailCount(
                 )
             }
         }
-        Divider(Modifier.fillMaxWidth())
+        HorizontalDivider()
     }
 }
 

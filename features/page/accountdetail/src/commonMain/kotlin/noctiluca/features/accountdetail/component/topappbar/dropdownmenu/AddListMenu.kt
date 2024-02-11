@@ -1,14 +1,9 @@
 package noctiluca.features.accountdetail.component.topappbar.dropdownmenu
 
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.PlaylistAdd
-import androidx.compose.material3.Divider
-import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import noctiluca.features.accountdetail.getString
 import noctiluca.model.accountdetail.Relationships
 
@@ -30,5 +25,5 @@ internal fun AddListMenu(
             onClick()
         },
     )
-    Divider(Modifier.fillMaxWidth())
+    HorizontalDivider()
 }

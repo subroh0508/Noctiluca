@@ -1,16 +1,11 @@
 package noctiluca.features.accountdetail.component.caption
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.ListItem
-import androidx.compose.material3.ListItemDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import kotlinx.datetime.LocalDateTime
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.shared.atoms.card.FilledCard
-import noctiluca.features.shared.atoms.divider.Divider
 import noctiluca.features.shared.atoms.text.HtmlText
 import noctiluca.features.shared.utils.toYearMonthDay
 import noctiluca.model.accountdetail.AccountAttributes
@@ -29,7 +24,10 @@ internal fun CustomFields(
 
     items.forEachIndexed { i, field ->
         if (i != 0) {
-            Divider(modifier = Modifier.fillMaxWidth())
+            HorizontalDivider(
+                thickness = Dp.Hairline,
+                color = MaterialTheme.colorScheme.outline,
+            )
         }
 
         CustomField(field)

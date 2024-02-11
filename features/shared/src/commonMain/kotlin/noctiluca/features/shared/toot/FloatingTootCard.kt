@@ -61,6 +61,7 @@ fun FloatingTootCard(
     TootTextArea(
         content.value ?: "",
         warning.value ?: "",
+        borderColor = MaterialTheme.colorScheme.outline,
         onChangeContent = { content.value = it },
         onChangeWarningText = { warning.value = it },
         modifier = Modifier.fillMaxWidth(),

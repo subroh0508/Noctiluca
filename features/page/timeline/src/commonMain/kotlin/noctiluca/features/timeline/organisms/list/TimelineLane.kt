@@ -1,6 +1,7 @@
 package noctiluca.features.timeline.organisms.list
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.CircularProgressIndicator
@@ -12,7 +13,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import noctiluca.features.shared.model.LoadState
-import noctiluca.features.shared.molecules.list.LazyColumn
+import noctiluca.features.shared.atoms.list.footer
+import noctiluca.features.shared.atoms.list.items
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
@@ -45,19 +47,23 @@ internal fun TimelineLane(
     }
 
     LazyColumn(
-        timelineState.timeline.statuses,
-        key = { it.id.value },
         modifier = modifier,
         state = lazyListState,
-        showDivider = true,
-        footerContent = { TimelineFooter(timelineState, loadState, onLoad) },
-    ) { _, item ->
-        Status(
-            item,
-            onClickAvatar = onClickAvatar,
-            onClick = onClickStatus,
-            onClickAction = { onExecuteAction(timelineState.timeline, item, it) },
-        )
+    ) {
+        items(
+            timelineState.timeline.statuses,
+            key = { _, item -> item.id.value },
+            showDivider = true,
+        ) { _, item ->
+            Status(
+                item,
+                onClickAvatar = onClickAvatar,
+                onClick = onClickStatus,
+                onClickAction = { onExecuteAction(timelineState.timeline, item, it) },
+            )
+        }
+
+        footer { TimelineFooter(timelineState, loadState, onLoad) }
     }
 }
 

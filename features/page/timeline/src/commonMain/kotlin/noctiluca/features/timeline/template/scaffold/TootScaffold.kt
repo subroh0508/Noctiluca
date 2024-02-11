@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.shared.toot.TootBox
 import noctiluca.features.timeline.template.scaffold.toot.TootTopAppBar
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
@@ -17,19 +16,12 @@ internal fun TootScaffold(
 ) {
     val uiModel by viewModel.uiModel.collectAsState()
 
-    val navigator = LocalNavigator.current
-
     val content = remember { mutableStateOf<String?>(null) }
     val warning = remember { mutableStateOf<String?>(null) }
     val visibility = remember { mutableStateOf(Status.Visibility.PUBLIC) }
 
     Scaffold(
-        topBar = {
-            TootTopAppBar(
-                visibility,
-                onBackPressed = { navigator?.pop() },
-            )
-        },
+        topBar = { TootTopAppBar(visibility) },
     ) { paddingValues ->
         TootBox(
             uiModel.account.current,

@@ -10,6 +10,8 @@ import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildRedirectUri
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.navigation.navigateToTimelines
+import noctiluca.features.shared.atoms.snackbar.showSnackbar
+import noctiluca.features.shared.getCommonString
 import noctiluca.features.shared.utils.openBrowser
 import org.koin.core.parameter.parametersOf
 
@@ -33,7 +35,12 @@ fun Screen.HandleAuthorize(
     HandleDeepLink()
     HandleAuthorizeEvent(event)
 
-    content(viewModel, viewModel.isFetchingAccessToken)
+    SnackbarForAuthorizationError(authorizeResult)
+
+    content(
+        viewModel,
+        authorizeResult?.getCodeOrNull() != null && viewModel.isFetchingAccessToken,
+    )
 }
 
 @Composable
@@ -43,4 +50,13 @@ private fun HandleAuthorizeEvent(
     is AuthorizeViewModel.Event.OpeningBrowser -> openBrowser(event.uri)
     is AuthorizeViewModel.Event.NavigatingToTimelines -> navigateToTimelines()
     else -> Unit
+}
+
+@Composable
+private fun SnackbarForAuthorizationError(
+    authorizeResult: AuthorizeResult?,
+) {
+    val error = authorizeResult?.getErrorOrNull() ?: return
+
+    showSnackbar(error.message ?: getCommonString().error_unknown)
 }

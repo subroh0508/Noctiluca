@@ -58,11 +58,10 @@ internal fun Screen.MastodonInstanceDetailScreen(
 ) = HandleAuthorize(
     domain,
     authorizeResult,
-) { viewModel, isFetchingAccessToken ->
+) { viewModel, isSignInProgress ->
     InstanceDetailScaffold(
         getScreenModel(),
         domain,
-        authorizeResult,
-        isFetchingAccessToken,
+        isSignInProgress,
     ) { viewModel.requestAuthorize(it) }
 }

@@ -63,7 +63,7 @@ internal fun InstanceDetailScrollableFrame(
                     end = HeadlinedScaffoldHorizontalPadding,
                 ),
             )
-            is LoadState.Loaded<*> -> Box(modifier = Modifier.fillMaxSize()) {
+            is LoadState.Loaded -> Box(modifier = Modifier.fillMaxSize()) {
                 LazyColumn(
                     modifier = Modifier.fillMaxSize(),
                     state = scrollableFrameState.lazyListState,

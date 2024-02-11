@@ -20,7 +20,7 @@ abstract class AuthorizedViewModel(
     ) {
         val job = launch {
             runCatchingWithAuth { block() }
-                .onSuccess { state.value = LoadState.Loaded(Unit) }
+                .onSuccess { state.value = LoadState.Loaded }
                 .onFailure { e -> state.value = LoadState.Error(e) }
         }
 

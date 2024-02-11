@@ -48,7 +48,7 @@ class MastodonInstanceListViewModel(
                         if (query.isBlank()) {
                             LoadState.Initial
                         } else {
-                            LoadState.Loaded(Unit)
+                            LoadState.Loaded
                         }
                 }
                 .onFailure { state.value = LoadState.Error(it) }

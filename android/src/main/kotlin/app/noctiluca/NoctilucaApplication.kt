@@ -12,6 +12,7 @@ import noctiluca.features.accountdetail.di.FeatureAccountDetailModule
 import noctiluca.features.accountdetail.featureAccountDetailScreenModule
 import noctiluca.features.authentication.di.FeatureSignInModule
 import noctiluca.features.authentication.featureSignInScreenModule
+import noctiluca.features.shared.di.AuthorizedFeatureModule
 import noctiluca.features.statusdetail.di.FeatureStatusDetailModule
 import noctiluca.features.statusdetail.featureStatusDetailScreenModule
 import noctiluca.features.timeline.di.FeatureTimelineModule
@@ -85,6 +86,7 @@ class NoctilucaApplication : Application() {
     }
 
     private fun buildFeaturesModule() = module {
+        AuthorizedFeatureModule()
         FeatureSignInModule()
         FeatureTimelineModule()
         FeatureAccountDetailModule()

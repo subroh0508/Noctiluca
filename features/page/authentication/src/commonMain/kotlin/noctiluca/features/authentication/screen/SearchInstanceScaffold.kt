@@ -49,7 +49,7 @@ internal fun SearchInstanceScaffold(
 
             InstanceSuggestsList(
                 uiModel.suggests,
-                uiModel.state is LoadState.Loaded<*>,
+                uiModel.state is LoadState.Loaded,
                 lazyListState,
                 onSelect = {
                     navigator?.push(SignInScreen(it.domain))

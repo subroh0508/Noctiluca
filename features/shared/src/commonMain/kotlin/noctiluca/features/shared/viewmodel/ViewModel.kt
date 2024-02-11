@@ -34,7 +34,7 @@ fun ViewModel.launchLazy(
 ) {
     val job = launch(context, CoroutineStart.LAZY) {
         runCatching { block() }
-            .onSuccess { state.value = LoadState.Loaded(Unit) }
+            .onSuccess { state.value = LoadState.Loaded }
             .onFailure {
                 it.printStackTrace()
                 state.value = LoadState.Error(it)

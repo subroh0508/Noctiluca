@@ -69,14 +69,9 @@ internal data object TootScreen : Screen {
 @Composable
 private fun Screen.TimelineFeature(
     content: @Composable (TimelinesViewModel) -> Unit,
-) {
-    val viewModel: TimelinesViewModel = getScreenModel()
-
-    AuthorizedComposable(
-        viewModel,
-        LocalResources provides Resources(Locale.current.language),
-    ) { content(viewModel) }
-}
+) = AuthorizedComposable(
+    LocalResources provides Resources(Locale.current.language),
+) { content(getScreenModel()) }
 
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,

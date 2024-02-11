@@ -28,12 +28,7 @@ internal data class StatusDetailScreen(
     override val key: ScreenKey = "StatusDetail#$id"
 
     @Composable
-    override fun Content() {
-        val viewModel: StatusDetailViewModel = getScreenModel { parametersOf(StatusId(id)) }
-
-        AuthorizedComposable(
-            viewModel,
-            LocalResources provides Resources(Locale.current.language),
-        ) { StatusDetailScaffold(viewModel) }
-    }
+    override fun Content() = AuthorizedComposable(
+        LocalResources provides Resources(Locale.current.language),
+    ) { StatusDetailScaffold(getScreenModel { parametersOf(StatusId(id)) }) }
 }

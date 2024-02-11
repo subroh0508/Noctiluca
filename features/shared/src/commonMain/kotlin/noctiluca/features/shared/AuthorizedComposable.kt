@@ -56,25 +56,3 @@ class AuthorizeEventStateFlow(
         state.value = AuthorizedViewModel.Event.SIGN_IN
     }
 }
-
-@Composable
-fun AuthorizedComposable(
-    viewModel: AuthorizedViewModel,
-    vararg values: ProvidedValue<*>,
-    content: @Composable () -> Unit,
-) = FeatureComposable(*values) {
-    val event by viewModel.event.collectAsState()
-
-    when (event) {
-        AuthorizedViewModel.Event.OK -> content()
-        AuthorizedViewModel.Event.REOPEN -> {
-            viewModel.reset()
-            navigateToTimelines()
-        }
-
-        AuthorizedViewModel.Event.SIGN_IN -> {
-            viewModel.reset()
-            backToSignIn()
-        }
-    }
-}

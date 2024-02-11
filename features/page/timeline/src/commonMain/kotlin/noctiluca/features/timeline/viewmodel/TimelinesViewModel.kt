@@ -5,6 +5,7 @@ import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.data.timeline.impl.TimelineStreamStateFlow
+import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
@@ -24,7 +25,8 @@ class TimelinesViewModel(
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
     private val authorizedAccountRepository: AuthorizedAccountRepository,
     authorizedUserRepository: AuthorizedUserRepository,
-) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
+    eventStateFlow: AuthorizeEventStateFlow,
+) : AuthorizedViewModel(authorizedUserRepository, eventStateFlow), ScreenModel {
     private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
     private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 

@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.accountdetail.component.headline.Avatar
 import noctiluca.features.accountdetail.component.headline.Header
 import noctiluca.features.accountdetail.section.scrollableframe.AccountDetailScrollableFrameState
+import noctiluca.features.accountdetail.section.scrollableframe.AccountDetailScrollableFrameState.Companion.TAB_INDEX
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.accountdetail.Relationships
 
@@ -52,7 +53,7 @@ internal fun AccountDetailScrollableFrame(
             scrollBehavior,
         )
 
-        if (scrollableFrameState.firstVisibleItemIndex >= 1) {
+        if (scrollableFrameState.firstVisibleItemIndex >= TAB_INDEX) {
             Box(
                 modifier = Modifier.offset(y = 64.dp),
             ) { tabs(scrollableFrameState) }

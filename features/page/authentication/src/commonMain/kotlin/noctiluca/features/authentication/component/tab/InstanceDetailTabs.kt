@@ -2,7 +2,7 @@ package noctiluca.features.authentication.component.tab
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import noctiluca.features.authentication.section.InstanceDetailScrollState
+import noctiluca.features.authentication.section.scrollableframe.InstanceDetailScrollableFrameState
 import noctiluca.features.shared.atoms.tab.PrimaryTabs
 
 enum class InstancesTab {
@@ -11,17 +11,17 @@ enum class InstancesTab {
 
 @Composable
 internal fun InstanceDetailTabs(
-    statusesScrollState: InstanceDetailScrollState,
+    scrollState: InstanceDetailScrollableFrameState,
     modifier: Modifier = Modifier,
 ) {
-    if (statusesScrollState.tabs.isEmpty()) {
+    if (scrollState.tabs.isEmpty()) {
         return
     }
 
     PrimaryTabs(
-        statusesScrollState.tabs,
-        statusesScrollState.currentIndex,
-        onClick = { _, (tab, _) -> statusesScrollState.cacheScrollPosition(tab) },
+        scrollState.tabs,
+        scrollState.currentIndex,
+        onClick = { _, (tab, _) -> scrollState.cacheScrollPosition(tab) },
         transform = { (_, label) -> label },
         modifier = modifier,
     )

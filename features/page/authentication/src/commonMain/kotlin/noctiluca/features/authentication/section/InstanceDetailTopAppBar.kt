@@ -3,6 +3,7 @@ package noctiluca.features.authentication.section
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import noctiluca.features.authentication.component.topappbar.InstanceHeaderText
+import noctiluca.features.authentication.section.scrollableframe.InstanceDetailScrollableFrameState
 import noctiluca.features.navigation.component.Back
 import noctiluca.model.authentication.Instance
 
@@ -11,7 +12,7 @@ import noctiluca.model.authentication.Instance
 internal fun InstanceDetailTopAppBar(
     domain: String,
     instance: Instance?,
-    scrollState: InstanceDetailScrollState,
+    scrollState: InstanceDetailScrollableFrameState,
     scrollBehavior: TopAppBarScrollBehavior,
 ) = TopAppBar(
     title = {

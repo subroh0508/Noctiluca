@@ -11,7 +11,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
+import noctiluca.features.authentication.component.InstancesTab
 import noctiluca.features.authentication.section.scrollableframe.InstanceDetailScrollableFrameState
+import noctiluca.features.authentication.section.scrollableframe.InstanceDetailScrollableFrameState.Companion.TAB_INDEX
 import noctiluca.features.authentication.section.scrollableframe.rememberInstanceDetailScrollableFrameState
 import noctiluca.features.shared.atoms.card.CardHeader
 import noctiluca.features.shared.atoms.card.CardSupporting
@@ -21,16 +23,14 @@ import noctiluca.features.shared.getCommonString
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.utils.description
 import noctiluca.features.shared.utils.label
-import noctiluca.model.authentication.Instance
-
-private const val TAB_INDEX = 1
 
 private val HeadlinedScaffoldHorizontalPadding = 16.dp
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun InstanceDetailScrollableFrame(
-    instance: Instance?,
+    tab: InstancesTab,
+    tabList: List<InstancesTab>,
     instanceLoadState: LoadState,
     topBar: @Composable (InstanceDetailScrollableFrameState, TopAppBarScrollBehavior) -> Unit,
     tabs: @Composable (InstanceDetailScrollableFrameState) -> Unit,
@@ -38,11 +38,11 @@ internal fun InstanceDetailScrollableFrame(
     content: LazyListScope.(
         @Composable (InstanceDetailScrollableFrameState) -> Unit,
         InstanceDetailScrollableFrameState,
-        Dp
+        Dp,
     ) -> Unit,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
-    val scrollableFrameState = rememberInstanceDetailScrollableFrameState(instance)
+    val scrollableFrameState = rememberInstanceDetailScrollableFrameState(tab, tabList)
 
     Scaffold(
         topBar = { topBar(scrollableFrameState, scrollBehavior) },

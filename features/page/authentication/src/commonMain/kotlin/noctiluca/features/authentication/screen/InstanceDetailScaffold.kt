@@ -27,7 +27,8 @@ internal fun InstanceDetailScaffold(
     LaunchedEffect(domain) { viewModel.load(domain) }
 
     InstanceDetailScrollableFrame(
-        uiModel.instance,
+        uiModel.tab,
+        uiModel.tabList,
         uiModel.instanceLoadState,
         topBar = { scrollableFrameState, scrollBehavior ->
             InstanceDetailTopAppBar(
@@ -38,7 +39,12 @@ internal fun InstanceDetailScaffold(
             )
         },
         tabs = { scrollableFrameState ->
-            InstanceDetailTabs(scrollableFrameState)
+            InstanceDetailTabs(
+                uiModel.tab,
+                uiModel.tabList,
+                scrollableFrameState,
+                onSwitch = { tab -> viewModel.switch(tab) },
+            )
         },
         bottomBar = { horizontalPadding ->
             ActionButtons(
@@ -55,7 +61,7 @@ internal fun InstanceDetailScaffold(
             horizontalPadding,
         )
 
-        when (scrollableFrameState.tab ?: return@InstanceDetailScrollableFrame) {
+        when (uiModel.tab) {
             InstancesTab.INFO -> InstanceInformationTab(uiModel.instance)
             InstancesTab.EXTENDED_DESCRIPTION -> InstanceExtendedDescriptionTab(uiModel.instance)
             InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(

@@ -5,15 +5,19 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import noctiluca.features.authentication.component.InstancesTab
-import noctiluca.model.authentication.Instance
 
 internal class InstanceDetailScrollableFrameState private constructor(
-    val tabs: List<Int>,
-    private val index: MutableState<Int>,
+    private val tabs: List<Int>,
+    private var index: Int,
     private var scrollPositions: List<Pair<Int, Int>>,
 ) {
+    constructor(
+        tabs: List<InstancesTab>,
+        scrollPositions: List<Pair<Int, Int>> = List(tabs.size) { 0 to 0 },
+    ) : this(tabs = tabs.map { it.ordinal }, index = 0, scrollPositions = scrollPositions)
+
     companion object {
-        private const val VERSION_REQUIRE_EXTENDED_DESCRIPTION = 4
+        const val TAB_INDEX = 1
 
         private const val TAB_ORDINAL_LIST = "tabOrdinalList"
         private const val SCROLL_POSITIONS = "scrollPositions"
@@ -38,31 +42,11 @@ internal class InstanceDetailScrollableFrameState private constructor(
 
                 InstanceDetailScrollableFrameState(
                     tabs,
-                    mutableStateOf(scrollPositions.indexOf(current).takeIf { it >= 0 } ?: 0),
+                    scrollPositions.indexOf(current).takeIf { it >= 0 } ?: 0,
                     scrollPositions,
                 )
             },
         )
-
-        operator fun invoke(
-            instance: Instance?,
-        ): InstanceDetailScrollableFrameState {
-            val tabs = listOfNotNull(
-                InstancesTab.INFO,
-                if ((instance?.version?.major ?: 0) >= VERSION_REQUIRE_EXTENDED_DESCRIPTION) {
-                    InstancesTab.EXTENDED_DESCRIPTION
-                } else {
-                    null
-                },
-                InstancesTab.LOCAL_TIMELINE,
-            )
-
-            return InstanceDetailScrollableFrameState(
-                tabs = tabs.map { it.ordinal },
-                index = mutableStateOf(0),
-                scrollPositions = List(tabs.size) { 0 to 0 },
-            )
-        }
     }
 
     val lazyListState by lazy {
@@ -74,27 +58,28 @@ internal class InstanceDetailScrollableFrameState private constructor(
     val firstVisibleItemIndex get() = lazyListState.firstVisibleItemIndex
 
     private val firstVisibleItemScrollOffset get() = lazyListState.firstVisibleItemScrollOffset
-    private val currentScrollPositions get() = scrollPositions[currentIndex]
+    private val currentScrollPositions get() = scrollPositions[index]
 
-    val tab get() = tabs.getOrNull(index.value)?.let { InstancesTab.entries[it] }
-    val currentIndex get() = index.value
-
-    fun cacheScrollPosition(next: InstancesTab) {
-        cacheScrollPosition()
-        index.value = tabs.indexOf(next.ordinal)
+    fun cacheScrollPosition(prev: InstancesTab, next: InstancesTab) {
+        cacheScrollPosition(tabs.indexOf(prev.ordinal))
+        index = tabs.indexOf(next.ordinal)
     }
 
-    suspend fun restoreScrollPosition() {
+    suspend fun restoreScrollPosition(tab: InstancesTab) {
         if (firstVisibleItemIndex == 0) {
             return
         }
 
-        val (index, offset) = scrollPositions[currentIndex]
+        val (index, offset) = scrollPositions[tabs.indexOf(tab.ordinal)]
+        if (firstVisibleItemIndex >= TAB_INDEX && index == 0) {
+            lazyListState.scrollToItem(TAB_INDEX, 0)
+            return
+        }
 
         lazyListState.scrollToItem(index, offset)
     }
 
-    private fun cacheScrollPosition(cachedAt: Int = this.currentIndex) {
+    private fun cacheScrollPosition(cachedAt: Int = this.index) {
         scrollPositions = scrollPositions.mapIndexed { index, state ->
             if (firstVisibleItemIndex > 0 && index == cachedAt) {
                 firstVisibleItemIndex to firstVisibleItemScrollOffset
@@ -107,14 +92,15 @@ internal class InstanceDetailScrollableFrameState private constructor(
 
 @Composable
 internal fun rememberInstanceDetailScrollableFrameState(
-    instance: Instance?,
+    tab: InstancesTab,
+    tabList: List<InstancesTab>,
 ): InstanceDetailScrollableFrameState {
-    val scrollState = rememberSaveable(saver = InstanceDetailScrollableFrameState.Saver) {
-        InstanceDetailScrollableFrameState(instance)
+    val scrollState = rememberSaveable(tabList, saver = InstanceDetailScrollableFrameState.Saver) {
+        InstanceDetailScrollableFrameState(tabList)
     }
 
-    LaunchedEffect(scrollState.currentIndex) {
-        scrollState.restoreScrollPosition()
+    LaunchedEffect(tab) {
+        scrollState.restoreScrollPosition(tab)
     }
     return scrollState
 }

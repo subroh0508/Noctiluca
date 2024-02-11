@@ -3,8 +3,8 @@ package noctiluca.features.authentication.screen
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import noctiluca.features.authentication.component.ActionButtons
-import noctiluca.features.authentication.component.tab.InstanceDetailTabs
-import noctiluca.features.authentication.component.tab.InstancesTab
+import noctiluca.features.authentication.component.InstanceDetailTabs
+import noctiluca.features.authentication.component.InstancesTab
 import noctiluca.features.authentication.component.tab.extendeddescription.InstanceExtendedDescriptionTab
 import noctiluca.features.authentication.component.tab.info.InstanceInformationTab
 import noctiluca.features.authentication.component.tab.localtimeline.InstanceLocalTimelineTab

@@ -1,7 +1,10 @@
 package noctiluca.features.authentication.section
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import noctiluca.features.authentication.component.InstanceDescription
 import noctiluca.features.authentication.component.InstanceName
@@ -36,8 +39,12 @@ internal fun LazyListScope.InstanceDetailCaption(
     tabs: @Composable () -> Unit,
     horizontalPadding: Dp,
 ) {
-    item { InstanceThumbnail(thumbnail, horizontalPadding) }
-    item { InstanceName(name, domain, horizontalPadding) }
-    item { InstanceDescription(description, horizontalPadding) }
+    item {
+        Column(modifier = Modifier.fillMaxWidth()) {
+            InstanceThumbnail(thumbnail, horizontalPadding)
+            InstanceName(name, domain, horizontalPadding)
+            InstanceDescription(description, horizontalPadding)
+        }
+    }
     item { tabs() }
 }

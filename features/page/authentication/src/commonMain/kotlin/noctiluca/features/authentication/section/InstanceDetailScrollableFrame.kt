@@ -3,8 +3,6 @@ package noctiluca.features.authentication.section
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -13,8 +11,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.features.authentication.component.tab.InstancesTab
-import noctiluca.features.authentication.getString
 import noctiluca.features.authentication.section.scrollableframe.InstanceDetailScrollableFrameState
 import noctiluca.features.authentication.section.scrollableframe.rememberInstanceDetailScrollableFrameState
 import noctiluca.features.shared.atoms.card.CardHeader
@@ -27,7 +23,7 @@ import noctiluca.features.shared.utils.description
 import noctiluca.features.shared.utils.label
 import noctiluca.model.authentication.Instance
 
-private const val TAB_INDEX = 3
+private const val TAB_INDEX = 1
 
 private val HeadlinedScaffoldHorizontalPadding = 16.dp
 
@@ -39,7 +35,11 @@ internal fun InstanceDetailScrollableFrame(
     topBar: @Composable (InstanceDetailScrollableFrameState, TopAppBarScrollBehavior) -> Unit,
     tabs: @Composable (InstanceDetailScrollableFrameState) -> Unit,
     bottomBar: @Composable BoxScope.(Dp) -> Unit,
-    content: LazyListScope.(@Composable (InstanceDetailScrollableFrameState) -> Unit, InstanceDetailScrollableFrameState, Dp) -> Unit,
+    content: LazyListScope.(
+        @Composable (InstanceDetailScrollableFrameState) -> Unit,
+        InstanceDetailScrollableFrameState,
+        Dp
+    ) -> Unit,
 ) {
     val scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
     val scrollableFrameState = rememberInstanceDetailScrollableFrameState(instance)
@@ -75,7 +75,7 @@ internal fun InstanceDetailScrollableFrame(
                     ),
                 ) { content(tabs, scrollableFrameState, HeadlinedScaffoldHorizontalPadding) }
 
-                if (scrollableFrameState.lazyListState.firstVisibleItemIndex >= TAB_INDEX) {
+                if (scrollableFrameState.firstVisibleItemIndex >= TAB_INDEX) {
                     Box(
                         modifier = Modifier.offset(y = 64.dp),
                     ) { tabs(scrollableFrameState) }

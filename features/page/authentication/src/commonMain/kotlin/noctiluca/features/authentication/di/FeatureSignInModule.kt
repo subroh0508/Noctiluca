@@ -9,7 +9,7 @@ import org.koin.core.module.Module
 @Suppress("FunctionName")
 fun Module.FeatureSignInModule() {
     AuthenticationDomainModule()
-    factory { MastodonInstanceListViewModel(get()) }
     factory { params -> AuthorizeViewModel(params.get(), params.get(), get(), get()) }
-    factory { params -> MastodonInstanceDetailViewModel(params.get(), get()) }
+    factory { MastodonInstanceListViewModel(get()) }
+    factory { MastodonInstanceDetailViewModel(get()) }
 }

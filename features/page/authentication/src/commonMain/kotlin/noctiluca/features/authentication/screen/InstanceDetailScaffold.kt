@@ -21,11 +21,14 @@ import noctiluca.model.authentication.Instance
 @Composable
 internal fun InstanceDetailScaffold(
     viewModel: MastodonInstanceDetailViewModel,
+    domain: String,
     authorizeResult: AuthorizeResult?,
     isFetchingAccessToken: Boolean,
     onClickAuthorize: (Instance) -> Unit,
 ) {
     val uiModel by viewModel.uiModel.collectAsState()
+
+    LaunchedEffect(domain) { viewModel.load(domain) }
 
     SnackbarForAuthorizationError(authorizeResult)
 
@@ -34,7 +37,7 @@ internal fun InstanceDetailScaffold(
         uiModel.instanceLoadState,
         topBar = { scrollableFrameState, scrollBehavior ->
             InstanceDetailTopAppBar(
-                viewModel.domain,
+                domain,
                 uiModel.instance,
                 scrollableFrameState,
                 scrollBehavior,
@@ -64,7 +67,7 @@ internal fun InstanceDetailScaffold(
             InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(
                 uiModel.statuses,
                 uiModel.statusesLoadState.loading,
-                loadMore = { viewModel.loadMore() }
+                loadMore = { viewModel.loadMore(domain) },
             )
         }
     }

@@ -17,7 +17,6 @@ import noctiluca.features.navigation.SignIn
 import noctiluca.features.navigation.SignInParams
 import noctiluca.features.shared.FeatureComposable
 import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
-import org.koin.core.parameter.parametersOf
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
@@ -61,7 +60,8 @@ internal fun Screen.MastodonInstanceDetailScreen(
     authorizeResult,
 ) { viewModel, isFetchingAccessToken ->
     InstanceDetailScaffold(
-        getScreenModel { parametersOf(domain) },
+        getScreenModel(),
+        domain,
         authorizeResult,
         isFetchingAccessToken,
     ) { viewModel.requestAuthorize(it) }

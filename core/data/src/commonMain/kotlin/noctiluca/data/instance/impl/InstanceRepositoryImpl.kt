@@ -21,13 +21,12 @@ internal class InstanceRepositoryImpl(
     private val v2: MastodonApiV2,
 ) : InstanceRepository {
     private val suggests by lazy { MutableStateFlow<List<Instance.Suggest>>(listOf()) }
+    private val instance by lazy { MutableStateFlow<Instance?>(null) }
     private val statuses by lazy { MutableStateFlow<List<Status>>(listOf()) }
 
     override fun suggests() = suggests
-    override fun instance(domain: String) = flow { emit(getInstance(domain)) }
-    override fun statuses(domain: String) = flow {
-        emitAll(statuses)
-    }.onStart { loadStatuses(domain) }
+    override fun instance() = instance
+    override fun statuses() = statuses
 
     override suspend fun search(query: String) {
         if (query.isBlank()) {
@@ -45,13 +44,20 @@ internal class InstanceRepositoryImpl(
         }
     }
 
+    override suspend fun fetchInstance(domain: String) {
+        instance.value = null
+        statuses.value = listOf()
+
+        instance.value = getInstance(domain)
+        statuses.value = v1.getTimelinesPublic(domain)
+            .map { it.toEntity(accountId = null) }
+    }
+
     override suspend fun loadStatuses(domain: String) {
         statuses.value += v1.getTimelinesPublic(
             domain,
             statuses.value.lastOrNull()?.id?.value,
-        ).map {
-            it.toEntity(accountId = null)
-        }
+        ).map { it.toEntity(accountId = null) }
     }
 
     private suspend fun getInstance(domain: String): Instance {

@@ -6,11 +6,10 @@ import noctiluca.data.instance.InstanceRepository
 import noctiluca.features.authentication.model.InstanceDetailModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.ViewModel
-import noctiluca.features.shared.viewmodel.launch
+import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope
 
 class MastodonInstanceDetailViewModel(
-    val domain: String,
     private val repository: InstanceRepository,
 ) : ViewModel(), ScreenModel {
     private val instanceLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
@@ -18,11 +17,8 @@ class MastodonInstanceDetailViewModel(
 
     val uiModel by lazy {
         combine(
-            repository.instance(domain)
-                .catch { instanceLoadState.value = LoadState.Error(it) }
-                .onCompletion { instanceLoadState.value = LoadState.Loaded(Unit) },
-            repository.statuses(domain)
-                .catch { statusesLoadState.value = LoadState.Error(it) },
+            repository.instance(),
+            repository.statuses(),
             instanceLoadState,
             statusesLoadState,
         ) { instance, statuses, instanceLoadState, statusesLoadState ->
@@ -39,11 +35,25 @@ class MastodonInstanceDetailViewModel(
         )
     }
 
-    fun loadMore() {
-        launch {
+    fun load(domain: String) {
+        val job = launchLazy {
+            runCatching { repository.fetchInstance(domain) }
+                .onSuccess { instanceLoadState.value = LoadState.Loaded(Unit) }
+                .onFailure { instanceLoadState.value = LoadState.Error(it) }
+        }
+
+        instanceLoadState.value = LoadState.Loading(job)
+        job.start()
+    }
+
+    fun loadMore(domain: String) {
+        val job = launchLazy {
             runCatching { repository.loadStatuses(domain) }
                 .onSuccess { statusesLoadState.value = LoadState.Loaded(Unit) }
                 .onFailure { statusesLoadState.value = LoadState.Error(it) }
         }
+
+        statusesLoadState.value = LoadState.Loading(job)
+        job.start()
     }
 }

@@ -4,19 +4,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildRedirectUri
 import noctiluca.features.authentication.viewmodel.AuthorizeViewModel
 import noctiluca.features.navigation.navigateToTimelines
+import noctiluca.features.navigation.utils.getFeaturesScreenModel
 import noctiluca.features.shared.atoms.snackbar.showSnackbar
 import noctiluca.features.shared.getCommonString
 import noctiluca.features.shared.utils.openBrowser
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun Screen.HandleAuthorize(
+internal fun SignInScreen.HandleAuthorize(
     domain: String,
     authorizeResult: AuthorizeResult?,
     content: @Composable (AuthorizeViewModel, Boolean) -> Unit,
@@ -24,7 +23,9 @@ fun Screen.HandleAuthorize(
     val clientName = getString().sign_in_client_name
     val redirectUri = buildRedirectUri(domain)
 
-    val viewModel: AuthorizeViewModel = getScreenModel { parametersOf(clientName, redirectUri) }
+    val viewModel: AuthorizeViewModel = getFeaturesScreenModel {
+        parametersOf(clientName, redirectUri)
+    }
 
     LaunchedEffect(authorizeResult) {
         viewModel.fetchAccessToken(authorizeResult)

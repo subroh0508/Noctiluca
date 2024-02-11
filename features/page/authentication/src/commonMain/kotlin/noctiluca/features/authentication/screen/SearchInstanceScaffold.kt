@@ -2,6 +2,7 @@ package noctiluca.features.authentication.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.*
@@ -23,6 +24,7 @@ private val HorizontalPadding = 16.dp
 @Composable
 internal fun SearchInstanceScaffold(
     viewModel: MastodonInstanceListViewModel,
+    lazyListState: LazyListState,
 ) {
     val navigator = LocalNavigator.current
     val uiModel by viewModel.uiModel.collectAsState()
@@ -44,6 +46,7 @@ internal fun SearchInstanceScaffold(
             InstanceSuggestsList(
                 uiModel.suggests,
                 uiModel.state is LoadState.Loaded<*>,
+                lazyListState,
                 onSelect = {
                     navigator?.push(SignInScreen(it.domain))
                 },

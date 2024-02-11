@@ -3,8 +3,8 @@ package noctiluca.features.authentication.section
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +18,7 @@ import noctiluca.model.authentication.Instance
 internal fun InstanceSuggestsList(
     suggests: List<Instance.Suggest>,
     isLoaded: Boolean,
+    lazyListState: LazyListState,
     onSelect: (Instance.Suggest) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -31,7 +32,7 @@ internal fun InstanceSuggestsList(
 
     LazyColumn(
         modifier,
-        rememberLazyListState(),
+        lazyListState,
         contentPadding = PaddingValues(
             horizontal = 16.dp,
             vertical = 8.dp,

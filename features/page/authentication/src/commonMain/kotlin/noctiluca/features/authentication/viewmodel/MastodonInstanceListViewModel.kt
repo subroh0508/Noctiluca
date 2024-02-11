@@ -17,8 +17,7 @@ class MastodonInstanceListViewModel(
 
     val uiModel by lazy {
         combine(
-            repository.suggests()
-                .catch { state.value = LoadState.Error(it) },
+            repository.suggests(),
             query,
             state,
         ) { suggests, query, state ->

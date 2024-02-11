@@ -52,7 +52,6 @@ private fun TimelineAxisTop() = Box(
             top = 16.dp,
             start = 7.dp,
         )
-            // .fillMaxHeight()
             .width(2.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
     )
@@ -65,7 +64,6 @@ private fun TimelineAxisMiddle() = Box(
 ) {
     VerticalDivider(
         modifier = Modifier.padding(start = 7.dp)
-            // .fillMaxHeight()
             .width(2.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
     )

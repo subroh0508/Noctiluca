@@ -5,5 +5,5 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.FeatureStatusDetailModule() {
-    factory { params -> StatusDetailViewModel(params.get(), get(), get()) }
+    factory { params -> StatusDetailViewModel(params.get(), get(), get(), get()) }
 }

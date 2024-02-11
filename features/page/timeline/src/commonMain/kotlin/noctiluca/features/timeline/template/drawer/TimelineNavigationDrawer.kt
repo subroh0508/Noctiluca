@@ -70,7 +70,7 @@ private fun TimelineDrawerSheet(
             )
         }
 
-        Divider(Modifier.fillMaxWidth())
+        HorizontalDivider()
 
         Box(Modifier.weight(1F)) {
             AuthorizedAccountsList(
@@ -83,7 +83,7 @@ private fun TimelineDrawerSheet(
             )
         }
 
-        Divider(Modifier.fillMaxWidth())
+        HorizontalDivider()
 
         TimelineDrawerMenus(
             onClickDrawerMenu = {

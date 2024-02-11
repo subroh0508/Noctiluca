@@ -2,6 +2,8 @@ package noctiluca.features.timeline.template.drawer.menu
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -9,7 +11,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.features.shared.atoms.list.TwoLineListItem
-import noctiluca.features.shared.molecules.list.LazyColumn
 import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 
@@ -17,11 +18,13 @@ import noctiluca.model.account.Account
 internal fun AuthorizedAccountsList(
     account: CurrentAuthorizedAccount,
     onClick: (Account) -> Unit,
-) = LazyColumn(
-    account.others,
-    key = { it.screen },
-) { _, item ->
-    AuthorizedAccountItem(item) { onClick(item) }
+) = LazyColumn {
+    items(
+        account.others,
+        key = { it.screen },
+    ) {
+        AuthorizedAccountItem(it) { onClick(it) }
+    }
 }
 
 @Composable

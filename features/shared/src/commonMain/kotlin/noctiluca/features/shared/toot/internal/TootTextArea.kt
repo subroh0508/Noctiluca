@@ -10,8 +10,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import noctiluca.features.shared.atoms.divider.Divider
 import noctiluca.features.shared.atoms.textfield.TextArea
 import noctiluca.features.shared.getCommonString
 
@@ -24,6 +24,7 @@ private const val MAX_CONTENT_LENGTH = 500
 internal fun TootTextArea(
     content: String,
     warning: String? = null,
+    borderColor: Color = DividerDefaults.color,
     onChangeContent: (String?) -> Unit,
     onChangeWarningText: (String?) -> Unit,
     textAreaModifier: Modifier = Modifier,
@@ -41,6 +42,7 @@ internal fun TootTextArea(
             WarningTextField(
                 warning,
                 isContentWarning,
+                borderColor,
                 onChangeWarningText,
             )
 
@@ -53,7 +55,10 @@ internal fun TootTextArea(
             )
         }
 
-        Divider(Modifier.padding(horizontal = TootAreaPadding))
+        HorizontalDivider(
+            color = borderColor,
+            modifier = Modifier.padding(horizontal = TootAreaPadding),
+        )
 
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -87,6 +92,7 @@ internal fun TootTextArea(
 private fun WarningTextField(
     warning: String?,
     isContentWarning: Boolean,
+    borderColor: Color = MaterialTheme.colorScheme.outline,
     onValueChange: (String?) -> Unit,
 ) {
     if (!isContentWarning) {
@@ -101,7 +107,10 @@ private fun WarningTextField(
             .padding(TootAreaPadding),
     )
 
-    Divider(Modifier.padding(horizontal = TootAreaPadding))
+    HorizontalDivider(
+        color = borderColor,
+        modifier = Modifier.padding(horizontal = TootAreaPadding),
+    )
 }
 
 @Composable

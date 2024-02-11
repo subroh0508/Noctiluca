@@ -14,10 +14,12 @@ internal class AccountDetailScrollableFrameState private constructor(
 ) {
     constructor(
         queries: List<StatusesQuery>,
-        scrollPositions: List<Pair<Int, Int>> = List(queries.size) { 1 to 0 },
+        scrollPositions: List<Pair<Int, Int>> = List(queries.size) { 0 to 0 },
     ) : this(index = 0, scrollPositions = scrollPositions)
 
     companion object {
+        const val TAB_INDEX = 1
+
         val Saver = listSaver(
             save = {
                 it.cacheScrollPosition()
@@ -57,6 +59,10 @@ internal class AccountDetailScrollableFrameState private constructor(
         }
 
         val (index, offset) = scrollPositions[query.ordinal]
+        if (firstVisibleItemIndex >= TAB_INDEX && index == 0) {
+            lazyListState.scrollToItem(TAB_INDEX, 0)
+            return
+        }
 
         lazyListState.scrollToItem(index, offset)
     }

@@ -1,28 +1,27 @@
 package noctiluca.features.statusdetail.component
 
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.features.shared.molecules.scaffold.HeadlineTopAppBar
+import noctiluca.features.navigation.component.Back
 import noctiluca.features.statusdetail.LocalResources
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun StatusDetailTopAppBar() {
-    val navigator = LocalNavigator.current
     val res = LocalResources.current
 
-    HeadlineTopAppBar(
-        title = {
+    TopAppBar(
+        {
             Text(
                 res.getString().status_detail_title,
                 style = MaterialTheme.typography.titleLarge,
             )
         },
-        onBackPressed = {
-            navigator?.pop()
-        }
+        navigationIcon = { Back() },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface,
+            scrolledContainerColor = MaterialTheme.colorScheme.surface,
+        ),
+        scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(),
     )
 }

@@ -6,6 +6,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.data.status.StatusRepository
+import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.model.MessageHolder
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.model.StatusId
@@ -15,7 +16,8 @@ class StatusDetailViewModel(
     val id: StatusId,
     private val statusRepository: StatusRepository,
     authorizedUserRepository: AuthorizedUserRepository,
-) : AuthorizedViewModel(authorizedUserRepository), ScreenModel {
+    eventStateFlow: AuthorizeEventStateFlow,
+) : AuthorizedViewModel(authorizedUserRepository, eventStateFlow), ScreenModel {
     private val messageStateFlow: MutableStateFlow<MessageHolder> by lazy {
         MutableStateFlow(MessageHolder("", consumed = true))
     }

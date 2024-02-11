@@ -25,10 +25,10 @@ import noctiluca.features.accountdetail.section.scrollableframe.rememberAccountD
 import noctiluca.features.accountdetail.viewmodel.AccountStatusesViewModel
 import noctiluca.features.navigation.AccountDetail
 import noctiluca.features.navigation.StatusDetail
+import noctiluca.features.shared.atoms.list.EmptyMessage
+import noctiluca.features.shared.atoms.list.infiniteScrollFooter
+import noctiluca.features.shared.atoms.list.items
 import noctiluca.features.shared.model.LoadState
-import noctiluca.features.shared.molecules.list.EmptyMessage
-import noctiluca.features.shared.molecules.list.infiniteScrollFooter
-import noctiluca.features.shared.molecules.list.items
 import noctiluca.features.shared.status.Status
 import noctiluca.model.AccountId
 import org.koin.core.parameter.parametersOf

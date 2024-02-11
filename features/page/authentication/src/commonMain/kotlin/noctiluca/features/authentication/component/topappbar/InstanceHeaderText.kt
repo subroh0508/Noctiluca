@@ -4,7 +4,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import noctiluca.features.authentication.section.scrollableframe.InstanceDetailScrollableFrameState
-import noctiluca.features.shared.molecules.scaffold.HeadlineText
+import noctiluca.features.shared.atoms.text.HeadlineText
 import noctiluca.model.authentication.Instance
 
 @Composable

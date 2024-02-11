@@ -14,7 +14,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.launch
 import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToStatusDetail
-import noctiluca.features.shared.atoms.appbar.CenterAlignedTopAppBar
 import noctiluca.features.shared.atoms.appbar.NavigateIconSize
 import noctiluca.features.shared.atoms.appbar.scrollToTop
 import noctiluca.features.shared.atoms.image.AsyncImage
@@ -96,7 +95,7 @@ private fun CurrentInstanceTopAppBar(
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     onClickNavigationIcon: () -> Unit,
 ) = CenterAlignedTopAppBar(
-    account.domain?.value ?: getString().timeline_page_title,
+    { Text(account.domain?.value ?: getString().timeline_page_title) },
     navigationIcon = {
         IconButton(
             onClick = onClickNavigationIcon,
@@ -110,6 +109,10 @@ private fun CurrentInstanceTopAppBar(
             )
         }
     },
+    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        containerColor = MaterialTheme.colorScheme.surface,
+        scrolledContainerColor = MaterialTheme.colorScheme.surface,
+    ),
     scrollBehavior = topAppBarScrollBehavior,
 )
 

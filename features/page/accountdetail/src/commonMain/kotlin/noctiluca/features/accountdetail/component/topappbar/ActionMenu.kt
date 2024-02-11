@@ -1,12 +1,10 @@
 package noctiluca.features.accountdetail.component.topappbar
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import noctiluca.features.accountdetail.component.topappbar.dropdownmenu.*
 import noctiluca.features.accountdetail.component.topappbar.dropdownmenu.AddListMenu
 import noctiluca.features.accountdetail.component.topappbar.dropdownmenu.item.BlockDialog
@@ -81,7 +79,7 @@ internal fun ActionMenu(
                 openReportDialog,
                 unmute = mute,
             )
-            Divider(Modifier.fillMaxWidth())
+            HorizontalDivider()
             OpenBrowser(onClick = openBrowser)
         }
     }

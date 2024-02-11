@@ -328,7 +328,6 @@ private fun buildRepository(
         mockAuthenticationTokenDataStore,
     ) {
         single<AccountDataStore> { mockAccountDataStore }
-        DataAuthenticationModule()
     }
 
     return AuthorizedAccountRepositoryImpl(

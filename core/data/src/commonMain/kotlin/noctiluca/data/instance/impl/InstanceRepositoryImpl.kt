@@ -46,14 +46,16 @@ internal class InstanceRepositoryImpl(
 
     override suspend fun fetchInstance(domain: String) {
         instance.value = null
-        statuses.value = listOf()
-
         instance.value = getInstance(domain)
+    }
+
+    override suspend fun fetchStatuses(domain: String) {
+        statuses.value = listOf()
         statuses.value = v1.getTimelinesPublic(domain)
             .map { it.toEntity(accountId = null) }
     }
 
-    override suspend fun loadStatuses(domain: String) {
+    override suspend fun fetchMoreStatuses(domain: String) {
         statuses.value += v1.getTimelinesPublic(
             domain,
             statuses.value.lastOrNull()?.id?.value,

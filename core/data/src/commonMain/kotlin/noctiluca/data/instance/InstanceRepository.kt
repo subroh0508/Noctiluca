@@ -11,5 +11,6 @@ interface InstanceRepository {
 
     suspend fun search(query: String)
     suspend fun fetchInstance(domain: String)
-    suspend fun loadStatuses(domain: String)
+    suspend fun fetchStatuses(domain: String)
+    suspend fun fetchMoreStatuses(domain: String)
 }

@@ -67,7 +67,7 @@ internal fun InstanceDetailScaffold(
             InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(
                 uiModel.statuses,
                 uiModel.statusesLoadState.loading,
-                loadMore = { viewModel.loadMore(domain) },
+                loadMore = { viewModel.loadMoreStatuses(domain) },
             )
         }
     }

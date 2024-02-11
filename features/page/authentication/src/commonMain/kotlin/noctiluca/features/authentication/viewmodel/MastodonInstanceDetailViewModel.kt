@@ -36,6 +36,22 @@ class MastodonInstanceDetailViewModel(
     }
 
     fun load(domain: String) {
+        loadInstance(domain)
+        loadStatuses(domain)
+    }
+
+    fun loadMoreStatuses(domain: String) {
+        val job = launchLazy {
+            runCatching { repository.fetchMoreStatuses(domain) }
+                .onSuccess { statusesLoadState.value = LoadState.Loaded(Unit) }
+                .onFailure { statusesLoadState.value = LoadState.Error(it) }
+        }
+
+        statusesLoadState.value = LoadState.Loading(job)
+        job.start()
+    }
+
+    private fun loadInstance(domain: String) {
         val job = launchLazy {
             runCatching { repository.fetchInstance(domain) }
                 .onSuccess { instanceLoadState.value = LoadState.Loaded(Unit) }
@@ -46,9 +62,9 @@ class MastodonInstanceDetailViewModel(
         job.start()
     }
 
-    fun loadMore(domain: String) {
+    private fun loadStatuses(domain: String) {
         val job = launchLazy {
-            runCatching { repository.loadStatuses(domain) }
+            runCatching { repository.fetchStatuses(domain) }
                 .onSuccess { statusesLoadState.value = LoadState.Loaded(Unit) }
                 .onFailure { statusesLoadState.value = LoadState.Error(it) }
         }

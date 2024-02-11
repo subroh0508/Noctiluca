@@ -12,9 +12,12 @@ fun buildEmptyMockAuthenticationTokenDataStore() = MockAuthenticationTokenDataSt
     currentAccessToken = null,
 )
 
-fun buildFilledMockAuthenticationTokenDataStore() = MockAuthenticationTokenDataStore(
-    init = listOf(me),
-    currentAccessToken = DUMMY_ACCESS_TOKEN,
+fun buildFilledMockAuthenticationTokenDataStore(
+    init: List<AuthorizedUser> = listOf(me),
+    currentAccessToken: String? = DUMMY_ACCESS_TOKEN,
+) = MockAuthenticationTokenDataStore(
+    init = init,
+    currentAccessToken = currentAccessToken,
 )
 
 class MockAuthenticationTokenDataStore internal constructor(
@@ -55,7 +58,7 @@ class MockAuthenticationTokenDataStore internal constructor(
             override val domain = domain
         }
 
-        cache = listOf(item) + cache
+        cache += listOf(item)
 
         return cache
     }

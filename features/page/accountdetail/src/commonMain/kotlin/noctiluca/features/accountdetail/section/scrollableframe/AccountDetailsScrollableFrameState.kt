@@ -51,12 +51,12 @@ internal class AccountDetailScrollableFrameState private constructor(
         index = next.ordinal
     }
 
-    suspend fun restoreScrollPosition(tab: StatusesQuery) {
+    suspend fun restoreScrollPosition(query: StatusesQuery) {
         if (firstVisibleItemIndex == 0) {
             return
         }
 
-        val (index, offset) = scrollPositions[tab.ordinal]
+        val (index, offset) = scrollPositions[query.ordinal]
 
         lazyListState.scrollToItem(index, offset)
     }

@@ -1,30 +1,23 @@
 package noctiluca.features.authentication.viewmodel
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import noctiluca.authentication.domain.usecase.RequestAccessTokenUseCase
-import noctiluca.authentication.domain.usecase.RequestAppCredentialUseCase
-import noctiluca.features.authentication.getString
+import noctiluca.data.authentication.AuthenticationRepository
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.UnknownException
-import noctiluca.features.authentication.model.buildRedirectUri
 import noctiluca.features.shared.viewmodel.ViewModel
 import noctiluca.features.shared.viewmodel.launchLazy
+import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.authentication.Instance
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 class AuthorizeViewModel(
     private val clientName: String,
     private val redirectUri: Uri,
-    private val requestAppCredentialUseCase: RequestAppCredentialUseCase,
-    private val requestRequestAccessTokenUseCase: RequestAccessTokenUseCase,
+    private val repository: AuthenticationRepository,
 ) : ViewModel(), ScreenModel {
     private val mutableEvent by lazy { MutableStateFlow<Event>(Event.Initial) }
 
@@ -35,7 +28,7 @@ class AuthorizeViewModel(
         val domain = Domain(instance.domain)
 
         val job = launchLazy {
-            runCatching { requestAppCredentialUseCase.execute(domain, clientName, redirectUri) }
+            runCatching { repository.fetchAuthorizeUrl(domain, clientName, redirectUri) }
                 .onSuccess { mutableEvent.value = Event.OpeningBrowser(it) }
                 .onFailure { mutableEvent.value = Event.Error(it) }
         }
@@ -58,7 +51,7 @@ class AuthorizeViewModel(
         }
 
         val job = launchLazy {
-            runCatching { requestRequestAccessTokenUseCase.execute(code, redirectUri) }
+            runCatching { fetchAccessToken(code, redirectUri) }
                 .onSuccess {
                     if (it != null) {
                         mutableEvent.value = Event.NavigatingToTimelines
@@ -74,6 +67,14 @@ class AuthorizeViewModel(
         job.start()
     }
 
+    private suspend fun fetchAccessToken(
+        code: String,
+        redirectUri: Uri,
+    ): AuthorizedUser? {
+        val user = repository.fetchAccessToken(code, redirectUri) ?: return null
+        return repository.switchAccessToken(user.id)
+    }
+
     sealed class Event {
         data object Initial : Event()
         data class Loading(val job: Job) : Event()
@@ -83,25 +84,5 @@ class AuthorizeViewModel(
         data object NavigatingToTimelines : Event()
 
         val isFetchingAccessToken get() = this !is Initial && this !is Error
-    }
-
-    companion object Provider {
-        @Composable
-        operator fun invoke(
-            domain: String,
-            koinComponent: KoinComponent,
-        ): AuthorizeViewModel {
-            val clientName = getString().sign_in_client_name
-            val redirectUri = buildRedirectUri(domain)
-
-            return remember {
-                AuthorizeViewModel(
-                    clientName,
-                    redirectUri,
-                    koinComponent.get(),
-                    koinComponent.get(),
-                )
-            }
-        }
     }
 }

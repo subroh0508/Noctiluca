@@ -1,55 +1,68 @@
 package noctiluca.features.authentication.viewmodel
 
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import cafe.adriel.voyager.core.model.ScreenModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
-import noctiluca.authentication.domain.usecase.FetchLocalTimelineUseCase
-import noctiluca.authentication.domain.usecase.FetchMastodonInstanceUseCase
+import kotlinx.coroutines.flow.*
+import noctiluca.data.instance.InstanceRepository
+import noctiluca.features.authentication.component.InstancesTab
+import noctiluca.features.authentication.model.InstanceDetailModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.ViewModel
-import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope
-import noctiluca.model.StatusId
-import noctiluca.model.status.Status
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 class MastodonInstanceDetailViewModel(
-    val domain: String,
-    private val fetchMastodonInstanceUseCase: FetchMastodonInstanceUseCase,
-    private val fetchLocalTimelineUseCase: FetchLocalTimelineUseCase,
+    private val repository: InstanceRepository,
 ) : ViewModel(), ScreenModel {
+    private val tab by lazy { MutableStateFlow(InstancesTab.INFO) }
     private val instanceLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
-    private val statuses by lazy { MutableStateFlow(listOf<Status>()) }
+    private val statusesLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
 
     val uiModel by lazy {
         combine(
+            repository.instance(),
+            tab,
+            repository.statuses(),
             instanceLoadState,
-            statuses,
-        ) { instance, statuses -> UiModel(instance, statuses) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = UiModel(),
+            statusesLoadState,
+        ) { instance, tab, statuses, instanceLoadState, statusesLoadState ->
+            InstanceDetailModel(
+                instance = instance,
+                tab = tab,
+                statuses = statuses,
+                instanceLoadState = instanceLoadState,
+                statusesLoadState = statusesLoadState,
             )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = InstanceDetailModel(),
+        )
     }
 
-    fun load() {
-        loadInstanceDetail()
-        loadLocalTimeline()
+    fun load(domain: String) {
+        loadInstance(domain)
+        loadStatuses(domain)
     }
 
-    fun loadMore() = loadLocalTimeline(uiModel.value.statuses.lastOrNull()?.id)
+    fun switch(tab: InstancesTab) {
+        this.tab.value = tab
+    }
 
-    private fun loadInstanceDetail() {
+    fun loadMoreStatuses(domain: String) {
         val job = launchLazy {
-            runCatching { fetchMastodonInstanceUseCase.execute(domain) }
-                .onSuccess { instanceLoadState.value = LoadState.Loaded(it) }
+            runCatching { repository.fetchMoreStatuses(domain) }
+                .onSuccess { statusesLoadState.value = LoadState.Loaded(Unit) }
+                .onFailure { statusesLoadState.value = LoadState.Error(it) }
+        }
+
+        statusesLoadState.value = LoadState.Loading(job)
+        job.start()
+    }
+
+    private fun loadInstance(domain: String) {
+        val job = launchLazy {
+            runCatching { repository.fetchInstance(domain) }
+                .onSuccess { instanceLoadState.value = LoadState.Loaded(Unit) }
                 .onFailure { instanceLoadState.value = LoadState.Error(it) }
         }
 
@@ -57,43 +70,14 @@ class MastodonInstanceDetailViewModel(
         job.start()
     }
 
-    private fun loadLocalTimeline(maxId: StatusId? = null) {
-        if (maxId == null && uiModel.value.statuses.isNotEmpty()) {
-            return
+    private fun loadStatuses(domain: String) {
+        val job = launchLazy {
+            runCatching { repository.fetchStatuses(domain) }
+                .onSuccess { statusesLoadState.value = LoadState.Loaded(Unit) }
+                .onFailure { statusesLoadState.value = LoadState.Error(it) }
         }
 
-        launch {
-            runCatching { fetchLocalTimelineUseCase.execute(domain, maxId) }
-                .onSuccess {
-                    statuses.value =
-                        if (maxId == null) {
-                            it
-                        } else {
-                            statuses.value + it
-                        }
-                }
-                .onFailure { statuses.value = listOf() }
-        }
-    }
-
-    data class UiModel(
-        val instance: LoadState = LoadState.Initial,
-        val statuses: List<Status> = listOf(),
-    )
-
-    companion object Provider {
-        @Composable
-        operator fun invoke(
-            domain: String,
-            koinComponent: KoinComponent,
-        ): MastodonInstanceDetailViewModel {
-            return remember {
-                MastodonInstanceDetailViewModel(
-                    domain,
-                    koinComponent.get(),
-                    koinComponent.get(),
-                )
-            }
-        }
+        statusesLoadState.value = LoadState.Loading(job)
+        job.start()
     }
 }

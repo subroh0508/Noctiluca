@@ -2,9 +2,9 @@ package noctiluca.data.di
 
 import noctiluca.data.instance.InstanceRepository
 import noctiluca.data.instance.impl.InstanceRepositoryImpl
-import org.koin.core.module.Module
+import org.koin.dsl.ScopeDSL
 
 @Suppress("FunctionName")
-fun Module.DataInstanceModule() {
-    single<InstanceRepository> { InstanceRepositoryImpl(get(), get(), get()) }
+fun ScopeDSL.DataInstanceModule() {
+    scoped<InstanceRepository> { InstanceRepositoryImpl(get(), get(), get()) }
 }

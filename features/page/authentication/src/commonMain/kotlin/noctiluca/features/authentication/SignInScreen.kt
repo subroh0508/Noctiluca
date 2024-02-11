@@ -1,23 +1,23 @@
 package noctiluca.features.authentication
 
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.buildAuthorizeResult
-import noctiluca.features.authentication.templates.scaffold.InstanceDetailScaffold
-import noctiluca.features.authentication.templates.scaffold.SearchInstanceScaffold
-import noctiluca.features.authentication.viewmodel.MastodonInstanceListViewModel
+import noctiluca.features.authentication.screen.InstanceDetailScaffold
+import noctiluca.features.authentication.screen.SearchInstanceScaffold
 import noctiluca.features.navigation.MastodonInstanceDetailParams
 import noctiluca.features.navigation.MastodonInstanceListParams
 import noctiluca.features.navigation.SignIn
 import noctiluca.features.navigation.SignInParams
+import noctiluca.features.navigation.utils.getFeaturesScreenModel
 import noctiluca.features.shared.FeatureComposable
 import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
-import org.koin.core.parameter.parametersOf
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
@@ -35,8 +35,12 @@ internal data class SignInScreen(
         LocalResources provides Resources(Locale.current.language),
         LocalSnackbarHostState provides remember { SnackbarHostState() },
     ) {
+        val lazyListState = rememberLazyListState()
+
         when (params) {
-            is MastodonInstanceListParams -> MastodonInstanceListScreen()
+            is MastodonInstanceListParams -> MastodonInstanceListScreen(
+                lazyListState,
+            )
             is MastodonInstanceDetailParams -> MastodonInstanceDetailScreen(
                 params.domain,
                 buildAuthorizeResult(params),
@@ -46,23 +50,21 @@ internal data class SignInScreen(
 }
 
 @Composable
-internal fun Screen.MastodonInstanceListScreen() {
-    val viewModel: MastodonInstanceListViewModel = getScreenModel()
-
-    SearchInstanceScaffold(viewModel)
-}
+internal fun SignInScreen.MastodonInstanceListScreen(
+    lazyListState: LazyListState,
+) = SearchInstanceScaffold(getFeaturesScreenModel(), lazyListState)
 
 @Composable
-internal fun Screen.MastodonInstanceDetailScreen(
+internal fun SignInScreen.MastodonInstanceDetailScreen(
     domain: String,
     authorizeResult: AuthorizeResult?,
 ) = HandleAuthorize(
     domain,
     authorizeResult,
-) { viewModel, isFetchingAccessToken ->
+) { viewModel, isSignInProgress ->
     InstanceDetailScaffold(
-        getScreenModel { parametersOf(domain) },
-        authorizeResult,
-        isFetchingAccessToken,
+        getFeaturesScreenModel(),
+        domain,
+        isSignInProgress,
     ) { viewModel.requestAuthorize(it) }
 }

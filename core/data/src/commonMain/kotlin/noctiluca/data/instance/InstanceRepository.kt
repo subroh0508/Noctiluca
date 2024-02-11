@@ -1,16 +1,16 @@
 package noctiluca.data.instance
 
-import noctiluca.model.StatusId
+import kotlinx.coroutines.flow.Flow
 import noctiluca.model.authentication.Instance
 import noctiluca.model.status.Status
 
 interface InstanceRepository {
-    suspend fun search(query: String): List<Instance.Suggest>
+    fun suggests(): Flow<List<Instance.Suggest>>
+    fun instance(): Flow<Instance?>
+    fun statuses(): Flow<List<Status>>
 
-    suspend fun show(domain: String): Instance
-
-    suspend fun fetchLocalTimeline(
-        domain: String,
-        maxId: StatusId?,
-    ): List<Status>
+    suspend fun search(query: String)
+    suspend fun fetchInstance(domain: String)
+    suspend fun fetchStatuses(domain: String)
+    suspend fun fetchMoreStatuses(domain: String)
 }

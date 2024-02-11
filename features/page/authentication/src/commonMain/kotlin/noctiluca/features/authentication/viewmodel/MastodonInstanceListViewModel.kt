@@ -1,72 +1,60 @@
 package noctiluca.features.authentication.viewmodel
 
-import androidx.compose.runtime.*
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
-import noctiluca.authentication.domain.usecase.SearchMastodonInstancesUseCase
+import noctiluca.data.instance.InstanceRepository
+import noctiluca.features.authentication.model.InstanceSuggestsModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.ViewModel
 import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope
-import org.koin.core.component.KoinComponent
-import org.koin.core.component.get
 
 class MastodonInstanceListViewModel(
-    private val searchMastodonInstancesUseCase: SearchMastodonInstancesUseCase,
+    private val repository: InstanceRepository,
 ) : ViewModel(), ScreenModel {
-    private val instanceSuggests by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val query by lazy { MutableStateFlow("") }
+    private val state by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
 
     val uiModel by lazy {
         combine(
-            instanceSuggests,
+            repository.suggests(),
             query,
-        ) { suggests, query -> UiModel(query, suggests) }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = UiModel(),
+            state,
+        ) { suggests, query, state ->
+            InstanceSuggestsModel(
+                suggests = if (state.loading) listOf() else suggests,
+                state = state,
+                query = query,
             )
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = InstanceSuggestsModel(),
+        )
     }
 
     fun search(query: String) {
         val prevQuery = uiModel.value.query
-
         if (query == prevQuery) {
             return
         }
 
         this.query.value = query
-        if (query.isBlank()) {
-            instanceSuggests.value = LoadState.Initial
-            return
-        }
 
         val job = launchLazy {
-            runCatching { searchMastodonInstancesUseCase.execute(query) }
-                .onSuccess { instanceSuggests.value = LoadState.Loaded(it) }
-                .onFailure { instanceSuggests.value = LoadState.Error(it) }
+            runCatching { repository.search(query) }
+                .onSuccess {
+                    state.value =
+                        if (query.isBlank()) {
+                            LoadState.Initial
+                        } else {
+                            LoadState.Loaded(Unit)
+                        }
+                }
+                .onFailure { state.value = LoadState.Error(it) }
         }
 
-        instanceSuggests.value = LoadState.Loading(job)
+        state.value = LoadState.Loading(job)
         job.start()
-    }
-
-    data class UiModel(
-        val query: String = "",
-        val suggests: LoadState = LoadState.Initial,
-    ) : ScreenModel
-
-    companion object Provider {
-        @Composable
-        operator fun invoke(
-            koinComponent: KoinComponent,
-        ): MastodonInstanceListViewModel {
-            return remember {
-                MastodonInstanceListViewModel(
-                    koinComponent.get(),
-                )
-            }
-        }
     }
 }

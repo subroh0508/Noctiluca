@@ -14,10 +14,13 @@ kotlin {
                 implementation(compose.material3)
                 implementation(compose.materialIconsExtended)
 
+                implementation(libs.koin.core)
+
                 implementation(libs.kotlinx.coroutines.core)
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.transitions)
+                implementation(libs.voyager.koin)
 
                 implementation(libs.kotlinx.datetime)
             }

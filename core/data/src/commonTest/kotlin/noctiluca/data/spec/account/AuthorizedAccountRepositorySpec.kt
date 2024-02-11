@@ -16,7 +16,6 @@ import kotlinx.coroutines.test.*
 import noctiluca.data.TestDataComponent
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.impl.AuthorizedAccountRepositoryImpl
-import noctiluca.data.di.DataAuthenticationModule
 import noctiluca.data.json.JSON_ACCOUNT_CREDENTIAL_1
 import noctiluca.data.json.JSON_ACCOUNT_CREDENTIAL_2
 import noctiluca.data.json.JSON_ACCOUNT_CREDENTIAL_3
@@ -328,7 +327,6 @@ private fun buildRepository(
         mockAuthenticationTokenDataStore,
     ) {
         single<AccountDataStore> { mockAccountDataStore }
-        DataAuthenticationModule()
     }
 
     return AuthorizedAccountRepositoryImpl(

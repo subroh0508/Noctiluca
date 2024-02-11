@@ -4,12 +4,6 @@ plugins {
 
 kotlin {
     sourceSets {
-        commonMain {
-            dependencies {
-                implementation(project(":core:domain:authentication"))
-            }
-        }
-
         androidMain {
             dependencies {
                 implementation(libs.androidx.core)

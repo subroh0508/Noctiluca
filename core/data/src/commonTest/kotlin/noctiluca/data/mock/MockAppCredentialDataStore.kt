@@ -1,4 +1,4 @@
-package noctiluca.authentication.domain.mock
+package noctiluca.data.mock
 
 import noctiluca.datastore.AppCredentialDataStore
 import noctiluca.model.authentication.AppCredential

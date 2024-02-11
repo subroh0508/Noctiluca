@@ -1,4 +1,4 @@
-package noctiluca.authentication.domain.usecase.json
+package noctiluca.data.json.authentication
 
 import io.ktor.http.*
 import noctiluca.test.DOMAIN_SAMPLE_COM

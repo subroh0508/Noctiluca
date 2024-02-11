@@ -12,9 +12,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
-import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.atoms.list.footer
 import noctiluca.features.shared.atoms.list.items
+import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel

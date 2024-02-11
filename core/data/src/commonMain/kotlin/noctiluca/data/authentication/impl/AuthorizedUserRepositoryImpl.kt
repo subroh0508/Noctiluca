@@ -4,12 +4,12 @@ import noctiluca.data.authentication.AuthorizedUserRepository
 import noctiluca.datastore.AuthenticationTokenDataStore
 
 internal class AuthorizedUserRepositoryImpl(
-    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
+    private val dataStore: AuthenticationTokenDataStore,
 ) : AuthorizedUserRepository {
     override suspend fun expireCurrent() {
-        authenticationTokenDataStore.getCurrent()?.let { authenticationTokenDataStore.delete(it.id) }
-        authenticationTokenDataStore.getAll().firstOrNull()?.let {
-            authenticationTokenDataStore.setCurrent(it.id)
+        dataStore.getCurrent()?.let { dataStore.delete(it.id) }
+        dataStore.getAll().firstOrNull()?.let {
+            dataStore.setCurrent(it.id)
         }
     }
 }

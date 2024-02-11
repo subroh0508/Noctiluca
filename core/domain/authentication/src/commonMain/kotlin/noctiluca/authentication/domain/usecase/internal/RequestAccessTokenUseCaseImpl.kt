@@ -12,8 +12,11 @@ internal class RequestAccessTokenUseCaseImpl(
         code: String,
         redirectUri: Uri,
     ): AuthorizedUser? {
+        /*
         val user = repository.fetch(code, redirectUri) ?: return null
 
         return repository.switch(user.id)
+        */
+        return null
     }
 }

@@ -8,13 +8,10 @@ import noctiluca.features.authentication.component.tab.InstancesTab
 import noctiluca.features.authentication.component.tab.extendeddescription.InstanceExtendedDescriptionTab
 import noctiluca.features.authentication.component.tab.info.InstanceInformationTab
 import noctiluca.features.authentication.component.tab.localtimeline.InstanceLocalTimelineTab
-import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.section.InstanceDetailCaption
 import noctiluca.features.authentication.section.InstanceDetailScrollableFrame
 import noctiluca.features.authentication.section.InstanceDetailTopAppBar
 import noctiluca.features.authentication.viewmodel.MastodonInstanceDetailViewModel
-import noctiluca.features.shared.atoms.snackbar.showSnackbar
-import noctiluca.features.shared.getCommonString
 import noctiluca.model.authentication.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)

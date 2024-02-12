@@ -3,7 +3,6 @@ package noctiluca.data.spec.authorization
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.be
-import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.nulls.beNull
 import io.kotest.matchers.should
@@ -29,7 +28,6 @@ import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.JSON_ACCOUNT_CREDENTIAL
 import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.buildEmptyMockAuthenticationTokenDataStore
-import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 
 class AuthorizationRepositorySpec : DescribeSpec({
@@ -156,63 +154,6 @@ class AuthorizationRepositorySpec : DescribeSpec({
                 }
 
                 mockAuthenticationTokenDataStore.getAll() should haveSize(0)
-            }
-        }
-    }
-
-    describe("#switchAccessToken") {
-        context("when the local cache does not exist") {
-            val repository = buildRepository(
-                MockHttpClientEngine
-                    .mock(Api.V1.Accounts.VerifyCredentials(), JSON_ACCOUNT_CREDENTIAL)
-                    .build(),
-            )
-
-            it("raises NoSuchElementException") {
-                shouldThrowExactly<NoSuchElementException> {
-                    runBlocking {
-                        repository.switchAccessToken(AccountId(ACCOUNT_ID))
-                    }
-                }
-            }
-        }
-
-        context("when the local cache exists") {
-            val mockAuthenticationTokenDataStore = buildFilledMockAuthenticationTokenDataStore(
-                init = listOf(object : AuthorizedUser {
-                    override val id = AccountId("100")
-                    override val domain = Domain("hoge.com")
-                }),
-                currentAccessToken = "yyy",
-            )
-            val repository = buildRepository(
-                MockHttpClientEngine
-                    .mock(OAuth.Token(), JSON_OAUTH_TOKEN)
-                    .mock(Api.V1.Accounts.VerifyCredentials(), JSON_ACCOUNT_CREDENTIAL)
-                    .build(),
-                MockAppCredentialDataStore(
-                    AppCredential(
-                        TEST_CLIENT_ID,
-                        TEST_CLIENT_SECRET,
-                        Domain(DOMAIN_SAMPLE_COM),
-                        Uri("dummy"),
-                    ),
-                ),
-                mockAuthenticationTokenDataStore,
-            )
-
-            it("returns the authorized user") {
-                runBlocking {
-                    repository.fetchAccessToken(TEST_CODE, Uri(TEST_REDIRECT_URL))
-                    repository.switchAccessToken(AccountId(ACCOUNT_ID))
-                }.id should be(AccountId(ACCOUNT_ID))
-
-                runBlocking {
-                    mockAuthenticationTokenDataStore.getAll()
-                }.map(AuthorizedUser::id) should containExactly(
-                    AccountId(ACCOUNT_ID),
-                    AccountId("100"),
-                )
             }
         }
     }

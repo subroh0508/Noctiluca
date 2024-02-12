@@ -46,6 +46,4 @@ internal class AuthorizationRepositoryImpl(
 
         return authorizationTokenDataStore.add(id, domain, accessToken).find { it.id == id }
     }
-
-    override suspend fun switchAccessToken(id: AccountId) = authorizationTokenDataStore.setCurrent(id)
 }

@@ -54,7 +54,7 @@ class TimelinesViewModel(
 
     fun switch(account: Account) {
         launch {
-            runCatchingWithAuth { authorizedAccountRepository.switch(account.id) }
+            runCatchingWithAuth { context.switchCurrent(account.id) }
                 .onSuccess { reopen() }
         }
     }

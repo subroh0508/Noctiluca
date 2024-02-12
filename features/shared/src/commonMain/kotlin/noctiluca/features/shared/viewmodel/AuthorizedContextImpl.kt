@@ -5,10 +5,7 @@ import androidx.compose.runtime.remember
 import kotlinx.coroutines.flow.*
 import noctiluca.data.authorization.AuthorizedUserRepository
 import noctiluca.data.di.AuthorizedContext
-import noctiluca.model.AuthorizeEventState
-import noctiluca.model.AuthorizedTokenNotFoundException
-import noctiluca.model.AuthorizedUser
-import noctiluca.model.HttpUnauthorizedException
+import noctiluca.model.*
 import org.koin.core.qualifier.TypeQualifier
 import org.koin.core.scope.Scope
 import org.koin.mp.KoinPlatform.getKoin
@@ -53,6 +50,7 @@ internal class AuthorizedContextImpl private constructor(
         eventFlow.value = AuthorizeEventState.Event.SIGN_IN
     }
 
+    override suspend fun switchCurrent(id: AccountId) = repository.switchCurrent(id)
     override suspend fun expireCurrent() = repository.expireCurrent()
 
     private var _scope: Scope? = null

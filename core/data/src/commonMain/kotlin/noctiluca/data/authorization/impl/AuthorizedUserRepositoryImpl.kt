@@ -4,6 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onStart
 import noctiluca.data.authorization.AuthorizedUserRepository
 import noctiluca.datastore.AuthorizationTokenDataStore
+import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.AuthorizedUser
 import noctiluca.network.mastodon.MastodonApiV1
@@ -22,6 +23,11 @@ internal class AuthorizedUserRepositoryImpl(
 
             currentAuthorizedUserStateFlow.value = fetchCurrent()
         }
+
+    override suspend fun switchCurrent(id: AccountId) {
+        dataStore.setCurrent(id)
+        currentAuthorizedUserStateFlow.value = fetchCurrent()
+    }
 
     override suspend fun expireCurrent() {
         dataStore.getCurrent()?.let { dataStore.delete(it.id) }

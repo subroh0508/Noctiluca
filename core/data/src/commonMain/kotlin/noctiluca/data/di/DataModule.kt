@@ -6,7 +6,7 @@ import org.koin.dsl.module
 
 @Suppress("FunctionName")
 fun DataModule() = module {
-    single<AuthorizedUserRepository> { AuthorizedUserRepositoryImpl(get()) }
+    single<AuthorizedUserRepository> { AuthorizedUserRepositoryImpl(get(), get()) }
     DataAccountModule()
     DataAccountDetailModule()
     DataStatusModule()

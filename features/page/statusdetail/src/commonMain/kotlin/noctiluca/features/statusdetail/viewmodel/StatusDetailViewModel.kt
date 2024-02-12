@@ -15,9 +15,8 @@ import noctiluca.model.status.StatusList
 class StatusDetailViewModel(
     val id: StatusId,
     private val statusRepository: StatusRepository,
-    authorizedUserRepository: AuthorizedUserRepository,
     eventStateFlow: AuthorizeEventStateFlow,
-) : AuthorizedViewModel(authorizedUserRepository, eventStateFlow), ScreenModel {
+) : AuthorizedViewModel(eventStateFlow), ScreenModel {
     private val messageStateFlow: MutableStateFlow<MessageHolder> by lazy {
         MutableStateFlow(MessageHolder("", consumed = true))
     }

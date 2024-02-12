@@ -5,5 +5,5 @@ import org.koin.core.module.Module
 
 @Suppress("FunctionName")
 fun Module.AuthorizedFeatureModule() {
-    single { AuthorizeEventStateFlow() }
+    single { AuthorizeEventStateFlow(get()) }
 }

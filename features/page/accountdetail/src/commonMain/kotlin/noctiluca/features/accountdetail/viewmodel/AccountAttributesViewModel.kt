@@ -14,9 +14,8 @@ import noctiluca.model.accountdetail.StatusesQuery
 class AccountAttributesViewModel(
     val id: AccountId,
     private val accountAttributesRepository: AccountAttributesRepository,
-    authorizedUserRepository: AuthorizedUserRepository,
     eventStateFlow: AuthorizeEventStateFlow,
-) : AuthorizedViewModel(authorizedUserRepository, eventStateFlow), ScreenModel {
+) : AuthorizedViewModel(eventStateFlow), ScreenModel {
     private val state by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
 
     val uiModel by lazy {

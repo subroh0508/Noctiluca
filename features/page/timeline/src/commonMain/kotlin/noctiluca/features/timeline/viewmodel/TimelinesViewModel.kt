@@ -24,9 +24,8 @@ class TimelinesViewModel(
     private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
     private val authorizedAccountRepository: AuthorizedAccountRepository,
-    authorizedUserRepository: AuthorizedUserRepository,
     eventStateFlow: AuthorizeEventStateFlow,
-) : AuthorizedViewModel(authorizedUserRepository, eventStateFlow), ScreenModel {
+) : AuthorizedViewModel(eventStateFlow), ScreenModel {
     private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
     private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 

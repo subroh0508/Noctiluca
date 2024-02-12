@@ -3,9 +3,14 @@ package noctiluca.features.shared
 import androidx.compose.runtime.*
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.combine
+import noctiluca.data.authorization.AuthorizedUserRepository
 import noctiluca.features.navigation.backToSignIn
 import noctiluca.features.navigation.navigateToTimelines
-import noctiluca.features.shared.viewmodel.AuthorizedViewModel
+import noctiluca.features.shared.model.AuthorizeEventState
+import noctiluca.model.AuthorizedTokenNotFoundException
+import noctiluca.model.HttpUnauthorizedException
 import org.koin.mp.KoinPlatform.getKoin
 
 @Composable
@@ -14,16 +19,23 @@ fun AuthorizedComposable(
     eventStateFlow: AuthorizeEventStateFlow = rememberAuthorizeEventStateFlow(),
     content: @Composable () -> Unit,
 ) = FeatureComposable(*values) {
-    val event by eventStateFlow.collectAsState(AuthorizedViewModel.Event.OK)
+    val state by eventStateFlow.catch { e ->
+        e.printStackTrace()
 
-    when (event) {
-        AuthorizedViewModel.Event.OK -> content()
-        AuthorizedViewModel.Event.REOPEN -> {
+        when (e) {
+            is HttpUnauthorizedException -> eventStateFlow.reopen()
+            is AuthorizedTokenNotFoundException -> eventStateFlow.requestSignIn()
+        }
+    }.collectAsState(AuthorizeEventState())
+
+    when (state.event) {
+        AuthorizeEventState.Event.OK -> content()
+        AuthorizeEventState.Event.REOPEN -> {
             eventStateFlow.reset()
             navigateToTimelines()
         }
 
-        AuthorizedViewModel.Event.SIGN_IN -> {
+        AuthorizeEventState.Event.SIGN_IN -> {
             eventStateFlow.reset()
             backToSignIn()
         }
@@ -36,23 +48,32 @@ fun rememberAuthorizeEventStateFlow() = remember {
 }
 
 class AuthorizeEventStateFlow(
-    val state: MutableStateFlow<AuthorizedViewModel.Event>,
-) : Flow<AuthorizedViewModel.Event> by state {
+    private val repository: AuthorizedUserRepository,
+    private val eventFlow: MutableStateFlow<AuthorizeEventState.Event>,
+) : Flow<AuthorizeEventState> by combine(
+    repository.currentAuthorizedUser(),
+    eventFlow,
+    transform = { user, event -> AuthorizeEventState(user, event) },
+) {
     constructor(
-        initial: AuthorizedViewModel.Event = AuthorizedViewModel.Event.OK,
+        repository: AuthorizedUserRepository,
+        initial: AuthorizeEventState.Event = AuthorizeEventState.Event.OK,
     ) : this(
+        repository,
         MutableStateFlow(initial),
     )
 
     fun reset() {
-        state.value = AuthorizedViewModel.Event.OK
+        eventFlow.value = AuthorizeEventState.Event.OK
     }
 
     fun reopen() {
-        state.value = AuthorizedViewModel.Event.REOPEN
+        eventFlow.value = AuthorizeEventState.Event.REOPEN
     }
 
     fun requestSignIn() {
-        state.value = AuthorizedViewModel.Event.SIGN_IN
+        eventFlow.value = AuthorizeEventState.Event.SIGN_IN
     }
+
+    suspend fun expireCurrent() = repository.expireCurrent()
 }

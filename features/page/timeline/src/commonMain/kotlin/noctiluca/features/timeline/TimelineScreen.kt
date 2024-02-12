@@ -5,14 +5,13 @@ import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
-import cafe.adriel.voyager.core.screen.uniqueScreenKey
-import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import noctiluca.features.navigation.Timeline
 import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToSignIn
 import noctiluca.features.shared.AuthorizedComposable
+import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
@@ -23,19 +22,25 @@ internal val LocalResources = compositionLocalOf { Resources("JA") }
 
 val featureTimelineScreenModule = screenModule {
     register<Timeline.TimelineLane> {
-        TimelineLaneScreen()
+        TimelineLaneScreen(it.id, it.domain)
     }
     register<Timeline.Toot> {
         TootScreen
     }
 }
 
-class TimelineLaneScreen : Screen {
-    override val key: ScreenKey by lazy { uniqueScreenKey }
+data class TimelineLaneScreen(
+    private val id: String,
+    private val domain: String,
+) : Screen {
+    override val key: ScreenKey by lazy { "$id@$domain" }
 
     @Composable
-    override fun Content() = TimelineFeature { viewModel ->
+    override fun Content() = AuthorizedComposable(
+        LocalResources provides Resources(Locale.current.language),
+    ) {
         val navigator = LocalNavigator.current
+        val viewModel: TimelinesViewModel = getAuthorizedScreenModel()
         val uiModel by viewModel.uiModel.collectAsState()
 
         TimelineNavigationDrawer(
@@ -61,17 +66,10 @@ class TimelineLaneScreen : Screen {
 
 internal data object TootScreen : Screen {
     @Composable
-    override fun Content() = TimelineFeature { viewModel ->
-        TootScaffold(viewModel)
-    }
+    override fun Content() = AuthorizedComposable(
+        LocalResources provides Resources(Locale.current.language),
+    ) { TootScaffold(getAuthorizedScreenModel()) }
 }
-
-@Composable
-private fun Screen.TimelineFeature(
-    content: @Composable (TimelinesViewModel) -> Unit,
-) = AuthorizedComposable(
-    LocalResources provides Resources(Locale.current.language),
-) { content(getScreenModel()) }
 
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,

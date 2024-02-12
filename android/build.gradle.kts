@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core:network:authentication"))
+    implementation(project(":core:network:authorization"))
     implementation(project(":core:network:instancessocial"))
     implementation(project(":core:network:mastodon"))
     implementation(project(":core:datastore"))
@@ -14,7 +14,7 @@ dependencies {
     implementation(project(":features:shared"))
     implementation(project(":features:navigation"))
     implementation(project(":features:page:accountdetail"))
-    implementation(project(":features:page:authentication"))
+    implementation(project(":features:page:signin"))
     implementation(project(":features:page:statusdetail"))
     implementation(project(":features:page:timeline"))
 

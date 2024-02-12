@@ -4,7 +4,7 @@ import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import noctiluca.network.mastodon.Api
-import noctiluca.network.mastodon.AuthenticationTokenProvider
+import noctiluca.network.mastodon.AuthorizationTokenProvider
 import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.network.mastodon.data.account.NetworkAccount
 import noctiluca.network.mastodon.data.account.NetworkAccountCredential
@@ -16,7 +16,7 @@ import noctiluca.network.mastodon.data.status.NetworkStatusesContext
 import noctiluca.network.mastodon.paramaters.account.AccountFollowParameter
 
 internal class MastodonApiV1Client(
-    token: AuthenticationTokenProvider,
+    token: AuthorizationTokenProvider,
     private val client: HttpClient,
 ) : MastodonApiV1, AbstractMastodonApiClient(token) {
     override suspend fun getInstance(

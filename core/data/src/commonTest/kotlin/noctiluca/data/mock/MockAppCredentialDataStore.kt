@@ -1,7 +1,7 @@
 package noctiluca.data.mock
 
 import noctiluca.datastore.AppCredentialDataStore
-import noctiluca.model.authentication.AppCredential
+import noctiluca.model.authorization.AppCredential
 
 class MockAppCredentialDataStore(
     init: AppCredential? = null,

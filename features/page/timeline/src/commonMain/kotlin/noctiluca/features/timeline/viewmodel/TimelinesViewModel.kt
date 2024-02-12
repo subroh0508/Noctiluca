@@ -3,9 +3,8 @@ package noctiluca.features.timeline.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
-import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.data.di.AuthorizedContext
 import noctiluca.data.timeline.impl.TimelineStreamStateFlow
-import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
@@ -24,9 +23,8 @@ class TimelinesViewModel(
     private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
     private val authorizedAccountRepository: AuthorizedAccountRepository,
-    authorizedUserRepository: AuthorizedUserRepository,
-    eventStateFlow: AuthorizeEventStateFlow,
-) : AuthorizedViewModel(authorizedUserRepository, eventStateFlow), ScreenModel {
+    context: AuthorizedContext,
+) : AuthorizedViewModel(context), ScreenModel {
     private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
     private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 
@@ -56,7 +54,7 @@ class TimelinesViewModel(
 
     fun switch(account: Account) {
         launch {
-            runCatchingWithAuth { authorizedAccountRepository.switch(account.id) }
+            runCatchingWithAuth { context.switchCurrent(account.id) }
                 .onSuccess { reopen() }
         }
     }
@@ -66,6 +64,8 @@ class TimelinesViewModel(
     }
 
     fun subscribe() {
+        uiModel.value.account.current ?: return
+
         val job = launchLazy {
             runCatchingWithAuth { subscribeTimelineStreamUseCase.execute() }
                 .onSuccess { loadStateFlow.value = mapOf() }

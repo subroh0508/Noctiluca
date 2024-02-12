@@ -4,9 +4,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.data.di.AuthorizedContext
 import noctiluca.data.status.StatusRepository
-import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.model.MessageHolder
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.model.StatusId
@@ -15,9 +14,8 @@ import noctiluca.model.status.StatusList
 class StatusDetailViewModel(
     val id: StatusId,
     private val statusRepository: StatusRepository,
-    authorizedUserRepository: AuthorizedUserRepository,
-    eventStateFlow: AuthorizeEventStateFlow,
-) : AuthorizedViewModel(authorizedUserRepository, eventStateFlow), ScreenModel {
+    context: AuthorizedContext,
+) : AuthorizedViewModel(context), ScreenModel {
     private val messageStateFlow: MutableStateFlow<MessageHolder> by lazy {
         MutableStateFlow(MessageHolder("", consumed = true))
     }

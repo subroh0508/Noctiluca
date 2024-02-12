@@ -2,8 +2,8 @@ package noctiluca.data
 
 import io.ktor.client.engine.HttpClientEngine
 import kotlinx.serialization.json.Json
-import noctiluca.datastore.AuthenticationTokenDataStore
-import noctiluca.network.mastodon.AuthenticationTokenProvider
+import noctiluca.datastore.AuthorizationTokenDataStore
+import noctiluca.network.mastodon.AuthorizationTokenProvider
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.network.mastodon.di.buildWebSocketClient
@@ -16,7 +16,7 @@ import org.koin.dsl.module
 
 class TestDataComponent(
     private val mockHttpClientEngine: HttpClientEngine,
-    private val mockAuthenticationTokenDataStore: AuthenticationTokenDataStore,
+    private val mockAuthorizationTokenDataStore: AuthorizationTokenDataStore,
     private val moduleDeclaration: ModuleDeclaration = {},
 ) : KoinScopeComponent {
     private val json by lazy {
@@ -43,13 +43,13 @@ class TestDataComponent(
             json,
         )
 
-        single<AuthenticationTokenProvider> {
-            object : AuthenticationTokenProvider {
-                override suspend fun getCurrentAccessToken() = mockAuthenticationTokenDataStore.getCurrentAccessToken()
-                override suspend fun getCurrentDomain() = mockAuthenticationTokenDataStore.getCurrentDomain()
+        single<AuthorizationTokenProvider> {
+            object : AuthorizationTokenProvider {
+                override suspend fun getCurrentAccessToken() = mockAuthorizationTokenDataStore.getCurrentAccessToken()
+                override suspend fun getCurrentDomain() = mockAuthorizationTokenDataStore.getCurrentDomain()
             }
         }
-        single { mockAuthenticationTokenDataStore }
+        single { mockAuthorizationTokenDataStore }
 
         moduleDeclaration()
     }

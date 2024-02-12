@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.toEntity
 import noctiluca.datastore.AccountDataStore
-import noctiluca.datastore.AuthenticationTokenDataStore
+import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.datastore.getOthers
 import noctiluca.model.*
 import noctiluca.model.account.Account
@@ -12,7 +12,7 @@ import noctiluca.network.mastodon.MastodonApiV1
 
 internal class AuthorizedAccountRepositoryImpl(
     private val v1: MastodonApiV1,
-    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
+    private val authorizationTokenDataStore: AuthorizationTokenDataStore,
     private val accountDataStore: AccountDataStore,
 ) : AuthorizedAccountRepository {
     private val currentStateFlow: MutableStateFlow<Pair<Account, Domain>?> = MutableStateFlow(null)
@@ -35,10 +35,10 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     override suspend fun switch(id: AccountId) {
-        val token = authenticationTokenDataStore.setCurrent(id)
+        val token = authorizationTokenDataStore.setCurrent(id)
 
         currentStateFlow.value = refresh(id) to token.domain
-        allStateFlow.value = authenticationTokenDataStore.getOthers()
+        allStateFlow.value = authorizationTokenDataStore.getOthers()
             .mapNotNull { accountDataStore.get(it.id) }
     }
 
@@ -57,7 +57,7 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     private suspend fun refreshOthers() {
-        val cache = authenticationTokenDataStore.getOthers()
+        val cache = authorizationTokenDataStore.getOthers()
 
         allStateFlow.value = cache.mapNotNull {
             accountDataStore.get(it.id)
@@ -69,7 +69,7 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     private suspend fun getCurrent(): Pair<Account, Domain>? {
-        val token = authenticationTokenDataStore.getCurrent() ?: return null
+        val token = authorizationTokenDataStore.getCurrent() ?: return null
 
         val account = accountDataStore.get(token.id) ?: return null
         val domain = token.domain
@@ -78,7 +78,7 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     private suspend fun fetchCurrent(): Pair<Account, Domain> {
-        val domain = authenticationTokenDataStore.getCurrent()?.domain ?: throw AuthorizedTokenNotFoundException
+        val domain = authorizationTokenDataStore.getCurrent()?.domain ?: throw AuthorizedTokenNotFoundException
         val account = v1.getVerifyAccountsCredentials(domain.value).toEntity(domain)
 
         accountDataStore.add(account)
@@ -96,8 +96,8 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     private suspend fun getAccessToken(id: AccountId): Pair<String, Domain>? {
-        val accessToken = authenticationTokenDataStore.getAccessToken(id) ?: return null
-        val domain = authenticationTokenDataStore.getDomain(id) ?: return null
+        val accessToken = authorizationTokenDataStore.getAccessToken(id) ?: return null
+        val domain = authorizationTokenDataStore.getDomain(id) ?: return null
 
         return accessToken to domain
     }

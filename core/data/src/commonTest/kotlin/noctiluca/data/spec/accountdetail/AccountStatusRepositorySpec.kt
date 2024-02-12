@@ -21,7 +21,7 @@ import noctiluca.test.JSON_STATUS_MEDIA_ID_199
 import noctiluca.test.JSON_STATUS_NORMAL
 import noctiluca.test.JSON_STATUS_NORMAL_ID_99
 import noctiluca.test.extension.flowToList
-import noctiluca.test.mock.MockAuthenticationTokenDataStore
+import noctiluca.test.mock.MockAuthorizationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
@@ -244,7 +244,7 @@ private fun MockHttpClientEngine.Builder.mockGetNextStatuses(
 
 private fun buildRepository(
     mockEngine: MockEngine,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = buildFilledMockAuthenticationTokenDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthorizationTokenDataStore = buildFilledMockAuthenticationTokenDataStore(),
 ): AccountStatusRepository {
     val component = TestDataComponent(
         mockEngine,

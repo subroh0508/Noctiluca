@@ -9,7 +9,7 @@ kotlin {
             dependencies {
                 implementation(project(":core:model"))
                 implementation(project(":core:datastore"))
-                implementation(project(":core:network:authentication"))
+                implementation(project(":core:network:authorization"))
                 implementation(project(":core:network:mastodon"))
                 implementation(project(":core:network:instancessocial"))
 

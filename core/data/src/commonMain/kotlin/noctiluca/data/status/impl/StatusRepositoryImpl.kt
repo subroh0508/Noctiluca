@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onStart
 import noctiluca.data.status.StatusRepository
 import noctiluca.data.status.toEntity
-import noctiluca.datastore.AuthenticationTokenDataStore
+import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import noctiluca.network.mastodon.MastodonApiV1
@@ -12,7 +12,7 @@ import noctiluca.network.mastodon.data.status.NetworkStatus
 
 internal class StatusRepositoryImpl(
     private val api: MastodonApiV1,
-    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
+    private val authorizationTokenDataStore: AuthorizationTokenDataStore,
 ) : StatusRepository {
     private val statusContextStateFlow: MutableStateFlow<List<Status>> by lazy { MutableStateFlow(listOf()) }
 
@@ -69,5 +69,5 @@ internal class StatusRepositoryImpl(
         return ancestors + listOf(status) + descendants
     }
 
-    private suspend fun NetworkStatus.toEntity() = toEntity(authenticationTokenDataStore.getCurrent()?.id)
+    private suspend fun NetworkStatus.toEntity() = toEntity(authorizationTokenDataStore.getCurrent()?.id)
 }

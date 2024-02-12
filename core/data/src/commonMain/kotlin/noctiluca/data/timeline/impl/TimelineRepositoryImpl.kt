@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.*
 import noctiluca.data.status.toEntity
 import noctiluca.data.timeline.TimelineRepository
 import noctiluca.data.timeline.toStream
-import noctiluca.datastore.AuthenticationTokenDataStore
+import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.*
@@ -17,7 +17,7 @@ import noctiluca.network.mastodon.data.streaming.StreamingType
 
 internal class TimelineRepositoryImpl(
     private val webSocket: MastodonStream,
-    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
+    private val authorizationTokenDataStore: AuthorizationTokenDataStore,
     private val streamCoroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO + Job()),
 ) : TimelineRepository {
     private val timelineStreamStateFlow by lazy { TimelineStreamStateFlow(TimelineStreamState()) }
@@ -95,11 +95,11 @@ internal class TimelineRepositoryImpl(
     private suspend fun NetworkStreamEvent.toValueObject() = payload?.let {
         when (it) {
             is NetworkStreamEvent.Payload.Updated -> StreamEvent.Updated(
-                it.status.toEntity(authenticationTokenDataStore.getCurrent()?.id),
+                it.status.toEntity(authorizationTokenDataStore.getCurrent()?.id),
             )
 
             is NetworkStreamEvent.Payload.StatusEdited -> StreamEvent.StatusEdited(
-                it.status.toEntity(authenticationTokenDataStore.getCurrent()?.id),
+                it.status.toEntity(authorizationTokenDataStore.getCurrent()?.id),
             )
 
             is NetworkStreamEvent.Payload.Deleted -> StreamEvent.Deleted(StatusId(it.id))

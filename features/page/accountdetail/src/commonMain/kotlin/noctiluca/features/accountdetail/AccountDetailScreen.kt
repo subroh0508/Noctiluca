@@ -5,12 +5,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.features.accountdetail.screen.AccountDetailContent
 import noctiluca.features.accountdetail.screen.AccountDetailScaffold
 import noctiluca.features.accountdetail.section.AccountDetailTopAppBar
 import noctiluca.features.accountdetail.viewmodel.AccountRelationshipsViewModel
 import noctiluca.features.shared.AuthorizedComposable
+import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.model.AccountId
 import org.koin.core.parameter.parametersOf
 import noctiluca.features.navigation.AccountDetail as NavigationAccountDetailScreen
@@ -33,7 +33,7 @@ internal data class AccountDetailScreen(
     override fun Content() = AuthorizedComposable(
         LocalResources provides Resources(Locale.current.language),
     ) {
-        val viewModel: AccountRelationshipsViewModel = getScreenModel {
+        val viewModel: AccountRelationshipsViewModel = getAuthorizedScreenModel {
             parametersOf(AccountId(id))
         }
         val relationshipsModel by viewModel.uiModel.collectAsState()

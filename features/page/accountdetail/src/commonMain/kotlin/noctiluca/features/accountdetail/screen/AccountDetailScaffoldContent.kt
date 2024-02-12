@@ -12,7 +12,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
-import cafe.adriel.voyager.koin.getScreenModel
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.accountdetail.AccountDetailScreen
 import noctiluca.features.accountdetail.component.AccountDetailTabs
@@ -28,6 +27,7 @@ import noctiluca.features.navigation.StatusDetail
 import noctiluca.features.shared.atoms.list.EmptyMessage
 import noctiluca.features.shared.atoms.list.infiniteScrollFooter
 import noctiluca.features.shared.atoms.list.items
+import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.status.Status
 import noctiluca.model.AccountId
@@ -44,7 +44,7 @@ internal fun AccountDetailScreen.AccountDetailContent(
     block: () -> Unit,
     notifyNewStatus: () -> Unit,
 ) {
-    val viewModel: AccountStatusesViewModel = getScreenModel {
+    val viewModel: AccountStatusesViewModel = getAuthorizedScreenModel {
         parametersOf(AccountId(id))
     }
     val statusesModel by viewModel.uiModel.collectAsState()

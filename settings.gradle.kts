@@ -21,7 +21,7 @@ rootProject.name = "noctiluca"
 include(
     ":android",
     ":desktop",
-    ":core:network:authentication",
+    ":core:network:authorization",
     ":core:network:instancessocial",
     ":core:network:mastodon",
     ":core:datastore",
@@ -33,7 +33,7 @@ include(
     ":features:shared",
     ":features:designsystem",
     ":features:page:accountdetail",
-    ":features:page:authentication",
+    ":features:page:signin",
     ":features:page:statusdetail",
     ":features:page:timeline",
 )

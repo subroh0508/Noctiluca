@@ -7,7 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
 import noctiluca.model.Domain
 import noctiluca.model.Uri
-import noctiluca.model.authentication.AppCredential
+import noctiluca.model.authorization.AppCredential
 
 internal class AndroidAppCredentialDataStore(
     private val dataStore: DataStore<Preferences>,

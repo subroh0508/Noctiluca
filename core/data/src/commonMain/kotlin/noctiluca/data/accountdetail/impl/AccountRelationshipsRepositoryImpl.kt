@@ -3,7 +3,7 @@ package noctiluca.data.accountdetail.impl
 import kotlinx.coroutines.flow.*
 import noctiluca.data.accountdetail.AccountRelationshipsRepository
 import noctiluca.data.accountdetail.toValueObject
-import noctiluca.datastore.AuthenticationTokenDataStore
+import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.accountdetail.Relationships
 import noctiluca.network.mastodon.MastodonApiV1
@@ -11,7 +11,7 @@ import noctiluca.network.mastodon.data.account.NetworkRelationship
 
 internal class AccountRelationshipsRepositoryImpl(
     private val v1: MastodonApiV1,
-    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
+    private val authorizationTokenDataStore: AuthorizationTokenDataStore,
 ) : AccountRelationshipsRepository {
     private val current get() = accountRelationshipsStateFlow.value
     private val accountRelationshipsStateFlow by lazy { MutableStateFlow(Relationships.NONE) }
@@ -96,7 +96,7 @@ internal class AccountRelationshipsRepositoryImpl(
     private suspend fun fetchRelationships(
         id: AccountId,
     ): Relationships {
-        if (id == authenticationTokenDataStore.getCurrent()?.id) {
+        if (id == authorizationTokenDataStore.getCurrent()?.id) {
             return Relationships.ME
         }
 
@@ -108,6 +108,6 @@ internal class AccountRelationshipsRepositoryImpl(
     }
 
     private suspend fun NetworkRelationship.toValueObject() = toValueObject(
-        authenticationTokenDataStore.getCurrent(),
+        authorizationTokenDataStore.getCurrent(),
     )
 }

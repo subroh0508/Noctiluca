@@ -16,6 +16,10 @@ kotlin {
 
                 implementation(libs.image.loader)
 
+                implementation(libs.voyager.navigator)
+                implementation(libs.voyager.transitions)
+                implementation(libs.voyager.koin)
+
                 implementation(libs.koin.core)
             }
         }

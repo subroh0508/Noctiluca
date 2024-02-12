@@ -6,8 +6,8 @@ import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
-import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.features.shared.AuthorizedComposable
+import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.statusdetail.templates.StatusDetailScaffold
 import noctiluca.model.StatusId
 import org.koin.core.parameter.parametersOf
@@ -29,5 +29,5 @@ internal data class StatusDetailScreen(
     @Composable
     override fun Content() = AuthorizedComposable(
         LocalResources provides Resources(Locale.current.language),
-    ) { StatusDetailScaffold(getScreenModel { parametersOf(StatusId(id)) }) }
+    ) { StatusDetailScaffold(getAuthorizedScreenModel { parametersOf(StatusId(id)) }) }
 }

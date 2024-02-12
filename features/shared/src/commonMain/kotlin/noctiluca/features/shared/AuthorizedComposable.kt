@@ -2,57 +2,56 @@ package noctiluca.features.shared
 
 import androidx.compose.runtime.*
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
+import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.navigation.backToSignIn
 import noctiluca.features.navigation.navigateToTimelines
-import noctiluca.features.shared.viewmodel.AuthorizedViewModel
-import org.koin.mp.KoinPlatform.getKoin
+import noctiluca.features.shared.viewmodel.rememberAuthorizedContext
+import noctiluca.model.AccountId
+import noctiluca.model.AuthorizeEventState
+
+val LocalAuthorizedContext = compositionLocalOf<AuthorizedContext> { EmptyAuthorizedContext }
 
 @Composable
 fun AuthorizedComposable(
     vararg values: ProvidedValue<*>,
-    eventStateFlow: AuthorizeEventStateFlow = rememberAuthorizeEventStateFlow(),
+    context: AuthorizedContext = rememberAuthorizedContext(),
     content: @Composable () -> Unit,
-) = FeatureComposable(*values) {
-    val event by eventStateFlow.collectAsState()
+) = FeatureComposable(
+    LocalAuthorizedContext provides context,
+    *values,
+) {
+    val state by context.state.collectAsState(AuthorizeEventState())
 
-    when (event) {
-        AuthorizedViewModel.Event.OK -> content()
-        AuthorizedViewModel.Event.REOPEN -> {
-            eventStateFlow.reset()
-            navigateToTimelines()
+    when (state.event) {
+        AuthorizeEventState.Event.OK -> AuthorizedContextContent(context, content)
+        AuthorizeEventState.Event.REOPEN -> {
+            context.reset()
+            navigateToTimelines(state.user)
         }
 
-        AuthorizedViewModel.Event.SIGN_IN -> {
-            eventStateFlow.reset()
+        AuthorizeEventState.Event.SIGN_IN -> {
+            context.reset()
             backToSignIn()
         }
     }
 }
 
 @Composable
-fun rememberAuthorizeEventStateFlow() = remember {
-    getKoin().get<AuthorizeEventStateFlow>()
+private fun AuthorizedContextContent(
+    context: AuthorizedContext,
+    content: @Composable () -> Unit,
+) {
+    context.scope ?: return
+
+    content()
 }
 
-class AuthorizeEventStateFlow(
-    private val state: MutableStateFlow<AuthorizedViewModel.Event>,
-) : StateFlow<AuthorizedViewModel.Event> by state {
-    constructor(
-        initial: AuthorizedViewModel.Event = AuthorizedViewModel.Event.OK,
-    ) : this(
-        MutableStateFlow(initial),
-    )
-
-    fun reset() {
-        state.value = AuthorizedViewModel.Event.OK
-    }
-
-    fun reopen() {
-        state.value = AuthorizedViewModel.Event.REOPEN
-    }
-
-    fun requestSignIn() {
-        state.value = AuthorizedViewModel.Event.SIGN_IN
-    }
+private data object EmptyAuthorizedContext : AuthorizedContext {
+    override val state = MutableStateFlow(AuthorizeEventState())
+    override val scope = null
+    override fun reset() = Unit
+    override fun reopen() = Unit
+    override fun requestSignIn() = Unit
+    override suspend fun switchCurrent(id: AccountId) = Unit
+    override suspend fun expireCurrent() = Unit
 }

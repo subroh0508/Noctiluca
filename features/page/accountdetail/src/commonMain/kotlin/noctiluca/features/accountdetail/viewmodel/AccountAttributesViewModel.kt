@@ -3,9 +3,8 @@ package noctiluca.features.accountdetail.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.accountdetail.AccountAttributesRepository
-import noctiluca.data.authorization.AuthorizedUserRepository
 import noctiluca.features.accountdetail.model.AttributesModel
-import noctiluca.features.shared.AuthorizeEventStateFlow
+import noctiluca.features.shared.context.AuthorizedContext
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.model.AccountId
@@ -14,8 +13,8 @@ import noctiluca.model.accountdetail.StatusesQuery
 class AccountAttributesViewModel(
     val id: AccountId,
     private val accountAttributesRepository: AccountAttributesRepository,
-    eventStateFlow: AuthorizeEventStateFlow,
-) : AuthorizedViewModel(eventStateFlow), ScreenModel {
+    context: AuthorizedContext,
+) : AuthorizedViewModel(context), ScreenModel {
     private val state by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
 
     val uiModel by lazy {

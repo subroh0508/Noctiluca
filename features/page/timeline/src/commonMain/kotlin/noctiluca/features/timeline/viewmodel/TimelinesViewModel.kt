@@ -3,9 +3,8 @@ package noctiluca.features.timeline.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
-import noctiluca.data.authorization.AuthorizedUserRepository
 import noctiluca.data.timeline.impl.TimelineStreamStateFlow
-import noctiluca.features.shared.AuthorizeEventStateFlow
+import noctiluca.features.shared.context.AuthorizedContext
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
@@ -24,8 +23,8 @@ class TimelinesViewModel(
     private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
     private val authorizedAccountRepository: AuthorizedAccountRepository,
-    eventStateFlow: AuthorizeEventStateFlow,
-) : AuthorizedViewModel(eventStateFlow), ScreenModel {
+    context: AuthorizedContext,
+) : AuthorizedViewModel(context), ScreenModel {
     private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
     private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 

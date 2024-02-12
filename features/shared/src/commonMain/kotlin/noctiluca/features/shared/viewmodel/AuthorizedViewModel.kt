@@ -1,14 +1,14 @@
 package noctiluca.features.shared.viewmodel
 
 import kotlinx.coroutines.flow.*
-import noctiluca.features.shared.AuthorizeEventStateFlow
+import noctiluca.features.shared.context.AuthorizedContext
 import noctiluca.features.shared.model.LoadState
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.HttpUnauthorizedException
 import kotlin.coroutines.EmptyCoroutineContext
 
 abstract class AuthorizedViewModel(
-    private val eventStateFlow: AuthorizeEventStateFlow,
+    protected val context: AuthorizedContext,
 ) : ViewModel() {
     protected inline fun launchWithAuth(
         state: MutableStateFlow<LoadState>,
@@ -40,17 +40,17 @@ abstract class AuthorizedViewModel(
 
     private fun expireCurrentToken() {
         launch(EmptyCoroutineContext) {
-            runCatching { eventStateFlow.expireCurrent() }
+            runCatching { context.expireCurrent() }
                 .onSuccess { reopen() }
                 .onFailure { requestSignIn() }
         }
     }
 
-    internal fun reset() = eventStateFlow.reset()
+    internal fun reset() = context.reset()
 
-    protected fun reopen() = eventStateFlow.reopen()
+    protected fun reopen() = context.reopen()
 
-    protected fun requestSignIn() = eventStateFlow.requestSignIn()
+    protected fun requestSignIn() = context.requestSignIn()
 
     protected fun <T1, T2, R> buildUiModel(
         flow: Flow<T1>,

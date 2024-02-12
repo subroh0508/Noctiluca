@@ -2,7 +2,7 @@ package noctiluca.features.signin.model
 
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.signin.component.InstancesTab
-import noctiluca.model.signin.Instance
+import noctiluca.model.authorization.Instance
 import noctiluca.model.status.Status
 
 data class InstanceDetailModel(

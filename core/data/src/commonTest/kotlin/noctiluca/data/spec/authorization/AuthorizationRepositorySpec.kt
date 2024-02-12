@@ -19,10 +19,10 @@ import noctiluca.data.mock.MockAppCredentialDataStore
 import noctiluca.datastore.AppCredentialDataStore
 import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.*
-import noctiluca.model.signin.AppCredential
-import noctiluca.network.authentication.Api
-import noctiluca.network.authentication.OAuth
-import noctiluca.network.authentication.di.AuthenticationApiModule
+import noctiluca.model.authorization.AppCredential
+import noctiluca.network.authorization.Api
+import noctiluca.network.authorization.OAuth
+import noctiluca.network.authorization.di.AuthorizationApiModule
 import noctiluca.network.instancessocial.di.buildHttpClient
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.DOMAIN_SAMPLE_COM
@@ -241,7 +241,7 @@ private fun buildRepository(
         mockEngine,
         mockAuthorizationTokenDataStore,
     ) {
-        AuthenticationApiModule(buildHttpClient(json, mockEngine))
+        AuthorizationApiModule(buildHttpClient(json, mockEngine))
         single { mockAppCredentialDataStore }
     }
 

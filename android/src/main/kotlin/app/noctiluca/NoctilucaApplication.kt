@@ -17,7 +17,7 @@ import noctiluca.features.statusdetail.di.FeatureStatusDetailModule
 import noctiluca.features.statusdetail.featureStatusDetailScreenModule
 import noctiluca.features.timeline.di.FeatureTimelineModule
 import noctiluca.features.timeline.featureTimelineScreenModule
-import noctiluca.network.authentication.di.AuthenticationApiModule
+import noctiluca.network.authorization.di.AuthorizationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
 import noctiluca.network.mastodon.di.MastodonApiModule
 import noctiluca.network.mastodon.di.buildWebSocketClient
@@ -25,7 +25,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
-import noctiluca.network.authentication.di.buildHttpClient as buildHttpClientForAuthentication
+import noctiluca.network.authorization.di.buildHttpClient as buildHttpClientForAuthentication
 import noctiluca.network.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
 import noctiluca.network.mastodon.di.buildHttpClient as buildHttpClientForMastodon
 
@@ -75,7 +75,7 @@ class NoctilucaApplication : Application() {
         DataStoreModule(json)
         AndroidAuthorizationTokenProviderModule()
 
-        AuthenticationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
+        AuthorizationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
         InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
         MastodonApiModule(
             buildHttpClientForMastodon(json, httpClientEngine),

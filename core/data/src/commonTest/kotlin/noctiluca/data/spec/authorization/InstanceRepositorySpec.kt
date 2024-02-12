@@ -21,8 +21,8 @@ import noctiluca.data.spec.accountdetail.prevStatus
 import noctiluca.data.spec.accountdetail.status
 import noctiluca.model.HttpException
 import noctiluca.model.Uri
-import noctiluca.model.signin.Instance
-import noctiluca.network.authentication.di.AuthenticationApiModule
+import noctiluca.model.authorization.Instance
+import noctiluca.network.authorization.di.AuthorizationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
 import noctiluca.network.instancessocial.di.buildHttpClient
 import noctiluca.network.mastodon.Api
@@ -463,7 +463,7 @@ private fun buildRepository(
         mockEngine,
         buildEmptyMockAuthenticationTokenDataStore(),
     ) {
-        AuthenticationApiModule(buildHttpClient(json, mockEngine))
+        AuthorizationApiModule(buildHttpClient(json, mockEngine))
         InstancesSocialApiModule(buildHttpClient(json, mockEngine), "dummy_token")
     }
 

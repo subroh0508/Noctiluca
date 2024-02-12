@@ -7,8 +7,8 @@ import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.model.Uri
-import noctiluca.model.signin.AppCredential
-import noctiluca.network.authentication.AuthorizationApi
+import noctiluca.model.authorization.AppCredential
+import noctiluca.network.authorization.AuthorizationApi
 
 internal class AuthorizationRepositoryImpl(
     private val appCredentialDataStore: AppCredentialDataStore,

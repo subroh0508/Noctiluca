@@ -12,7 +12,7 @@ import noctiluca.features.signin.section.InstanceDetailCaption
 import noctiluca.features.signin.section.InstanceDetailScrollableFrame
 import noctiluca.features.signin.section.InstanceDetailTopAppBar
 import noctiluca.features.signin.viewmodel.MastodonInstanceDetailViewModel
-import noctiluca.model.signin.Instance
+import noctiluca.model.authorization.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

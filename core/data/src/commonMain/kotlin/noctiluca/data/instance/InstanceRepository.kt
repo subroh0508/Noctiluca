@@ -1,7 +1,7 @@
 package noctiluca.data.instance
 
 import kotlinx.coroutines.flow.Flow
-import noctiluca.model.signin.Instance
+import noctiluca.model.authorization.Instance
 import noctiluca.model.status.Status
 
 interface InstanceRepository {

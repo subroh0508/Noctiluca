@@ -3,7 +3,7 @@ plugins {
 }
 
 dependencies {
-    implementation(project(":core:network:authentication"))
+    implementation(project(":core:network:authorization"))
     implementation(project(":core:network:instancessocial"))
     implementation(project(":core:network:mastodon"))
     implementation(project(":core:datastore"))

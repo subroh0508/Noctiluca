@@ -1,7 +1,7 @@
 package noctiluca.features.signin.model
 
 import noctiluca.features.shared.model.LoadState
-import noctiluca.model.signin.Instance
+import noctiluca.model.authorization.Instance
 
 data class InstanceSuggestsModel(
     val query: String = "",

@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.*
 import noctiluca.data.instance.InstanceRepository
 import noctiluca.data.status.toEntity
 import noctiluca.model.Uri
-import noctiluca.model.signin.Instance
+import noctiluca.model.authorization.Instance
 import noctiluca.model.status.Status
 import noctiluca.network.instancessocial.InstancesSocialApi
 import noctiluca.network.instancessocial.data.NetworkInstance

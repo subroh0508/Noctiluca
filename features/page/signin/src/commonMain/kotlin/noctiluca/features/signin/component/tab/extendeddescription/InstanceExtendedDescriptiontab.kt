@@ -8,7 +8,7 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.atoms.card.FilledCard
 import noctiluca.features.shared.atoms.list.SectionPadding
 import noctiluca.features.shared.atoms.text.HtmlText
-import noctiluca.model.signin.Instance
+import noctiluca.model.authorization.Instance
 
 @Suppress("FunctionNaming")
 internal fun LazyListScope.InstanceExtendedDescriptionTab(

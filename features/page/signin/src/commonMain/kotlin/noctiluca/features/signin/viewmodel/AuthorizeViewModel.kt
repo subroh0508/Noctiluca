@@ -12,7 +12,7 @@ import noctiluca.features.signin.model.UnknownException
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.model.Uri
-import noctiluca.model.signin.Instance
+import noctiluca.model.authorization.Instance
 
 class AuthorizeViewModel(
     private val clientName: String,

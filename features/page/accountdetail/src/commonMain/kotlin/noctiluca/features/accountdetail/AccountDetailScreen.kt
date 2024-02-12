@@ -5,7 +5,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
-import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.features.accountdetail.screen.AccountDetailContent
 import noctiluca.features.accountdetail.screen.AccountDetailScaffold
 import noctiluca.features.accountdetail.section.AccountDetailTopAppBar

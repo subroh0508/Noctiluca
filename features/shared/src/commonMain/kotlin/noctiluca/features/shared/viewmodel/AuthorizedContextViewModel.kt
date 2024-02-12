@@ -9,7 +9,6 @@ import noctiluca.model.AuthorizeEventState
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.HttpUnauthorizedException
-import org.koin.core.component.getScopeName
 import org.koin.core.qualifier.TypeQualifier
 import org.koin.core.scope.Scope
 import org.koin.mp.KoinPlatform.getKoin

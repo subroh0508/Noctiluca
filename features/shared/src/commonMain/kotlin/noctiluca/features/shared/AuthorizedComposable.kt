@@ -4,7 +4,6 @@ import androidx.compose.runtime.*
 import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.navigation.backToSignIn
 import noctiluca.features.navigation.navigateToTimelines
-import noctiluca.features.shared.viewmodel.AuthorizedContextViewModel
 import noctiluca.features.shared.viewmodel.rememberAuthorizedContext
 import noctiluca.model.AuthorizeEventState
 

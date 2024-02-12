@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import cafe.adriel.voyager.koin.getScreenModel
 import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.accountdetail.AccountDetailScreen
 import noctiluca.features.accountdetail.model.AttributesModel

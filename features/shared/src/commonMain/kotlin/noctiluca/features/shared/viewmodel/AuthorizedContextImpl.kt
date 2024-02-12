@@ -50,8 +50,15 @@ internal class AuthorizedContextImpl private constructor(
         eventFlow.value = AuthorizeEventState.Event.SIGN_IN
     }
 
-    override suspend fun switchCurrent(id: AccountId) = repository.switchCurrent(id)
-    override suspend fun expireCurrent() = repository.expireCurrent()
+    override suspend fun switchCurrent(id: AccountId) {
+        repository.switchCurrent(id)
+        close()
+    }
+
+    override suspend fun expireCurrent() {
+        repository.expireCurrent()
+        close()
+    }
 
     private var _scope: Scope? = null
     private fun buildScope(

@@ -11,12 +11,12 @@ import noctiluca.features.shared.model.AuthorizeEventState
 fun AuthorizedComposable(
     vararg values: ProvidedValue<*>,
     context: AuthorizedContext = rememberAuthorizedContext(),
-    content: @Composable () -> Unit,
+    content: @Composable (AuthorizedContext) -> Unit,
 ) = FeatureComposable(*values) {
     val state by context.state.collectAsState()
 
     when (state.event) {
-        AuthorizeEventState.Event.OK -> content()
+        AuthorizeEventState.Event.OK -> AuthorizedContextContent(context, content)
         AuthorizeEventState.Event.REOPEN -> {
             context.reset()
             navigateToTimelines()
@@ -27,4 +27,14 @@ fun AuthorizedComposable(
             backToSignIn()
         }
     }
+}
+
+@Composable
+private fun AuthorizedContextContent(
+    context: AuthorizedContext,
+    content: @Composable (AuthorizedContext) -> Unit,
+) {
+    context.scope ?: return
+
+    content(context)
 }

@@ -13,6 +13,7 @@ import noctiluca.features.navigation.Timeline
 import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToSignIn
 import noctiluca.features.shared.AuthorizedComposable
+import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
 import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
@@ -71,7 +72,9 @@ private fun Screen.TimelineFeature(
     content: @Composable (TimelinesViewModel) -> Unit,
 ) = AuthorizedComposable(
     LocalResources provides Resources(Locale.current.language),
-) { content(getScreenModel()) }
+) { context ->
+    content(getAuthorizedScreenModel(context))
+}
 
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,

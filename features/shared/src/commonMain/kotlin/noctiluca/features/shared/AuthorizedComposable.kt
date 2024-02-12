@@ -19,7 +19,7 @@ fun AuthorizedComposable(
         AuthorizeEventState.Event.OK -> AuthorizedContextContent(context, content)
         AuthorizeEventState.Event.REOPEN -> {
             context.reset()
-            navigateToTimelines()
+            navigateToTimelines(state.user)
         }
 
         AuthorizeEventState.Event.SIGN_IN -> {

@@ -5,6 +5,7 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import cafe.adriel.voyager.navigator.Navigator
 import noctiluca.designsystem.NoctilucaTheme
+import noctiluca.features.timeline.Splash
 import noctiluca.features.timeline.TimelineLaneScreen
 
 class MainActivity : AppCompatActivity() {
@@ -13,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             NoctilucaTheme {
-                Navigator(TimelineLaneScreen())
+                Navigator(Splash)
             }
         }
     }

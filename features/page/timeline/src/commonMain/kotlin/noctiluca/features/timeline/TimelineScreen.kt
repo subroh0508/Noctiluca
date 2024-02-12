@@ -11,6 +11,7 @@ import cafe.adriel.voyager.navigator.Navigator
 import noctiluca.features.navigation.Timeline
 import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToSignIn
+import noctiluca.features.navigation.navigateToTimelines
 import noctiluca.features.shared.AuthorizedComposable
 import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.timeline.template.drawer.TimelineNavigationDrawer
@@ -18,20 +19,40 @@ import noctiluca.features.timeline.template.drawer.menu.TimelineDrawerMenu
 import noctiluca.features.timeline.template.scaffold.TimelineScaffold
 import noctiluca.features.timeline.template.scaffold.TootScaffold
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.model.AuthorizeEventState
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
 val featureTimelineScreenModule = screenModule {
     register<Timeline.TimelineLane> {
-        TimelineLaneScreen()
+        TimelineLaneScreen(it.id, it.domain)
     }
     register<Timeline.Toot> {
         TootScreen
     }
 }
 
-class TimelineLaneScreen : Screen {
-    override val key: ScreenKey by lazy { uniqueScreenKey }
+data object Splash : Screen {
+    @Composable
+    override fun Content() {
+        AuthorizedComposable(
+            LocalResources provides Resources(Locale.current.language),
+        ) { context ->
+            val state by context.state.collectAsState(AuthorizeEventState())
+
+            if (state.event == AuthorizeEventState.Event.OK) {
+                navigateToTimelines(state.user)
+            }
+        }
+    }
+}
+
+
+data class TimelineLaneScreen(
+    private val id: String,
+    private val domain: String,
+) : Screen {
+    override val key: ScreenKey by lazy { "$id@$domain" }
 
     @Composable
     override fun Content() = TimelineFeature { viewModel ->

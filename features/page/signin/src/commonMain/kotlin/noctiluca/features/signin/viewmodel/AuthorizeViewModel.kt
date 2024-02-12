@@ -54,7 +54,7 @@ class AuthorizeViewModel(
             runCatching { fetchAccessToken(code, redirectUri) }
                 .onSuccess {
                     if (it != null) {
-                        mutableEvent.value = Event.NavigatingToTimelines
+                        mutableEvent.value = Event.NavigatingToTimelines(it)
                         return@onSuccess
                     }
 
@@ -81,7 +81,7 @@ class AuthorizeViewModel(
         data class Error(val cause: Throwable) : Event()
 
         data class OpeningBrowser(val uri: Uri) : Event()
-        data object NavigatingToTimelines : Event()
+        data class NavigatingToTimelines(val user: AuthorizedUser) : Event()
 
         val isFetchingAccessToken get() = this !is Initial && this !is Error
     }

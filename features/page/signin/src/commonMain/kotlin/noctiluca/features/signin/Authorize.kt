@@ -49,7 +49,7 @@ private fun HandleAuthorizeEvent(
     event: AuthorizeViewModel.Event
 ) = when (event) {
     is AuthorizeViewModel.Event.OpeningBrowser -> openBrowser(event.uri)
-    is AuthorizeViewModel.Event.NavigatingToTimelines -> navigateToTimelines()
+    is AuthorizeViewModel.Event.NavigatingToTimelines -> navigateToTimelines(event.user)
     else -> Unit
 }
 

@@ -3,7 +3,7 @@ package noctiluca.data.accountdetail.impl
 import kotlinx.coroutines.flow.*
 import noctiluca.data.accountdetail.AccountStatusRepository
 import noctiluca.data.status.toEntity
-import noctiluca.datastore.AuthenticationTokenDataStore
+import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.accountdetail.StatusesQuery
 import noctiluca.model.status.Status
@@ -11,7 +11,7 @@ import noctiluca.network.mastodon.MastodonApiV1
 
 internal class AccountStatusRepositoryImpl(
     private val v1: MastodonApiV1,
-    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
+    private val authorizationTokenDataStore: AuthorizationTokenDataStore,
 ) : AccountStatusRepository {
     private val statusesStateFlow by lazy { MutableStateFlow<Map<StatusesQuery, List<Status>>>(mapOf()) }
 
@@ -45,7 +45,7 @@ internal class AccountStatusRepositoryImpl(
         getMaxId(query)?.value,
         query == StatusesQuery.ONLY_MEDIA,
         query != StatusesQuery.WITH_REPLIES,
-    ).map { it.toEntity(authenticationTokenDataStore.getCurrent()?.id) }
+    ).map { it.toEntity(authorizationTokenDataStore.getCurrent()?.id) }
 
     private fun buildNextStateMap(
         query: StatusesQuery,

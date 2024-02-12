@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import noctiluca.data.authentication.AuthenticationRepository
+import noctiluca.data.authentication.AuthorizationRepository
 import noctiluca.features.authentication.model.AuthorizeResult
 import noctiluca.features.authentication.model.UnknownException
 import noctiluca.features.shared.viewmodel.ViewModel
@@ -17,7 +17,7 @@ import noctiluca.model.authentication.Instance
 class AuthorizeViewModel(
     private val clientName: String,
     private val redirectUri: Uri,
-    private val repository: AuthenticationRepository,
+    private val repository: AuthorizationRepository,
 ) : ViewModel(), ScreenModel {
     private val mutableEvent by lazy { MutableStateFlow<Event>(Event.Initial) }
 

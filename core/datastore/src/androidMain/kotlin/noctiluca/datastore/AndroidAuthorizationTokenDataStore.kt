@@ -9,13 +9,13 @@ import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
-internal class AndroidAuthenticationTokenDataStore private constructor(
+internal class AndroidAuthorizationTokenDataStore private constructor(
     private val dataStore: DataStore<List<Token.Json>>,
-) : AuthenticationTokenDataStore {
+) : AuthorizationTokenDataStore {
     internal constructor(context: Context, json: Json) : this(
         context.getJsonDataStore(
             JsonSerializer(json, listOf()),
-            AuthenticationTokenDataStore::class.simpleName ?: "",
+            AuthorizationTokenDataStore::class.simpleName ?: "",
         )
     )
 

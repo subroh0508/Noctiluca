@@ -11,7 +11,7 @@ import io.ktor.http.*
 import io.ktor.resources.*
 import noctiluca.model.HttpException
 import noctiluca.network.authentication.Api
-import noctiluca.network.authentication.AuthenticationApi
+import noctiluca.network.authentication.AuthorizationApi
 import noctiluca.network.authentication.OAuth
 import noctiluca.network.authentication.data.NetworkAppCredential
 import noctiluca.network.authentication.data.NetworkToken
@@ -19,9 +19,9 @@ import noctiluca.network.authentication.params.GetAccountsVerifyCredential
 import noctiluca.network.authentication.params.PostApps
 import noctiluca.network.authentication.params.PostOauthToken
 
-internal class AuthenticationApiClient(
+internal class AuthorizationApiClient(
     private val client: HttpClient,
-) : AuthenticationApi {
+) : AuthorizationApi {
     companion object {
         private const val RESPONSE_TYPE = "response_type"
         private const val CLIENT_ID = "client_id"

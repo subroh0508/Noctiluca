@@ -18,7 +18,7 @@ import noctiluca.model.accountdetail.Relationship
 import noctiluca.model.accountdetail.Relationships
 import noctiluca.network.mastodon.Api
 import noctiluca.test.extension.flowToList
-import noctiluca.test.mock.MockAuthenticationTokenDataStore
+import noctiluca.test.mock.MockAuthorizationTokenDataStore
 import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
@@ -868,7 +868,7 @@ private suspend inline fun filterRelationship(
 
 private fun buildRepository(
     mockEngine: MockEngine,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore = buildFilledMockAuthenticationTokenDataStore(),
+    mockAuthenticationTokenDataStore: MockAuthorizationTokenDataStore = buildFilledMockAuthenticationTokenDataStore(),
 ): AccountRelationshipsRepository {
     val component = TestDataComponent(
         mockEngine,

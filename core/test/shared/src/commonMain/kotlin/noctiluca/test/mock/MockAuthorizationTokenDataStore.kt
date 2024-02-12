@@ -1,13 +1,13 @@
 package noctiluca.test.mock
 
-import noctiluca.datastore.AuthenticationTokenDataStore
+import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.test.DUMMY_ACCESS_TOKEN
 import noctiluca.test.me
 
-fun buildEmptyMockAuthenticationTokenDataStore() = MockAuthenticationTokenDataStore(
+fun buildEmptyMockAuthenticationTokenDataStore() = MockAuthorizationTokenDataStore(
     init = emptyList(),
     currentAccessToken = null,
 )
@@ -15,16 +15,16 @@ fun buildEmptyMockAuthenticationTokenDataStore() = MockAuthenticationTokenDataSt
 fun buildFilledMockAuthenticationTokenDataStore(
     init: List<AuthorizedUser> = listOf(me),
     currentAccessToken: String? = DUMMY_ACCESS_TOKEN,
-) = MockAuthenticationTokenDataStore(
+) = MockAuthorizationTokenDataStore(
     init = init,
     currentAccessToken = currentAccessToken,
 )
 
-class MockAuthenticationTokenDataStore internal constructor(
+class MockAuthorizationTokenDataStore internal constructor(
     init: List<AuthorizedUser>,
     private val currentAccessToken: String?,
     private val getCache: (AccountId) -> Pair<String, Domain>? = { null },
-) : AuthenticationTokenDataStore {
+) : AuthorizationTokenDataStore {
     constructor(
         init: List<AuthorizedUser>,
         getCache: (AccountId) -> Pair<String, Domain>?

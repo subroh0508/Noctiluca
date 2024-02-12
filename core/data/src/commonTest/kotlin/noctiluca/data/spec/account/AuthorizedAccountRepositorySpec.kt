@@ -12,7 +12,6 @@ import io.ktor.http.*
 import io.ktor.utils.io.*
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.test.*
 import noctiluca.data.TestDataComponent
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.impl.AuthorizedAccountRepositoryImpl
@@ -196,7 +195,7 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
 
             context("and the local cache has multiple accounts") {
                 context("and the sever returns valid response") {
-                    val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(
+                    val mockAuthenticationTokenDataStore = MockAuthorizationTokenDataStore(
                         init = accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
                         getCache = {
                             when (it) {
@@ -232,7 +231,7 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
                     }
                 }
                 context("and the sever returns error response") {
-                    val mockAuthenticationTokenDataStore = MockAuthenticationTokenDataStore(
+                    val mockAuthenticationTokenDataStore = MockAuthorizationTokenDataStore(
                         init = accounts.map { MockAuthorizedUser(it.id, Domain(DOMAIN_SAMPLE_COM)) },
                         getCache = {
                             when (it) {
@@ -272,7 +271,7 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
 private inline fun <reified T> buildRepository(
     resource: T,
     expected: String,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore,
+    mockAuthenticationTokenDataStore: MockAuthorizationTokenDataStore,
     mockAccountDataStore: AccountDataStore,
 ) = buildRepository(
     MockHttpClientEngine(resource, expected),
@@ -283,7 +282,7 @@ private inline fun <reified T> buildRepository(
 private inline fun <reified T> buildRepository(
     resource: T,
     expected: List<Pair<String, String>>,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore,
+    mockAuthenticationTokenDataStore: MockAuthorizationTokenDataStore,
     mockAccountDataStore: AccountDataStore,
 ) = buildRepository(
     MockHttpClientEngine(
@@ -309,7 +308,7 @@ private inline fun <reified T> buildRepository(
 private inline fun <reified T> buildRepository(
     resource: T,
     errorStatusCode: HttpStatusCode,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore,
+    mockAuthenticationTokenDataStore: MockAuthorizationTokenDataStore,
     mockAccountDataStore: AccountDataStore,
 ) = buildRepository(
     MockHttpClientEngine(resource, errorStatusCode),
@@ -319,7 +318,7 @@ private inline fun <reified T> buildRepository(
 
 private fun buildRepository(
     mockEngine: MockEngine,
-    mockAuthenticationTokenDataStore: MockAuthenticationTokenDataStore,
+    mockAuthenticationTokenDataStore: MockAuthorizationTokenDataStore,
     mockAccountDataStore: AccountDataStore,
 ): AuthorizedAccountRepository {
     val component = TestDataComponent(

@@ -9,10 +9,10 @@ import io.ktor.http.*
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.HttpException
 import noctiluca.model.HttpUnauthorizedException
-import noctiluca.network.mastodon.AuthenticationTokenProvider
+import noctiluca.network.mastodon.AuthorizationTokenProvider
 
 abstract class AbstractMastodonApiClient(
-    private val token: AuthenticationTokenProvider,
+    private val token: AuthorizationTokenProvider,
 ) {
     protected suspend inline fun <reified T : Any> HttpClient.get(
         resource: T,

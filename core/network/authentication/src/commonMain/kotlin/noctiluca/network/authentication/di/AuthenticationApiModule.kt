@@ -8,8 +8,8 @@ import io.ktor.client.plugins.resources.Resources
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
-import noctiluca.network.authentication.AuthenticationApi
-import noctiluca.network.authentication.internal.AuthenticationApiClient
+import noctiluca.network.authentication.AuthorizationApi
+import noctiluca.network.authentication.internal.AuthorizationApiClient
 import org.koin.core.module.Module
 
 fun buildHttpClient(
@@ -31,5 +31,5 @@ fun buildHttpClient(
 
 @Suppress("FunctionName")
 fun Module.AuthenticationApiModule(client: HttpClient) {
-    single<AuthenticationApi> { AuthenticationApiClient(client) }
+    single<AuthorizationApi> { AuthorizationApiClient(client) }
 }

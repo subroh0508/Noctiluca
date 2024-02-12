@@ -1,20 +1,20 @@
 package noctiluca.data.authentication.impl
 
-import noctiluca.data.authentication.AuthenticationRepository
+import noctiluca.data.authentication.AuthorizationRepository
 import noctiluca.datastore.AppCredentialDataStore
-import noctiluca.datastore.AuthenticationTokenDataStore
+import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.authentication.AppCredential
-import noctiluca.network.authentication.AuthenticationApi
+import noctiluca.network.authentication.AuthorizationApi
 
-internal class AuthenticationRepositoryImpl(
+internal class AuthorizationRepositoryImpl(
     private val appCredentialDataStore: AppCredentialDataStore,
-    private val authenticationTokenDataStore: AuthenticationTokenDataStore,
-    private val api: AuthenticationApi,
-) : AuthenticationRepository {
+    private val authorizationTokenDataStore: AuthorizationTokenDataStore,
+    private val api: AuthorizationApi,
+) : AuthorizationRepository {
     override suspend fun fetchAuthorizeUrl(
         domain: Domain,
         client: String,
@@ -44,8 +44,8 @@ internal class AuthenticationRepositoryImpl(
 
         val id = AccountId(api.getVerifyAccountsCredentials(domain.value, accessToken).id)
 
-        return authenticationTokenDataStore.add(id, domain, accessToken).find { it.id == id }
+        return authorizationTokenDataStore.add(id, domain, accessToken).find { it.id == id }
     }
 
-    override suspend fun switchAccessToken(id: AccountId) = authenticationTokenDataStore.setCurrent(id)
+    override suspend fun switchAccessToken(id: AccountId) = authorizationTokenDataStore.setCurrent(id)
 }

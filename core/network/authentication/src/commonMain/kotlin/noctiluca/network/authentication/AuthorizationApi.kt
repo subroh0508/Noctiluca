@@ -4,7 +4,7 @@ import noctiluca.network.authentication.data.NetworkAppCredential
 import noctiluca.network.authentication.data.NetworkToken
 import noctiluca.network.authentication.params.GetAccountsVerifyCredential
 
-interface AuthenticationApi {
+interface AuthorizationApi {
     suspend fun postApps(
         domain: String,
         clientName: String,

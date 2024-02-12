@@ -4,7 +4,7 @@ import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
-interface AuthenticationTokenDataStore {
+interface AuthorizationTokenDataStore {
     suspend fun getCurrentAccessToken(): String?
 
     suspend fun getCurrentDomain(): String?
@@ -24,4 +24,4 @@ interface AuthenticationTokenDataStore {
     suspend fun delete(id: AccountId): List<AuthorizedUser>
 }
 
-suspend fun AuthenticationTokenDataStore.getOthers() = getAll().drop(1)
+suspend fun AuthorizationTokenDataStore.getOthers() = getAll().drop(1)

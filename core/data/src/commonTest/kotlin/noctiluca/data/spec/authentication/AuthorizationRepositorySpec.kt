@@ -12,12 +12,12 @@ import io.ktor.http.*
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import noctiluca.data.TestDataComponent
-import noctiluca.data.authentication.AuthenticationRepository
-import noctiluca.data.authentication.impl.AuthenticationRepositoryImpl
+import noctiluca.data.authentication.AuthorizationRepository
+import noctiluca.data.authentication.impl.AuthorizationRepositoryImpl
 import noctiluca.data.json.authentication.*
 import noctiluca.data.mock.MockAppCredentialDataStore
 import noctiluca.datastore.AppCredentialDataStore
-import noctiluca.datastore.AuthenticationTokenDataStore
+import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.*
 import noctiluca.model.authentication.AppCredential
 import noctiluca.network.authentication.Api
@@ -32,7 +32,7 @@ import noctiluca.test.mock.buildEmptyMockAuthenticationTokenDataStore
 import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 
-class AuthenticationRepositorySpec : DescribeSpec({
+class AuthorizationRepositorySpec : DescribeSpec({
     coroutineTestScope = true
 
     describe("#fetchAuthorizeUrl") {
@@ -229,8 +229,8 @@ private fun buildAuthorizedUrl() = buildString {
 private fun buildRepository(
     mockEngine: MockEngine,
     mockAppCredentialDataStore: AppCredentialDataStore = MockAppCredentialDataStore(),
-    mockAuthenticationTokenDataStore: AuthenticationTokenDataStore = buildEmptyMockAuthenticationTokenDataStore(),
-): AuthenticationRepository {
+    mockAuthorizationTokenDataStore: AuthorizationTokenDataStore = buildEmptyMockAuthenticationTokenDataStore(),
+): AuthorizationRepository {
     val json = Json {
         explicitNulls = false
         encodeDefaults = true
@@ -239,13 +239,13 @@ private fun buildRepository(
 
     val component = TestDataComponent(
         mockEngine,
-        mockAuthenticationTokenDataStore,
+        mockAuthorizationTokenDataStore,
     ) {
         AuthenticationApiModule(buildHttpClient(json, mockEngine))
         single { mockAppCredentialDataStore }
     }
 
-    return AuthenticationRepositoryImpl(
+    return AuthorizationRepositoryImpl(
         component.get(),
         component.get(),
         component.get(),

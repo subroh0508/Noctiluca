@@ -8,9 +8,9 @@ import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
 @Suppress("UNCHECKED_CAST")
-internal class DesktopAuthenticationTokenDataStore(
+internal class DesktopAuthorizationTokenDataStore(
     private val prefs: JsonPreferences<List<Token.Json>>,
-) : AuthenticationTokenDataStore {
+) : AuthorizationTokenDataStore {
     override suspend fun getCurrentAccessToken() = (getCurrent() as? Token)?.accessToken
 
     override suspend fun getCurrentDomain() = (getCurrent() as? Token)?.domain?.value

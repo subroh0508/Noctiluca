@@ -5,7 +5,7 @@ import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 
-interface AuthenticationRepository {
+interface AuthorizationRepository {
     suspend fun fetchAuthorizeUrl(
         domain: Domain,
         client: String,

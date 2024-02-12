@@ -36,8 +36,11 @@ data class TimelineLaneScreen(
     override val key: ScreenKey by lazy { "$id@$domain" }
 
     @Composable
-    override fun Content() = TimelineFeature { viewModel ->
+    override fun Content() = AuthorizedComposable(
+        LocalResources provides Resources(Locale.current.language),
+    ) {
         val navigator = LocalNavigator.current
+        val viewModel: TimelinesViewModel = getAuthorizedScreenModel()
         val uiModel by viewModel.uiModel.collectAsState()
 
         TimelineNavigationDrawer(
@@ -63,17 +66,10 @@ data class TimelineLaneScreen(
 
 internal data object TootScreen : Screen {
     @Composable
-    override fun Content() = TimelineFeature { viewModel ->
-        TootScaffold(viewModel)
-    }
+    override fun Content() = AuthorizedComposable(
+        LocalResources provides Resources(Locale.current.language),
+    ) { TootScaffold(getAuthorizedScreenModel()) }
 }
-
-@Composable
-private fun Screen.TimelineFeature(
-    content: @Composable (TimelinesViewModel) -> Unit,
-) = AuthorizedComposable(
-    LocalResources provides Resources(Locale.current.language),
-) { content(getAuthorizedScreenModel()) }
 
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,

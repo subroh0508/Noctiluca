@@ -13,10 +13,10 @@ import org.koin.core.qualifier.TypeQualifier
 import org.koin.core.scope.Scope
 import org.koin.mp.KoinPlatform.getKoin
 
-internal class AuthorizedContextViewModel private constructor(
+internal class AuthorizedContextImpl private constructor(
     private val repository: AuthorizedUserRepository,
     private val eventFlow: MutableStateFlow<AuthorizeEventState.Event>,
-) : ViewModel(), AuthorizedContext {
+) : AuthorizedContext {
     constructor(
         repository: AuthorizedUserRepository,
         initial: AuthorizeEventState.Event = AuthorizeEventState.Event.OK,

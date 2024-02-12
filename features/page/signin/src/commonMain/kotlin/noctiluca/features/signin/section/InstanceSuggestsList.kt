@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.signin.component.list.SuggestCard
 import noctiluca.features.signin.getString
-import noctiluca.model.authentication.Instance
+import noctiluca.model.signin.Instance
 
 @Composable
 internal fun InstanceSuggestsList(

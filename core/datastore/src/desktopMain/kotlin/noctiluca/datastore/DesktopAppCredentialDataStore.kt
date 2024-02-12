@@ -4,7 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import noctiluca.model.Domain
 import noctiluca.model.Uri
-import noctiluca.model.authentication.AppCredential
+import noctiluca.model.signin.AppCredential
 import java.util.prefs.Preferences
 
 internal class DesktopAppCredentialDataStore private constructor(

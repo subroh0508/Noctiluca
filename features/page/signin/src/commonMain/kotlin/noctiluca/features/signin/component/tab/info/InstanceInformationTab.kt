@@ -20,7 +20,7 @@ import noctiluca.features.shared.atoms.list.LeadingAvatarContainerSize
 import noctiluca.features.shared.atoms.list.Section
 import noctiluca.features.shared.atoms.list.SectionItem
 import noctiluca.features.signin.getString
-import noctiluca.model.authentication.Instance
+import noctiluca.model.signin.Instance
 
 @Suppress("FunctionNaming")
 internal fun LazyListScope.InstanceInformationTab(

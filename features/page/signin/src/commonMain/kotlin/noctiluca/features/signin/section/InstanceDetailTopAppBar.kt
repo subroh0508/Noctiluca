@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import noctiluca.features.navigation.component.Back
 import noctiluca.features.signin.component.topappbar.InstanceHeaderText
 import noctiluca.features.signin.section.scrollableframe.InstanceDetailScrollableFrameState
-import noctiluca.model.authentication.Instance
+import noctiluca.model.signin.Instance
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

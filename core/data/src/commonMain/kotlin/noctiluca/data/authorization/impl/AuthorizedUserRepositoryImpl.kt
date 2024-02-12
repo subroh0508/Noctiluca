@@ -1,6 +1,6 @@
-package noctiluca.data.authentication.impl
+package noctiluca.data.authorization.impl
 
-import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.data.authorization.AuthorizedUserRepository
 import noctiluca.datastore.AuthorizationTokenDataStore
 
 internal class AuthorizedUserRepositoryImpl(

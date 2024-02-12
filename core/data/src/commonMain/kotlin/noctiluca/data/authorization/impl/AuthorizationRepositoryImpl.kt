@@ -1,13 +1,13 @@
-package noctiluca.data.authentication.impl
+package noctiluca.data.authorization.impl
 
-import noctiluca.data.authentication.AuthorizationRepository
+import noctiluca.data.authorization.AuthorizationRepository
 import noctiluca.datastore.AppCredentialDataStore
 import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.model.Uri
-import noctiluca.model.authentication.AppCredential
+import noctiluca.model.signin.AppCredential
 import noctiluca.network.authentication.AuthorizationApi
 
 internal class AuthorizationRepositoryImpl(

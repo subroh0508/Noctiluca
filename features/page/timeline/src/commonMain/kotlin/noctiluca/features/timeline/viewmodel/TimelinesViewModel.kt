@@ -3,7 +3,7 @@ package noctiluca.features.timeline.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
-import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.data.authorization.AuthorizedUserRepository
 import noctiluca.data.timeline.impl.TimelineStreamStateFlow
 import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.model.LoadState

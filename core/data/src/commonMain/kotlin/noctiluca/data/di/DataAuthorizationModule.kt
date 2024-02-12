@@ -1,10 +1,10 @@
 package noctiluca.data.di
 
-import noctiluca.data.authentication.AuthorizationRepository
-import noctiluca.data.authentication.impl.AuthorizationRepositoryImpl
+import noctiluca.data.authorization.AuthorizationRepository
+import noctiluca.data.authorization.impl.AuthorizationRepositoryImpl
 import org.koin.dsl.ScopeDSL
 
 @Suppress("FunctionName")
-fun ScopeDSL.DataAuthenticationModule() {
+fun ScopeDSL.DataAuthorizationModule() {
     scoped<AuthorizationRepository> { AuthorizationRepositoryImpl(get(), get(), get()) }
 }

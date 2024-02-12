@@ -1,4 +1,4 @@
-package noctiluca.data.json.authentication
+package noctiluca.data.json.authorization
 
 const val TEST_CODE = "dummy_code"
 const val TEST_ACCESS_TOKEN = "AAABBBCCC"

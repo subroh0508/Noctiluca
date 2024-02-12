@@ -10,7 +10,7 @@ import noctiluca.features.signin.component.InstanceDescription
 import noctiluca.features.signin.component.InstanceName
 import noctiluca.features.signin.component.InstanceThumbnail
 import noctiluca.model.Uri
-import noctiluca.model.authentication.Instance
+import noctiluca.model.signin.Instance
 
 @Suppress("FunctionNaming")
 internal fun LazyListScope.InstanceDetailCaption(

@@ -7,6 +7,6 @@ import noctiluca.datastore.JsonPreferences
 import org.koin.core.module.Module
 
 @Suppress("FunctionName")
-internal actual fun Module.AuthenticationTokenDataStoreModule(json: Json) {
+internal actual fun Module.AuthorizationTokenDataStoreModule(json: Json) {
     single<AuthorizationTokenDataStore> { DesktopAuthorizationTokenDataStore(JsonPreferences(json, listOf(), get())) }
 }

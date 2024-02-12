@@ -1,4 +1,4 @@
-package noctiluca.data.authentication
+package noctiluca.data.authorization
 
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser

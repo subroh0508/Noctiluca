@@ -1,7 +1,7 @@
 package noctiluca.features.shared.viewmodel
 
 import kotlinx.coroutines.flow.*
-import noctiluca.data.authentication.AuthorizedUserRepository
+import noctiluca.data.authorization.AuthorizedUserRepository
 import noctiluca.features.shared.AuthorizeEventStateFlow
 import noctiluca.features.shared.model.LoadState
 import noctiluca.model.AuthorizedTokenNotFoundException

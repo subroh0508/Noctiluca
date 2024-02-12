@@ -1,4 +1,4 @@
-package noctiluca.data.spec.authentication
+package noctiluca.data.spec.authorization
 
 import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.DescribeSpec
@@ -16,12 +16,12 @@ import kotlinx.serialization.json.Json
 import noctiluca.data.TestDataComponent
 import noctiluca.data.instance.InstanceRepository
 import noctiluca.data.instance.impl.InstanceRepositoryImpl
-import noctiluca.data.json.authentication.*
+import noctiluca.data.json.authorization.*
 import noctiluca.data.spec.accountdetail.prevStatus
 import noctiluca.data.spec.accountdetail.status
 import noctiluca.model.HttpException
 import noctiluca.model.Uri
-import noctiluca.model.authentication.Instance
+import noctiluca.model.signin.Instance
 import noctiluca.network.authentication.di.AuthenticationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
 import noctiluca.network.instancessocial.di.buildHttpClient

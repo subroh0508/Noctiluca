@@ -1,7 +1,7 @@
 package noctiluca.data.di
 
-import noctiluca.data.authentication.AuthorizedUserRepository
-import noctiluca.data.authentication.impl.AuthorizedUserRepositoryImpl
+import noctiluca.data.authorization.AuthorizedUserRepository
+import noctiluca.data.authorization.impl.AuthorizedUserRepositoryImpl
 import org.koin.dsl.module
 
 @Suppress("FunctionName")

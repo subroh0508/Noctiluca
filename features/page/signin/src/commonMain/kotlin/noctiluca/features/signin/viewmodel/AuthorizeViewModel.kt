@@ -4,7 +4,7 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import noctiluca.data.authentication.AuthorizationRepository
+import noctiluca.data.authorization.AuthorizationRepository
 import noctiluca.features.shared.viewmodel.ViewModel
 import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.signin.model.AuthorizeResult
@@ -12,7 +12,7 @@ import noctiluca.features.signin.model.UnknownException
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 import noctiluca.model.Uri
-import noctiluca.model.authentication.Instance
+import noctiluca.model.signin.Instance
 
 class AuthorizeViewModel(
     private val clientName: String,

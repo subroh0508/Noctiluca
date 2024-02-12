@@ -1,4 +1,4 @@
-package noctiluca.model.authentication
+package noctiluca.model.signin
 
 import noctiluca.model.Domain
 import noctiluca.model.Uri

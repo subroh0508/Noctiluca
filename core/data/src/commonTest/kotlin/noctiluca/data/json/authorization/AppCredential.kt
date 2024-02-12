@@ -1,4 +1,4 @@
-package noctiluca.data.json.authentication
+package noctiluca.data.json.authorization
 
 const val TEST_CLIENT_NAME = "client-name"
 const val TEST_REDIRECT_SCHEMA = "oauth2redirect"

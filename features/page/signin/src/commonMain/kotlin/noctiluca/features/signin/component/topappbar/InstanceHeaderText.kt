@@ -5,7 +5,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import noctiluca.features.shared.atoms.text.HeadlineText
 import noctiluca.features.signin.section.scrollableframe.InstanceDetailScrollableFrameState
-import noctiluca.model.authentication.Instance
+import noctiluca.model.signin.Instance
 
 @Composable
 internal fun InstanceHeaderText(

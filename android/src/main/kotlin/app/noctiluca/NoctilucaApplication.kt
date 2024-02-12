@@ -10,9 +10,9 @@ import noctiluca.data.di.DataModule
 import noctiluca.datastore.di.DataStoreModule
 import noctiluca.features.accountdetail.di.FeatureAccountDetailModule
 import noctiluca.features.accountdetail.featureAccountDetailScreenModule
-import noctiluca.features.authentication.di.FeatureSignInModule
-import noctiluca.features.authentication.featureSignInScreenModule
 import noctiluca.features.shared.di.AuthorizedFeatureModule
+import noctiluca.features.signin.di.FeatureSignInModule
+import noctiluca.features.signin.featureSignInScreenModule
 import noctiluca.features.statusdetail.di.FeatureStatusDetailModule
 import noctiluca.features.statusdetail.featureStatusDetailScreenModule
 import noctiluca.features.timeline.di.FeatureTimelineModule

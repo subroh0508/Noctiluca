@@ -1,0 +1,20 @@
+package noctiluca.features.signin.di
+
+import noctiluca.data.di.DataAuthenticationModule
+import noctiluca.data.di.DataInstanceModule
+import noctiluca.features.signin.SignInScreen
+import noctiluca.features.signin.viewmodel.AuthorizeViewModel
+import noctiluca.features.signin.viewmodel.MastodonInstanceDetailViewModel
+import noctiluca.features.signin.viewmodel.MastodonInstanceListViewModel
+import org.koin.core.module.Module
+
+@Suppress("FunctionName")
+fun Module.FeatureSignInModule() {
+    scope<SignInScreen> {
+        DataAuthenticationModule()
+        DataInstanceModule()
+        scoped { params -> AuthorizeViewModel(params.get(), params.get(), get()) }
+        scoped { MastodonInstanceListViewModel(get()) }
+        scoped { MastodonInstanceDetailViewModel(get()) }
+    }
+}

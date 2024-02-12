@@ -35,14 +35,8 @@ internal class AuthorizedContextViewModel private constructor(
                 when (e) {
                     is HttpUnauthorizedException -> emit(AuthorizeEventState(event = AuthorizeEventState.Event.REOPEN))
                     is AuthorizedTokenNotFoundException -> emit(AuthorizeEventState(event = AuthorizeEventState.Event.SIGN_IN))
-                    else -> throw e
                 }
             }
-            .stateIn(
-                scope = viewModelScope,
-                started = SharingStarted.WhileSubscribed(),
-                initialValue = AuthorizeEventState(),
-            )
     }
 
     override val scope get() = _scope

@@ -13,7 +13,7 @@ fun AuthorizedComposable(
     context: AuthorizedContext = rememberAuthorizedContext(),
     content: @Composable (AuthorizedContext) -> Unit,
 ) = FeatureComposable(*values) {
-    val state by context.state.collectAsState()
+    val state by context.state.collectAsState(AuthorizeEventState())
 
     when (state.event) {
         AuthorizeEventState.Event.OK -> AuthorizedContextContent(context, content)

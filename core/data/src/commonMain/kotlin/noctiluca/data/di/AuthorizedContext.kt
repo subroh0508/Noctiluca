@@ -1,11 +1,11 @@
 package noctiluca.data.di
 
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import noctiluca.model.AuthorizeEventState
 import org.koin.core.scope.Scope
 
 interface AuthorizedContext {
-    val state: StateFlow<AuthorizeEventState>
+    val state: Flow<AuthorizeEventState>
     val scope: Scope?
 
     fun reset()

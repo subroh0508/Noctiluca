@@ -13,7 +13,7 @@ fun Module.FeatureSignInModule() {
     scope<SignInScreen> {
         DataAuthorizationModule()
         DataInstanceModule()
-        scoped { params -> AuthorizeViewModel(params.get(), params.get(), get()) }
+        scoped { params -> AuthorizeViewModel(params.get(), params.get(), get(), get()) }
         scoped { MastodonInstanceListViewModel(get()) }
         scoped { MastodonInstanceDetailViewModel(get()) }
     }

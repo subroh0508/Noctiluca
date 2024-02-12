@@ -5,7 +5,6 @@ import androidx.compose.ui.text.intl.Locale
 import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
-import cafe.adriel.voyager.core.screen.uniqueScreenKey
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.Navigator
 import noctiluca.features.navigation.Timeline
@@ -46,7 +45,6 @@ data object Splash : Screen {
         }
     }
 }
-
 
 data class TimelineLaneScreen(
     private val id: String,

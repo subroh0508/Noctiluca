@@ -5,6 +5,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import noctiluca.data.authorization.AuthorizationRepository
+import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.shared.viewmodel.ViewModel
 import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.signin.model.AuthorizeResult
@@ -18,6 +19,7 @@ class AuthorizeViewModel(
     private val clientName: String,
     private val redirectUri: Uri,
     private val repository: AuthorizationRepository,
+    private val context: AuthorizedContext,
 ) : ViewModel(), ScreenModel {
     private val mutableEvent by lazy { MutableStateFlow<Event>(Event.Initial) }
 
@@ -70,10 +72,10 @@ class AuthorizeViewModel(
     private suspend fun fetchAccessToken(
         code: String,
         redirectUri: Uri,
-    ): AuthorizedUser? {
-        val user = repository.fetchAccessToken(code, redirectUri) ?: return null
-        return repository.switchAccessToken(user.id)
-    }
+    ) = repository.fetchAccessToken(
+        code,
+        redirectUri,
+    )?.also { user -> context.switchCurrent(user.id) }
 
     sealed class Event {
         data object Initial : Event()

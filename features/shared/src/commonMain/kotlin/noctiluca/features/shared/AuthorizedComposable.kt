@@ -1,8 +1,8 @@
 package noctiluca.features.shared
 
 import androidx.compose.runtime.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import noctiluca.features.navigation.backToSignIn
 import noctiluca.features.navigation.navigateToTimelines
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
@@ -14,7 +14,7 @@ fun AuthorizedComposable(
     eventStateFlow: AuthorizeEventStateFlow = rememberAuthorizeEventStateFlow(),
     content: @Composable () -> Unit,
 ) = FeatureComposable(*values) {
-    val event by eventStateFlow.collectAsState()
+    val event by eventStateFlow.collectAsState(AuthorizedViewModel.Event.OK)
 
     when (event) {
         AuthorizedViewModel.Event.OK -> content()
@@ -36,8 +36,8 @@ fun rememberAuthorizeEventStateFlow() = remember {
 }
 
 class AuthorizeEventStateFlow(
-    private val state: MutableStateFlow<AuthorizedViewModel.Event>,
-) : StateFlow<AuthorizedViewModel.Event> by state {
+    val state: MutableStateFlow<AuthorizedViewModel.Event>,
+) : Flow<AuthorizedViewModel.Event> by state {
     constructor(
         initial: AuthorizedViewModel.Event = AuthorizedViewModel.Event.OK,
     ) : this(

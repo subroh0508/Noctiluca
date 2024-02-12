@@ -66,6 +66,8 @@ class TimelinesViewModel(
     }
 
     fun subscribe() {
+        uiModel.value.account.current ?: return
+
         val job = launchLazy {
             runCatchingWithAuth { subscribeTimelineStreamUseCase.execute() }
                 .onSuccess { loadStateFlow.value = mapOf() }

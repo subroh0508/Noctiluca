@@ -1,7 +1,7 @@
 package noctiluca.features.shared.viewmodel
 
 import kotlinx.coroutines.flow.*
-import noctiluca.features.shared.context.AuthorizedContext
+import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.shared.model.LoadState
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.HttpUnauthorizedException

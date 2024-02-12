@@ -1,11 +1,10 @@
 package noctiluca.features.shared.extensions
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import cafe.adriel.voyager.core.model.ScreenModel
 import cafe.adriel.voyager.core.model.rememberScreenModel
 import cafe.adriel.voyager.core.screen.Screen
-import noctiluca.features.shared.context.AuthorizedContext
+import noctiluca.data.di.AuthorizedContext
 import org.koin.core.parameter.ParametersDefinition
 import org.koin.core.qualifier.Qualifier
 

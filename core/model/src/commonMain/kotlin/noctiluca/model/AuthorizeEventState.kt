@@ -1,6 +1,4 @@
-package noctiluca.features.shared.model
-
-import noctiluca.model.AuthorizedUser
+package noctiluca.model
 
 data class AuthorizeEventState(
     val user: AuthorizedUser? = null,

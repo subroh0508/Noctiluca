@@ -1,11 +1,12 @@
 package noctiluca.features.shared
 
 import androidx.compose.runtime.*
+import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.navigation.backToSignIn
 import noctiluca.features.navigation.navigateToTimelines
-import noctiluca.features.shared.context.AuthorizedContext
-import noctiluca.features.shared.context.rememberAuthorizedContext
-import noctiluca.features.shared.model.AuthorizeEventState
+import noctiluca.features.shared.viewmodel.AuthorizedContextViewModel
+import noctiluca.features.shared.viewmodel.rememberAuthorizedContext
+import noctiluca.model.AuthorizeEventState
 
 @Composable
 fun AuthorizedComposable(

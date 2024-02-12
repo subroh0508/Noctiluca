@@ -11,6 +11,7 @@ import noctiluca.features.accountdetail.screen.AccountDetailScaffold
 import noctiluca.features.accountdetail.section.AccountDetailTopAppBar
 import noctiluca.features.accountdetail.viewmodel.AccountRelationshipsViewModel
 import noctiluca.features.shared.AuthorizedComposable
+import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.model.AccountId
 import org.koin.core.parameter.parametersOf
 import noctiluca.features.navigation.AccountDetail as NavigationAccountDetailScreen
@@ -32,13 +33,14 @@ internal data class AccountDetailScreen(
     @Composable
     override fun Content() = AuthorizedComposable(
         LocalResources provides Resources(Locale.current.language),
-    ) {
-        val viewModel: AccountRelationshipsViewModel = getScreenModel {
+    ) { context ->
+        val viewModel: AccountRelationshipsViewModel = getAuthorizedScreenModel(context) {
             parametersOf(AccountId(id))
         }
         val relationshipsModel by viewModel.uiModel.collectAsState()
 
         AccountDetailScaffold(
+            context,
             relationshipsModel,
             topBar = { account, scrollBehavior ->
                 AccountDetailTopAppBar(
@@ -53,6 +55,7 @@ internal data class AccountDetailScreen(
             },
         ) { attributesModel, paddingValues, scrollBehavior ->
             AccountDetailContent(
+                context,
                 paddingValues,
                 attributesModel,
                 relationshipsModel,

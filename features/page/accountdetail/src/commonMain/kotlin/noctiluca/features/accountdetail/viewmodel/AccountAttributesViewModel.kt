@@ -3,8 +3,8 @@ package noctiluca.features.accountdetail.viewmodel
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.accountdetail.AccountAttributesRepository
+import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.accountdetail.model.AttributesModel
-import noctiluca.features.shared.context.AuthorizedContext
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.model.AccountId

@@ -1,6 +1,6 @@
 package noctiluca.features.timeline.di
 
-import noctiluca.features.shared.context.AuthorizedContext
+import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.timeline.domain.di.TimelineDomainModule
 import org.koin.core.module.Module

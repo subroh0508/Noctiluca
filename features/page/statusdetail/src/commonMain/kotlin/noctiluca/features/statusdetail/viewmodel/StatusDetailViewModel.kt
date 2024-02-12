@@ -4,8 +4,8 @@ import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import noctiluca.data.di.AuthorizedContext
 import noctiluca.data.status.StatusRepository
-import noctiluca.features.shared.context.AuthorizedContext
 import noctiluca.features.shared.model.MessageHolder
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.model.StatusId

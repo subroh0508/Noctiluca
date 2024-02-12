@@ -2,9 +2,9 @@ package noctiluca.timeline.domain
 
 import io.ktor.client.engine.HttpClientEngine
 import kotlinx.serialization.json.Json
-import noctiluca.data.di.DataAccountModule
-import noctiluca.data.di.DataStatusModule
-import noctiluca.data.di.DataTimelineModule
+import noctiluca.data.di.TestDataAccountModule
+import noctiluca.data.di.TestDataStatusModule
+import noctiluca.data.di.TestDataTimelineModule
 import noctiluca.datastore.AccountDataStore
 import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.network.mastodon.di.MastodonApiModule
@@ -55,9 +55,9 @@ class TestTimelineUseCaseComponent(
         single { mockAuthorizationTokenDataStore }
         single { mockAccountDataStore }
 
-        DataAccountModule()
-        DataStatusModule()
-        DataTimelineModule()
+        TestDataAccountModule()
+        TestDataStatusModule()
+        TestDataTimelineModule()
 
         TimelineDomainModule()
     }

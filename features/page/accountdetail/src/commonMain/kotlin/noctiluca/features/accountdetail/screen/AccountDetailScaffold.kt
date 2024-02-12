@@ -10,7 +10,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.accountdetail.AccountDetailScreen
 import noctiluca.features.accountdetail.model.AttributesModel
 import noctiluca.features.accountdetail.model.RelationshipsModel
@@ -23,12 +22,11 @@ import org.koin.core.parameter.parametersOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AccountDetailScreen.AccountDetailScaffold(
-    context: AuthorizedContext,
     relationshipsModel: RelationshipsModel,
     topBar: @Composable (AccountAttributes?, TopAppBarScrollBehavior) -> Unit,
     content: @Composable (AttributesModel, PaddingValues, TopAppBarScrollBehavior) -> Unit,
 ) {
-    val viewModel: AccountAttributesViewModel = getAuthorizedScreenModel(context) {
+    val viewModel: AccountAttributesViewModel = getAuthorizedScreenModel {
         parametersOf(AccountId(id))
     }
     val attributesModel by viewModel.uiModel.collectAsState()

@@ -90,9 +90,7 @@ private fun Screen.TimelineFeature(
     content: @Composable (TimelinesViewModel) -> Unit,
 ) = AuthorizedComposable(
     LocalResources provides Resources(Locale.current.language),
-) { context ->
-    content(getAuthorizedScreenModel(context))
-}
+) { content(getAuthorizedScreenModel()) }
 
 private fun handleOnClickDrawerItem(
     item: TimelineDrawerMenu,

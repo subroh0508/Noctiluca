@@ -1,4 +1,4 @@
-package noctiluca.features.navigation.utils
+package noctiluca.features.shared.extensions
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember

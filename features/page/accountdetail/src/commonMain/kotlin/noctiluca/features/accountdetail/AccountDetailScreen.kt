@@ -32,14 +32,13 @@ internal data class AccountDetailScreen(
     @Composable
     override fun Content() = AuthorizedComposable(
         LocalResources provides Resources(Locale.current.language),
-    ) { context ->
-        val viewModel: AccountRelationshipsViewModel = getAuthorizedScreenModel(context) {
+    ) {
+        val viewModel: AccountRelationshipsViewModel = getAuthorizedScreenModel {
             parametersOf(AccountId(id))
         }
         val relationshipsModel by viewModel.uiModel.collectAsState()
 
         AccountDetailScaffold(
-            context,
             relationshipsModel,
             topBar = { account, scrollBehavior ->
                 AccountDetailTopAppBar(
@@ -54,7 +53,6 @@ internal data class AccountDetailScreen(
             },
         ) { attributesModel, paddingValues, scrollBehavior ->
             AccountDetailContent(
-                context,
                 paddingValues,
                 attributesModel,
                 relationshipsModel,

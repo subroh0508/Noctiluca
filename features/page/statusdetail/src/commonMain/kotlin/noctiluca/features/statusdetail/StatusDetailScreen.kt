@@ -29,11 +29,5 @@ internal data class StatusDetailScreen(
     @Composable
     override fun Content() = AuthorizedComposable(
         LocalResources provides Resources(Locale.current.language),
-    ) { context ->
-        StatusDetailScaffold(
-            getAuthorizedScreenModel(context) {
-                parametersOf(StatusId(id))
-            },
-        )
-    }
+    ) { StatusDetailScaffold(getAuthorizedScreenModel { parametersOf(StatusId(id)) }) }
 }

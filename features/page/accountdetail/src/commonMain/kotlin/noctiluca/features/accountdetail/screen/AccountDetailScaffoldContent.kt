@@ -13,7 +13,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.accountdetail.AccountDetailScreen
 import noctiluca.features.accountdetail.component.AccountDetailTabs
 import noctiluca.features.accountdetail.getString
@@ -37,7 +36,6 @@ import org.koin.core.parameter.parametersOf
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AccountDetailScreen.AccountDetailContent(
-    context: AuthorizedContext,
     paddingValues: PaddingValues,
     attributesModel: AttributesModel,
     relationshipsModel: RelationshipsModel,
@@ -46,7 +44,7 @@ internal fun AccountDetailScreen.AccountDetailContent(
     block: () -> Unit,
     notifyNewStatus: () -> Unit,
 ) {
-    val viewModel: AccountStatusesViewModel = getAuthorizedScreenModel(context) {
+    val viewModel: AccountStatusesViewModel = getAuthorizedScreenModel {
         parametersOf(AccountId(id))
     }
     val statusesModel by viewModel.uiModel.collectAsState()

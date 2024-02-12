@@ -9,8 +9,8 @@ import org.koin.core.module.Module
 @Suppress("FunctionName")
 fun Module.FeatureAccountDetailModule() {
     scope<AuthorizedContext> {
-        scoped { params -> AccountAttributesViewModel(params.get(), get(), get()) }
-        scoped { params -> AccountRelationshipsViewModel(params.get(), get(), get()) }
-        scoped { params -> AccountStatusesViewModel(params.get(), get(), get()) }
+        factory { params -> AccountAttributesViewModel(params.get(), get(), get()) }
+        factory { params -> AccountRelationshipsViewModel(params.get(), get(), get()) }
+        factory { params -> AccountStatusesViewModel(params.get(), get(), get()) }
     }
 }

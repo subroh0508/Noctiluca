@@ -9,6 +9,6 @@ import org.koin.core.module.Module
 fun Module.FeatureTimelineModule() {
     scope<AuthorizedContext> {
         TimelineDomainModule()
-        scoped { TimelinesViewModel(get(), get(), get(), get(), get(), get()) }
+        factory { TimelinesViewModel(get(), get(), get(), get(), get(), get()) }
     }
 }

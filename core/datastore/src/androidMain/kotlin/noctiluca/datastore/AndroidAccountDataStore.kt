@@ -18,6 +18,8 @@ internal class AndroidAccountDataStore private constructor(
         )
     )
 
+    override suspend fun all() = dataStore.data.first().map { it.toEntity() }
+
     override suspend fun get(id: AccountId) = dataStore.data.first().find { it.id == id.value }?.toEntity()
 
     override suspend fun add(item: Account) = dataStore.updateData { list ->

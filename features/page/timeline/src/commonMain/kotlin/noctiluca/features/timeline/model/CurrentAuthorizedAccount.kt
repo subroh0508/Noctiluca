@@ -1,5 +1,6 @@
 package noctiluca.features.timeline.model
 
+import noctiluca.model.AuthorizeEventState
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
 
@@ -9,11 +10,11 @@ data class CurrentAuthorizedAccount(
     val others: List<Account> = emptyList(),
 ) {
     constructor(
-        item: Pair<Account, Domain>?,
-        others: List<Account>,
+        state: AuthorizeEventState?,
+        accounts: List<Account>,
     ) : this(
-        current = item?.first,
-        domain = item?.second,
-        others = others,
+        current = accounts.find { it.id == state?.user?.id },
+        domain = state?.user?.domain,
+        others = accounts.filterNot { it.id == state?.user?.id },
     )
 }

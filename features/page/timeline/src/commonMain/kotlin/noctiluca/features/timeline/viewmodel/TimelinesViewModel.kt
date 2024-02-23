@@ -30,16 +30,16 @@ class TimelinesViewModel(
 
     val uiModel: StateFlow<UiModel> by lazy {
         buildUiModel(
-            authorizedAccountRepository.current(),
-            authorizedAccountRepository.others(),
+            context.state,
+            authorizedAccountRepository.all(),
             timelineStreamStateFlow,
             foregroundIdStateFlow,
             loadStateFlow,
             initialValue = UiModel(),
             started = SharingStarted.Eagerly,
-        ) { current, others, timelines, timelineId, loadState ->
+        ) { authorizedState, accounts, timelines, timelineId, loadState ->
             UiModel(
-                account = CurrentAuthorizedAccount(current, others),
+                account = CurrentAuthorizedAccount(authorizedState, accounts),
                 timelines = timelines.map { id, timeline, latestEvent ->
                     id to TimelineState(
                         timeline = timeline,

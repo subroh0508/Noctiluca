@@ -1,8 +1,6 @@
 package noctiluca.data.spec.account
 
-import io.kotest.assertions.throwables.shouldThrowExactly
 import io.kotest.core.spec.style.DescribeSpec
-import io.kotest.matchers.be
 import io.kotest.matchers.collections.beEmpty
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
@@ -15,7 +13,6 @@ import kotlinx.coroutines.runBlocking
 import noctiluca.data.TestDataComponent
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.account.impl.AuthorizedAccountRepositoryImpl
-import noctiluca.data.json.JSON_ACCOUNT_CREDENTIAL_1
 import noctiluca.data.json.JSON_ACCOUNT_CREDENTIAL_2
 import noctiluca.data.json.JSON_ACCOUNT_CREDENTIAL_3
 import noctiluca.data.mock.MockAccountDataStore
@@ -67,100 +64,6 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
         ),
     )
 
-    describe("#current") {
-        context("when the local cache does not exist") {
-            context("and the sever returns valid response") {
-                val mockAccountDataStore = buildEmptyMockAccountDataStore()
-                val repository = buildRepository(
-                    Api.V1.Accounts.VerifyCredentials(),
-                    JSON_ACCOUNT_CREDENTIAL_1,
-                    buildFilledMockAuthenticationTokenDataStore(),
-                    mockAccountDataStore,
-                )
-
-                it("returns flow with one instance of account from server") {
-                    runBlocking {
-                        repository.current().first()
-                    } should be(current.copy(displayName = "サンプル太郎") to me.domain)
-
-                    runBlocking {
-                        mockAccountDataStore.get(me.id)
-                    } should be(current.copy(displayName = "サンプル太郎"))
-                }
-            }
-
-            context("and current domain is not unknown") {
-                val repository = buildRepository(
-                    Api.V1.Accounts.VerifyCredentials(),
-                    JSON_ACCOUNT_CREDENTIAL_1,
-                    buildEmptyMockAuthenticationTokenDataStore(),
-                    buildEmptyMockAccountDataStore(),
-                )
-
-                it("raises AuthorizedTokenNotFoundException") {
-                    shouldThrowExactly<AuthorizedTokenNotFoundException> {
-                        runBlocking { repository.current().first() }
-                    }
-                }
-            }
-
-            context("and the sever returns error response") {
-                val repository = buildRepository(
-                    Api.V1.Accounts.VerifyCredentials(),
-                    HttpStatusCode.BadRequest,
-                    buildFilledMockAuthenticationTokenDataStore(),
-                    buildEmptyMockAccountDataStore(),
-                )
-
-                it("raises HttpException") {
-                    shouldThrowExactly<HttpException> {
-                        runBlocking { repository.current().first() }
-                    }
-                }
-            }
-        }
-
-        context("when the local cache exists") {
-            val mockAuthenticationTokenDataStore = buildFilledMockAuthenticationTokenDataStore()
-
-            context("and the sever returns valid response") {
-                val mockAccountDataStore = MockAccountDataStore(listOf(current))
-                val repository = buildRepository(
-                    Api.V1.Accounts.VerifyCredentials(),
-                    JSON_ACCOUNT_CREDENTIAL_1,
-                    mockAuthenticationTokenDataStore,
-                    mockAccountDataStore,
-                )
-
-                it("returns flow with one instances of account from server") {
-                    runBlocking {
-                        repository.current().first()
-                    } should be(current.copy(displayName = "サンプル太郎") to me.domain)
-
-                    runBlocking {
-                        mockAccountDataStore.get(me.id)
-                    } should be(current.copy(displayName = "サンプル太郎"))
-                }
-            }
-
-            context("and the sever returns error response") {
-                val mockAccountDataStore = MockAccountDataStore(listOf(current))
-                val repository = buildRepository(
-                    Api.V1.Accounts.VerifyCredentials(),
-                    HttpStatusCode.BadRequest,
-                    mockAuthenticationTokenDataStore,
-                    mockAccountDataStore,
-                )
-
-                it("returns flow with one instance from cache") {
-                    runBlocking {
-                        repository.current().first()
-                    } should be(current to me.domain)
-                }
-            }
-        }
-    }
-
     describe("#othres") {
         context("when the local cache does not exists") {
             val repository = buildRepository(
@@ -172,7 +75,7 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
 
             it("returns flow with empty list") {
                 runBlocking {
-                    repository.others().first()
+                    repository.all().first()
                 } should beEmpty()
             }
         }
@@ -188,8 +91,10 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
 
                 it("returns flow with empty list") {
                     runBlocking {
-                        repository.others().first()
-                    } should beEmpty()
+                        repository.all().first()
+                    } should containExactly(
+                        current,
+                    )
                 }
             }
 
@@ -220,10 +125,11 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
 
                     it("returns flow with instances from server") {
                         runBlocking {
-                            repository.others().first()
+                            repository.all().first()
                         }.let {
-                            it should haveSize(2)
+                            it should haveSize(accounts.size)
                             it should containExactly(
+                                accounts[0],
                                 accounts[1].copy(displayName = "サンプル次郎"),
                                 accounts[2].copy(displayName = "サンプル三郎"),
                             )
@@ -253,10 +159,11 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
 
                     it("returns flow with instances from cache") {
                         runBlocking {
-                            repository.others().first()
+                            repository.all().first()
                         }.let {
-                            it should haveSize(2)
+                            it should haveSize(accounts.size)
                             it should containExactly(
+                                accounts[0],
                                 accounts[1],
                                 accounts[2],
                             )
@@ -267,17 +174,6 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
         }
     }
 })
-
-private inline fun <reified T> buildRepository(
-    resource: T,
-    expected: String,
-    mockAuthenticationTokenDataStore: MockAuthorizationTokenDataStore,
-    mockAccountDataStore: AccountDataStore,
-) = buildRepository(
-    MockHttpClientEngine(resource, expected),
-    mockAuthenticationTokenDataStore,
-    mockAccountDataStore,
-)
 
 private inline fun <reified T> buildRepository(
     resource: T,

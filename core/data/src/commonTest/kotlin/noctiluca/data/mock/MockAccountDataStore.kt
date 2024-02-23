@@ -9,6 +9,7 @@ fun buildEmptyMockAccountDataStore() = MockAccountDataStore(emptyList())
 class MockAccountDataStore(init: List<Account>) : AccountDataStore {
     private var accounts = init
 
+    override suspend fun all() = accounts
     override suspend fun get(id: AccountId) = accounts.find { it.id == id }
     override suspend fun add(item: Account): List<Account> {
         accounts = accounts.filter { it.id != item.id } + item

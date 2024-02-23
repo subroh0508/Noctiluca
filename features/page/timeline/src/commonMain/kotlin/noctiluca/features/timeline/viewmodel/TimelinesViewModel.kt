@@ -9,6 +9,7 @@ import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
+import noctiluca.features.shared.viewmodel.viewModelScope
 import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
@@ -29,27 +30,33 @@ class TimelinesViewModel(
     private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 
     val uiModel: StateFlow<UiModel> by lazy {
-        buildUiModel(
+        combine(
             context.state,
             authorizedAccountRepository.all(),
             timelineStreamStateFlow,
             foregroundIdStateFlow,
             loadStateFlow,
-            initialValue = UiModel(),
-            started = SharingStarted.Eagerly,
         ) { authorizedState, accounts, timelines, timelineId, loadState ->
             UiModel(
                 account = CurrentAuthorizedAccount(authorizedState, accounts),
                 timelines = timelines.map { id, timeline, latestEvent ->
                     id to TimelineState(
-                        timeline = timeline,
+                        timeline = timeline.activate(timelines.hasActiveJob(id)),
                         latestEvent = latestEvent,
                         foreground = timelineId == id,
                     )
                 },
                 loadState = loadState,
             )
-        }
+        }.onEach { model ->
+            subscribe(model.timelines.isEmpty(), model.inactivates())
+        }.catch { e ->
+            handleException(e)
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.Eagerly,
+            initialValue = UiModel(),
+        )
     }
 
     fun switch(account: Account) {
@@ -61,19 +68,6 @@ class TimelinesViewModel(
 
     fun setForeground(timelineId: TimelineId) {
         foregroundIdStateFlow.value = timelineId
-    }
-
-    fun subscribe() {
-        uiModel.value.account.current ?: return
-
-        val job = launchLazy {
-            runCatchingWithAuth { subscribeTimelineStreamUseCase.execute() }
-                .onSuccess { loadStateFlow.value = mapOf() }
-                .onFailure { e -> loadStateFlow.value += uiModel.value.timelines.keys.associateWith { LoadState.Error(e) } }
-        }
-
-        loadStateFlow.value += uiModel.value.timelines.keys.associateWith { LoadState.Loading(job) }
-        job.start()
     }
 
     fun load(timelineId: TimelineId) {
@@ -90,6 +84,24 @@ class TimelinesViewModel(
     fun favourite(status: Status) = execute(status, StatusAction.FAVOURITE)
     fun boost(status: Status) = execute(status, StatusAction.BOOST)
     fun bookmark(status: Status) = execute(status, StatusAction.BOOKMARK)
+
+    private fun subscribe(
+        isEmpty: Boolean,
+        inactivates: Map<TimelineId, Timeline>,
+    ) {
+        if (!isEmpty && inactivates.isEmpty()) {
+            return
+        }
+
+        val job = launchLazy {
+            runCatchingWithAuth { subscribeTimelineStreamUseCase.execute(inactivates) }
+                .onSuccess { loadStateFlow.value = mapOf() }
+                .onFailure { e -> loadStateFlow.value += inactivates.mapValues { LoadState.Error(e) } }
+        }
+
+        loadStateFlow.value += inactivates.mapValues { LoadState.Loading(job) }
+        job.start()
+    }
 
     private fun execute(
         status: Status,
@@ -110,11 +122,17 @@ class TimelinesViewModel(
 
         fun toTimelineList() = timelines.values.toList()
         fun findTimelineId(index: Int) = timelines.keys.toList()[index]
+
+        fun inactivates() = timelines
+            .filterNot { (_, timeline) -> timeline.isActive }
+            .mapValues { (_, timeline) -> timeline.timeline }
     }
 
     data class TimelineState(
         val timeline: Timeline,
         val latestEvent: StreamEvent? = null,
         val foreground: Boolean = false,
-    )
+    ) {
+        val isActive get() = timeline.isActive
+    }
 }

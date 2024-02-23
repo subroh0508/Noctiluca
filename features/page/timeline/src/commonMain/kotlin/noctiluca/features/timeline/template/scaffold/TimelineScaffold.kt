@@ -36,10 +36,6 @@ internal fun TimelineScaffold(
 ) {
     val uiModel by viewModel.uiModel.collectAsState()
 
-    LaunchedEffect(uiModel.account.current) {
-        viewModel.subscribe()
-    }
-
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyListState = remember(

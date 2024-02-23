@@ -27,19 +27,15 @@ internal class TimelineRepositoryImpl(
     override fun get(timelineId: TimelineId) = timelineStreamStateFlow.timeline(timelineId)
 
     override suspend fun fetchInitialTimeline() = mapOf(
-        LocalTimelineId to Timeline.Local(listOf(), onlyMedia = false),
-        HomeTimelineId to Timeline.Home(listOf()),
-        GlobalTimelineId to Timeline.Global(listOf(), onlyRemote = false, onlyMedia = false),
+        LocalTimelineId to Timeline.Local(listOf(), onlyMedia = false, isActive = false),
+        HomeTimelineId to Timeline.Home(listOf(), isActive = false),
+        GlobalTimelineId to Timeline.Global(listOf(), onlyRemote = false, onlyMedia = false, isActive = false),
     )
 
     override suspend fun subscribe(
         initial: Map<TimelineId, Timeline>,
         statuses: Map<TimelineId, List<Status>>,
     ) {
-        timelineStreamStateFlow.cancelAll()
-        timelineStreamStateFlow.clear()
-        timelineStreamStateFlow.setInitialTimeline(initial)
-
         initial.forEach { (timelineId, timeline) ->
             timelineStreamStateFlow[timelineId] = timeline + statuses[timelineId].orEmpty()
 

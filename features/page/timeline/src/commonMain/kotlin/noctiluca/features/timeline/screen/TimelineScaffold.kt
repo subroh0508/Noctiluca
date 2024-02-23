@@ -1,4 +1,4 @@
-package noctiluca.features.timeline.template.scaffold
+package noctiluca.features.timeline.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
@@ -17,29 +17,36 @@ import noctiluca.features.navigation.navigateToStatusDetail
 import noctiluca.features.shared.atoms.appbar.NavigateIconSize
 import noctiluca.features.shared.atoms.appbar.scrollToTop
 import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
+import noctiluca.features.timeline.TimelineLaneScreen
 import noctiluca.features.timeline.getString
-import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.tab.TimelineTabs
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.model.Domain
+import noctiluca.model.Uri
+import noctiluca.model.account.Account
 import noctiluca.model.timeline.TimelineId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TimelineScaffold(
-    viewModel: TimelinesViewModel,
+internal fun TimelineLaneScreen.TimelineScaffold(
+    current: Account?,
+    domain: Domain?,
     drawerState: DrawerState,
 ) {
+    val viewModel: TimelinesViewModel = getAuthorizedScreenModel()
+
     val uiModel by viewModel.uiModel.collectAsState()
 
     val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyListState = remember(
-        uiModel.account.current,
+        current,
         uiModel.timelines.keys,
     ) { uiModel.timelines.mapValues { (_, _) -> LazyListState() } }
 
@@ -47,7 +54,8 @@ internal fun TimelineScaffold(
         scrollBehavior,
         topAppBar = {
             CurrentInstanceTopAppBar(
-                uiModel.account,
+                current?.avatar,
+                domain,
                 scrollBehavior,
                 onClickNavigationIcon = {
                     scope.launch { drawerState.open() }
@@ -87,18 +95,19 @@ internal fun TimelineScaffold(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CurrentInstanceTopAppBar(
-    account: CurrentAuthorizedAccount,
+    avatar: Uri?,
+    domain: Domain?,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,
     onClickNavigationIcon: () -> Unit,
 ) = CenterAlignedTopAppBar(
-    { Text(account.domain?.value ?: getString().timeline_page_title) },
+    { Text(domain?.value ?: getString().timeline_page_title) },
     navigationIcon = {
         IconButton(
             onClick = onClickNavigationIcon,
             modifier = Modifier.padding(start = 8.dp),
         ) {
             AsyncImage(
-                account.current?.avatar,
+                avatar,
                 // fallback = imageResources(getDrawables().icon_mastodon),
                 modifier = Modifier.size(NavigateIconSize)
                     .clip(RoundedCornerShape(8.dp)),

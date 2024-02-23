@@ -18,6 +18,9 @@ data class MastodonInstanceDetailParams(
     val query: String?,
 ) : SignInParams()
 
+@Composable
+fun rememberSignInScreen() = rememberScreen((SignIn(MastodonInstanceListParams)))
+
 fun Navigator.navigateToSignIn() {
     push(ScreenRegistry.get(SignIn(MastodonInstanceListParams)))
 }

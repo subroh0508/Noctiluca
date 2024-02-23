@@ -4,7 +4,7 @@ import noctiluca.model.AuthorizeEventState
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
 
-data class CurrentAuthorizedAccount(
+data class AuthorizedAccountModel(
     val current: Account? = null,
     val domain: Domain? = null,
     val others: List<Account> = emptyList(),

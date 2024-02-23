@@ -11,16 +11,15 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.features.shared.atoms.list.TwoLineListItem
-import noctiluca.features.timeline.model.CurrentAuthorizedAccount
 import noctiluca.model.account.Account
 
 @Composable
 internal fun AuthorizedAccountsList(
-    account: CurrentAuthorizedAccount,
+    accounts: List<Account>,
     onClick: (Account) -> Unit,
 ) = LazyColumn {
     items(
-        account.others,
+        accounts,
         key = { it.screen },
     ) {
         AuthorizedAccountItem(it) { onClick(it) }

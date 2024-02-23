@@ -24,7 +24,7 @@ internal fun TootScaffold(
         topBar = { TootTopAppBar(visibility) },
     ) { paddingValues ->
         TootBox(
-            uiModel.account.current,
+            null, // TODO uiModel.account.current,
             content,
             warning,
             modifier = Modifier.fillMaxSize()

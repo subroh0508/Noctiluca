@@ -2,7 +2,6 @@ package noctiluca.features.timeline.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
-import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.di.AuthorizedContext
 import noctiluca.data.timeline.impl.TimelineStreamStateFlow
 import noctiluca.features.shared.model.LoadState
@@ -10,8 +9,6 @@ import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope
-import noctiluca.features.timeline.model.CurrentAuthorizedAccount
-import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.*
 import noctiluca.timeline.domain.model.StatusAction
@@ -23,7 +20,6 @@ class TimelinesViewModel(
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
-    private val authorizedAccountRepository: AuthorizedAccountRepository,
     context: AuthorizedContext,
 ) : AuthorizedViewModel(context), ScreenModel {
     private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
@@ -31,14 +27,11 @@ class TimelinesViewModel(
 
     val uiModel: StateFlow<UiModel> by lazy {
         combine(
-            context.state,
-            authorizedAccountRepository.all(),
             timelineStreamStateFlow,
             foregroundIdStateFlow,
             loadStateFlow,
-        ) { authorizedState, accounts, timelines, timelineId, loadState ->
+        ) { timelines, timelineId, loadState ->
             UiModel(
-                account = CurrentAuthorizedAccount(authorizedState, accounts),
                 timelines = timelines.map { id, timeline, latestEvent ->
                     id to TimelineState(
                         timeline = timeline.activate(timelines.hasActiveJob(id)),
@@ -57,13 +50,6 @@ class TimelinesViewModel(
             started = SharingStarted.Eagerly,
             initialValue = UiModel(),
         )
-    }
-
-    fun switch(account: Account) {
-        launch {
-            runCatchingWithAuth { context.switchCurrent(account.id) }
-                .onSuccess { reopen() }
-        }
     }
 
     fun setForeground(timelineId: TimelineId) {
@@ -113,7 +99,6 @@ class TimelinesViewModel(
     }
 
     data class UiModel(
-        val account: CurrentAuthorizedAccount = CurrentAuthorizedAccount(),
         val timelines: Map<TimelineId, TimelineState> = mapOf(),
         val loadState: Map<TimelineId, LoadState> = mapOf(),
     ) {

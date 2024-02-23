@@ -21,7 +21,7 @@ kotlinx-serialization = "1.6.2"
 
 ktor = "2.3.8"
 
-image-loader = "1.7.4"
+image-loader = "1.7.6"
 
 voyager = "1.0.0"
 

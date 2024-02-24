@@ -3,32 +3,27 @@ package noctiluca.features.timeline.screen
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import kotlinx.coroutines.launch
 import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToStatusDetail
-import noctiluca.features.shared.atoms.appbar.NavigateIconSize
 import noctiluca.features.shared.atoms.appbar.scrollToTop
-import noctiluca.features.shared.atoms.image.AsyncImage
 import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.TimelineLaneScreen
-import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.tab.TimelineTabs
+import noctiluca.features.timeline.section.TimelineLaneTopAppBar
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.model.Domain
-import noctiluca.model.Uri
 import noctiluca.model.account.Account
 import noctiluca.model.timeline.TimelineId
 
@@ -53,7 +48,7 @@ internal fun TimelineLaneScreen.TimelineScaffold(
     TabbedScaffold(
         scrollBehavior,
         topAppBar = {
-            CurrentInstanceTopAppBar(
+            TimelineLaneTopAppBar(
                 current?.avatar,
                 domain,
                 scrollBehavior,
@@ -91,35 +86,6 @@ internal fun TimelineLaneScreen.TimelineScaffold(
         )
     }
 }
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun CurrentInstanceTopAppBar(
-    avatar: Uri?,
-    domain: Domain?,
-    topAppBarScrollBehavior: TopAppBarScrollBehavior,
-    onClickNavigationIcon: () -> Unit,
-) = CenterAlignedTopAppBar(
-    { Text(domain?.value ?: getString().timeline_page_title) },
-    navigationIcon = {
-        IconButton(
-            onClick = onClickNavigationIcon,
-            modifier = Modifier.padding(start = 8.dp),
-        ) {
-            AsyncImage(
-                avatar,
-                // fallback = imageResources(getDrawables().icon_mastodon),
-                modifier = Modifier.size(NavigateIconSize)
-                    .clip(RoundedCornerShape(8.dp)),
-            )
-        }
-    },
-    colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-        containerColor = MaterialTheme.colorScheme.surface,
-        scrolledContainerColor = MaterialTheme.colorScheme.surface,
-    ),
-    scrollBehavior = topAppBarScrollBehavior,
-)
 
 @Composable
 private fun TimelineLanes(

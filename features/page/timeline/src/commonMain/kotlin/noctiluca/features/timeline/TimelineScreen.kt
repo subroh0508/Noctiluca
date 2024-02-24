@@ -7,10 +7,9 @@ import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import noctiluca.features.navigation.Timeline
 import noctiluca.features.shared.AuthorizedComposable
-import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.timeline.screen.TimelineNavigationDrawer
 import noctiluca.features.timeline.screen.TimelineScaffold
-import noctiluca.features.timeline.template.scaffold.TootScaffold
+import noctiluca.features.timeline.screen.TootScaffold
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
@@ -47,5 +46,5 @@ internal data object TootScreen : Screen {
     @Composable
     override fun Content() = AuthorizedComposable(
         LocalResources provides Resources(Locale.current.language),
-    ) { TootScaffold(getAuthorizedScreenModel()) }
+    ) { TootScaffold() }
 }

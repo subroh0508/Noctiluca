@@ -1,4 +1,4 @@
-package noctiluca.features.timeline.template.drawer.menu
+package noctiluca.features.timeline.component.drawer
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -14,7 +14,7 @@ import noctiluca.features.shared.atoms.list.TwoLineListItem
 import noctiluca.model.account.Account
 
 @Composable
-internal fun AuthorizedAccountsList(
+internal fun AuthorizedAccountList(
     accounts: List<Account>,
     onClick: (Account) -> Unit,
 ) = LazyColumn {

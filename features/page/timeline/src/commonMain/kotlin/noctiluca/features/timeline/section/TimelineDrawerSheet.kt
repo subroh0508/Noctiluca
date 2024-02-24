@@ -16,9 +16,9 @@ import noctiluca.features.navigation.AccountDetail
 import noctiluca.features.navigation.rememberSignInScreen
 import noctiluca.features.timeline.component.drawer.AuthorizedAccountHeader
 import noctiluca.features.timeline.component.drawer.AuthorizedAccountList
-import noctiluca.features.timeline.model.AuthorizedAccountModel
 import noctiluca.features.timeline.component.drawer.DrawerBottomMenu
 import noctiluca.features.timeline.component.drawer.DrawerBottomMenus
+import noctiluca.features.timeline.model.AuthorizedAccountModel
 import noctiluca.model.account.Account
 
 @Composable

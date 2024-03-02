@@ -42,7 +42,7 @@ fun ApplicationExtension.proguardApplicationConfig() {
     }
 }
 
-private fun CommonExtension<*, *, *, *, *>.androidConfig() {
+private fun CommonExtension<*, *, *, *, *, *>.androidConfig() {
     defaultConfig {
         compileSdk = Packages.compileSdk
         minSdk = Packages.minSdk

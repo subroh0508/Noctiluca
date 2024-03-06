@@ -16,7 +16,7 @@ import noctiluca.model.Uri
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TimelineLaneTopAppBar(
+internal fun TimelinesTopAppBar(
     avatar: Uri?,
     domain: Domain?,
     topAppBarScrollBehavior: TopAppBarScrollBehavior,

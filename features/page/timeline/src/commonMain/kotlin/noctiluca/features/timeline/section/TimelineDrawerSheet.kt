@@ -22,7 +22,7 @@ import noctiluca.features.timeline.model.AuthorizedAccountModel
 import noctiluca.model.account.Account
 
 @Composable
-internal fun TimelineDrawerSheet(
+internal fun TimelinesDrawerSheet(
     model: AuthorizedAccountModel,
     drawerState: DrawerState,
     onClickOtherAccount: (Account) -> Unit,

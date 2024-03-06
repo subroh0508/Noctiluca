@@ -1,7 +1,7 @@
 package noctiluca.features.timeline.di
 
 import noctiluca.data.di.AuthorizedContext
-import noctiluca.features.timeline.TimelineLaneScreen
+import noctiluca.features.timeline.TimelinesScreen
 import noctiluca.features.timeline.TootScreen
 import noctiluca.features.timeline.viewmodel.AuthorizedAccountViewModel
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
@@ -14,7 +14,7 @@ fun Module.FeatureTimelineModule() {
         TimelineDomainModule()
     }
 
-    scope<TimelineLaneScreen> {
+    scope<TimelinesScreen> {
         scoped { AuthorizedAccountViewModel(get(), get()) }
         scoped { TimelinesViewModel(get(), get(), get(), get(), get()) }
     }

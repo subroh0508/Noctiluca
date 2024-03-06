@@ -5,14 +5,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import noctiluca.features.shared.extensions.getAuthorizedScreenModel
-import noctiluca.features.timeline.TimelineLaneScreen
-import noctiluca.features.timeline.section.TimelineDrawerSheet
+import noctiluca.features.timeline.TimelinesScreen
+import noctiluca.features.timeline.section.TimelinesDrawerSheet
 import noctiluca.features.timeline.viewmodel.AuthorizedAccountViewModel
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
 
 @Composable
-internal fun TimelineLaneScreen.TimelineNavigationDrawer(
+internal fun TimelinesScreen.TimelinesNavigationDrawer(
     content: @Composable (Account?, Domain?, DrawerState) -> Unit,
 ) {
     val viewModel: AuthorizedAccountViewModel = getAuthorizedScreenModel()
@@ -22,7 +22,7 @@ internal fun TimelineLaneScreen.TimelineNavigationDrawer(
 
     ModalNavigationDrawer(
         drawerContent = {
-            TimelineDrawerSheet(
+            TimelinesDrawerSheet(
                 uiModel,
                 drawerState,
                 onClickOtherAccount = { viewModel.switch(it) },

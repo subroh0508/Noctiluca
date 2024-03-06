@@ -17,12 +17,12 @@ import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
-import noctiluca.features.timeline.TimelineLaneScreen
+import noctiluca.features.timeline.TimelinesScreen
 import noctiluca.features.timeline.model.TimelinesModel
 import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.tab.TimelineTabs
-import noctiluca.features.timeline.section.TimelineLaneTopAppBar
+import noctiluca.features.timeline.section.TimelinesTopAppBar
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.model.Domain
 import noctiluca.model.account.Account
@@ -30,7 +30,7 @@ import noctiluca.model.timeline.TimelineId
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun TimelineLaneScreen.TimelineScaffold(
+internal fun TimelinesScreen.TimelinesScaffold(
     current: Account?,
     domain: Domain?,
     drawerState: DrawerState,
@@ -49,7 +49,7 @@ internal fun TimelineLaneScreen.TimelineScaffold(
     TabbedScaffold(
         scrollBehavior,
         topAppBar = {
-            TimelineLaneTopAppBar(
+            TimelinesTopAppBar(
                 current?.avatar,
                 domain,
                 scrollBehavior,

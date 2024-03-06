@@ -8,10 +8,8 @@ import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
 
-sealed class Timeline : ScreenProvider {
-    data class TimelineLane(val id: String, val domain: String) : Timeline()
-    data object Toot : Timeline()
-}
+data class Timelines(val id: String, val domain: String) : ScreenProvider
+data object Toot : ScreenProvider
 
 @Composable
 fun navigateToTimelines(user: AuthorizedUser?) {
@@ -26,9 +24,7 @@ fun navigateToTimelines(
     domain: Domain,
 ) {
     val navigator = LocalNavigator.current
-    val timelines = rememberScreen(
-        Timeline.TimelineLane(id.value, domain.value),
-    )
+    val timelines = rememberScreen(Timelines(id.value, domain.value))
 
     navigator?.replaceAll(timelines)
 }

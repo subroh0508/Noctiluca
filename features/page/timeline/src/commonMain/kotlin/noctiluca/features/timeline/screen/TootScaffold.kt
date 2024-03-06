@@ -9,12 +9,12 @@ import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.shared.toot.TootBox
 import noctiluca.features.timeline.TootScreen
 import noctiluca.features.timeline.section.TootTopAppBar
-import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.features.timeline.viewmodel.TootViewModel
 import noctiluca.model.status.Status
 
 @Composable
 internal fun TootScreen.TootScaffold() {
-    val viewModel: TimelinesViewModel = getAuthorizedScreenModel()
+    val viewModel: TootViewModel = getAuthorizedScreenModel()
     val uiModel by viewModel.uiModel.collectAsState()
 
     val content = remember { mutableStateOf<String?>(null) }
@@ -25,7 +25,7 @@ internal fun TootScreen.TootScaffold() {
         topBar = { TootTopAppBar(visibility) },
     ) { paddingValues ->
         TootBox(
-            null, // TODO uiModel.account.current,
+            uiModel.current,
             content,
             warning,
             modifier = Modifier.fillMaxSize()

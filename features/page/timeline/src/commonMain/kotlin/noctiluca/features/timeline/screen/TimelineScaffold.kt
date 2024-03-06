@@ -14,7 +14,6 @@ import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.TimelinesScreen
 import noctiluca.features.timeline.component.TimelineTabs
 import noctiluca.features.timeline.model.TimelinesModel
-import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.section.TimelineContent
 import noctiluca.features.timeline.section.TimelinesTopAppBar
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
@@ -51,6 +50,7 @@ internal fun TimelinesScreen.TimelinesScaffold(
         },
         bottomBar = {
             TootCard(
+                getAuthorizedScreenModel(),
                 modifier = Modifier.fillMaxWidth()
                     .padding(16.dp)
                     .align(Alignment.BottomCenter)

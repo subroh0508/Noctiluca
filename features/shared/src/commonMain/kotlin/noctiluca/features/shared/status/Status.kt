@@ -38,46 +38,42 @@ enum class Action {
 @Composable
 fun Status(
     status: Status,
-    onClick: (CoroutineScope.(StatusId) -> Unit)? = null,
-    onClickAvatar: (CoroutineScope.(AccountId) -> Unit)? = null,
-    onClickAction: (CoroutineScope.(Action) -> Unit)? = null,
+    onClick: ((StatusId) -> Unit)? = null,
+    onClickAvatar: ((AccountId) -> Unit)? = null,
+    onClickAction: ((Action) -> Unit)? = null,
     modifier: Modifier = Modifier,
-) {
-    val scope = rememberCoroutineScope()
-
-    Column(
-        modifier = Modifier.run {
-            if (onClick != null) {
-                clickable { onClick(scope, status.id) }
-            } else {
-                this
-            }
-        }.padding(
-            start = 16.dp,
-            end = 16.dp,
-            top = 16.dp,
-        ).then(modifier),
-    ) {
-        StatusHeader(
-            status.tooter,
-            status.visibility,
-            status.createdAt,
-            onClickAvatar,
-        )
-
-        Spacer(Modifier.height(8.dp))
-
-        HtmlText(
-            status.content,
-            style = MaterialTheme.typography.bodyLarge,
-        )
-
-        if (onClickAction != null) {
-            StatusActions(
-                status,
-                onClickAction,
-            )
+) = Column(
+    modifier = Modifier.run {
+        if (onClick != null) {
+            clickable { onClick(status.id) }
+        } else {
+            this
         }
+    }.padding(
+        start = 16.dp,
+        end = 16.dp,
+        top = 16.dp,
+    ).then(modifier),
+) {
+    StatusHeader(
+        status.tooter,
+        status.visibility,
+        status.createdAt,
+        onClickAvatar,
+    )
+
+    Spacer(Modifier.height(8.dp))
+
+    HtmlText(
+        status.content,
+        style = MaterialTheme.typography.bodyLarge,
+    )
+
+    if (onClickAction != null) {
+        StatusActions(
+            status,
+            onClickAction,
+        )
     }
 }
 
@@ -86,9 +82,8 @@ private fun StatusHeader(
     tooter: Account,
     visibility: Status.Visibility,
     createdAt: LocalDateTime,
-    onClickAvatar: (CoroutineScope.(AccountId) -> Unit)?,
+    onClickAvatar: ((AccountId) -> Unit)?,
 ) = Row {
-    val scope = rememberCoroutineScope()
     var tooterIconSize by remember { mutableStateOf(0) }
 
     AsyncImage(
@@ -96,7 +91,7 @@ private fun StatusHeader(
         fallback = imageResources(getDrawables().icon_mastodon),
         modifier = Modifier.size(tooterIconSize.toDp())
             .clip(RoundedCornerShape(8.dp))
-            .clickable { onClickAvatar?.invoke(scope, tooter.id) },
+            .clickable { onClickAvatar?.invoke(tooter.id) },
     )
 
     Spacer(Modifier.width(16.dp))
@@ -153,7 +148,7 @@ fun VisibilityIcon(
 @Composable
 private fun StatusActions(
     status: Status,
-    onClick: CoroutineScope.(Action) -> Unit,
+    onClick: (Action) -> Unit,
 ) {
     CompositionLocalProvider(LocalContentColor provides MaterialTheme.colorScheme.outline) {
         Row {

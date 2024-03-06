@@ -33,7 +33,10 @@ data class TimelinesModel(
         val isActive get() = timeline.isActive
     }
 
-    val foreground get() = tabs.values.find { it.foreground }
+    val foreground
+        get() = tabs.toList()
+            .find { (_, state) -> state.foreground }
+            ?.let { (id, state) -> Triple(id, state, loadState[id]) }
     val currentTabIndex get() = tabs.values.indexOfFirst { it.foreground }
 
     fun toTabList() = tabs.values.toList()

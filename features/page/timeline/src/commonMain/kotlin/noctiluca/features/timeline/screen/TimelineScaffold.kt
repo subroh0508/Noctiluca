@@ -2,26 +2,20 @@ package noctiluca.features.timeline.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import kotlinx.coroutines.launch
-import noctiluca.features.navigation.navigateToAccountDetail
-import noctiluca.features.navigation.navigateToStatusDetail
-import noctiluca.features.shared.atoms.appbar.scrollToTop
 import noctiluca.features.shared.extensions.getAuthorizedScreenModel
-import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.TimelinesScreen
+import noctiluca.features.timeline.component.TimelineTabs
 import noctiluca.features.timeline.model.TimelinesModel
 import noctiluca.features.timeline.organisms.card.TootCard
-import noctiluca.features.timeline.organisms.list.TimelineLane
-import noctiluca.features.timeline.organisms.tab.TimelineTabs
+import noctiluca.features.timeline.section.TimelineContent
 import noctiluca.features.timeline.section.TimelinesTopAppBar
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.model.Domain
@@ -39,7 +33,6 @@ internal fun TimelinesScreen.TimelinesScaffold(
 
     val uiModel by viewModel.uiModel.collectAsState()
 
-    val scope = rememberCoroutineScope()
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyListState = remember(
         current,
@@ -53,9 +46,7 @@ internal fun TimelinesScreen.TimelinesScaffold(
                 current?.avatar,
                 domain,
                 scrollBehavior,
-                onClickNavigationIcon = {
-                    scope.launch { drawerState.open() }
-                },
+                drawerState,
             )
         },
         bottomBar = {
@@ -67,51 +58,49 @@ internal fun TimelinesScreen.TimelinesScaffold(
         },
         tabs = {
             TimelineTabs(
-                uiModel,
+                uiModel.tabs,
+                uiModel.currentTabIndex,
+                lazyListState,
+                scrollBehavior,
                 onClickTab = { timelineId ->
-                    if (uiModel.tabs[timelineId]?.foreground == true) {
-                        scope.launch { lazyListState[timelineId]?.animateScrollToItem(0) }
-                        scrollBehavior.scrollToTop()
-                    }
-
                     viewModel.setForeground(timelineId)
                 },
             )
         },
     ) {
-        TimelineLanes(
+        TimelineTabContent(
             viewModel,
-            uiModel.tabs,
-            uiModel.loadState,
+            uiModel,
             lazyListState,
         )
     }
 }
 
 @Composable
-private fun TimelineLanes(
+private fun TimelineTabContent(
     viewModel: TimelinesViewModel,
-    timelines: Map<TimelineId, TimelinesModel.State>,
-    loadState: Map<TimelineId, LoadState>,
-    lazyListState: Map<TimelineId, LazyListState>,
+    uiModel: TimelinesModel,
+    lazyListStateMap: Map<TimelineId, LazyListState>,
 ) {
+    val (timelineId, timelineState, loadState) = uiModel.foreground ?: return
+    val lazyListState = lazyListStateMap[timelineId] ?: return
+
     val navigator = LocalNavigator.current
 
-    timelines.forEach { (timelineId, timelineState) ->
-        TimelineLane(
-            timelineState,
-            loadState[timelineId],
-            lazyListState = lazyListState[timelineId] ?: rememberLazyListState(),
-            onLoad = { viewModel.load(timelineId) },
-            onClickStatus = { navigator?.navigateToStatusDetail(it) },
-            onClickAvatar = { navigator?.navigateToAccountDetail(it) },
-            onExecuteAction = { _, status, action ->
-                when (action) {
-                    Action.FAVOURITE -> viewModel.favourite(status)
-                    Action.BOOST -> viewModel.boost(status)
-                    else -> Unit
-                }
-            },
-        )
-    }
+    TimelineContent(
+        timelineId,
+        timelineState,
+        loadState,
+        lazyListState,
+        onLoad = { viewModel.load(timelineId) },
+        onClickStatus = { navigator?.push(it) },
+        onClickAvatar = { navigator?.push(it) },
+        onExecuteAction = { _, status, action ->
+            when (action) {
+                Action.FAVOURITE -> viewModel.favourite(status)
+                Action.BOOST -> viewModel.boost(status)
+                else -> Unit
+            }
+        },
+    )
 }

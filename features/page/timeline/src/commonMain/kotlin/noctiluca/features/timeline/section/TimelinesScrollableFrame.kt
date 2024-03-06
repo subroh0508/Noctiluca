@@ -1,4 +1,4 @@
-package noctiluca.features.shared.molecules.scaffold
+package noctiluca.features.timeline.section
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
@@ -9,8 +9,8 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TabbedScaffold(
-    scrollBehavior: TopAppBarScrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(),
+fun TimelinesScrollableFrame(
+    scrollBehavior: TopAppBarScrollBehavior,
     snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
     topAppBar: @Composable (TopAppBarScrollBehavior) -> Unit = {},
     bottomBar: @Composable BoxScope.() -> Unit = {},

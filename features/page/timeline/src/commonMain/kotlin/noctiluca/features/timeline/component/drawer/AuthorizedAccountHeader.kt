@@ -1,4 +1,4 @@
-package noctiluca.features.timeline.template.drawer.header
+package noctiluca.features.timeline.component.drawer
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -16,18 +16,20 @@ import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.atoms.appbar.NavigateIconSize
 import noctiluca.features.shared.atoms.clickable
 import noctiluca.features.shared.atoms.image.AsyncImage
-import noctiluca.model.account.Account
+import noctiluca.model.Uri
 
 @Composable
-internal fun CurrentAuthorizedAccountHeader(
-    account: Account,
+internal fun AuthorizedAccountHeader(
+    avatar: Uri?,
+    displayName: String,
+    screen: String,
     onClickOpenAccountDetail: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     Row {
         IconButton(onClick = onClickOpenAccountDetail) {
             AsyncImage(
-                account.avatar,
+                avatar,
                 // fallback = imageResources(getDrawables().icon_mastodon),
                 modifier = Modifier.size(NavigateIconSize)
                     .clip(RoundedCornerShape(8.dp)),
@@ -57,7 +59,8 @@ internal fun CurrentAuthorizedAccountHeader(
     }
     Spacer(Modifier.height(16.dp))
     AccountName(
-        account,
+        displayName = displayName,
+        screen = screen,
         modifier = Modifier.fillMaxWidth()
             .clickable(noRipple = true) { onClickOpenAccountDetail() },
     )

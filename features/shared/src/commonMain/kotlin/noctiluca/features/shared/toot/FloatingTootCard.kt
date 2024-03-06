@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.atoms.card.FilledCard
 import noctiluca.features.shared.toot.internal.TootTextArea
-import noctiluca.features.shared.toot.internal.VisibilityChip
 import noctiluca.model.status.Status
 
 @Composable

@@ -10,8 +10,8 @@ import noctiluca.model.AuthorizedUser
 import noctiluca.network.mastodon.MastodonApiV1
 
 internal class AuthorizedUserRepositoryImpl(
-    private val dataStore: AuthorizationTokenDataStore,
     private val v1: MastodonApiV1,
+    private val dataStore: AuthorizationTokenDataStore,
 ) : AuthorizedUserRepository {
     private val currentAuthorizedUserStateFlow by lazy { MutableStateFlow<AuthorizedUser?>(null) }
 

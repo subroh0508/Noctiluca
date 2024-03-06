@@ -7,6 +7,7 @@ import noctiluca.model.timeline.HashTag as HashTagValue
 
 sealed class Timeline {
     abstract val statuses: StatusList
+    abstract val isActive: Boolean
 
     val maxId get() = statuses.lastOrNull()?.id
 
@@ -82,6 +83,14 @@ sealed class Timeline {
         },
     )
 
+    fun activate(isActive: Boolean) = when (this) {
+        is Global -> copy(isActive = isActive)
+        is Local -> copy(isActive = isActive)
+        is Home -> copy(isActive = isActive)
+        is HashTag -> copy(isActive = isActive)
+        is List -> copy(isActive = isActive)
+    }
+
     private fun replace(statuses: StatusList) = when (this) {
         is Global -> copy(statuses = statuses)
         is Local -> copy(statuses = statuses)
@@ -94,25 +103,30 @@ sealed class Timeline {
         override val statuses: StatusList,
         val onlyRemote: Boolean,
         val onlyMedia: Boolean,
+        override val isActive: Boolean,
     ) : Timeline()
 
     data class Local(
         override val statuses: StatusList,
         val onlyMedia: Boolean,
+        override val isActive: Boolean,
     ) : Timeline()
 
     data class Home(
         override val statuses: StatusList,
+        override val isActive: Boolean,
     ) : Timeline()
 
     data class HashTag(
         override val statuses: StatusList,
         val hashtag: HashTagValue,
         val onlyMedia: Boolean,
+        override val isActive: Boolean,
     ) : Timeline()
 
     data class List(
         override val statuses: StatusList,
         val list: AccountList,
+        override val isActive: Boolean,
     ) : Timeline()
 }

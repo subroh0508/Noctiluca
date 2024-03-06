@@ -2,15 +2,14 @@ package noctiluca.features.timeline.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
-import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.di.AuthorizedContext
 import noctiluca.data.timeline.impl.TimelineStreamStateFlow
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
-import noctiluca.features.timeline.model.CurrentAuthorizedAccount
-import noctiluca.model.account.Account
+import noctiluca.features.shared.viewmodel.viewModelScope
+import noctiluca.features.timeline.model.TimelinesModel
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.*
 import noctiluca.timeline.domain.model.StatusAction
@@ -22,58 +21,31 @@ class TimelinesViewModel(
     private val executeStatusActionUseCase: ExecuteStatusActionUseCase,
     private val subscribeTimelineStreamUseCase: SubscribeTimelineStreamUseCase,
     private val loadTimelineStatusesUseCase: LoadTimelineStatusesUseCase,
-    private val authorizedAccountRepository: AuthorizedAccountRepository,
     context: AuthorizedContext,
 ) : AuthorizedViewModel(context), ScreenModel {
     private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
     private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 
-    val uiModel: StateFlow<UiModel> by lazy {
-        buildUiModel(
-            authorizedAccountRepository.current(),
-            authorizedAccountRepository.others(),
+    val uiModel: StateFlow<TimelinesModel> by lazy {
+        combine(
             timelineStreamStateFlow,
             foregroundIdStateFlow,
             loadStateFlow,
-            initialValue = UiModel(),
+        ) { timelines, timelineId, loadState ->
+            TimelinesModel(timelines, timelineId, loadState)
+        }.onEach { model ->
+            subscribe(model.tabs.isEmpty(), model.inactivates())
+        }.catch { e ->
+            handleException(e)
+        }.stateIn(
+            scope = viewModelScope,
             started = SharingStarted.Eagerly,
-        ) { current, others, timelines, timelineId, loadState ->
-            UiModel(
-                account = CurrentAuthorizedAccount(current, others),
-                timelines = timelines.map { id, timeline, latestEvent ->
-                    id to TimelineState(
-                        timeline = timeline,
-                        latestEvent = latestEvent,
-                        foreground = timelineId == id,
-                    )
-                },
-                loadState = loadState,
-            )
-        }
-    }
-
-    fun switch(account: Account) {
-        launch {
-            runCatchingWithAuth { context.switchCurrent(account.id) }
-                .onSuccess { reopen() }
-        }
+            initialValue = TimelinesModel(),
+        )
     }
 
     fun setForeground(timelineId: TimelineId) {
         foregroundIdStateFlow.value = timelineId
-    }
-
-    fun subscribe() {
-        uiModel.value.account.current ?: return
-
-        val job = launchLazy {
-            runCatchingWithAuth { subscribeTimelineStreamUseCase.execute() }
-                .onSuccess { loadStateFlow.value = mapOf() }
-                .onFailure { e -> loadStateFlow.value += uiModel.value.timelines.keys.associateWith { LoadState.Error(e) } }
-        }
-
-        loadStateFlow.value += uiModel.value.timelines.keys.associateWith { LoadState.Loading(job) }
-        job.start()
     }
 
     fun load(timelineId: TimelineId) {
@@ -91,6 +63,24 @@ class TimelinesViewModel(
     fun boost(status: Status) = execute(status, StatusAction.BOOST)
     fun bookmark(status: Status) = execute(status, StatusAction.BOOKMARK)
 
+    private fun subscribe(
+        isEmpty: Boolean,
+        inactivates: Map<TimelineId, Timeline>,
+    ) {
+        if (!isEmpty && inactivates.isEmpty()) {
+            return
+        }
+
+        val job = launchLazy {
+            runCatchingWithAuth { subscribeTimelineStreamUseCase.execute(inactivates) }
+                .onSuccess { loadStateFlow.value = mapOf() }
+                .onFailure { e -> loadStateFlow.value += inactivates.mapValues { LoadState.Error(e) } }
+        }
+
+        loadStateFlow.value += inactivates.mapValues { LoadState.Loading(job) }
+        job.start()
+    }
+
     private fun execute(
         status: Status,
         action: StatusAction
@@ -99,22 +89,4 @@ class TimelinesViewModel(
             runCatchingWithAuth { executeStatusActionUseCase.execute(status, action) }
         }
     }
-
-    data class UiModel(
-        val account: CurrentAuthorizedAccount = CurrentAuthorizedAccount(),
-        val timelines: Map<TimelineId, TimelineState> = mapOf(),
-        val loadState: Map<TimelineId, LoadState> = mapOf(),
-    ) {
-        val foreground get() = timelines.values.find { it.foreground }
-        val currentTabIndex get() = timelines.values.indexOfFirst { it.foreground }
-
-        fun toTimelineList() = timelines.values.toList()
-        fun findTimelineId(index: Int) = timelines.keys.toList()[index]
-    }
-
-    data class TimelineState(
-        val timeline: Timeline,
-        val latestEvent: StreamEvent? = null,
-        val foreground: Boolean = false,
-    )
 }

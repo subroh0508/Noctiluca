@@ -17,6 +17,7 @@ internal class DesktopAccountDataStore private constructor(
         ),
     )
 
+    override suspend fun all() = prefs.data.map { it.toEntity() }
     override suspend fun get(id: AccountId) = prefs.data.find { it.id == id.value }?.toEntity()
     override suspend fun add(item: Account) = prefs.add(SerializableAccount(item)).map { it.toEntity() }
     override suspend fun delete(id: AccountId) =

@@ -1,10 +1,12 @@
-package noctiluca.features.shared.toot.internal
+package noctiluca.features.shared.toot
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import noctiluca.features.shared.status.VisibilityIcon
+import noctiluca.features.shared.toot.internal.label
+import noctiluca.features.shared.toot.internal.supportText
 import noctiluca.model.status.Status
 
 @Composable

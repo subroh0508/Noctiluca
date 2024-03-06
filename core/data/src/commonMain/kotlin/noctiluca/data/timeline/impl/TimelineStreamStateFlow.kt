@@ -36,12 +36,6 @@ class TimelineStreamStateFlow(
         mutableStateFlow.value += (timelineId to event)
     }
 
-    internal fun setInitialTimeline(
-        initial: Map<TimelineId, Timeline>,
-    ) {
-        mutableStateFlow.value = TimelineStreamState(timeline = initial)
-    }
-
     internal fun hasActiveJob(
         timelineId: TimelineId,
     ) = mutableStateFlow.value.hasActiveJob(timelineId)
@@ -65,11 +59,6 @@ class TimelineStreamStateFlow(
     internal fun update(
         status: Status,
     ) = execute { timeline -> timeline.replace(status) }
-
-    internal fun cancelAll() = mutableStateFlow.value.cancelAll()
-    internal fun clear() {
-        mutableStateFlow.value = TimelineStreamState()
-    }
 
     private inline fun execute(
         crossinline action: (Timeline) -> Timeline,

@@ -134,7 +134,7 @@ abstract class AuthorizedViewModel(
 
     private fun <R> Flow<R>.stateInWithAuth(
         started: SharingStarted,
-        catch: suspend (Throwable) -> Unit,
+        catch: suspend (Throwable) -> Unit = {},
         initialValue: R,
     ) = catch { e ->
         handleException(e)

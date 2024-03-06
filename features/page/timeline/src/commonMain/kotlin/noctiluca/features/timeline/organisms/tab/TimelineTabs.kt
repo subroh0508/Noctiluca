@@ -4,22 +4,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import noctiluca.features.shared.atoms.tab.PrimaryTabs
 import noctiluca.features.timeline.getString
-import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.features.timeline.model.TimelinesModel
 import noctiluca.model.timeline.Timeline
 import noctiluca.model.timeline.TimelineId
 
 @Composable
 internal fun TimelineTabs(
-    uiModel: TimelinesViewModel.UiModel,
+    uiModel: TimelinesModel,
     onClickTab: (TimelineId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    if (uiModel.timelines.isEmpty()) {
+    if (uiModel.tabs.isEmpty()) {
         return
     }
 
     PrimaryTabs(
-        uiModel.toTimelineList(),
+        uiModel.toTabList(),
         selectedTabIndex = uiModel.currentTabIndex,
         onClick = { index, _ -> onClickTab(uiModel.findTimelineId(index)) },
         transform = { (timeline) -> timeline.label() },

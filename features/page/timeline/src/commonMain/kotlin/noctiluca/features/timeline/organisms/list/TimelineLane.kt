@@ -17,7 +17,7 @@ import noctiluca.features.shared.atoms.list.items
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status
-import noctiluca.features.timeline.viewmodel.TimelinesViewModel
+import noctiluca.features.timeline.model.TimelinesModel
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.status.Status
@@ -25,7 +25,7 @@ import noctiluca.model.timeline.Timeline
 
 @Composable
 internal fun TimelineLane(
-    timelineState: TimelinesViewModel.TimelineState,
+    timelineState: TimelinesModel.State,
     loadState: LoadState?,
     onLoad: suspend CoroutineScope.() -> Unit,
     onClickStatus: CoroutineScope.(StatusId) -> Unit,
@@ -69,7 +69,7 @@ internal fun TimelineLane(
 
 @Composable
 private fun TimelineFooter(
-    foreground: TimelinesViewModel.TimelineState,
+    foreground: TimelinesModel.State,
     loadState: LoadState?,
     onLoad: suspend CoroutineScope.() -> Unit,
     height: Dp = 64.dp,

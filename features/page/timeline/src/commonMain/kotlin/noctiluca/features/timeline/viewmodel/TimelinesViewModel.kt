@@ -9,6 +9,7 @@ import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launch
 import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.shared.viewmodel.viewModelScope
+import noctiluca.features.timeline.model.TimelinesModel
 import noctiluca.model.status.Status
 import noctiluca.model.timeline.*
 import noctiluca.timeline.domain.model.StatusAction
@@ -25,30 +26,21 @@ class TimelinesViewModel(
     private val foregroundIdStateFlow by lazy { MutableStateFlow<TimelineId>(LocalTimelineId) }
     private val loadStateFlow by lazy { MutableStateFlow<Map<TimelineId, LoadState>>(mapOf()) }
 
-    val uiModel: StateFlow<UiModel> by lazy {
+    val uiModel: StateFlow<TimelinesModel> by lazy {
         combine(
             timelineStreamStateFlow,
             foregroundIdStateFlow,
             loadStateFlow,
         ) { timelines, timelineId, loadState ->
-            UiModel(
-                timelines = timelines.map { id, timeline, latestEvent ->
-                    id to TimelineState(
-                        timeline = timeline.activate(timelines.hasActiveJob(id)),
-                        latestEvent = latestEvent,
-                        foreground = timelineId == id,
-                    )
-                },
-                loadState = loadState,
-            )
+            TimelinesModel(timelines, timelineId, loadState)
         }.onEach { model ->
-            subscribe(model.timelines.isEmpty(), model.inactivates())
+            subscribe(model.tabs.isEmpty(), model.inactivates())
         }.catch { e ->
             handleException(e)
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.Eagerly,
-            initialValue = UiModel(),
+            initialValue = TimelinesModel(),
         )
     }
 
@@ -96,28 +88,5 @@ class TimelinesViewModel(
         launch {
             runCatchingWithAuth { executeStatusActionUseCase.execute(status, action) }
         }
-    }
-
-    data class UiModel(
-        val timelines: Map<TimelineId, TimelineState> = mapOf(),
-        val loadState: Map<TimelineId, LoadState> = mapOf(),
-    ) {
-        val foreground get() = timelines.values.find { it.foreground }
-        val currentTabIndex get() = timelines.values.indexOfFirst { it.foreground }
-
-        fun toTimelineList() = timelines.values.toList()
-        fun findTimelineId(index: Int) = timelines.keys.toList()[index]
-
-        fun inactivates() = timelines
-            .filterNot { (_, timeline) -> timeline.isActive }
-            .mapValues { (_, timeline) -> timeline.timeline }
-    }
-
-    data class TimelineState(
-        val timeline: Timeline,
-        val latestEvent: StreamEvent? = null,
-        val foreground: Boolean = false,
-    ) {
-        val isActive get() = timeline.isActive
     }
 }

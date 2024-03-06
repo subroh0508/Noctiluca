@@ -18,6 +18,7 @@ import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.TimelineLaneScreen
+import noctiluca.features.timeline.model.TimelinesModel
 import noctiluca.features.timeline.organisms.card.TootCard
 import noctiluca.features.timeline.organisms.list.TimelineLane
 import noctiluca.features.timeline.organisms.tab.TimelineTabs
@@ -42,8 +43,8 @@ internal fun TimelineLaneScreen.TimelineScaffold(
     val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     val lazyListState = remember(
         current,
-        uiModel.timelines.keys,
-    ) { uiModel.timelines.mapValues { (_, _) -> LazyListState() } }
+        uiModel.tabs.keys,
+    ) { uiModel.tabs.mapValues { (_, _) -> LazyListState() } }
 
     TabbedScaffold(
         scrollBehavior,
@@ -68,7 +69,7 @@ internal fun TimelineLaneScreen.TimelineScaffold(
             TimelineTabs(
                 uiModel,
                 onClickTab = { timelineId ->
-                    if (uiModel.timelines[timelineId]?.foreground == true) {
+                    if (uiModel.tabs[timelineId]?.foreground == true) {
                         scope.launch { lazyListState[timelineId]?.animateScrollToItem(0) }
                         scrollBehavior.scrollToTop()
                     }
@@ -80,7 +81,7 @@ internal fun TimelineLaneScreen.TimelineScaffold(
     ) {
         TimelineLanes(
             viewModel,
-            uiModel.timelines,
+            uiModel.tabs,
             uiModel.loadState,
             lazyListState,
         )
@@ -90,7 +91,7 @@ internal fun TimelineLaneScreen.TimelineScaffold(
 @Composable
 private fun TimelineLanes(
     viewModel: TimelinesViewModel,
-    timelines: Map<TimelineId, TimelinesViewModel.TimelineState>,
+    timelines: Map<TimelineId, TimelinesModel.State>,
     loadState: Map<TimelineId, LoadState>,
     lazyListState: Map<TimelineId, LazyListState>,
 ) {

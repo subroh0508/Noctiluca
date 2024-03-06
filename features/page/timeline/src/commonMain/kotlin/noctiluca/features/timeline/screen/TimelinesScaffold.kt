@@ -9,12 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.shared.extensions.getAuthorizedScreenModel
-import noctiluca.features.shared.molecules.scaffold.TabbedScaffold
 import noctiluca.features.shared.status.Action
 import noctiluca.features.timeline.TimelinesScreen
 import noctiluca.features.timeline.component.TimelineTabs
 import noctiluca.features.timeline.model.TimelinesModel
 import noctiluca.features.timeline.section.TimelineContent
+import noctiluca.features.timeline.section.TimelinesScrollableFrame
 import noctiluca.features.timeline.section.TimelinesTopAppBar
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
 import noctiluca.model.Domain
@@ -38,7 +38,7 @@ internal fun TimelinesScreen.TimelinesScaffold(
         uiModel.tabs.keys,
     ) { uiModel.tabs.mapValues { (_, _) -> LazyListState() } }
 
-    TabbedScaffold(
+    TimelinesScrollableFrame(
         scrollBehavior,
         topAppBar = {
             TimelinesTopAppBar(

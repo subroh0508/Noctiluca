@@ -17,7 +17,7 @@ import noctiluca.model.StatusId
 import noctiluca.model.status.Status
 
 @Composable
-internal fun Conversation(
+internal fun ConversationItem(
     status: Status,
     position: Position,
     onClickStatus: (StatusId) -> Unit,

@@ -13,7 +13,7 @@ import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import noctiluca.features.navigation.AccountDetail
 import noctiluca.features.navigation.StatusDetail
-import noctiluca.features.statusdetail.component.Conversation
+import noctiluca.features.statusdetail.component.ConversationItem
 import noctiluca.features.statusdetail.component.item.Position
 import noctiluca.model.StatusId
 import noctiluca.model.status.StatusList
@@ -64,7 +64,7 @@ internal fun StatusContext(
                 else -> Position.MIDDLE
             }
 
-            Conversation(
+            ConversationItem(
                 status,
                 position,
                 onClickStatus = { onClickStatus(statusDetail) },

@@ -6,10 +6,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import noctiluca.data.di.AuthorizedContext
 import noctiluca.data.status.StatusRepository
+import noctiluca.features.shared.model.EmptyMessageHolder
 import noctiluca.features.shared.model.MessageHolder
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
+import noctiluca.features.statusdetail.model.StatusDetailModel
 import noctiluca.model.StatusId
-import noctiluca.model.status.StatusList
 
 class StatusDetailViewModel(
     val id: StatusId,
@@ -17,30 +18,20 @@ class StatusDetailViewModel(
     context: AuthorizedContext,
 ) : AuthorizedViewModel(context), ScreenModel {
     private val messageStateFlow: MutableStateFlow<MessageHolder> by lazy {
-        MutableStateFlow(MessageHolder("", consumed = true))
+        MutableStateFlow(EmptyMessageHolder)
     }
 
-    val uiModel: StateFlow<UiModel> by lazy {
+    val uiModel: StateFlow<StatusDetailModel> by lazy {
         buildUiModel(
             statusRepository.context(id),
             messageStateFlow,
-            initialValue = UiModel.Loading,
+            initialValue = StatusDetailModel(loading = true),
             started = SharingStarted.WhileSubscribed(5_000),
         ) { statuses, message ->
-            UiModel.Loaded(
+            StatusDetailModel(
                 statuses = statuses,
                 message = message,
             )
         }
-    }
-
-    sealed class UiModel {
-        data object Loading : UiModel()
-        data class Loaded(
-            val statuses: StatusList,
-            val message: MessageHolder,
-        ) : UiModel()
-
-        fun getValue() = (this as? Loaded)?.statuses ?: listOf()
     }
 }

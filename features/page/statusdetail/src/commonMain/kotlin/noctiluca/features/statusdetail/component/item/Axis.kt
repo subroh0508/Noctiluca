@@ -1,7 +1,6 @@
-package noctiluca.features.statusdetail.component
+package noctiluca.features.statusdetail.component.item
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
@@ -10,41 +9,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import noctiluca.features.shared.status.Action
-import noctiluca.model.AccountId
-import noctiluca.model.StatusId
-import noctiluca.model.status.Status
-import noctiluca.features.shared.status.Status as ComposableStatus
 
 internal enum class Position { TOP, MIDDLE, BOTTOM }
 
 @Composable
-internal fun StatusItem(
-    status: Status,
+internal fun ConversationAxis(
     position: Position,
-    onClickStatus: (StatusId) -> Unit,
-    onClickAvatar: (AccountId) -> Unit,
-    onClickAction: (Action) -> Unit,
-) = Row(
-    modifier = Modifier.clickable { onClickStatus(status.id) }
-        .height(IntrinsicSize.Min)
-        .padding(start = 8.dp),
-) {
-    when (position) {
-        Position.TOP -> TimelineAxisTop()
-        Position.MIDDLE -> TimelineAxisMiddle()
-        Position.BOTTOM -> TimelineAxisBottom()
-    }
-
-    ComposableStatus(
-        status,
-        onClickAvatar = { onClickAvatar(it) },
-        onClickAction = { onClickAction(it) },
-    )
+) = when (position) {
+    Position.TOP -> AxisTop()
+    Position.MIDDLE -> AxisMiddle()
+    Position.BOTTOM -> AxisBottom()
 }
 
 @Composable
-private fun TimelineAxisTop() = Box(
+private fun AxisTop() = Box(
     modifier = Modifier.fillMaxHeight(),
 ) {
     VerticalDivider(
@@ -55,11 +33,11 @@ private fun TimelineAxisTop() = Box(
             .width(2.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
     )
-    TimelineDot()
+    Dot()
 }
 
 @Composable
-private fun TimelineAxisMiddle() = Box(
+private fun AxisMiddle() = Box(
     modifier = Modifier.fillMaxHeight(),
 ) {
     VerticalDivider(
@@ -67,22 +45,22 @@ private fun TimelineAxisMiddle() = Box(
             .width(2.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
     )
-    TimelineDot()
+    Dot()
 }
 
 @Composable
-private fun TimelineAxisBottom() = Box {
+private fun AxisBottom() = Box {
     VerticalDivider(
         modifier = Modifier.padding(start = 7.dp)
             .height(16.dp)
             .width(2.dp),
         color = MaterialTheme.colorScheme.surfaceVariant,
     )
-    TimelineDot()
+    Dot()
 }
 
 @Composable
-private fun TimelineDot() = Box(
+private fun Dot() = Box(
     modifier = Modifier.offset(y = 16.dp)
         .size(16.dp)
         .clip(CircleShape)

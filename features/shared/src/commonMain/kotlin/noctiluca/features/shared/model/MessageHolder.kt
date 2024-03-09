@@ -6,3 +6,5 @@ data class MessageHolder(
 ) {
     fun consume() = copy(consumed = true)
 }
+
+val EmptyMessageHolder = MessageHolder("", consumed = true)

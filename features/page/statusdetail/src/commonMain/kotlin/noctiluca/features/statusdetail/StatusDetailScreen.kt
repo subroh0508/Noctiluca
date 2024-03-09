@@ -7,10 +7,7 @@ import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import noctiluca.features.shared.AuthorizedComposable
-import noctiluca.features.shared.extensions.getAuthorizedScreenModel
-import noctiluca.features.statusdetail.templates.StatusDetailScaffold
-import noctiluca.model.StatusId
-import org.koin.core.parameter.parametersOf
+import noctiluca.features.statusdetail.screen.StatusDetailScaffold
 import noctiluca.features.navigation.StatusDetail as NavigationStatusDetailScreen
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
@@ -22,12 +19,12 @@ val featureStatusDetailScreenModule = screenModule {
 }
 
 internal data class StatusDetailScreen(
-    private val id: String,
+    val id: String,
 ) : Screen {
     override val key: ScreenKey = "StatusDetail#$id"
 
     @Composable
     override fun Content() = AuthorizedComposable(
         LocalResources provides Resources(Locale.current.language),
-    ) { StatusDetailScaffold(getAuthorizedScreenModel { parametersOf(StatusId(id)) }) }
+    ) { StatusDetailScaffold() }
 }

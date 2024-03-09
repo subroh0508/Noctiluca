@@ -1,4 +1,4 @@
-package noctiluca.features.statusdetail.component
+package noctiluca.features.statusdetail.section
 
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable

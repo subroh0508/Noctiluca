@@ -17,10 +17,10 @@ import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.navigation.navigateToAccountDetail
 import noctiluca.features.navigation.navigateToStatusDetail
-import noctiluca.features.statusdetail.component.Position
 import noctiluca.features.statusdetail.component.StatusDetail
-import noctiluca.features.statusdetail.component.StatusDetailTopAppBar
 import noctiluca.features.statusdetail.component.StatusItem
+import noctiluca.features.statusdetail.component.item.Position
+import noctiluca.features.statusdetail.section.StatusDetailTopAppBar
 import noctiluca.features.statusdetail.viewmodel.StatusDetailViewModel
 import noctiluca.model.AccountId
 import noctiluca.model.StatusId

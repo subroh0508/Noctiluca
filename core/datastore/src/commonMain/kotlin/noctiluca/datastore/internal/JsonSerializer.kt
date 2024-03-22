@@ -1,13 +1,14 @@
-package noctiluca.datastore
+package noctiluca.datastore.internal
 
-import android.content.Context
 import androidx.datastore.core.DataStoreFactory
 import androidx.datastore.core.Serializer
-import androidx.datastore.dataStoreFile
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.*
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
+import kotlinx.serialization.serializer
+import java.io.File
 import java.io.InputStream
 import java.io.OutputStream
 
@@ -39,10 +40,10 @@ internal class JsonSerializer<T : Any?>(
     }
 }
 
-internal fun <T : Any?> Context.getJsonDataStore(
-    serializer: JsonSerializer<T>,
-    fileName: String,
+internal fun <T : Any?> getJsonDataStore(
+    serializer: Serializer<T>,
+    file: File,
 ) = DataStoreFactory.create(
     serializer,
-    produceFile = { dataStoreFile(fileName) },
+    produceFile = { file },
 )

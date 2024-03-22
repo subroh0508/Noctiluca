@@ -1,15 +1,20 @@
-package noctiluca.datastore
+package noctiluca.datastore.internal
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.first
+import noctiluca.datastore.*
+import noctiluca.datastore.KEY_AUTHORIZE_URL
+import noctiluca.datastore.KEY_CLIENT_ID
+import noctiluca.datastore.KEY_CLIENT_SECRET
+import noctiluca.datastore.KEY_DOMAIN
 import noctiluca.model.Domain
 import noctiluca.model.Uri
 import noctiluca.model.authorization.AppCredential
 
-internal class AndroidAppCredentialDataStore(
+internal class AppCredentialDataStoreImpl(
     private val dataStore: DataStore<Preferences>,
 ) : AppCredentialDataStore {
     companion object {

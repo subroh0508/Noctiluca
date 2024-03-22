@@ -14,6 +14,7 @@ kotlin {
                 implementation(libs.kotlinx.serialization)
 
                 implementation(libs.androidx.datastore.core)
+                implementation(libs.androidx.datastore.core.okio)
                 implementation(libs.androidx.datastore.preferences.core)
 
                 implementation(libs.koin.core)

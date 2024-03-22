@@ -1,23 +1,14 @@
-package noctiluca.datastore
+package noctiluca.datastore.internal
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import kotlinx.coroutines.flow.first
-import kotlinx.serialization.json.Json
-import noctiluca.datastore.internal.SerializableAccount
+import noctiluca.datastore.AccountDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.account.Account
 
-internal class AndroidAccountDataStore private constructor(
+internal class AccountDataStoreImpl(
     private val dataStore: DataStore<List<SerializableAccount>>,
 ) : AccountDataStore {
-    constructor(context: Context, json: Json) : this(
-        context.getJsonDataStore(
-            JsonSerializer(json, listOf()),
-            AccountDataStore::class.simpleName ?: "",
-        )
-    )
-
     override suspend fun all() = dataStore.data.first().map { it.toEntity() }
 
     override suspend fun get(id: AccountId) = dataStore.data.first().find { it.id == id.value }?.toEntity()

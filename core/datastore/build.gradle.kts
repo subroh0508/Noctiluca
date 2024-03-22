@@ -13,6 +13,9 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.kotlinx.serialization)
 
+                implementation(libs.androidx.datastore.core)
+                implementation(libs.androidx.datastore.preferences.core)
+
                 implementation(libs.koin.core)
 
                 implementation(libs.kotest.assertions.core)
@@ -29,9 +32,6 @@ kotlin {
 
         androidMain {
             dependencies {
-                implementation(libs.androidx.datastore.core)
-                implementation(libs.androidx.datastore.preferences)
-
                 implementation(libs.koin.android)
             }
         }

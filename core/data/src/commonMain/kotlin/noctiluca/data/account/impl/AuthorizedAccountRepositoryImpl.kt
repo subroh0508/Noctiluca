@@ -25,10 +25,9 @@ internal class AuthorizedAccountRepositoryImpl(
     }
 
     private suspend fun refreshAll() {
-        val cache = accountDataStore.all()
-
-        allStateFlow.value = cache
-        allStateFlow.value = cache.map { runCatching { refresh(it.id) }.getOrNull() ?: it }
+        allStateFlow.value = accountDataStore.all()
+        allStateFlow.value = authorizationTokenDataStore.getAll()
+            .mapNotNull { runCatching { refresh(it.id) }.getOrNull() }
     }
 
     private suspend fun refresh(id: AccountId): Account {

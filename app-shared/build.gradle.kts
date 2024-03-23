@@ -1,9 +1,19 @@
+import org.jetbrains.kotlin.gradle.plugin.mpp.KotlinNativeTarget
+
 plugins {
     id("multiplatform-library")
     id("org.jetbrains.compose")
 }
 
 kotlin {
+    targets.filterIsInstance<KotlinNativeTarget>()
+        .forEach { target ->
+            target.binaries.framework {
+                baseName = "iosArtifact"
+                isStatic = true
+            }
+        }
+
     sourceSets {
         named("commonMain") {
             dependencies {

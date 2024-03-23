@@ -8,6 +8,7 @@ import org.koin.core.KoinApplication
 
 private val koinApp = compositionLocalOf<KoinApplication?> { null }
 private val httpClientEngine = Darwin.create()
+
 fun MainViewController() = ComposeUIViewController {
     CompositionLocalProvider(
         koinApp provides AppEntryPoint.init(

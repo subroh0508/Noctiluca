@@ -1,5 +1,7 @@
 package noctiluca.model.accountdetail
 
+import kotlin.jvm.JvmInline
+
 @JvmInline
 value class Relationships(val value: Set<Relationship>?) {
     companion object {

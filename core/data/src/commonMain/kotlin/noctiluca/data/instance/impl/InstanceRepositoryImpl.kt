@@ -1,6 +1,7 @@
 package noctiluca.data.instance.impl
 
 import kotlinx.coroutines.flow.*
+import noctiluca.data.UnknownHostException
 import noctiluca.data.instance.InstanceRepository
 import noctiluca.data.status.toEntity
 import noctiluca.model.Uri
@@ -13,7 +14,6 @@ import noctiluca.network.mastodon.MastodonApiV2
 import noctiluca.network.mastodon.data.account.NetworkAccount
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.instance.NetworkV2Instance
-import java.net.UnknownHostException
 
 internal class InstanceRepositoryImpl(
     private val instancesSocialApi: InstancesSocialApi,
@@ -36,7 +36,7 @@ internal class InstanceRepositoryImpl(
 
         try {
             suggests.value = listOf(getInstance(query).toSuggest())
-        } catch (@Suppress("SwallowedException") e: UnknownHostException) {
+        } catch (@Suppress("SwallowedException") e: Exception) {
             suggests.value = instancesSocialApi.search(query)
                 .instances
                 .filterNot(NetworkInstance::dead)

@@ -2,6 +2,7 @@ package noctiluca.data.timeline.impl
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.*
 import noctiluca.data.status.toEntity

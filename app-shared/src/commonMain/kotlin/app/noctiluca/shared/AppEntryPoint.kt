@@ -35,6 +35,7 @@ object AppEntryPoint {
             ignoreUnknownKeys = true
         }
     }
+    private var koinApplication: KoinApplication? = null
 
     fun init(
         httpClientEngine: HttpClientEngine,
@@ -43,7 +44,7 @@ object AppEntryPoint {
     ): KoinApplication {
         registerScreen()
 
-        return startKoin {
+        val app = koinApplication ?: startKoin {
             block()
 
             modules(
@@ -53,6 +54,9 @@ object AppEntryPoint {
                 module { single { imageLoader } },
             )
         }
+        koinApplication = app
+
+        return app
     }
 
     private fun registerScreen() = ScreenRegistry {

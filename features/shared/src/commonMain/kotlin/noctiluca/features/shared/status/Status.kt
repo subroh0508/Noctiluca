@@ -18,11 +18,10 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDateTime
 import noctiluca.features.shared.account.TooterName
-import noctiluca.features.shared.atoms.clickable
-import noctiluca.features.shared.atoms.image.AsyncImage
-import noctiluca.features.shared.atoms.image.imageResources
-import noctiluca.features.shared.atoms.text.HtmlText
-import noctiluca.features.shared.atoms.text.RelativeTime
+import noctiluca.features.shared.components.image.AsyncImage
+import noctiluca.features.shared.components.image.imageResources
+import noctiluca.features.shared.components.text.HtmlText
+import noctiluca.features.shared.components.text.RelativeTime
 import noctiluca.features.shared.getDrawables
 import noctiluca.features.shared.utils.baseline
 import noctiluca.features.shared.utils.toDp

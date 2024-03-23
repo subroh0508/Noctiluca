@@ -12,7 +12,7 @@ import noctiluca.features.navigation.MastodonInstanceListParams
 import noctiluca.features.navigation.SignIn
 import noctiluca.features.navigation.SignInParams
 import noctiluca.features.shared.FeatureComposable
-import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
+import noctiluca.features.shared.components.snackbar.LocalSnackbarHostState
 import noctiluca.features.shared.extensions.getFeaturesScreenModel
 import noctiluca.features.signin.model.AuthorizeResult
 import noctiluca.features.signin.model.buildAuthorizeResult

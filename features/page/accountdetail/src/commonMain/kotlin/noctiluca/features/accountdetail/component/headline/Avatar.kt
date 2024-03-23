@@ -14,7 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
-import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.model.Uri
 
 private val AvatarIconSize = 96.dp

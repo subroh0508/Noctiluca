@@ -2,7 +2,7 @@ package noctiluca.features.signin.component
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import noctiluca.features.shared.atoms.tab.PrimaryTabs
+import noctiluca.features.shared.components.tab.PrimaryTabs
 import noctiluca.features.signin.getString
 import noctiluca.features.signin.section.scrollableframe.InstanceDetailScrollableFrameState
 

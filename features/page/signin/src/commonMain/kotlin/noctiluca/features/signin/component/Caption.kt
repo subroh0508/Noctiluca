@@ -13,8 +13,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import noctiluca.features.shared.atoms.image.AsyncImage
-import noctiluca.features.shared.atoms.text.HtmlText
+import noctiluca.features.shared.components.image.AsyncImage
+import noctiluca.features.shared.components.text.HtmlText
 import noctiluca.model.Uri
 
 @Composable

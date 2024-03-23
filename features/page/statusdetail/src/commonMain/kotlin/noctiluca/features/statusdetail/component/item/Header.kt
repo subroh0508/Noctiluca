@@ -12,9 +12,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.layout
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.account.TooterName
-import noctiluca.features.shared.atoms.clickable
-import noctiluca.features.shared.atoms.image.AsyncImage
-import noctiluca.features.shared.atoms.image.imageResources
+import noctiluca.features.shared.components.clickable
+import noctiluca.features.shared.components.image.AsyncImage
+import noctiluca.features.shared.components.image.imageResources
 import noctiluca.features.shared.getDrawables
 import noctiluca.features.shared.status.VisibilityIcon
 import noctiluca.features.shared.utils.toDp

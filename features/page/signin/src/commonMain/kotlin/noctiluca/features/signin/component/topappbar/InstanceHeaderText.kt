@@ -3,7 +3,7 @@ package noctiluca.features.signin.component.topappbar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import noctiluca.features.shared.atoms.text.HeadlineText
+import noctiluca.features.shared.components.text.HeadlineText
 import noctiluca.features.signin.section.scrollableframe.InstanceDetailScrollableFrameState
 import noctiluca.model.authorization.Instance
 

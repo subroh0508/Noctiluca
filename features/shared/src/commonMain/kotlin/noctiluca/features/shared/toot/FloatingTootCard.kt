@@ -8,7 +8,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import noctiluca.features.shared.atoms.card.FilledCard
+import noctiluca.features.shared.components.card.FilledCard
 import noctiluca.features.shared.toot.internal.TootTextArea
 import noctiluca.model.status.Status
 

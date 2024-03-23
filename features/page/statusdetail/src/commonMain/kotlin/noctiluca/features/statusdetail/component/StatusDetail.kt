@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import noctiluca.features.shared.atoms.text.HtmlText
+import noctiluca.features.shared.components.text.HtmlText
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.utils.border
 import noctiluca.features.statusdetail.component.item.Actions

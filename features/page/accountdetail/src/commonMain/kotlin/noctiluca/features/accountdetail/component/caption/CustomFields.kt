@@ -5,8 +5,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import kotlinx.datetime.LocalDateTime
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.shared.atoms.card.FilledCard
-import noctiluca.features.shared.atoms.text.HtmlText
+import noctiluca.features.shared.components.card.FilledCard
+import noctiluca.features.shared.components.text.HtmlText
 import noctiluca.features.shared.utils.toYearMonthDay
 import noctiluca.model.accountdetail.AccountAttributes
 

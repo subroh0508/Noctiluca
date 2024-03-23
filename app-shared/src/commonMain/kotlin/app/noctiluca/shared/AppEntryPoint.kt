@@ -3,7 +3,6 @@ package app.noctiluca.shared
 import app.noctiluca.shared.di.AuthorizationTokenProviderModule
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import com.seiko.imageloader.ImageLoader
-import io.ktor.client.HttpClient
 import io.ktor.client.engine.HttpClientEngine
 import kotlinx.serialization.json.Json
 import noctiluca.data.di.DataModule
@@ -18,11 +17,8 @@ import noctiluca.features.statusdetail.featureStatusDetailScreenModule
 import noctiluca.features.timeline.di.FeatureTimelineModule
 import noctiluca.features.timeline.featureTimelineScreenModule
 import noctiluca.network.authorization.di.AuthorizationApiModule
-import noctiluca.network.authorization.di.buildHttpClient
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
-import noctiluca.network.instancessocial.di.buildHttpClient
 import noctiluca.network.mastodon.di.MastodonApiModule
-import noctiluca.network.mastodon.di.buildHttpClient
 import noctiluca.network.mastodon.di.buildWebSocketClient
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin

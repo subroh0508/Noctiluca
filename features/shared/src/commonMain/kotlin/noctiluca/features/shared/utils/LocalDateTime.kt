@@ -5,9 +5,9 @@ import kotlinx.datetime.format
 import kotlinx.datetime.format.FormatStringsInDatetimeFormats
 import kotlinx.datetime.format.byUnicodePattern
 
-internal const val FORMAT_MONTH_DAY = "MM/dd"
-internal const val FORMAT_YEAR_MONTH_DAY = "yyyy/MM/dd"
-internal const val FORMAT_YEAR_MONTH_DAY_TIME = "yyyy/MM/dd HH:mm:ss"
+private const val FORMAT_MONTH_DAY = "MM/dd"
+private const val FORMAT_YEAR_MONTH_DAY = "yyyy/MM/dd"
+private const val FORMAT_YEAR_MONTH_DAY_TIME = "yyyy/MM/dd HH:mm:ss"
 
 @OptIn(FormatStringsInDatetimeFormats::class)
 private val MonthDayFormat = LocalDateTime.Format { byUnicodePattern(FORMAT_MONTH_DAY) }

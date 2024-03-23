@@ -1,7 +1,8 @@
 package noctiluca.data.instance.impl
 
 import kotlinx.coroutines.flow.*
-import noctiluca.data.UnknownHostException
+import noctiluca.data.extensions.UnknownHostException
+import noctiluca.data.extensions.handleUnknownHostException
 import noctiluca.data.instance.InstanceRepository
 import noctiluca.data.status.toEntity
 import noctiluca.model.Uri
@@ -36,7 +37,7 @@ internal class InstanceRepositoryImpl(
 
         try {
             suggests.value = listOf(getInstance(query).toSuggest())
-        } catch (@Suppress("SwallowedException") e: Exception) {
+        } catch (e: UnknownHostException) {
             suggests.value = instancesSocialApi.search(query)
                 .instances
                 .filterNot(NetworkInstance::dead)
@@ -64,10 +65,7 @@ internal class InstanceRepositoryImpl(
 
     private suspend fun getInstance(domain: String): Instance {
         val result = runCatching { v1.getInstance(domain) }
-        val exception = result.exceptionOrNull()
-        if (exception is UnknownHostException) {
-            throw exception
-        }
+        handleUnknownHostException(result.exceptionOrNull())
 
         val v1Instance = result.getOrNull()
 

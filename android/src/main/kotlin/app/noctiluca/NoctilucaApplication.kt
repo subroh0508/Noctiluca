@@ -33,8 +33,6 @@ class NoctilucaApplication : Application() {
         ) {
             androidContext(this@NoctilucaApplication)
         }
-
-        AppEntryPoint.registerScreen()
     }
 
     private fun buildImageLoader() = ImageLoader {

@@ -40,18 +40,22 @@ object AppEntryPoint {
         httpClientEngine: HttpClientEngine,
         imageLoader: ImageLoader,
         block: KoinApplication.() -> Unit = {},
-    ) = startKoin {
-        block()
+    ): KoinApplication {
+        registerScreen()
 
-        modules(
-            buildApiModules(httpClientEngine),
-            DataModule(),
-            buildFeaturesModule(),
-            module { single { imageLoader } },
-        )
+        return startKoin {
+            block()
+
+            modules(
+                buildApiModules(httpClientEngine),
+                DataModule(),
+                buildFeaturesModule(),
+                module { single { imageLoader } },
+            )
+        }
     }
 
-    fun registerScreen() = ScreenRegistry {
+    private fun registerScreen() = ScreenRegistry {
         featureAccountDetailScreenModule()
         featureSignInScreenModule()
         featureStatusDetailScreenModule()

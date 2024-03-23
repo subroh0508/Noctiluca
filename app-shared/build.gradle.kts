@@ -9,7 +9,7 @@ kotlin {
     targets.filterIsInstance<KotlinNativeTarget>()
         .forEach { target ->
             target.binaries.framework {
-                baseName = "iosArtifact"
+                baseName = "IosArtifact"
                 isStatic = true
             }
         }

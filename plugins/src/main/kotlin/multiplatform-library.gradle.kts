@@ -8,7 +8,11 @@ plugins {
 }
 
 kotlin {
-    targets(Target.ANDROID, Target.DESKTOP)
+    targets(
+        Target.ANDROID,
+        Target.IOS,
+        Target.DESKTOP,
+    )
 }
 
 android {

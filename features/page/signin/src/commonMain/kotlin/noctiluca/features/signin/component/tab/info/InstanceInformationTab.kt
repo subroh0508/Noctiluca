@@ -19,6 +19,7 @@ import noctiluca.features.shared.components.image.NumberCircle
 import noctiluca.features.shared.components.list.LeadingAvatarContainerSize
 import noctiluca.features.shared.components.list.Section
 import noctiluca.features.shared.components.list.SectionItem
+import noctiluca.features.shared.utils.format
 import noctiluca.features.signin.getString
 import noctiluca.model.authorization.Instance
 

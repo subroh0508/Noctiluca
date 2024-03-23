@@ -9,6 +9,7 @@ import androidx.compose.ui.text.TextStyle
 import kotlinx.datetime.*
 import noctiluca.features.shared.StringResources
 import noctiluca.features.shared.getString
+import noctiluca.features.shared.utils.format
 import noctiluca.features.shared.utils.toMonthDay
 import noctiluca.features.shared.utils.toYearMonthDay
 

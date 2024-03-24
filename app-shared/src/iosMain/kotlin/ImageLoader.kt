@@ -11,6 +11,11 @@ import platform.Foundation.NSCachesDirectory
 import platform.Foundation.NSSearchPathForDirectoriesInDomains
 import platform.Foundation.NSUserDomainMask
 
+private const val MAX_BITMAP_MEMORY_CACHE_SIZE = 32 * 1024 * 1024
+private const val MAX_IMAGE_MEMORY_CACHE_SIZE = 50
+private const val MAX_PAINTER_MEMORY_CACHE_SIZE = 50
+private const val MAX_DISK_CACHE_SIZE = 512L * 1024 * 1024
+
 internal fun buildImageLoader(
     httpClientEngine: HttpClientEngine,
 ) = ImageLoader {
@@ -24,19 +29,19 @@ internal fun buildImageLoader(
     interceptor {
         bitmapMemoryCacheConfig {
             // Set the max size to 25% of the app's available memory.
-            maxSize(32 * 1024 * 1024)
+            maxSize(MAX_BITMAP_MEMORY_CACHE_SIZE)
         }
         // cache 50 image
         imageMemoryCacheConfig {
-            maxSize(50)
+            maxSize(MAX_IMAGE_MEMORY_CACHE_SIZE)
         }
         // cache 50 painter
         painterMemoryCacheConfig {
-            maxSize(50)
+            maxSize(MAX_PAINTER_MEMORY_CACHE_SIZE)
         }
         diskCacheConfig {
             directory(getCacheDir().toPath().resolve("image_cache"))
-            maxSizeBytes(512L * 1024 * 1024) // 512MB
+            maxSizeBytes(MAX_DISK_CACHE_SIZE) // 512MB
         }
     }
 }

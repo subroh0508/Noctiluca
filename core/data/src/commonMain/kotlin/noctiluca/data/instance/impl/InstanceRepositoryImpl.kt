@@ -37,7 +37,7 @@ internal class InstanceRepositoryImpl(
 
         try {
             suggests.value = listOf(getInstance(query).toSuggest())
-        } catch (e: UnknownHostException) {
+        } catch (@Suppress("SwallowedException") e: UnknownHostException) {
             suggests.value = instancesSocialApi.search(query)
                 .instances
                 .filterNot(NetworkInstance::dead)

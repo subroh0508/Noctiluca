@@ -15,6 +15,7 @@ fun handleDeepLink(
     query: String?,
 ) = noctiluca.features.signin.handleDeepLink(host, query)
 
+@Suppress("FunctionName")
 fun MainViewController() = ComposeUIViewController {
     CompositionLocalProvider(
         koinApp provides AppEntryPoint.init(

@@ -110,3 +110,35 @@ jobs:
         with:
           name: all-desktop-test-reports
           path: ./build/reports/desktopTest
+  ios:
+    name: 'Test / iOS'
+    runs-on: macos-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 17
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v3
+      - name: Prepare dummy access token
+        run: echo instances.social.token=XXX > ./local.properties
+      - name: Run test on iOS
+        run: ./gradlew iosSimulatorArm64Test --stacktrace
+      - name: Report test on iOS
+        if: success() || failure()
+        run: ./gradlew iosTestReport --stacktrace
+      - name: Publish test report on iOS
+        uses: mikepenz/action-junit-report@v4
+        if: success() || failure()
+        with:
+          check_name: 'Test Report / iOS'
+          report_paths: '**/build/test-results/iosSimulatorArm64Test/TEST-*.xml'
+      - name: Archive test on iOS results artifact
+        uses: actions/upload-artifact@master
+        if: success() || failure()
+        with:
+          name: all-ios-test-reports
+          path: ./build/reports/iosSimulatorArm64Test

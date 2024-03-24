@@ -12,6 +12,7 @@ fun KotlinMultiplatformExtension.targets(vararg target: Target) {
             Target.DESKTOP -> desktop()
         }
     }
+    applyDefaultHierarchyTemplate()
 }
 
 private fun KotlinMultiplatformExtension.desktop() {

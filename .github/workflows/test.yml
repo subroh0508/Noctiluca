@@ -126,7 +126,7 @@ jobs:
       - name: Prepare dummy access token
         run: echo instances.social.token=XXX > ./local.properties
       - name: Run test on iOS
-        run: ./gradlew iosSimulatorArm64Test --stacktrace
+        run: ./gradlew iosTest --stacktrace
       - name: Report test on iOS
         if: success() || failure()
         run: ./gradlew iosTestReport --stacktrace
@@ -135,7 +135,7 @@ jobs:
         if: success() || failure()
         with:
           check_name: 'Test Report / iOS'
-          report_paths: '**/build/test-results/iosSimulatorArm64Test/TEST-*.xml'
+          report_paths: '**/build/test-results/iosTest/TEST-*.xml'
       - name: Archive test on iOS results artifact
         uses: actions/upload-artifact@master
         if: success() || failure()

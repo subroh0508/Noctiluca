@@ -8,8 +8,6 @@ struct iOSApp: App {
             ContentView()
                 .onOpenURL(perform: { url in
                     MainViewControllerKt.handleDeepLink(host: url.host, query: url.query)
-                    
-                    print(url.absoluteString)
                 })
 		}
 	}

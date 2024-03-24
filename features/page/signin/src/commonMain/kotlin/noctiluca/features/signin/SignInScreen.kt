@@ -25,7 +25,7 @@ val featureSignInScreenModule = screenModule {
     register<SignIn> { (params) -> SignInScreen(params) }
 }
 
-internal data class SignInScreen(
+data class SignInScreen(
     val params: SignInParams,
 ) : Screen {
     constructor(domain: String) : this(MastodonInstanceDetailParams(domain, null))

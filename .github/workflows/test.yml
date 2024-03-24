@@ -141,4 +141,4 @@ jobs:
         if: success() || failure()
         with:
           name: all-ios-test-reports
-          path: ./build/reports/iosSimulatorArm64Test
+          path: ./build/reports/iosTest

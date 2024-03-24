@@ -19,12 +19,13 @@ tasks.register(TASK_TEST_IOS_TEST_REPORT, TestReport::class) {
         } else {
             TASK_TEST_IOS_SIMULATOR_ARM64_TEST
         },
+        TASK_TEST_IOS_TEST,
     )
 }
 
 @Suppress("UNCHECKED_CAST")
-fun <T : AbstractTestTask> TestReport.config(name: String) {
-    destinationDirectory.set(layout.buildDirectory.file("reports/$name").get().asFile)
+fun <T : AbstractTestTask> TestReport.config(name: String, directoryName: String = name) {
+    destinationDirectory.set(layout.buildDirectory.file("reports/$directoryName").get().asFile)
 
     subprojects.forEach {
         val test = it.tasks.findByName(name) as? T

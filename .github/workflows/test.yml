@@ -135,7 +135,7 @@ jobs:
         if: success() || failure()
         with:
           check_name: 'Test Report / iOS'
-          report_paths: '**/build/test-results/iosTest/TEST-*.xml'
+          report_paths: '**/build/test-results/ios*Test/TEST-*.xml'
       - name: Archive test on iOS results artifact
         uses: actions/upload-artifact@master
         if: success() || failure()

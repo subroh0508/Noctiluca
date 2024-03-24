@@ -18,7 +18,7 @@ kotlin {
         named("commonMain") {
             dependencies {
                 // Workaround: https://github.com/cashapp/sqldelight/issues/4357
-                implementation("co.touchlab:stately-common:2.0.5")
+                implementation("co.touchlab:stately-common:2.0.7")
             }
         }
     }

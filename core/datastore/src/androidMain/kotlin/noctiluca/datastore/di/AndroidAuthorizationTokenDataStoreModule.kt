@@ -22,5 +22,4 @@ internal actual fun Module.AuthorizationTokenDataStoreModule(json: Json) {
             ),
         )
     }
-    // single<TokenCache> { get<LocalTokenCache>() }
 }

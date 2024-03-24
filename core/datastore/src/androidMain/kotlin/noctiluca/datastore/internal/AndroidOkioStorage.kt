@@ -17,6 +17,7 @@ internal inline fun <reified T : Any?> createOkioStorage(
         json,
         defaultValue,
         File(it.filesDir, "datastore/$fileName").absolutePath,
+        FileSystem.SYSTEM,
     )
 } ?: throw IllegalArgumentException("Context is required")
 
@@ -24,7 +25,8 @@ internal actual inline fun <reified T : Any?> createOkioStorage(
     json: Json,
     defaultValue: T,
     fileName: String,
+    fileSystem: FileSystem,
 ): OkioStorage<T> = OkioStorage(
-    FileSystem.SYSTEM,
+    fileSystem,
     OkioJsonSerializer(json, defaultValue),
 ) { File(fileName).absoluteFile.toOkioPath() }

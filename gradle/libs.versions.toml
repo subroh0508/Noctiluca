@@ -22,6 +22,7 @@ kotlinx-serialization = "1.6.3"
 ktor = "2.3.9"
 
 image-loader = "1.7.8"
+okio = "3.9.0"
 
 voyager = "1.0.0"
 
@@ -110,6 +111,8 @@ junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+
+okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
 
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 

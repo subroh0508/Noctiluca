@@ -10,7 +10,7 @@ plugins {
 }
 
 tasks.named<Test>(TASK_TEST_DESKTOP_TEST) { jvmConfig() }
-tasks.named<KotlinNativeSimulatorTest>(TASK_TEST_IOS_TEST) { iosConfig() }
+tasks.named<KotlinNativeSimulatorTest>(TASK_TEST_IOS_TEST) { config() }
 
 android {
     defaultConfig {
@@ -26,11 +26,6 @@ android {
 
 fun Test.jvmConfig() {
     useJUnitPlatform()
-    config()
-}
-
-fun KotlinNativeSimulatorTest.iosConfig() {
-    device.set("iPhone 15")
     config()
 }
 

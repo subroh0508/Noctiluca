@@ -64,7 +64,7 @@ class AuthorizedAccountRepositorySpec : DescribeSpec({
         ),
     )
 
-    describe("#othres") {
+    describe("#all") {
         context("when the local cache does not exists") {
             val repository = buildRepository(
                 Api.V1.Accounts.VerifyCredentials(),

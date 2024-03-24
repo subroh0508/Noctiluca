@@ -1,18 +1,29 @@
 package test
 
+import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
+
 tasks.register(TASK_TEST_DEBUG_UNIT_TEST_REPORT, TestReport::class) {
-    config(
+    config<Test>(
         TASK_TEST_DEBUG_UNIT_TEST
     )
 }
-tasks.register(TASK_TEST_DESKTOP_TEST_REPORT, TestReport::class) { config(TASK_TEST_DESKTOP_TEST) }
-tasks.register(TASK_TEST_IOS_TEST_REPORT, TestReport::class) { config(TASK_TEST_IOS_TEST) }
+tasks.register(TASK_TEST_DESKTOP_TEST_REPORT, TestReport::class) {
+    config<Test>(
+        TASK_TEST_DESKTOP_TEST
+    )
+}
+tasks.register(TASK_TEST_IOS_TEST_REPORT, TestReport::class) {
+    config<KotlinNativeSimulatorTest>(
+        TASK_TEST_IOS_TEST
+    )
+}
 
-fun TestReport.config(name: String) {
-    destinationDirectory.set(file("${layout.buildDirectory}/reports/$name"))
+@Suppress("UNCHECKED_CAST")
+fun <T : AbstractTestTask> TestReport.config(name: String) {
+    destinationDirectory.set(layout.buildDirectory.file("reports/$name").get().asFile)
 
     subprojects.forEach {
-        val test = it.tasks.findByName(name) as? Test
+        val test = it.tasks.findByName(name) as? T
         if (test != null) testResults.from(test.binaryResultsDirectory)
     }
 }

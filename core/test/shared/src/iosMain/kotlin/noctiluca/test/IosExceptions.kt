@@ -6,7 +6,7 @@ import platform.Foundation.NSURLErrorCannotFindHost
 
 actual val MockUnknownHostException: Exception = DarwinHttpRequestException(
     NSError.errorWithDomain(
-        domain = null,
+        domain = "NSURLErrorDomain",
         code = NSURLErrorCannotFindHost,
         userInfo = null,
     )

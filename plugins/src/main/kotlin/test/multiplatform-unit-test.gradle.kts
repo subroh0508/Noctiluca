@@ -1,15 +1,16 @@
 package test
 
 import org.gradle.api.tasks.testing.logging.TestLogEvent
-import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeTest
+import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
 
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("io.kotest.multiplatform")
 }
 
 tasks.named<Test>(TASK_TEST_DESKTOP_TEST) { jvmConfig() }
-tasks.named<KotlinNativeTest>(TASK_TEST_IOS_TEST) { config() }
+tasks.named<KotlinNativeSimulatorTest>(TASK_TEST_IOS_TEST) { iosConfig() }
 
 android {
     defaultConfig {
@@ -25,6 +26,11 @@ android {
 
 fun Test.jvmConfig() {
     useJUnitPlatform()
+    config()
+}
+
+fun KotlinNativeSimulatorTest.iosConfig() {
+    device.set("iPhone 15")
     config()
 }
 

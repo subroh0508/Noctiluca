@@ -13,7 +13,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import noctiluca.features.shared.atoms.textfield.DebouncedTextForm
+import noctiluca.features.shared.components.textfield.DebouncedTextForm
 import noctiluca.features.signin.getString
 
 private const val DEBOUNCE_TIME_MILLIS = 500L

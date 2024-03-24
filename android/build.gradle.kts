@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":core:data"))
     implementation(project(":core:model"))
 
+    implementation(project(":app-shared"))
     implementation(project(":features:designsystem"))
     implementation(project(":features:shared"))
     implementation(project(":features:navigation"))

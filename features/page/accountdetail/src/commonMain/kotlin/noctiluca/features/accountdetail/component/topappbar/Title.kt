@@ -7,7 +7,8 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import noctiluca.features.accountdetail.getString
-import noctiluca.features.shared.atoms.text.HeadlineText
+import noctiluca.features.shared.components.text.HeadlineText
+import noctiluca.features.shared.utils.format
 import noctiluca.model.accountdetail.AccountAttributes
 
 private const val CONTENT_SCROLL_OFFSET = -300F

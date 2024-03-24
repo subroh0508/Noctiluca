@@ -29,12 +29,12 @@ import noctiluca.network.mastodon.Api
 import noctiluca.test.DOMAIN_SAMPLE_COM
 import noctiluca.test.JSON_STATUS_NORMAL
 import noctiluca.test.JSON_STATUS_NORMAL_ID_99
+import noctiluca.test.MockUnknownHostException
 import noctiluca.test.URL_SAMPLE_COM
 import noctiluca.test.extension.flowToList
 import noctiluca.test.mock.MockHttpClientEngine
 import noctiluca.test.mock.buildEmptyMockAuthenticationTokenDataStore
 import org.koin.core.component.get
-import java.net.UnknownHostException
 import noctiluca.network.instancessocial.Api as InstancesSocialApi
 
 class InstanceRepositorySpec : DescribeSpec({
@@ -110,7 +110,7 @@ class InstanceRepositorySpec : DescribeSpec({
                 context("and the instances.social api returns valid response") {
                     val repository = buildRepository(
                         MockHttpClientEngine
-                            .mock(Api.V1.Instance(), UnknownHostException())
+                            .mock(Api.V1.Instance(), MockUnknownHostException)
                             .mock(InstancesSocialApi.Instances.Search(), JSON_INSTANCES)
                             .build(),
                     )
@@ -140,7 +140,7 @@ class InstanceRepositorySpec : DescribeSpec({
                 context("and the instances.social api returns invalid response") {
                     val repository = buildRepository(
                         MockHttpClientEngine
-                            .mock(Api.V1.Instance(), UnknownHostException())
+                            .mock(Api.V1.Instance(), MockUnknownHostException)
                             .mock(InstancesSocialApi.Instances.Search(), HttpStatusCode.BadRequest)
                             .build(),
                     )

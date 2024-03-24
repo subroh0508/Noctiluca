@@ -1,41 +1,27 @@
 package app.noctiluca
 
 import android.app.Application
-import app.noctiluca.di.AndroidAuthorizationTokenProviderModule
-import app.noctiluca.di.ImageLoaderModule
-import cafe.adriel.voyager.core.registry.ScreenRegistry
+import app.noctiluca.shared.AppEntryPoint
+import com.seiko.imageloader.ImageLoader
+import com.seiko.imageloader.cache.memory.maxSizePercent
+import com.seiko.imageloader.component.setupDefaultComponents
+import com.seiko.imageloader.intercept.bitmapMemoryCacheConfig
+import com.seiko.imageloader.intercept.imageMemoryCacheConfig
+import com.seiko.imageloader.intercept.painterMemoryCacheConfig
+import com.seiko.imageloader.option.androidContext
+import io.ktor.client.HttpClient
 import io.ktor.client.engine.okhttp.*
-import kotlinx.serialization.json.Json
-import noctiluca.data.di.DataModule
-import noctiluca.datastore.di.DataStoreModule
-import noctiluca.features.accountdetail.di.FeatureAccountDetailModule
-import noctiluca.features.accountdetail.featureAccountDetailScreenModule
-import noctiluca.features.shared.di.AuthorizedFeatureModule
-import noctiluca.features.signin.di.FeatureSignInModule
-import noctiluca.features.signin.featureSignInScreenModule
-import noctiluca.features.statusdetail.di.FeatureStatusDetailModule
-import noctiluca.features.statusdetail.featureStatusDetailScreenModule
-import noctiluca.features.timeline.di.FeatureTimelineModule
-import noctiluca.features.timeline.featureTimelineScreenModule
-import noctiluca.network.authorization.di.AuthorizationApiModule
-import noctiluca.network.instancessocial.di.InstancesSocialApiModule
-import noctiluca.network.mastodon.di.MastodonApiModule
-import noctiluca.network.mastodon.di.buildWebSocketClient
+import io.ktor.client.plugins.cache.HttpCache
 import okhttp3.logging.HttpLoggingInterceptor
+import okio.Path.Companion.toOkioPath
 import org.koin.android.ext.koin.androidContext
-import org.koin.core.context.startKoin
-import org.koin.dsl.module
-import noctiluca.network.authorization.di.buildHttpClient as buildHttpClientForAuthentication
-import noctiluca.network.instancessocial.di.buildHttpClient as buildHttpClientForInstancesSocial
-import noctiluca.network.mastodon.di.buildHttpClient as buildHttpClientForMastodon
 
 class NoctilucaApplication : Application() {
-    private val json by lazy {
-        Json {
-            explicitNulls = false
-            encodeDefaults = true
-            ignoreUnknownKeys = true
-        }
+    companion object {
+        private const val MAX_BITMAP_MEMORY_CACHE_SIZE_PERCENT = 0.25
+        private const val MAX_IMAGE_MEMORY_CACHE_SIZE = 50
+        private const val MAX_PAINTER_MEMORY_CACHE_SIZE = 50
+        private const val MAX_DISK_CACHE_SIZE = 512L * 1024 * 1024
     }
 
     private val httpClientEngine by lazy {
@@ -49,46 +35,40 @@ class NoctilucaApplication : Application() {
     override fun onCreate() {
         super.onCreate()
 
-        startKoin {
-            // androidLogger(Level.DEBUG)
+        AppEntryPoint.init(
+            httpClientEngine,
+            buildImageLoader(),
+        ) {
             androidContext(this@NoctilucaApplication)
-            modules(
-                buildApiModules(),
-                DataModule(),
-                buildFeaturesModule(),
-                ImageLoaderModule(
-                    this@NoctilucaApplication,
-                    httpClientEngine,
-                )
-            )
-        }
-
-        ScreenRegistry {
-            featureAccountDetailScreenModule()
-            featureSignInScreenModule()
-            featureStatusDetailScreenModule()
-            featureTimelineScreenModule()
         }
     }
 
-    private fun buildApiModules() = module {
-        DataStoreModule(json)
-        AndroidAuthorizationTokenProviderModule()
-
-        AuthorizationApiModule(buildHttpClientForAuthentication(json, httpClientEngine))
-        InstancesSocialApiModule(buildHttpClientForInstancesSocial(json, httpClientEngine))
-        MastodonApiModule(
-            buildHttpClientForMastodon(json, httpClientEngine),
-            buildWebSocketClient(httpClientEngine),
-            json,
-        )
-    }
-
-    private fun buildFeaturesModule() = module {
-        AuthorizedFeatureModule()
-        FeatureSignInModule()
-        FeatureTimelineModule()
-        FeatureAccountDetailModule()
-        FeatureStatusDetailModule()
+    private fun buildImageLoader() = ImageLoader {
+        options { androidContext(this@NoctilucaApplication) }
+        components {
+            setupDefaultComponents {
+                HttpClient(httpClientEngine) {
+                    install(HttpCache)
+                }
+            }
+        }
+        interceptor {
+            bitmapMemoryCacheConfig {
+                // Set the max size to 25% of the app's available memory.
+                maxSizePercent(this@NoctilucaApplication, MAX_BITMAP_MEMORY_CACHE_SIZE_PERCENT)
+            }
+            // cache 50 image
+            imageMemoryCacheConfig {
+                maxSize(MAX_IMAGE_MEMORY_CACHE_SIZE)
+            }
+            // cache 50 painter
+            painterMemoryCacheConfig {
+                maxSize(MAX_PAINTER_MEMORY_CACHE_SIZE)
+            }
+            diskCacheConfig {
+                directory(cacheDir.resolve("image_cache").toOkioPath())
+                maxSizeBytes(MAX_DISK_CACHE_SIZE) // 512MB
+            }
+        }
     }
 }

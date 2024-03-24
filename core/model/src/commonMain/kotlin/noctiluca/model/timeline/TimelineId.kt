@@ -1,5 +1,7 @@
 package noctiluca.model.timeline
 
+import kotlin.jvm.JvmInline
+
 sealed interface TimelineId
 
 data object GlobalTimelineId : TimelineId

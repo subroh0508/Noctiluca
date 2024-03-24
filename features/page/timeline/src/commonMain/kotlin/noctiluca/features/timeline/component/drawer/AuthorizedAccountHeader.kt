@@ -13,9 +13,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.account.AccountName
-import noctiluca.features.shared.atoms.appbar.NavigateIconSize
-import noctiluca.features.shared.atoms.clickable
-import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.components.appbar.NavigateIconSize
+import noctiluca.features.shared.components.clickable
+import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.model.Uri
 
 @Composable

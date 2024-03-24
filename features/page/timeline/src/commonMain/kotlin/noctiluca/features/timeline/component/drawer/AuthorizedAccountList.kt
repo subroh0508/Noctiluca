@@ -9,8 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
-import noctiluca.features.shared.atoms.image.AsyncImage
-import noctiluca.features.shared.atoms.list.TwoLineListItem
+import noctiluca.features.shared.components.image.AsyncImage
+import noctiluca.features.shared.components.list.TwoLineListItem
 import noctiluca.model.account.Account
 
 @Composable

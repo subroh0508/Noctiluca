@@ -10,7 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.layout.ContentScale
-import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.model.Uri
 import noctiluca.model.accountdetail.Relationships
 

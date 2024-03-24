@@ -8,7 +8,20 @@ plugins {
 }
 
 kotlin {
-    targets(Target.ANDROID, Target.DESKTOP)
+    targets(
+        Target.ANDROID,
+        Target.IOS,
+        Target.DESKTOP,
+    )
+
+    sourceSets {
+        named("commonMain") {
+            dependencies {
+                // Workaround: https://github.com/cashapp/sqldelight/issues/4357
+                implementation("co.touchlab:stately-common:2.0.5")
+            }
+        }
+    }
 }
 
 android {

@@ -9,19 +9,20 @@ androidx-core = "1.12.0"
 androidx-appcompat = "1.6.1"
 androidx-browser = "1.8.0"
 androidx-activity = "1.8.2"
-androidx-datastore = "1.0.0"
+androidx-datastore = "1.1.0-beta02"
 
 androidx-compose-material3 = "1.2.1"
 
 android-desugarjdk = "2.0.4"
 
-kotlinx-datetime = "0.5.0"
+kotlinx-datetime = "0.6.0-RC.2"
 kotlinx-coroutines = "1.8.0"
 kotlinx-serialization = "1.6.3"
 
 ktor = "2.3.9"
 
 image-loader = "1.7.8"
+okio = "3.9.0"
 
 voyager = "1.0.0"
 
@@ -68,8 +69,9 @@ androidx-core = { module = "androidx.core:core-ktx", version.ref = "androidx-cor
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "androidx-appcompat" }
 androidx-browser = { module = "androidx.browser:browser", version.ref = "androidx-browser" }
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
-androidx-datastore-core = { module = "androidx.datastore:datastore", version.ref = "androidx-datastore" }
-androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
+androidx-datastore-core = { module = "androidx.datastore:datastore-core", version.ref = "androidx-datastore" }
+androidx-datastore-core-okio = { module = "androidx.datastore:datastore-core-okio", version.ref = "androidx-datastore" }
+androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-preferences-core", version.ref = "androidx-datastore" }
 
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
 
@@ -83,6 +85,7 @@ kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-
 
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktor" }
 ktor-client-okhttp = { module = "io.ktor:ktor-client-okhttp", version.ref = "ktor" }
+ktor-client-darwin = { module = "io.ktor:ktor-client-darwin", version.ref = "ktor" }
 ktor-client-cio = { module = "io.ktor:ktor-client-cio", version.ref = "ktor" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktor" }
 ktor-client-resources = { module = "io.ktor:ktor-client-resources", version.ref = "ktor" }
@@ -108,6 +111,8 @@ junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
+
+okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
 
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
 

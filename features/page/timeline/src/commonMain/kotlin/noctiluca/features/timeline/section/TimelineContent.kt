@@ -17,8 +17,8 @@ import cafe.adriel.voyager.core.registry.rememberScreen
 import cafe.adriel.voyager.core.screen.Screen
 import noctiluca.features.navigation.AccountDetail
 import noctiluca.features.navigation.StatusDetail
-import noctiluca.features.shared.atoms.list.footer
-import noctiluca.features.shared.atoms.list.items
+import noctiluca.features.shared.components.list.footer
+import noctiluca.features.shared.components.list.items
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.status.Action
 import noctiluca.features.shared.status.Status

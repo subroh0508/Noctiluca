@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.accountdetail.section.scrollableframe.AccountDetailScrollableFrameState
-import noctiluca.features.shared.atoms.tab.PrimaryTabs
+import noctiluca.features.shared.components.tab.PrimaryTabs
 import noctiluca.model.accountdetail.StatusesQuery
 
 internal val AccountDetailTabList = listOf(

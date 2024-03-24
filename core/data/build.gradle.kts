@@ -18,6 +18,12 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
             }
         }
+
+        iosMain {
+            dependencies {
+                implementation(libs.ktor.client.darwin)
+            }
+        }
     }
 }
 

@@ -24,9 +24,9 @@ import noctiluca.features.accountdetail.section.scrollableframe.rememberAccountD
 import noctiluca.features.accountdetail.viewmodel.AccountStatusesViewModel
 import noctiluca.features.navigation.AccountDetail
 import noctiluca.features.navigation.StatusDetail
-import noctiluca.features.shared.atoms.list.EmptyMessage
-import noctiluca.features.shared.atoms.list.infiniteScrollFooter
-import noctiluca.features.shared.atoms.list.items
+import noctiluca.features.shared.components.list.EmptyMessage
+import noctiluca.features.shared.components.list.infiniteScrollFooter
+import noctiluca.features.shared.components.list.items
 import noctiluca.features.shared.extensions.getAuthorizedScreenModel
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.status.Status

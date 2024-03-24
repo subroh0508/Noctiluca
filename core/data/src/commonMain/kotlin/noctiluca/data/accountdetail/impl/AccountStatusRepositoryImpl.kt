@@ -50,7 +50,7 @@ internal class AccountStatusRepositoryImpl(
     private fun buildNextStateMap(
         query: StatusesQuery,
         statuses: List<Status>,
-    ) = statusesStateFlow.value + (query to statusesStateFlow.value.getOrDefault(query, listOf()) + statuses)
+    ) = statusesStateFlow.value + (query to (statusesStateFlow.value[query] ?: listOf()) + statuses)
 
     private fun getMaxId(query: StatusesQuery) = statusesStateFlow.value[query]?.lastOrNull()?.id
 }

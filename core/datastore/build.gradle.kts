@@ -13,6 +13,10 @@ kotlin {
                 implementation(libs.kotlinx.coroutines.core)
                 implementation(libs.kotlinx.serialization)
 
+                implementation(libs.androidx.datastore.core)
+                implementation(libs.androidx.datastore.core.okio)
+                implementation(libs.androidx.datastore.preferences.core)
+
                 implementation(libs.koin.core)
 
                 implementation(libs.kotest.assertions.core)
@@ -24,14 +28,13 @@ kotlin {
             dependencies {
                 implementation(kotlin("test-common"))
                 implementation(kotlin("test-annotations-common"))
+
+                implementation(libs.okio.fakefilesystem)
             }
         }
 
         androidMain {
             dependencies {
-                implementation(libs.androidx.datastore.core)
-                implementation(libs.androidx.datastore.preferences)
-
                 implementation(libs.koin.android)
             }
         }

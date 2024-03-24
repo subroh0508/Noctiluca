@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
-import noctiluca.features.shared.atoms.appbar.NavigateIconSize
-import noctiluca.features.shared.atoms.image.AsyncImage
+import noctiluca.features.shared.components.appbar.NavigateIconSize
+import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.features.timeline.getString
 import noctiluca.model.Domain
 import noctiluca.model.Uri

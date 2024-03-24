@@ -1,8 +1,8 @@
 package noctiluca.features.signin.component.tab.localtimeline
 
 import androidx.compose.foundation.lazy.LazyListScope
-import noctiluca.features.shared.atoms.list.infiniteScrollFooter
-import noctiluca.features.shared.atoms.list.items
+import noctiluca.features.shared.components.list.infiniteScrollFooter
+import noctiluca.features.shared.components.list.items
 import noctiluca.features.shared.status.Status
 import noctiluca.model.status.Status
 

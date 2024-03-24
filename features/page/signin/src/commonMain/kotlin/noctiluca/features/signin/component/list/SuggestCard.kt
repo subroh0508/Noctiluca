@@ -15,8 +15,8 @@ import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.layout.layoutId
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import noctiluca.features.shared.atoms.image.AsyncImage
-import noctiluca.features.shared.atoms.text.HtmlText
+import noctiluca.features.shared.components.image.AsyncImage
+import noctiluca.features.shared.components.text.HtmlText
 import noctiluca.model.authorization.Instance
 
 private const val FOREGROUND_ID = "foreground"

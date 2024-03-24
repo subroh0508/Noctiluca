@@ -1,6 +1,8 @@
 package noctiluca.data.instance.impl
 
 import kotlinx.coroutines.flow.*
+import noctiluca.data.extensions.UnknownHostException
+import noctiluca.data.extensions.handleUnknownHostException
 import noctiluca.data.instance.InstanceRepository
 import noctiluca.data.status.toEntity
 import noctiluca.model.Uri
@@ -13,7 +15,6 @@ import noctiluca.network.mastodon.MastodonApiV2
 import noctiluca.network.mastodon.data.account.NetworkAccount
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.instance.NetworkV2Instance
-import java.net.UnknownHostException
 
 internal class InstanceRepositoryImpl(
     private val instancesSocialApi: InstancesSocialApi,
@@ -64,10 +65,7 @@ internal class InstanceRepositoryImpl(
 
     private suspend fun getInstance(domain: String): Instance {
         val result = runCatching { v1.getInstance(domain) }
-        val exception = result.exceptionOrNull()
-        if (exception is UnknownHostException) {
-            throw exception
-        }
+        handleUnknownHostException(result.exceptionOrNull())
 
         val v1Instance = result.getOrNull()
 

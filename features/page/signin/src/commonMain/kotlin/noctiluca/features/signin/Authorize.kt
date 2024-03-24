@@ -5,7 +5,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import noctiluca.features.navigation.navigateToTimelines
-import noctiluca.features.shared.atoms.snackbar.showSnackbar
+import noctiluca.features.shared.components.snackbar.showSnackbar
 import noctiluca.features.shared.extensions.getFeaturesScreenModel
 import noctiluca.features.shared.getCommonString
 import noctiluca.features.shared.utils.openBrowser

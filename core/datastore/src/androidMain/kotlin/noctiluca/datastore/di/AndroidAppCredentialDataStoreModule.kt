@@ -1,19 +1,23 @@
 package noctiluca.datastore.di
 
 import android.app.Application
-import android.content.Context
-import androidx.datastore.preferences.preferencesDataStore
-import noctiluca.datastore.AndroidAppCredentialDataStore
+import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import noctiluca.datastore.AppCredentialDataStore
+import noctiluca.datastore.internal.AppCredentialDataStoreImpl
+import okio.Path.Companion.toPath
 import org.koin.core.module.Module
+import java.io.File
 
 @Suppress("FunctionName")
 actual fun Module.AppCredentialDataStoreModule() {
     single<AppCredentialDataStore> {
-        AndroidAppCredentialDataStore(get<Application>().appCredentialDataStore)
+        AppCredentialDataStoreImpl(
+            PreferenceDataStoreFactory.createWithPath {
+                File(
+                    get<Application>().filesDir,
+                    "datastore/${preferencesFileName(AppCredentialDataStore::class.simpleName ?: "")}",
+                ).path.toPath()
+            },
+        )
     }
 }
-
-private val Context.appCredentialDataStore by preferencesDataStore(
-    name = AndroidAppCredentialDataStore::class.simpleName ?: "",
-)

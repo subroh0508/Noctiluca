@@ -1,5 +1,7 @@
 package noctiluca.model
 
+import kotlin.jvm.JvmInline
+
 @JvmInline
 value class AccountId(val value: String)
 

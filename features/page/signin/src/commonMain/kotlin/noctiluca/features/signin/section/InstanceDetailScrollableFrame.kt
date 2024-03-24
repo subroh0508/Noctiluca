@@ -11,10 +11,10 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.features.shared.atoms.card.CardHeader
-import noctiluca.features.shared.atoms.card.CardSupporting
-import noctiluca.features.shared.atoms.card.FilledCard
-import noctiluca.features.shared.atoms.snackbar.LocalSnackbarHostState
+import noctiluca.features.shared.components.card.CardHeader
+import noctiluca.features.shared.components.card.CardSupporting
+import noctiluca.features.shared.components.card.FilledCard
+import noctiluca.features.shared.components.snackbar.LocalSnackbarHostState
 import noctiluca.features.shared.getCommonString
 import noctiluca.features.shared.model.LoadState
 import noctiluca.features.shared.utils.description

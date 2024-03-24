@@ -7,8 +7,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import kotlinx.coroutines.launch
-import noctiluca.features.shared.atoms.appbar.scrollToTop
-import noctiluca.features.shared.atoms.tab.PrimaryTabs
+import noctiluca.features.shared.components.appbar.scrollToTop
+import noctiluca.features.shared.components.tab.PrimaryTabs
 import noctiluca.features.timeline.getString
 import noctiluca.features.timeline.model.TimelinesModel
 import noctiluca.model.timeline.Timeline

@@ -7,6 +7,7 @@ import io.ktor.resources.*
 import io.ktor.resources.serialization.*
 import io.ktor.utils.io.*
 import noctiluca.test.util.isMatched
+import kotlin.jvm.JvmName
 
 object MockHttpClientEngine {
     val format = ResourcesFormat()

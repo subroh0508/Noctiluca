@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import noctiluca.features.accountdetail.getString
 import noctiluca.features.shared.getCommonString
+import noctiluca.features.shared.utils.format
 import noctiluca.model.accountdetail.Relationships
 
 @Composable

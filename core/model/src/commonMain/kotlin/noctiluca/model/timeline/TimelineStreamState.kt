@@ -1,6 +1,7 @@
 package noctiluca.model.timeline
 
 import kotlinx.coroutines.Job
+import kotlin.jvm.JvmName
 
 data class TimelineStreamState(
     private val timeline: Map<TimelineId, Timeline> = emptyMap(),

@@ -10,7 +10,7 @@ import noctiluca.features.accountdetail.component.caption.CustomFields
 import noctiluca.features.accountdetail.component.caption.RelationshipButton
 import noctiluca.features.accountdetail.component.caption.RelationshipCount
 import noctiluca.features.accountdetail.model.RelationshipsModel
-import noctiluca.features.shared.atoms.text.HtmlText
+import noctiluca.features.shared.components.text.HtmlText
 import noctiluca.model.accountdetail.AccountAttributes
 
 @Composable

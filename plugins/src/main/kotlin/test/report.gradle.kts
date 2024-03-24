@@ -14,7 +14,11 @@ tasks.register(TASK_TEST_DESKTOP_TEST_REPORT, TestReport::class) {
 }
 tasks.register(TASK_TEST_IOS_TEST_REPORT, TestReport::class) {
     config<KotlinNativeSimulatorTest>(
-        TASK_TEST_IOS_TEST
+        if (System.getenv("CI") != null) {
+            TASK_TEST_IOS_X64_TEST
+        } else {
+            TASK_TEST_IOS_SIMULATOR_ARM64_TEST
+        },
     )
 }
 

@@ -22,6 +22,7 @@ kotlinx-serialization = "1.6.3"
 ktor = "2.3.9"
 
 image-loader = "1.7.8"
+ksoup = "0.3.1"
 okio = "3.9.0"
 
 voyager = "1.0.0"
@@ -95,6 +96,8 @@ ktor-client-mock = { module = "io.ktor:ktor-client-mock", version.ref = "ktor" }
 
 image-loader = { module = "io.github.qdsfdhvh:image-loader", version.ref = "image-loader" }
 image-loader-extension-blur = { module = "io.github.qdsfdhvh:image-loader-extension-blur", version.ref = "image-loader" }
+
+ksoup-html = { module = "com.mohamedrejeb.ksoup:ksoup-html", version.ref = "ksoup" }
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }

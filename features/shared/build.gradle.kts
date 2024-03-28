@@ -15,6 +15,8 @@ kotlin {
                 implementation(libs.ktor.client.core)
 
                 implementation(libs.image.loader)
+                implementation(libs.ksoup.html)
+                implementation(libs.ksoup.entities)
 
                 implementation(libs.voyager.navigator)
                 implementation(libs.voyager.transitions)

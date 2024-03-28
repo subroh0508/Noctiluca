@@ -23,7 +23,7 @@ fun buildAnnotatedStringFromHtml(
 ) = getAnnotatedStringBuilder(
     text,
     textStyle,
-    buildUrlSpanStyle(urlColor),
+    SpanStyle(urlColor),
 ).toAnnotatedString()
 
 private fun getAnnotatedStringBuilder(
@@ -131,7 +131,10 @@ private fun AnnotatedString.Builder.handleClassName(
 
     when {
         className.contains("invisible") -> Unit
-        className.contains("ellipse") -> append("...")
+        className.contains("ellipsis") -> {
+            fallback()
+            append("...")
+        }
         else -> fallback()
     }
 }
@@ -167,10 +170,3 @@ private fun AnnotatedString.Builder.withStrikethrough(
     textStyle: TextStyle,
     block: AnnotatedString.Builder.() -> Unit,
 ) = withStyle(textStyle.copy(textDecoration = TextDecoration.LineThrough).toSpanStyle(), block)
-
-private fun buildUrlSpanStyle(
-    urlColor: Color,
-) = SpanStyle(
-    color = urlColor,
-    textDecoration = TextDecoration.Underline,
-)

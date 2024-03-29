@@ -18,14 +18,8 @@ kotlin {
                 implementation(project(":core:network:mastodon"))
                 implementation(project(":core:datastore"))
                 implementation(project(":core:data"))
-                implementation(project(":core:test:shared"))
 
-                implementation(kotlin("test"))
                 implementation(libs.ktorSerializationKotlinxJson)
-                implementation(libs.ktorClientResources)
-                implementation(libs.ktorClientMock)
-                implementation(libs.kotestAssertionsCore)
-                implementation(libs.kotestFrameworkEngine)
             }
         }
         named("androidMain") {
@@ -33,16 +27,6 @@ kotlin {
                 implementation(libs.koinAndroid)
             }
         }
-        named("androidUnitTest") {
-            dependencies {
-                implementation(libs.kotestRunnerJunit5)
-            }
-        }
         named("desktopMain")
-        named("desktopTest") {
-            dependencies {
-                implementation(libs.kotestRunnerJunit5)
-            }
-        }
     }
 }

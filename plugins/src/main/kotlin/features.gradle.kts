@@ -4,6 +4,7 @@ plugins {
     id("multiplatform-library")
     id("org.jetbrains.compose")
     id("kotlin-parcelize")
+    id("test.multiplatform-unit-test")
 }
 
 kotlin {
@@ -27,11 +28,6 @@ kotlin {
                 implementation(libs.koinCore)
             }
         }
-        named("commonTest") {
-            dependencies {
-                implementation(kotlin("test"))
-            }
-        }
         named("androidMain") {
             dependencies {
                 implementation(libs.androidxActivities)
@@ -41,8 +37,6 @@ kotlin {
                 implementation(libs.koinAndroid)
             }
         }
-        named("androidUnitTest")
         named("desktopMain")
-        named("desktopTest")
     }
 }

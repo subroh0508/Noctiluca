@@ -3,6 +3,7 @@ package test
 import extension.koinAndroid
 import extension.koinCore
 import extension.kotestAssertionsCore
+import extension.kotestFrameworkDataTest
 import extension.kotestFrameworkEngine
 import extension.kotestRunnerJunit5
 import extension.ktorClientMock
@@ -71,6 +72,7 @@ kotlin {
                 implementation(libs.ktorClientMock)
                 implementation(libs.kotestAssertionsCore)
                 implementation(libs.kotestFrameworkEngine)
+                implementation(libs.kotestFrameworkDataTest)
             }
         }
         named("androidUnitTest") {

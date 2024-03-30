@@ -15,7 +15,7 @@ kotlin {
         }
 
     sourceSets {
-        named("commonMain") {
+        commonMain {
             dependencies {
                 implementation(project(":core:network:authorization"))
                 implementation(project(":core:network:instancessocial"))

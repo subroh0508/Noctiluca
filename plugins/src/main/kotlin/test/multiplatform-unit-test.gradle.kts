@@ -1,5 +1,12 @@
 package test
 
+import extension.kotestAssertionsCore
+import extension.kotestFrameworkDataTest
+import extension.kotestFrameworkEngine
+import extension.kotestRunnerJunit5
+import extension.ktorClientMock
+import extension.ktorClientResources
+import extension.libs
 import org.gradle.api.tasks.testing.logging.TestLogEvent
 import org.jetbrains.kotlin.gradle.targets.native.tasks.KotlinNativeSimulatorTest
 
@@ -49,5 +56,31 @@ fun AbstractTestTask.config() {
         showExceptions = true
         showStandardStreams = true
         events = setOf(TestLogEvent.FAILED, TestLogEvent.PASSED)
+    }
+}
+
+kotlin {
+    sourceSets {
+        commonTest {
+            dependencies {
+                implementation(project(":core:test:shared"))
+
+                implementation(libs.ktorClientResources)
+                implementation(libs.ktorClientMock)
+                implementation(libs.kotestAssertionsCore)
+                implementation(libs.kotestFrameworkEngine)
+                implementation(libs.kotestFrameworkDataTest)
+            }
+        }
+        named("androidUnitTest") {
+            dependencies {
+                implementation(libs.kotestRunnerJunit5)
+            }
+        }
+        named("desktopTest") {
+            dependencies {
+                implementation(libs.kotestRunnerJunit5)
+            }
+        }
     }
 }

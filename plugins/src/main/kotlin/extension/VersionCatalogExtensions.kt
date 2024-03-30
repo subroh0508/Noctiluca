@@ -28,6 +28,10 @@ internal val VersionCatalog.androidxComposeMaterial3: Provider<MinimalExternalMo
 
 internal val VersionCatalog.kotestAssertionsCore: Provider<MinimalExternalModuleDependency> get() = getLibrary("kotest-assertions-core")
 internal val VersionCatalog.kotestFrameworkEngine: Provider<MinimalExternalModuleDependency> get() = getLibrary("kotest-framework-engine")
+internal val VersionCatalog.kotestFrameworkDataTest: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "kotest-framework-datatest"
+    )
 internal val VersionCatalog.kotestRunnerJunit5: Provider<MinimalExternalModuleDependency> get() = getLibrary("kotest-runner-junit5")
 
 internal val VersionCatalog.androidDesugarjdk: Provider<MinimalExternalModuleDependency> get() = getLibrary("android-desugarjdk")

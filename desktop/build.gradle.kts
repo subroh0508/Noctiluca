@@ -6,14 +6,13 @@ plugins {
 }
 
 kotlin {
-    jvm {
+    jvm("desktop") {
         compilations.all {
             kotlinOptions.jvmTarget = "17"
         }
-        withJava()
     }
     sourceSets {
-        named("jvmMain") {
+        named("desktopMain") {
             dependencies {
                 implementation(project(":features:page:timeline"))
 
@@ -23,7 +22,7 @@ kotlin {
                 implementation(compose.desktop.currentOs)
             }
         }
-        named("jvmTest")
+        named("desktopTest")
     }
 }
 

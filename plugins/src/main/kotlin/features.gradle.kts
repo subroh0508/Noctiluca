@@ -9,7 +9,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        named("commonMain") {
+        commonMain {
             dependencies {
                 implementation(project(":core:model"))
 
@@ -28,7 +28,7 @@ kotlin {
                 implementation(libs.koinCore)
             }
         }
-        named("androidMain") {
+        androidMain {
             dependencies {
                 implementation(libs.androidxActivities)
                 // Workaround for https://stackoverflow.com/q/77341341
@@ -37,6 +37,5 @@ kotlin {
                 implementation(libs.koinAndroid)
             }
         }
-        named("desktopMain")
     }
 }

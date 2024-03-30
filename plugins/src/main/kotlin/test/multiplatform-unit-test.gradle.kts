@@ -1,7 +1,5 @@
 package test
 
-import extension.koinAndroid
-import extension.koinCore
 import extension.kotestAssertionsCore
 import extension.kotestFrameworkDataTest
 import extension.kotestFrameworkEngine
@@ -67,7 +65,6 @@ kotlin {
             dependencies {
                 implementation(project(":core:test:shared"))
 
-                implementation(kotlin("test"))
                 implementation(libs.ktorClientResources)
                 implementation(libs.ktorClientMock)
                 implementation(libs.kotestAssertionsCore)

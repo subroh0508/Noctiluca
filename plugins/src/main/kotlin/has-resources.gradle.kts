@@ -10,7 +10,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        named("commonMain") {
+        commonMain {
             kotlin.srcDir("${layout.buildDirectory.asFile.get().absolutePath}/generated/resources")
         }
     }

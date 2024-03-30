@@ -4,7 +4,7 @@ plugins {
 
 kotlin {
     sourceSets {
-        named("commonMain") {
+        commonMain {
             dependencies {
                 implementation(project(":core:data"))
             }

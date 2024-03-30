@@ -8,12 +8,12 @@ plugins {
 
 kotlin {
     sourceSets {
-        named("commonMain") {
+        commonMain {
             dependencies {
                 implementation(libs.koinCore)
             }
         }
-        named("commonTest") {
+        commonTest {
             dependencies {
                 implementation(project(":core:network:mastodon"))
                 implementation(project(":core:datastore"))
@@ -22,11 +22,10 @@ kotlin {
                 implementation(libs.ktorSerializationKotlinxJson)
             }
         }
-        named("androidMain") {
+        androidMain {
             dependencies {
                 implementation(libs.koinAndroid)
             }
         }
-        named("desktopMain")
     }
 }

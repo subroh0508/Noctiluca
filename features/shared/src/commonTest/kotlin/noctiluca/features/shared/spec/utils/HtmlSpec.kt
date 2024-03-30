@@ -24,31 +24,36 @@ import noctiluca.features.shared.utils.buildAnnotatedStringFromHtml
 
 class BuildAnnotatedHtmlStringFromHtmlSpec : DescribeSpec({
     data class TestData(
+        val testCaseName: String,
         val html: String,
         val expectedText: String,
         val expectedSpanStyles: List<AnnotatedString.Range<SpanStyle>>,
         val expectedParagraphStyles: List<AnnotatedString.Range<ParagraphStyle>>,
     ) : WithDataTestName {
-        override fun dataTestName() = "$html -> $expectedText"
+        override fun dataTestName() = "returns $testCaseName"
     }
 
     val urlSpanStyle = SpanStyle(color = Color.Blue)
 
     context("#buildAnnotatedStringFromHtml") {
         withData(
+            nameFn = { it.dataTestName() },
             TestData(
+                "simple paragraph",
                 SIMPLE_HTML_PARAGRAPH_1,
                 SIMPLE_TEXT_PARAGRAPH_1,
                 emptyList(),
                 emptyList(),
             ),
             TestData(
+                "simple paragraph with line break ",
                 SIMPLE_HTML_PARAGRAPH_2,
                 SIMPLE_TEXT_PARAGRAPH_2,
                 emptyList(),
                 emptyList(),
             ),
             TestData(
+                "paragraph with link",
                 WITH_LINK_HTML_PARAGRAPH,
                 WITH_LINK_TEXT_PARAGRAPH,
                 listOf(
@@ -59,6 +64,7 @@ class BuildAnnotatedHtmlStringFromHtmlSpec : DescribeSpec({
                 emptyList(),
             ),
             TestData(
+                "paragraph with hash tag",
                 WITH_HASH_TAG_HTML_PARAGRAPH,
                 WITH_HASH_TAG_TEXT_PARAGRAPH,
                 listOf(
@@ -68,12 +74,13 @@ class BuildAnnotatedHtmlStringFromHtmlSpec : DescribeSpec({
                 emptyList(),
             ),
             TestData(
+                "paragraph with encoded text",
                 ENCODED_HTML_PARAGRAPH,
                 ENCODED_TEXT_PARAGRAPH,
                 emptyList(),
                 emptyList(),
             ),
-        ) { (html, expectedTest, expectedSpanStyles, expectedParagraphStyles) ->
+        ) { (_, html, expectedTest, expectedSpanStyles, expectedParagraphStyles) ->
             buildAnnotatedStringFromHtml(
                 html,
                 urlSpanStyle.color,

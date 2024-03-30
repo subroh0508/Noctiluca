@@ -43,7 +43,7 @@ internal class MastodonStreamClient(
                 if (frame is Frame.Text) {
                     val text = frame.readText()
 
-                    // println("streaming: $text")
+                    println("streaming: $text")
                     emit(decode(text))
                 }
             }

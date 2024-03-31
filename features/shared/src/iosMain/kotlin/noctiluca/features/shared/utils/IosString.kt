@@ -28,5 +28,9 @@ actual fun String.format(vararg args: Any?): String {
         }
     }
 
+    if (newStrings.count() > args.count()) {
+        returnString += newStrings.last()
+    }
+
     return returnString
 }

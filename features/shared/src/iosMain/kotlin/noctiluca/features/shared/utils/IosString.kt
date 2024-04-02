@@ -1,12 +1,15 @@
 package noctiluca.features.shared.utils
 
+import platform.Foundation.NSNumber
+import platform.Foundation.NSNumberFormatter
+import platform.Foundation.NSNumberFormatterDecimalStyle
 import platform.Foundation.NSString
 import platform.Foundation.stringWithFormat
 
 // @see: https://stackoverflow.com/a/64499248
 actual fun String.format(vararg args: Any?): String {
     var returnString = ""
-    val regEx = "%[\\d|.]*[sdf]|%".toRegex()
+    val regEx = "%[\\d|.,]*[sdf]|%".toRegex()
     val singleFormats = regEx.findAll(this).map {
         it.groupValues.first()
     }.toList()
@@ -19,7 +22,7 @@ actual fun String.format(vararg args: Any?): String {
             }
 
             is Int -> {
-                NSString.stringWithFormat(newStrings[i] + singleFormats[i], args[i] as Int)
+                stringWithFormat(newStrings[i], singleFormats[i], args[i] as Int)
             }
 
             else -> {
@@ -33,4 +36,16 @@ actual fun String.format(vararg args: Any?): String {
     }
 
     return returnString
+}
+
+private fun stringWithFormat(newString: String, singleFormat: String, arg: Int): String {
+    if (!singleFormat.contains(",")) {
+        return NSString.stringWithFormat(newString + singleFormat, arg)
+    }
+
+    val formattedNumber = NSNumberFormatter().apply {
+        numberStyle = NSNumberFormatterDecimalStyle
+    }.stringFromNumber(NSNumber(arg))
+
+    return NSString.stringWithFormat("$newString%@", formattedNumber as Any)
 }

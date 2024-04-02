@@ -18,5 +18,13 @@ class FormatSpec : DescribeSpec({
         it("returns formatted string (integer and comma)") {
             "%,d人".format(10000) should be("10,000人")
         }
+
+        it("returns formatted string (double)") {
+            "%.2f℃".format(36.5) should be("36.50℃")
+        }
+
+        it("returns formatted string (double and comma)") {
+            "%,.5fm".format(4750.12345) should be("4,750.12345m")
+        }
     }
 })

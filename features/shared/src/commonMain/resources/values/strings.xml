@@ -32,4 +32,7 @@
 
     <string name="toot_support_text">今なにしてる？</string>
     <string name="toot_warning_support_text">警告文</string>
+
+    <string name="toot_show_content">もっと見る</string>
+    <string name="toot_hide_content">隠す</string>
 </resources>

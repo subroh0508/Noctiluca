@@ -7,8 +7,10 @@ import noctiluca.model.AccountId
 import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.model.account.Account
+import noctiluca.model.status.Attachment
 import noctiluca.model.status.Status
 import noctiluca.network.mastodon.data.account.NetworkAccount
+import noctiluca.network.mastodon.data.mediaattachment.NetworkMediaAttachment
 import noctiluca.network.mastodon.data.status.NetworkStatus
 
 @Suppress("CyclomaticComplexMethod")
@@ -31,6 +33,7 @@ fun NetworkStatus.toEntity(accountId: AccountId?) = Status(
         null
     },
     application?.let { Status.Via(it.name, it.website?.let(::Uri)) },
+    mediaAttachments.map { it.toEntity() },
 )
 
 private fun NetworkAccount.toTooter() = Account(
@@ -41,3 +44,37 @@ private fun NetworkAccount.toTooter() = Account(
     Uri(avatar),
     "@$acct",
 )
+
+private enum class AttachmentType { IMAGE, GIFV, VIDEO, AUDIO, UNKNOWN }
+
+private fun NetworkMediaAttachment.toEntity() = when (AttachmentType.valueOf(type.uppercase())) {
+    AttachmentType.IMAGE -> Attachment.Image(
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+
+    AttachmentType.GIFV -> Attachment.Gifv(
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+
+    AttachmentType.VIDEO -> Attachment.Video(
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+
+    AttachmentType.AUDIO -> Attachment.Audio(
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+
+    AttachmentType.UNKNOWN -> Attachment.Unknown(
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+}

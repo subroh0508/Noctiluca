@@ -20,6 +20,7 @@ data class Status(
     val tooter: Account,
     val rebloggedBy: Account?,
     val via: Via?,
+    val attachments: List<Attachment>,
 ) {
     enum class Visibility { PUBLIC, UNLISTED, PRIVATE, DIRECT }
 

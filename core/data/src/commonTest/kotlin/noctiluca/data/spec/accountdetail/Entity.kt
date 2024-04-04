@@ -78,6 +78,7 @@ val status = Status(
     ),
     rebloggedBy = null,
     via = Status.Via("Web", website = null),
+    attachments = listOf(),
 )
 
 val prevStatus = Status(
@@ -102,6 +103,7 @@ val prevStatus = Status(
     ),
     rebloggedBy = null,
     via = Status.Via("Web", website = null),
+    attachments = listOf(),
 )
 
 val media = Status(
@@ -126,6 +128,7 @@ val media = Status(
     ),
     rebloggedBy = null,
     via = Status.Via("Web", website = null),
+    attachments = listOf(),
 )
 
 val prevMedia = Status(
@@ -150,4 +153,5 @@ val prevMedia = Status(
     ),
     rebloggedBy = null,
     via = Status.Via("Web", website = null),
+    attachments = listOf(),
 )

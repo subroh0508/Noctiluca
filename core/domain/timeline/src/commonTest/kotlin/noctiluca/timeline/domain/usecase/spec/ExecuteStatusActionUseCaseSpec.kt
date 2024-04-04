@@ -49,6 +49,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
         tooter,
         rebloggedBy = null,
         via = Status.Via("Web", website = null),
+        attachments = listOf(),
     )
 
     describe("#execute") {

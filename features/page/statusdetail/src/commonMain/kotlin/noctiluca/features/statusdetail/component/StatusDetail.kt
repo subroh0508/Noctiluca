@@ -51,7 +51,10 @@ internal fun StatusDetail(
         ),
     )
 
-    AttachmentPreview(status.attachments)
+    AttachmentPreview(
+        status.sensitive,
+        status.attachments,
+    )
 
     CreatedAtAndVia(
         status.createdAt,

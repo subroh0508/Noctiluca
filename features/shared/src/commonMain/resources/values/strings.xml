@@ -35,4 +35,6 @@
 
     <string name="toot_show_content">もっと見る</string>
     <string name="toot_hide_content">隠す</string>
+
+    <string name="attachment_sensitive">閲覧注意</string>
 </resources>

@@ -20,6 +20,7 @@ fun NetworkStatus.toEntity(accountId: AccountId?) = Status(
     spoilerText.takeIf(String::isNotBlank),
     (reblog?.createdAt ?: createdAt).toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     Status.Visibility.valueOf(visibility.uppercase()),
+    reblog?.sensitive ?: sensitive,
     reblog?.repliesCount ?: repliesCount,
     reblog?.favouritesCount ?: favouritesCount,
     reblog?.reblogsCount ?: reblogsCount,

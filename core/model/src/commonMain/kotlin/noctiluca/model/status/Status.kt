@@ -11,6 +11,7 @@ data class Status(
     val warningText: String?,
     val createdAt: LocalDateTime,
     val visibility: Visibility,
+    val sensitive: Boolean,
     val repliesCount: Int,
     val favouriteCount: Int,
     val reblogCount: Int,

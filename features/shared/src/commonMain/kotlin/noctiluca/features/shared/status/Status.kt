@@ -65,7 +65,10 @@ fun Status(
         status.warningText,
     )
 
-    AttachmentPreview(status.attachments)
+    AttachmentPreview(
+        status.sensitive,
+        status.attachments,
+    )
 
     if (onClickAction != null) {
         StatusActions(

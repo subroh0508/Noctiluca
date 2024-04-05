@@ -32,8 +32,8 @@ fun NetworkStatus.toEntity(accountId: AccountId?) = Status(
     } else {
         null
     },
-    application?.let { Status.Via(it.name, it.website?.let(::Uri)) },
-    mediaAttachments.map { it.toEntity() },
+    (reblog?.application ?: application)?.let { Status.Via(it.name, it.website?.let(::Uri)) },
+    (reblog?.mediaAttachments ?: mediaAttachments).map { it.toEntity() },
 )
 
 private fun NetworkAccount.toTooter() = Account(

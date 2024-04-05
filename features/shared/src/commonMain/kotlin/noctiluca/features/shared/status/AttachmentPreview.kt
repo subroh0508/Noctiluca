@@ -23,10 +23,10 @@ private const val COUNT_PER_GRID = 4
 private val GridHeight = 160.dp
 
 @Composable
-internal fun ThumbnailGrid(
+fun AttachmentPreview(
     attachments: List<Attachment>,
 ) = Column {
-    attachments.filterIsInstance<Attachment.Image>()
+    attachments.filter { it !is Attachment.Audio && it !is Attachment.Unknown }
         .chunked(COUNT_PER_GRID)
         .forEach { chunked ->
             val previewUrls = chunked.map { it.previewUrl }

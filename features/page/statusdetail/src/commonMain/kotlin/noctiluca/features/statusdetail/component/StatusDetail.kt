@@ -8,8 +8,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import noctiluca.features.shared.components.text.HtmlText
 import noctiluca.features.shared.status.Action
+import noctiluca.features.shared.status.AttachmentPreview
+import noctiluca.features.shared.status.StatusContent
 import noctiluca.features.shared.utils.border
 import noctiluca.features.statusdetail.component.item.Actions
 import noctiluca.features.statusdetail.component.item.Count
@@ -41,13 +42,16 @@ internal fun StatusDetail(
 
     Spacer(Modifier.height(8.dp))
 
-    HtmlText(
+    StatusContent(
         status.content,
+        status.warningText,
         style = MaterialTheme.typography.bodyLarge.copy(
             fontSize = 20.sp,
             lineHeight = 28.sp,
         ),
     )
+
+    AttachmentPreview(status.attachments)
 
     CreatedAtAndVia(
         status.createdAt,

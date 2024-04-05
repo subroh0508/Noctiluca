@@ -65,7 +65,7 @@ fun Status(
         status.warningText,
     )
 
-    ThumbnailGrid(status.attachments)
+    AttachmentPreview(status.attachments)
 
     if (onClickAction != null) {
         StatusActions(

@@ -13,18 +13,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import noctiluca.features.shared.components.text.HtmlText
 import noctiluca.features.shared.getCommonString
 
 @Composable
-internal fun StatusContent(
+fun StatusContent(
     content: String,
     warningText: String?,
+    style: TextStyle = MaterialTheme.typography.bodyLarge,
 ) {
     if (warningText.isNullOrBlank()) {
         HtmlText(
             content,
-            style = MaterialTheme.typography.bodyLarge,
+            style = style,
         )
         return
     }
@@ -32,6 +34,7 @@ internal fun StatusContent(
     StatusContentWithWarning(
         content,
         warningText,
+        style,
     )
 }
 
@@ -39,6 +42,7 @@ internal fun StatusContent(
 private fun StatusContentWithWarning(
     content: String,
     warningText: String,
+    style: TextStyle,
 ) = Column(
     modifier = Modifier.fillMaxWidth(),
 ) {
@@ -46,7 +50,7 @@ private fun StatusContentWithWarning(
 
     HtmlText(
         warningText,
-        style = MaterialTheme.typography.bodyLarge,
+        style = style,
     )
 
     SuggestionChip(
@@ -71,7 +75,7 @@ private fun StatusContentWithWarning(
     if (showContent) {
         HtmlText(
             content,
-            style = MaterialTheme.typography.bodyLarge,
+            style = style,
         )
     }
 }

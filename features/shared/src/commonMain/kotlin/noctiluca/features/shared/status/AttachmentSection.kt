@@ -84,6 +84,7 @@ private fun SensitiveContent(
     )
 }
 
+@Suppress("MagicNumber")
 @Composable
 private fun OverlayHideIcon(
     height: Dp,

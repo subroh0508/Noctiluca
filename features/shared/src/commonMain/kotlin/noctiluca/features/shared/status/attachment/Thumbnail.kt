@@ -39,6 +39,7 @@ internal fun ThumbnailGrid(
         ThumbnailGridItem(chunked.map { it.previewUrl })
     }
 
+@Suppress("MagicNumber")
 @Composable
 private fun ThumbnailGridItem(
     previewUrls: List<Uri>,
@@ -158,6 +159,7 @@ private fun ThumbnailThree(
     }
 }
 
+@Suppress("MagicNumber")
 @Composable
 private fun ThumbnailFour(
     previewUrls: List<Uri>,

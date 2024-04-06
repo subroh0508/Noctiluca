@@ -19,7 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.datetime.LocalDateTime
 import noctiluca.features.shared.account.TooterName
 import noctiluca.features.shared.components.image.AsyncImage
-import noctiluca.features.shared.components.text.HtmlText
 import noctiluca.features.shared.components.text.RelativeTime
 import noctiluca.features.shared.utils.baseline
 import noctiluca.features.shared.utils.toDp
@@ -61,9 +60,14 @@ fun Status(
 
     Spacer(Modifier.height(8.dp))
 
-    HtmlText(
+    StatusContent(
         status.content,
-        style = MaterialTheme.typography.bodyLarge,
+        status.warningText,
+    )
+
+    AttachmentSection(
+        status.sensitive,
+        status.attachments,
     )
 
     if (onClickAction != null) {

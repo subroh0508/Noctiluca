@@ -1,5 +1,6 @@
 package noctiluca.data.spec.accountdetail
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
 import kotlinx.datetime.toLocalDateTime
@@ -8,6 +9,7 @@ import noctiluca.model.StatusId
 import noctiluca.model.Uri
 import noctiluca.model.account.Account
 import noctiluca.model.accountdetail.AccountAttributes
+import noctiluca.model.status.Attachment
 import noctiluca.model.status.Status
 import noctiluca.test.ACCOUNT_ID
 import noctiluca.test.URL_SAMPLE_COM
@@ -62,6 +64,7 @@ val status = Status(
     warningText = null,
     "2023-03-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     Status.Visibility.PUBLIC,
+    sensitive = false,
     0,
     0,
     0,
@@ -78,6 +81,7 @@ val status = Status(
     ),
     rebloggedBy = null,
     via = Status.Via("Web", website = null),
+    attachments = listOf(),
 )
 
 val prevStatus = Status(
@@ -86,6 +90,7 @@ val prevStatus = Status(
     warningText = null,
     "2023-02-28T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     Status.Visibility.PUBLIC,
+    sensitive = false,
     0,
     0,
     0,
@@ -102,14 +107,16 @@ val prevStatus = Status(
     ),
     rebloggedBy = null,
     via = Status.Via("Web", website = null),
+    attachments = listOf(),
 )
 
 val media = Status(
     StatusId("200"),
     "<p>Test Media</p>",
     warningText = null,
-    "2023-03-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
+    Instant.parse("2023-03-01T00:00:00.000Z").toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     Status.Visibility.PUBLIC,
+    sensitive = false,
     0,
     0,
     0,
@@ -126,14 +133,22 @@ val media = Status(
     ),
     rebloggedBy = null,
     via = Status.Via("Web", website = null),
+    attachments = listOf(
+        Attachment.Image(
+            Uri("$URL_SAMPLE_COM/media_attachments/files/sample_200.jpeg"),
+            Uri("$URL_SAMPLE_COM/media_attachments/files/small_200.jpeg"),
+            description = null,
+        ),
+    ),
 )
 
 val prevMedia = Status(
     StatusId("199"),
     "<p>Test Media</p>",
     warningText = null,
-    "2023-02-28T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
+    Instant.parse("2023-02-28T00:00:00.000Z").toLocalDateTime(TimeZone.of("Asia/Tokyo")),
     Status.Visibility.PUBLIC,
+    sensitive = false,
     0,
     0,
     0,
@@ -150,4 +165,11 @@ val prevMedia = Status(
     ),
     rebloggedBy = null,
     via = Status.Via("Web", website = null),
+    attachments = listOf(
+        Attachment.Image(
+            Uri("$URL_SAMPLE_COM/media_attachments/files/sample_199.jpeg"),
+            Uri("$URL_SAMPLE_COM/media_attachments/files/small_199.jpeg"),
+            description = null,
+        ),
+    ),
 )

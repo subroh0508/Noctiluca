@@ -11,6 +11,7 @@ data class Status(
     val warningText: String?,
     val createdAt: LocalDateTime,
     val visibility: Visibility,
+    val sensitive: Boolean,
     val repliesCount: Int,
     val favouriteCount: Int,
     val reblogCount: Int,
@@ -20,6 +21,7 @@ data class Status(
     val tooter: Account,
     val rebloggedBy: Account?,
     val via: Via?,
+    val attachments: List<Attachment>,
 ) {
     enum class Visibility { PUBLIC, UNLISTED, PRIVATE, DIRECT }
 

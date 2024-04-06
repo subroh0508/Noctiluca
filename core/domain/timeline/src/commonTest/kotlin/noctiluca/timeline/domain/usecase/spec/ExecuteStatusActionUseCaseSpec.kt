@@ -40,6 +40,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
         "<p>warning text</p>",
         "2022-01-01T00:00:00.000Z".toInstant().toLocalDateTime(TimeZone.of("Asia/Tokyo")),
         Status.Visibility.PUBLIC,
+        sensitive = false,
         0,
         0,
         0,
@@ -49,6 +50,7 @@ class ExecuteStatusActionUseCaseSpec : DescribeSpec({
         tooter,
         rebloggedBy = null,
         via = Status.Via("Web", website = null),
+        attachments = listOf(),
     )
 
     describe("#execute") {

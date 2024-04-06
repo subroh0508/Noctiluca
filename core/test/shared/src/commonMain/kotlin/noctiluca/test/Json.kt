@@ -252,8 +252,8 @@ val JSON_STATUS_MEDIA = """
         {
           "id": "10",
           "type": "image",
-          "url": "$URL_SAMPLE_COM/media_attachments/files/109/654/559/723/047/027/original/9ae6953df4cce61d.jpeg",
-          "preview_url": "$URL_SAMPLE_COM/media_attachments/files/109/654/559/723/047/027/small/9ae6953df4cce61d.jpeg",
+          "url": "$URL_SAMPLE_COM/media_attachments/files/sample_200.jpeg",
+          "preview_url": "$URL_SAMPLE_COM/media_attachments/files/small_200.jpeg",
           "remote_url": null,
           "preview_remote_url": null,
           "text_url": null,
@@ -345,8 +345,8 @@ val JSON_STATUS_MEDIA_ID_199 = """
         {
           "id": "10",
           "type": "image",
-          "url": "$URL_SAMPLE_COM/media_attachments/files/109/654/559/723/047/027/original/9ae6953df4cce61d.jpeg",
-          "preview_url": "$URL_SAMPLE_COM/media_attachments/files/109/654/559/723/047/027/small/9ae6953df4cce61d.jpeg",
+          "url": "$URL_SAMPLE_COM/media_attachments/files/sample_199.jpeg",
+          "preview_url": "$URL_SAMPLE_COM/media_attachments/files/small_199.jpeg",
           "remote_url": null,
           "preview_remote_url": null,
           "text_url": null,

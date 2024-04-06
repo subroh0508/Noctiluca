@@ -35,7 +35,7 @@ import noctiluca.features.shared.status.attachment.ThumbnailGrid
 import noctiluca.model.status.Attachment
 
 @Composable
-fun AttachmentPreview(
+fun AttachmentSection(
     sensitive: Boolean,
     attachments: List<Attachment>,
 ) {

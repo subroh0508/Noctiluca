@@ -22,6 +22,9 @@ import noctiluca.model.status.Attachment
 internal val GridHeight = 160.dp
 internal const val COUNT_PER_GRID = 4
 
+private val ImageModifier = Modifier.fillMaxSize()
+    .clip(RoundedCornerShape(8.dp))
+
 @Composable
 internal fun ThumbnailGrid(
     attachments: List<Attachment>,
@@ -60,8 +63,7 @@ private fun ThumbnailTwo(
         AsyncImage(
             previewUrls[0],
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-                .clip(RoundedCornerShape(8.dp)),
+            modifier = ImageModifier,
         )
     }
     Spacer(Modifier.width(4.dp))
@@ -69,8 +71,7 @@ private fun ThumbnailTwo(
         AsyncImage(
             previewUrls[1],
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-                .clip(RoundedCornerShape(8.dp)),
+            modifier = ImageModifier,
         )
     }
 }
@@ -86,8 +87,7 @@ private fun ThumbnailThree(
         AsyncImage(
             previewUrls[0],
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-                .clip(RoundedCornerShape(8.dp)),
+            modifier = ImageModifier,
         )
     }
     Spacer(Modifier.width(4.dp))
@@ -99,8 +99,7 @@ private fun ThumbnailThree(
             AsyncImage(
                 previewUrls[1],
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-                    .clip(RoundedCornerShape(8.dp)),
+                modifier = ImageModifier,
             )
         }
         Spacer(Modifier.height(4.dp))
@@ -108,8 +107,7 @@ private fun ThumbnailThree(
             AsyncImage(
                 previewUrls[2],
                 contentScale = ContentScale.Crop,
-                modifier = Modifier.fillMaxSize()
-                    .clip(RoundedCornerShape(8.dp)),
+                modifier = ImageModifier,
             )
         }
     }

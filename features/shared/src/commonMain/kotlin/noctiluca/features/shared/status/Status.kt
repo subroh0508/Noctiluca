@@ -65,7 +65,7 @@ fun Status(
         status.warningText,
     )
 
-    AttachmentPreview(
+    AttachmentSection(
         status.sensitive,
         status.attachments,
     )

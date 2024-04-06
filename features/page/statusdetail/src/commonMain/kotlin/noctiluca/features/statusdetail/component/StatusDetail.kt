@@ -9,7 +9,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import noctiluca.features.shared.status.Action
-import noctiluca.features.shared.status.AttachmentPreview
+import noctiluca.features.shared.status.AttachmentSection
 import noctiluca.features.shared.status.StatusContent
 import noctiluca.features.shared.utils.border
 import noctiluca.features.statusdetail.component.item.Actions
@@ -51,7 +51,7 @@ internal fun StatusDetail(
         ),
     )
 
-    AttachmentPreview(
+    AttachmentSection(
         status.sensitive,
         status.attachments,
     )

@@ -115,7 +115,8 @@ private fun SensitiveCover(
     height: Dp,
     onShowContent: () -> Unit,
 ) = Box(
-    modifier = Modifier.fillMaxWidth()
+    modifier = Modifier.clickable { onShowContent() }
+        .fillMaxWidth()
         .height(height)
         .clip(RoundedCornerShape(8.dp))
         .background(MaterialTheme.colorScheme.surfaceBright),

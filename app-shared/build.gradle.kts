@@ -28,6 +28,7 @@ kotlin {
                 implementation(project(":features:shared"))
                 implementation(project(":features:navigation"))
                 implementation(project(":features:page:accountdetail"))
+                implementation(project(":features:page:attachment"))
                 implementation(project(":features:page:signin"))
                 implementation(project(":features:page:statusdetail"))
                 implementation(project(":features:page:timeline"))

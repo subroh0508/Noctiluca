@@ -12,16 +12,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import cafe.adriel.voyager.navigator.LocalNavigator
+import noctiluca.features.navigation.rememberAttachmentPreview
 import noctiluca.features.shared.components.image.AsyncImage
-import noctiluca.model.Uri
 import noctiluca.model.status.Attachment
 
 internal val GridHeight = 160.dp
@@ -35,45 +32,32 @@ internal fun ThumbnailGrid(
     attachments: List<Attachment>,
 ) = attachments.filter { it !is Attachment.Audio && it !is Attachment.Unknown }
     .chunked(COUNT_PER_GRID)
-    .forEach { chunked ->
-        ThumbnailGridItem(chunked.map { it.previewUrl })
-    }
+    .forEach { chunked -> ThumbnailGridItem(chunked) }
 
 @Suppress("MagicNumber")
 @Composable
 private fun ThumbnailGridItem(
-    previewUrls: List<Uri>,
+    attachments: List<Attachment>,
 ) {
-    var openDialog by remember { mutableStateOf(false) }
-    var index by remember { mutableStateOf(0) }
-
-    if (openDialog) {
-        ImagePreviewDialog(
-            previewUrls,
-            index,
-            onDismissRequest = { openDialog = false },
-        )
+    val navigator = LocalNavigator.current
+    val previews = List(attachments.size) {
+        rememberAttachmentPreview(attachments, it)
     }
 
-    val onClick: (Int) -> Unit = {
-        openDialog = true
-        index = it
-    }
-
-    when (previewUrls.size) {
-        1 -> ThumbnailOne(previewUrls, onClick = onClick)
-        2 -> ThumbnailTwo(previewUrls, onClick = onClick)
-        3 -> ThumbnailThree(previewUrls, onClick = onClick)
-        4 -> ThumbnailFour(previewUrls, onClick = onClick)
+    when (attachments.size) {
+        1 -> ThumbnailOne(attachments, onClick = { navigator?.push(previews[it]) })
+        2 -> ThumbnailTwo(attachments, onClick = { navigator?.push(previews[it]) })
+        3 -> ThumbnailThree(attachments, onClick = { navigator?.push(previews[it]) })
+        4 -> ThumbnailFour(attachments, onClick = { navigator?.push(previews[it]) })
     }
 }
 
 @Composable
 private fun ThumbnailOne(
-    previewUrls: List<Uri>,
+    attachments: List<Attachment>,
     onClick: (Int) -> Unit,
 ) = AsyncImage(
-    previewUrls[0],
+    attachments[0].previewUrl,
     contentScale = ContentScale.Crop,
     modifier = Modifier.clickable { onClick(0) }
         .fillMaxWidth()
@@ -83,7 +67,7 @@ private fun ThumbnailOne(
 
 @Composable
 private fun ThumbnailTwo(
-    previewUrls: List<Uri>,
+    attachments: List<Attachment>,
     onClick: (Int) -> Unit,
 ) = Row(
     modifier = Modifier.fillMaxWidth()
@@ -94,7 +78,7 @@ private fun ThumbnailTwo(
             .clickable { onClick(0) },
     ) {
         AsyncImage(
-            previewUrls[0],
+            attachments[0].previewUrl,
             contentScale = ContentScale.Crop,
             modifier = ImageModifier,
         )
@@ -105,7 +89,7 @@ private fun ThumbnailTwo(
             .clickable { onClick(1) }
     ) {
         AsyncImage(
-            previewUrls[1],
+            attachments[1].previewUrl,
             contentScale = ContentScale.Crop,
             modifier = ImageModifier,
         )
@@ -114,7 +98,7 @@ private fun ThumbnailTwo(
 
 @Composable
 private fun ThumbnailThree(
-    previewUrls: List<Uri>,
+    attachments: List<Attachment>,
     onClick: (Int) -> Unit,
 ) = Row(
     modifier = Modifier.fillMaxWidth()
@@ -125,7 +109,7 @@ private fun ThumbnailThree(
             .clickable { onClick(0) }
     ) {
         AsyncImage(
-            previewUrls[0],
+            attachments[0].previewUrl,
             contentScale = ContentScale.Crop,
             modifier = ImageModifier,
         )
@@ -140,7 +124,7 @@ private fun ThumbnailThree(
                 .clickable { onClick(1) }
         ) {
             AsyncImage(
-                previewUrls[1],
+                attachments[1].previewUrl,
                 contentScale = ContentScale.Crop,
                 modifier = ImageModifier,
             )
@@ -151,7 +135,7 @@ private fun ThumbnailThree(
                 .clickable { onClick(2) }
         ) {
             AsyncImage(
-                previewUrls[2],
+                attachments[2].previewUrl,
                 contentScale = ContentScale.Crop,
                 modifier = ImageModifier,
             )
@@ -162,19 +146,19 @@ private fun ThumbnailThree(
 @Suppress("MagicNumber")
 @Composable
 private fun ThumbnailFour(
-    previewUrls: List<Uri>,
+    attachments: List<Attachment>,
     onClick: (Int) -> Unit,
 ) = Column(
     modifier = Modifier.fillMaxWidth()
         .height(GridHeight * 2),
 ) {
     ThumbnailTwo(
-        previewUrls.slice(0..1),
+        attachments.slice(0..1),
         onClick = onClick,
     )
     Spacer(Modifier.height(4.dp))
     ThumbnailTwo(
-        previewUrls.slice(2..3),
+        attachments.slice(2..3),
         onClick = { onClick(it + 2) },
     )
 }

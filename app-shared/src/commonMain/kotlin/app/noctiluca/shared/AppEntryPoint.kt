@@ -9,6 +9,7 @@ import noctiluca.data.di.DataModule
 import noctiluca.datastore.di.DataStoreModule
 import noctiluca.features.accountdetail.di.FeatureAccountDetailModule
 import noctiluca.features.accountdetail.featureAccountDetailScreenModule
+import noctiluca.features.attachment.featureAttachmentScreenModule
 import noctiluca.features.shared.di.AuthorizedFeatureModule
 import noctiluca.features.signin.di.FeatureSignInModule
 import noctiluca.features.signin.featureSignInScreenModule
@@ -61,6 +62,7 @@ object AppEntryPoint {
 
     private fun registerScreen() = ScreenRegistry {
         featureAccountDetailScreenModule()
+        featureAttachmentScreenModule()
         featureSignInScreenModule()
         featureStatusDetailScreenModule()
         featureTimelineScreenModule()

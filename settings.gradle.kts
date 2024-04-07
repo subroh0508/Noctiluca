@@ -34,6 +34,7 @@ include(
     ":features:shared",
     ":features:designsystem",
     ":features:page:accountdetail",
+    ":features:page:attachment",
     ":features:page:signin",
     ":features:page:statusdetail",
     ":features:page:timeline",

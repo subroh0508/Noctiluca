@@ -30,6 +30,9 @@ kotlin {
                 implementation(libs.ktor.client.okhttp)
                 implementation(libs.androidx.core)
                 implementation(libs.androidx.browser)
+                implementation(libs.androidx.media3.exoplayer.core)
+                implementation(libs.androidx.media3.ui)
+                implementation(libs.androidx.media3.exoplayer.dash)
             }
         }
         desktopMain {

@@ -29,10 +29,11 @@ import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
 import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.model.Uri
+import noctiluca.model.status.Attachment
 
 @Composable
-internal fun ImagePreviewDialog(
-    previewUrls: List<Uri>,
+internal fun AttachmentPreviewDialog(
+    attachments: List<Attachment>,
     index: Int,
     onDismissRequest: () -> Unit,
 ) {
@@ -47,7 +48,7 @@ internal fun ImagePreviewDialog(
                 .background(MaterialTheme.colorScheme.surface),
         ) {
             DialogContent(
-                previewUrls,
+                attachments,
                 index,
                 onDismissRequest = onDismissRequest,
             )
@@ -57,14 +58,14 @@ internal fun ImagePreviewDialog(
 
 @Composable
 private fun DialogContent(
-    previewUrls: List<Uri>,
+    attachments: List<Attachment>,
     initialIndex: Int,
     onDismissRequest: () -> Unit,
 ) {
     var visibleTopAppBar by remember { mutableStateOf(true) }
 
-    ImagePager(
-        previewUrls,
+    PreviewPager(
+        attachments,
         initialIndex,
         onClick = { visibleTopAppBar = !visibleTopAppBar },
     )
@@ -105,28 +106,37 @@ private fun DialogTopBar(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-private fun ImagePager(
-    previewUrls: List<Uri>,
+private fun PreviewPager(
+    attachments: List<Attachment>,
     initialIndex: Int,
     onClick: () -> Unit,
 ) {
     val pagerState = rememberPagerState(
         initialIndex,
-        pageCount = { previewUrls.size },
+        pageCount = { attachments.size },
     )
 
     HorizontalPager(
         pagerState,
         modifier = Modifier.fillMaxSize(),
     ) { page ->
-        AsyncImage(
-            previewUrls[page],
-            modifier = Modifier.fillMaxSize()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { onClick() },
-                ),
-        )
+        val modifier = Modifier.fillMaxSize()
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = { onClick() },
+            )
+
+        when (val item = attachments[page]) {
+            is Attachment.Video -> VideoPlayer(
+                item.url,
+                modifier = modifier,
+            )
+
+            else -> AsyncImage(
+                item.url,
+                modifier = modifier,
+            )
+        }
     }
 }

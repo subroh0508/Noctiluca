@@ -35,26 +35,25 @@ internal fun ThumbnailGrid(
     attachments: List<Attachment>,
 ) = attachments.filter { it !is Attachment.Audio && it !is Attachment.Unknown }
     .chunked(COUNT_PER_GRID)
-    .forEach { chunked ->
-        ThumbnailGridItem(chunked.map { it.previewUrl })
-    }
+    .forEach { chunked -> ThumbnailGridItem(chunked) }
 
 @Suppress("MagicNumber")
 @Composable
 private fun ThumbnailGridItem(
-    previewUrls: List<Uri>,
+    attachments: List<Attachment>,
 ) {
     var openDialog by remember { mutableStateOf(false) }
     var index by remember { mutableStateOf(0) }
 
     if (openDialog) {
-        ImagePreviewDialog(
-            previewUrls,
+        AttachmentPreviewDialog(
+            attachments,
             index,
             onDismissRequest = { openDialog = false },
         )
     }
 
+    val previewUrls = attachments.map { it.previewUrl }
     val onClick: (Int) -> Unit = {
         openDialog = true
         index = it

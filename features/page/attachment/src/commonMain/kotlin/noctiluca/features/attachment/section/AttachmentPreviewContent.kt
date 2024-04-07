@@ -1,13 +1,10 @@
 package noctiluca.features.attachment.section
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import noctiluca.features.attachment.component.VideoPlayer
 import noctiluca.features.navigation.AttachmentParams
@@ -19,7 +16,8 @@ import noctiluca.model.Uri
 internal fun AttachmentPreviewContent(
     attachments: List<Pair<AttachmentParams.Type, Uri>>,
     index: Int,
-    onClick: () -> Unit,
+    isVisibleTopAppBar: Boolean,
+    onToggleTopAppBar: (Boolean) -> Unit,
 ) {
     val pagerState = rememberPagerState(
         index,
@@ -35,12 +33,9 @@ internal fun AttachmentPreviewContent(
         PageContent(
             type,
             url,
-            modifier = Modifier.fillMaxSize()
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    indication = null,
-                    onClick = { onClick() },
-                ),
+            isVisibleTopAppBar,
+            onToggleTopAppBar = onToggleTopAppBar,
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -49,10 +44,14 @@ internal fun AttachmentPreviewContent(
 private fun PageContent(
     type: AttachmentParams.Type,
     url: Uri,
+    isVisibleTopAppBar: Boolean,
+    onToggleTopAppBar: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) = when (type) {
     AttachmentParams.Type.VIDEO -> VideoPlayer(
         url,
+        isVisibleTopAppBar,
+        onChangeControllerVisibility = onToggleTopAppBar,
         modifier = modifier,
     )
 

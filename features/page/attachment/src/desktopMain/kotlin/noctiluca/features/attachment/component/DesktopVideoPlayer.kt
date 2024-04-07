@@ -17,6 +17,8 @@ import java.awt.Component
 @Composable
 actual fun VideoPlayer(
     url: Uri,
+    isControllerVisible: Boolean,
+    onChangeControllerVisibility: (Boolean) -> Unit,
     modifier: Modifier,
 ) {
     val mediaPlayerComponent = remember { initializeMediaPlayerComponent() }

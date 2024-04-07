@@ -14,6 +14,7 @@ import platform.AVKit.AVPlayerViewController
 import platform.CoreGraphics.CGRect
 import platform.Foundation.NSURL
 import platform.QuartzCore.CATransaction
+import platform.QuartzCore.kCAGravityResizeAspectFill
 import platform.QuartzCore.kCATransactionDisableActions
 import platform.UIKit.UIView
 
@@ -21,6 +22,8 @@ import platform.UIKit.UIView
 @Composable
 actual fun VideoPlayer(
     url: Uri,
+    isControllerVisible: Boolean,
+    onChangeControllerVisibility: (Boolean) -> Unit,
     modifier: Modifier,
 ) {
     val nsUrl = NSURL.URLWithString(url.value) ?: return

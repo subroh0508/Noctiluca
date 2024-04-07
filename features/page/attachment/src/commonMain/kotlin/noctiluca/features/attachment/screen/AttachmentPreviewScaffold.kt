@@ -14,15 +14,16 @@ import noctiluca.model.Uri
 
 @Composable
 internal fun AttachmentPreviewScreen.AttachmentPreviewScaffold() {
-    var visibleTopAppBar by remember { mutableStateOf(true) }
+    var isVisibleTopAppBar by remember { mutableStateOf(false) }
 
     Scaffold(
-        topBar = { AttachmentPreviewTopAppBar(visibleTopAppBar) },
+        topBar = { AttachmentPreviewTopAppBar(isVisibleTopAppBar) },
     ) {
         AttachmentPreviewContent(
             params.map { AttachmentParams.Type.valueOf(it.type) to Uri(it.url) },
             index,
-            onClick = { visibleTopAppBar = !visibleTopAppBar },
+            isVisibleTopAppBar,
+            onToggleTopAppBar = { visibility -> isVisibleTopAppBar = visibility },
         )
     }
 }

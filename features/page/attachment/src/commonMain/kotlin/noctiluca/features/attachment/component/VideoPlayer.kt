@@ -7,5 +7,7 @@ import noctiluca.model.Uri
 @Composable
 expect fun VideoPlayer(
     url: Uri,
+    isControllerVisible: Boolean,
+    onChangeControllerVisibility: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 )

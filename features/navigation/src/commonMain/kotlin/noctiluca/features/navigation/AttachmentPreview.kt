@@ -21,7 +21,7 @@ data class AttachmentParams(
         when (attachment) {
             is Attachment.Video -> Type.VIDEO
             is Attachment.Image, is Attachment.Gifv -> Type.IMAGE
-            else -> throw IllegalStateException()
+            else -> error("Illegal attachment type: ${attachment::class.simpleName}")
         }.name,
         attachment.url.value,
     )

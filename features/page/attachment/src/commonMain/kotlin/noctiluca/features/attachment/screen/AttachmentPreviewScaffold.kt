@@ -14,7 +14,7 @@ import noctiluca.model.Uri
 
 @Composable
 internal fun AttachmentPreviewScreen.AttachmentPreviewScaffold() {
-    var isVisibleTopAppBar by remember { mutableStateOf(false) }
+    var isVisibleTopAppBar by remember { mutableStateOf(true) }
 
     Scaffold(
         topBar = { AttachmentPreviewTopAppBar(isVisibleTopAppBar) },

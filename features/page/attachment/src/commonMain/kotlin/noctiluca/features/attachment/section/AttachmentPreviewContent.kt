@@ -9,9 +9,9 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import noctiluca.features.attachment.component.VideoPlayer
 import noctiluca.features.navigation.AttachmentParams
 import noctiluca.features.shared.components.image.AsyncImage
-import noctiluca.features.shared.status.attachment.VideoPlayer
 import noctiluca.model.Uri
 
 @OptIn(ExperimentalFoundationApi::class)

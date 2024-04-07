@@ -26,6 +26,8 @@ image-loader = "1.7.8"
 ksoup = "0.3.1"
 okio = "3.9.0"
 
+vlcj = "4.8.2"
+
 voyager = "1.0.0"
 
 koin = "3.5.4"
@@ -104,6 +106,8 @@ image-loader-extension-blur = { module = "io.github.qdsfdhvh:image-loader-extens
 
 ksoup-html = { module = "com.mohamedrejeb.ksoup:ksoup-html", version.ref = "ksoup" }
 ksoup-entities = { module = "com.mohamedrejeb.ksoup:ksoup-entities", version.ref = "ksoup" }
+
+vlcj = { module = "uk.co.caprica:vlcj", version.ref = "vlcj" }
 
 voyager-navigator = { module = "cafe.adriel.voyager:voyager-navigator", version.ref = "voyager" }
 voyager-transitions = { module = "cafe.adriel.voyager:voyager-transitions", version.ref = "voyager" }

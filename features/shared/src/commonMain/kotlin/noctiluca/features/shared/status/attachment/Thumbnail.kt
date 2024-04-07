@@ -57,7 +57,7 @@ private fun ThumbnailOne(
     attachments: List<Attachment>,
     onClick: (Int) -> Unit,
 ) = AsyncImage(
-    attachments[0].url,
+    attachments[0].previewUrl,
     contentScale = ContentScale.Crop,
     modifier = Modifier.clickable { onClick(0) }
         .fillMaxWidth()
@@ -78,7 +78,7 @@ private fun ThumbnailTwo(
             .clickable { onClick(0) },
     ) {
         AsyncImage(
-            attachments[0].url,
+            attachments[0].previewUrl,
             contentScale = ContentScale.Crop,
             modifier = ImageModifier,
         )
@@ -89,7 +89,7 @@ private fun ThumbnailTwo(
             .clickable { onClick(1) }
     ) {
         AsyncImage(
-            attachments[1].url,
+            attachments[1].previewUrl,
             contentScale = ContentScale.Crop,
             modifier = ImageModifier,
         )
@@ -109,7 +109,7 @@ private fun ThumbnailThree(
             .clickable { onClick(0) }
     ) {
         AsyncImage(
-            attachments[0].url,
+            attachments[0].previewUrl,
             contentScale = ContentScale.Crop,
             modifier = ImageModifier,
         )
@@ -124,7 +124,7 @@ private fun ThumbnailThree(
                 .clickable { onClick(1) }
         ) {
             AsyncImage(
-                attachments[1].url,
+                attachments[1].previewUrl,
                 contentScale = ContentScale.Crop,
                 modifier = ImageModifier,
             )
@@ -135,7 +135,7 @@ private fun ThumbnailThree(
                 .clickable { onClick(2) }
         ) {
             AsyncImage(
-                attachments[2].url,
+                attachments[2].previewUrl,
                 contentScale = ContentScale.Crop,
                 modifier = ImageModifier,
             )

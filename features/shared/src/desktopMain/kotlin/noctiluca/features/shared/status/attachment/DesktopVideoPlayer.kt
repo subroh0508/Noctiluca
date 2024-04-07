@@ -26,6 +26,7 @@ actual fun VideoPlayer(
 
     LaunchedEffect(url) { mediaPlayer.media().start(url.value) }
     DisposableEffect(Unit) { onDispose(mediaPlayer::release) }
+
     SwingPanel(
         factory = factory,
         background = MaterialTheme.colorScheme.surface,

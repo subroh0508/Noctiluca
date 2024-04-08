@@ -30,6 +30,8 @@
     <string name="visibility_private_support_text">フォロワーのみ閲覧可</string>
     <string name="visibility_direct_support_text">指定された相手のみ閲覧可</string>
 
+    <string name="status_reblogged_by">%sさんがブースト</string>
+
     <string name="toot_support_text">今なにしてる？</string>
     <string name="toot_warning_support_text">警告文</string>
 

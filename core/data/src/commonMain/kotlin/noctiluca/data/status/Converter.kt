@@ -28,8 +28,8 @@ fun NetworkStatus.toEntity(accountId: AccountId?) = Status(
     (reblog?.reblogged ?: reblogged) ?: false,
     (reblog?.bookmarked ?: bookmarked) ?: false,
     (reblog?.account ?: account).toTooter(),
-    if (reblog != null && accountId?.value != reblog?.account?.id) {
-        reblog?.account?.toTooter()
+    if (reblog != null) {
+        account.toTooter()
     } else {
         null
     },

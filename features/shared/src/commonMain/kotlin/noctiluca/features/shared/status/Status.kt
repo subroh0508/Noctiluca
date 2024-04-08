@@ -20,6 +20,7 @@ import kotlinx.datetime.LocalDateTime
 import noctiluca.features.shared.account.TooterName
 import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.features.shared.components.text.RelativeTime
+import noctiluca.features.shared.status.header.RebloggedBy
 import noctiluca.features.shared.utils.baseline
 import noctiluca.features.shared.utils.toDp
 import noctiluca.model.AccountId
@@ -51,6 +52,8 @@ fun Status(
         top = 16.dp,
     ).then(modifier),
 ) {
+    RebloggedBy(status.rebloggedBy)
+
     StatusHeader(
         status.tooter,
         status.visibility,

@@ -20,7 +20,7 @@ kotlinx-datetime = "0.6.0-RC.2"
 kotlinx-coroutines = "1.8.0"
 kotlinx-serialization = "1.6.3"
 
-ktor = "2.3.9"
+ktor = "2.3.10"
 
 image-loader = "1.7.8"
 ksoup = "0.3.1"

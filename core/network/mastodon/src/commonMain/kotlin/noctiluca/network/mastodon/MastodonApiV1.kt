@@ -7,6 +7,7 @@ import noctiluca.network.mastodon.data.extendeddescription.NetworkExtendedDescri
 import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.status.NetworkStatus
 import noctiluca.network.mastodon.data.status.NetworkStatusesContext
+import noctiluca.network.mastodon.paramaters.status.NewStatusParameter
 
 interface MastodonApiV1 {
     suspend fun getInstance(
@@ -56,6 +57,10 @@ interface MastodonApiV1 {
     suspend fun getStatusesContext(
         id: String,
     ): NetworkStatusesContext
+
+    suspend fun postStatus(
+        params: NewStatusParameter,
+    ): NetworkStatus
 
     suspend fun postStatusesFavourite(
         id: String,

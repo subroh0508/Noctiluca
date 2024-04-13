@@ -1,23 +1,27 @@
-package noctiluca.features.shared.toot
+package noctiluca.features.toot.section
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Launch
 import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.Launch
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.card.FilledCard
-import noctiluca.features.shared.toot.internal.TootTextArea
+import noctiluca.features.toot.component.chip.VisibilityChip
+import noctiluca.features.toot.component.textfield.TootTextArea
 import noctiluca.model.status.Status
 
 @Composable
-fun FloatingTootCard(
+internal fun FloatingTootCard(
     content: MutableState<String?>,
     warning: MutableState<String?>,
-    visibility: MutableState<Status.Visibility>,
+    visibility: Status.Visibility,
+    enabled: Boolean,
     expanded: MutableState<Boolean>,
+    onChangeVisibility: (Status.Visibility) -> Unit,
+    onClickToot: () -> Unit,
     onClickOpenFullScreen: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) = FilledCard(
@@ -34,20 +38,26 @@ fun FloatingTootCard(
     Spacer(Modifier.height(8.dp))
     Row {
         Spacer(Modifier.width(16.dp))
-        VisibilityChip(visibility)
+        VisibilityChip(
+            visibility,
+            enabled = enabled,
+            onChangeVisibility = onChangeVisibility,
+        )
 
         Spacer(Modifier.weight(1F))
 
         IconButton(
             onClick = onClickOpenFullScreen,
+            enabled = enabled,
         ) {
             Icon(
-                Icons.Default.Launch,
+                Icons.AutoMirrored.Filled.Launch,
                 contentDescription = "Open Full Toot Screen",
             )
         }
         IconButton(
             onClick = { expanded.value = false },
+            enabled = enabled,
         ) {
             Icon(
                 Icons.Default.Cancel,
@@ -60,9 +70,11 @@ fun FloatingTootCard(
     TootTextArea(
         content.value ?: "",
         warning.value ?: "",
+        enabled = enabled,
         borderColor = MaterialTheme.colorScheme.outline,
         onChangeContent = { content.value = it },
         onChangeWarningText = { warning.value = it },
+        onClickToot = onClickToot,
         modifier = Modifier.fillMaxWidth(),
     )
 }

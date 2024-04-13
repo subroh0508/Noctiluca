@@ -6,20 +6,15 @@ import cafe.adriel.voyager.core.registry.screenModule
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.core.screen.ScreenKey
 import noctiluca.features.navigation.Timelines
-import noctiluca.features.navigation.Toot
 import noctiluca.features.shared.AuthorizedComposable
 import noctiluca.features.timeline.screen.TimelinesNavigationDrawer
 import noctiluca.features.timeline.screen.TimelinesScaffold
-import noctiluca.features.timeline.screen.TootScaffold
 
 internal val LocalResources = compositionLocalOf { Resources("JA") }
 
 val featureTimelineScreenModule = screenModule {
     register<Timelines> {
         TimelinesScreen(it.id, it.domain)
-    }
-    register<Toot> {
-        TootScreen
     }
 }
 
@@ -41,11 +36,4 @@ data class TimelinesScreen(
             )
         }
     }
-}
-
-internal data object TootScreen : Screen {
-    @Composable
-    override fun Content() = AuthorizedComposable(
-        LocalResources provides Resources(Locale.current.language),
-    ) { TootScaffold() }
 }

@@ -1,10 +1,17 @@
 package noctiluca.features.shared.model
 
-data class MessageHolder(
-    val text: String,
-    val consumed: Boolean = false,
-) {
-    fun consume() = copy(consumed = true)
-}
+import kotlinx.coroutines.Job
 
-val EmptyMessageHolder = MessageHolder("", consumed = true)
+data class MessageHolder<E : Enum<*>>(
+    val text: E? = null,
+    val error: Throwable? = null,
+    val job: Job? = null,
+) {
+    fun consume() = copy(
+        text = null,
+        error = null,
+        job = null,
+    )
+
+    val isLoading get() = job != null
+}

@@ -32,6 +32,7 @@ kotlin {
                 implementation(project(":features:page:signin"))
                 implementation(project(":features:page:statusdetail"))
                 implementation(project(":features:page:timeline"))
+                implementation(project(":features:page:toot"))
 
                 implementation(compose.runtime)
                 implementation(compose.foundation)

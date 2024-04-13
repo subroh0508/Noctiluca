@@ -1,31 +1,32 @@
-package noctiluca.features.shared.toot
+package noctiluca.features.toot.component.chip
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import noctiluca.features.shared.status.VisibilityIcon
-import noctiluca.features.shared.toot.internal.label
-import noctiluca.features.shared.toot.internal.supportText
 import noctiluca.model.status.Status
 
 @Composable
-fun VisibilityChip(
-    visibility: MutableState<Status.Visibility>,
+internal fun VisibilityChip(
+    visibility: Status.Visibility,
+    enabled: Boolean,
+    onChangeVisibility: (Status.Visibility) -> Unit,
 ) {
     var expandedVisibilityMenu by remember { mutableStateOf(false) }
 
     Box {
         AssistChip(
+            enabled = enabled,
             onClick = { expandedVisibilityMenu = true },
-            label = { Text(visibility.value.label()) },
-            leadingIcon = { VisibilityIcon(visibility.value) },
+            label = { Text(visibility.label()) },
+            leadingIcon = { VisibilityIcon(visibility) },
         )
 
         VisibleDropdownMenu(
             expandedVisibilityMenu,
             onDismissRequest = { expandedVisibilityMenu = false },
-            onChangeVisibility = { visibility.value = it },
+            onChangeVisibility = onChangeVisibility,
         )
     }
 }

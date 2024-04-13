@@ -1,4 +1,4 @@
-package noctiluca.features.shared.toot
+package noctiluca.features.toot.section
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -12,15 +12,17 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.account.AccountName
 import noctiluca.features.shared.components.appbar.NavigateIconSize
 import noctiluca.features.shared.components.image.AsyncImage
-import noctiluca.features.shared.toot.internal.TootAreaPadding
-import noctiluca.features.shared.toot.internal.TootTextArea
+import noctiluca.features.toot.component.textfield.TootAreaPadding
+import noctiluca.features.toot.component.textfield.TootTextArea
 import noctiluca.model.account.Account
 
 @Composable
-fun TootBox(
+internal fun TootBox(
     account: Account?,
     content: MutableState<String?>,
     warning: MutableState<String?>,
+    enabled: Boolean,
+    onClickToot: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     TootBy(
@@ -32,8 +34,10 @@ fun TootBox(
     TootTextArea(
         content.value ?: "",
         warning.value ?: "",
+        enabled = enabled,
         onChangeContent = { content.value = it },
         onChangeWarningText = { warning.value = it },
+        onClickToot = onClickToot,
         textAreaModifier = Modifier.weight(1F),
         modifier = Modifier.fillMaxSize(),
     )

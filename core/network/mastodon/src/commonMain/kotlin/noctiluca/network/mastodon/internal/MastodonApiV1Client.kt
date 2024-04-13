@@ -14,6 +14,7 @@ import noctiluca.network.mastodon.data.instance.NetworkV1Instance
 import noctiluca.network.mastodon.data.status.NetworkStatus
 import noctiluca.network.mastodon.data.status.NetworkStatusesContext
 import noctiluca.network.mastodon.paramaters.account.AccountFollowParameter
+import noctiluca.network.mastodon.paramaters.status.NewStatusParameter
 
 internal class MastodonApiV1Client(
     token: AuthorizationTokenProvider,
@@ -109,6 +110,13 @@ internal class MastodonApiV1Client(
         id: String,
     ): NetworkStatusesContext = client.get(
         Api.V1.Statuses.Id.Context(id = id),
+    ).body()
+
+    override suspend fun postStatus(
+        params: NewStatusParameter,
+    ): NetworkStatus = client.post(
+        Api.V1.Statuses(),
+        params,
     ).body()
 
     override suspend fun postStatusesFavourite(

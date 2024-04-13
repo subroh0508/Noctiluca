@@ -1,4 +1,4 @@
-package noctiluca.features.shared.toot.internal
+package noctiluca.features.toot.component.chip
 
 import androidx.compose.runtime.Composable
 import noctiluca.features.shared.getCommonString

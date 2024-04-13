@@ -38,4 +38,5 @@ include(
     ":features:page:signin",
     ":features:page:statusdetail",
     ":features:page:timeline",
+    ":features:page:toot",
 )

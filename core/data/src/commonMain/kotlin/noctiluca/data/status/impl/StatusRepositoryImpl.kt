@@ -2,13 +2,17 @@ package noctiluca.data.status.impl
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onStart
+import kotlinx.datetime.LocalDateTime
+import noctiluca.data.extensions.toISO8601
 import noctiluca.data.status.StatusRepository
 import noctiluca.data.status.toEntity
 import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.StatusId
+import noctiluca.model.status.Poll
 import noctiluca.model.status.Status
 import noctiluca.network.mastodon.MastodonApiV1
 import noctiluca.network.mastodon.data.status.NetworkStatus
+import noctiluca.network.mastodon.paramaters.status.NewStatusParameter
 
 internal class StatusRepositoryImpl(
     private val api: MastodonApiV1,
@@ -21,6 +25,37 @@ internal class StatusRepositoryImpl(
         statusContextStateFlow.value = listOf(status)
         statusContextStateFlow.value = fetchContext(status)
     }
+
+    override suspend fun new(
+        status: String,
+        spoilerText: String?,
+        visibility: Status.Visibility,
+        mediaIds: List<String>,
+        poll: Poll.New?,
+        inReplyToId: StatusId?,
+        sensitive: Boolean,
+        language: String,
+        scheduledAt: LocalDateTime?,
+    ) = api.postStatus(
+        NewStatusParameter(
+            status,
+            mediaIds,
+            poll?.let {
+                NewStatusParameter.Poll(
+                    it.options,
+                    it.expiresIn,
+                    it.multiple,
+                    it.hideTotals
+                )
+            },
+            inReplyToId?.value,
+            sensitive,
+            spoilerText,
+            visibility.name.lowercase(),
+            language,
+            scheduledAt?.toISO8601(),
+        )
+    ).toEntity()
 
     override suspend fun delete(
         id: StatusId,

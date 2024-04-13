@@ -39,16 +39,14 @@ class TootViewModel(
         }
     }
 
-    fun onChangeContent(
+    fun onChange(
         content: String?,
-    ) {
-        statusTextStateFlow.value = statusTextStateFlow.copy(content = content)
-    }
-
-    fun onChangeWarningText(
         warning: String?,
     ) {
-        statusTextStateFlow.value = statusTextStateFlow.copy(warning = warning)
+        statusTextStateFlow.value = statusTextStateFlow.copy(
+            content = content,
+            warning = warning,
+        )
     }
 
     fun onChangeVisibility(

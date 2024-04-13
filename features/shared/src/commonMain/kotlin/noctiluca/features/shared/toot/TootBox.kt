@@ -19,11 +19,9 @@ import noctiluca.model.account.Account
 @Composable
 fun TootBox(
     account: Account?,
-    content: String?,
-    warning: String?,
+    content: MutableState<String?>,
+    warning: MutableState<String?>,
     enabled: Boolean,
-    onChangeContent: (String?) -> Unit,
-    onChangeWarningText: (String?) -> Unit,
     onClickToot: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
@@ -34,11 +32,11 @@ fun TootBox(
     )
 
     TootTextArea(
-        content ?: "",
-        warning ?: "",
+        content.value ?: "",
+        warning.value ?: "",
         enabled = enabled,
-        onChangeContent = onChangeContent,
-        onChangeWarningText = onChangeWarningText,
+        onChangeContent = { content.value = it },
+        onChangeWarningText = { warning.value = it },
         onClickToot = onClickToot,
         textAreaModifier = Modifier.weight(1F),
         modifier = Modifier.fillMaxSize(),

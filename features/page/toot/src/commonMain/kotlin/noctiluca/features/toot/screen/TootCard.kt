@@ -23,15 +23,25 @@ fun BoxScope.TootCard(
     val uiModel by viewModel.uiModel.collectAsState()
     val expanded = remember { mutableStateOf(false) }
 
+    val content = remember { mutableStateOf<String?>(null) }
+    val warning = remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(uiModel.isSendingSuccessful) {
+        if (uiModel.isSendingSuccessful) {
+            content.value = uiModel.statusText.content
+            warning.value = uiModel.statusText.warning
+        }
+    }
+
+    viewModel.onChange(content.value, warning.value)
+
     if (expanded.value) {
         FloatingTootCard(
-            uiModel.statusText.content,
-            uiModel.statusText.warning,
+            content,
+            warning,
             uiModel.statusText.visibility,
             enabled = !uiModel.message.isLoading,
             expanded = expanded,
-            onChangeContent = viewModel::onChangeContent,
-            onChangeWarningText = viewModel::onChangeWarningText,
             onChangeVisibility = viewModel::onChangeVisibility,
             onClickOpenFullScreen = { navigator?.push(TootScreen) },
             onClickToot = viewModel::toot,

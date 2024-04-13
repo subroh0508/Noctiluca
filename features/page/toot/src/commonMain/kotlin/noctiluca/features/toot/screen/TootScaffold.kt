@@ -21,11 +21,18 @@ internal fun TootScreen.TootScaffold() {
     val viewModel: TootViewModel = getAuthorizedScreenModel()
     val uiModel by viewModel.uiModel.collectAsState()
 
+    val content = remember { mutableStateOf<String?>(null) }
+    val warning = remember { mutableStateOf<String?>(null) }
+
     LaunchedEffect(uiModel.isSendingSuccessful) {
         if (uiModel.isSendingSuccessful) {
+            content.value = uiModel.statusText.content
+            warning.value = uiModel.statusText.warning
             navigator?.pop()
         }
     }
+
+    viewModel.onChange(content.value, warning.value)
 
     TootScrollableFrame(
         uiModel.message,
@@ -40,11 +47,9 @@ internal fun TootScreen.TootScaffold() {
     ) { paddingValues ->
         TootBox(
             uiModel.current,
-            uiModel.statusText.content,
-            uiModel.statusText.warning,
+            content,
+            warning,
             enabled = !uiModel.message.isLoading,
-            onChangeContent = viewModel::onChangeContent,
-            onChangeWarningText = viewModel::onChangeWarningText,
             onClickToot = viewModel::toot,
             modifier = Modifier.fillMaxSize()
                 .padding(paddingValues),

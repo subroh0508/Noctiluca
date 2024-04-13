@@ -5,9 +5,11 @@ import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.di.AuthorizedContext
 import noctiluca.data.status.StatusRepository
+import noctiluca.features.shared.model.MessageHolder
 import noctiluca.features.shared.utils.isEnabledToot
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launchLazy
+import noctiluca.features.toot.model.Message
 import noctiluca.features.toot.model.TootModel
 import noctiluca.model.status.Status
 
@@ -17,16 +19,23 @@ class TootViewModel(
     context: AuthorizedContext,
 ) : AuthorizedViewModel(context), ScreenModel {
     private val statusTextStateFlow by lazy { MutableStateFlow(TootModel.StatusText()) }
+    private val message by lazy { MutableStateFlow(MessageHolder<Message>()) }
 
     val uiModel: StateFlow<TootModel> by lazy {
         buildUiModel(
             context.state,
             authorizedAccountRepository.all(),
             statusTextStateFlow,
+            message,
             initialValue = TootModel(),
             started = SharingStarted.WhileSubscribed(5_000),
-        ) { authorizedEventState, accounts, statusText ->
-            TootModel(authorizedEventState, accounts, statusText)
+        ) { authorizedEventState, accounts, statusText, message ->
+            TootModel(
+                authorizedEventState,
+                accounts,
+                statusText,
+                message,
+            )
         }
     }
 
@@ -50,7 +59,7 @@ class TootViewModel(
 
     fun toot() {
         val content = uiModel.value.statusText.content ?: return
-        if (!isEnabledToot(content)) {
+        if (!isEnabledToot(content) || uiModel.value.message.text == Message.SENDING) {
             return
         }
 
@@ -62,8 +71,11 @@ class TootViewModel(
                     uiModel.value.statusText.visibility,
                 )
             }
+                .onSuccess { reset() }
+                .onFailure { message.value = MessageHolder(Message.FAILED_SENDING_TOOT) }
         }
 
+        message.value = MessageHolder(Message.SENDING)
         job.start()
     }
 
@@ -76,4 +88,9 @@ class TootViewModel(
         warning = warning,
         visibility = visibility,
     )
+
+    private fun reset() {
+        message.value = MessageHolder(Message.SENT_NEW_TOOT)
+        statusTextStateFlow.value = TootModel.StatusText()
+    }
 }

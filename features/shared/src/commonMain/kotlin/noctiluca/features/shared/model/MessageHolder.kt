@@ -1,10 +1,7 @@
 package noctiluca.features.shared.model
 
-data class MessageHolder(
-    val text: String,
-    val consumed: Boolean = false,
+data class MessageHolder<E : Enum<*>>(
+    val text: E? = null,
 ) {
-    fun consume() = copy(consumed = true)
+    fun consume() = copy(text = null)
 }
-
-val EmptyMessageHolder = MessageHolder("", consumed = true)

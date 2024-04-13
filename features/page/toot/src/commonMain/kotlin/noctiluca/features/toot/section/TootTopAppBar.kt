@@ -15,6 +15,7 @@ import noctiluca.model.status.Status
 internal fun TootTopAppBar(
     visibility: Status.Visibility,
     onChangeVisibility: (Status.Visibility) -> Unit,
+    scrollBehavior: TopAppBarScrollBehavior,
 ) = TopAppBar(
     title = {},
     navigationIcon = { Back() },
@@ -29,5 +30,5 @@ internal fun TootTopAppBar(
         containerColor = MaterialTheme.colorScheme.surface,
         scrolledContainerColor = MaterialTheme.colorScheme.surface,
     ),
-    scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(),
+    scrollBehavior = scrollBehavior,
 )

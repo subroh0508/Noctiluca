@@ -72,10 +72,10 @@ class TootViewModel(
                 )
             }
                 .onSuccess { reset() }
-                .onFailure { message.value = MessageHolder(Message.FAILED_SENDING_TOOT) }
+                .onFailure { e -> error(e) }
         }
 
-        message.value = MessageHolder(Message.SENDING)
+        message.value = MessageHolder(Message.SENDING, job = job)
         job.start()
     }
 
@@ -92,5 +92,9 @@ class TootViewModel(
     private fun reset() {
         message.value = MessageHolder(Message.SENT_NEW_TOOT)
         statusTextStateFlow.value = TootModel.StatusText()
+    }
+
+    private fun error(e: Throwable) {
+        message.value = MessageHolder(Message.FAILED_SENDING_TOOT, error = e)
     }
 }

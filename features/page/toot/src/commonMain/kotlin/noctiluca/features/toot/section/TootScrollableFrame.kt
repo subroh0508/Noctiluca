@@ -15,12 +15,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.unit.dp
+import noctiluca.features.shared.model.MessageHolder
 import noctiluca.features.toot.model.Message
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun TootScrollableFrame(
-    message: Message?,
+    message: MessageHolder<Message>,
     topBar: @Composable (TopAppBarScrollBehavior) -> Unit,
     content: @Composable (PaddingValues) -> Unit,
 ) {
@@ -35,7 +36,7 @@ internal fun TootScrollableFrame(
                 .padding(top = 8.dp),
         ) { content(paddingValues) }
 
-        if (message == Message.SENDING) {
+        if (message.isLoading) {
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth()
                     .offset(y = paddingValues.calculateTopPadding()),

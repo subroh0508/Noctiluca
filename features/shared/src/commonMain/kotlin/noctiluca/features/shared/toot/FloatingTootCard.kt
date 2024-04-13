@@ -17,6 +17,7 @@ fun FloatingTootCard(
     content: String?,
     warning: String?,
     visibility: Status.Visibility,
+    enabled: Boolean,
     expanded: MutableState<Boolean>,
     onChangeContent: (String?) -> Unit,
     onChangeWarningText: (String?) -> Unit,
@@ -40,6 +41,7 @@ fun FloatingTootCard(
         Spacer(Modifier.width(16.dp))
         VisibilityChip(
             visibility,
+            enabled = enabled,
             onChangeVisibility = onChangeVisibility,
         )
 
@@ -47,6 +49,7 @@ fun FloatingTootCard(
 
         IconButton(
             onClick = onClickOpenFullScreen,
+            enabled = enabled,
         ) {
             Icon(
                 Icons.AutoMirrored.Filled.Launch,
@@ -55,6 +58,7 @@ fun FloatingTootCard(
         }
         IconButton(
             onClick = { expanded.value = false },
+            enabled = enabled,
         ) {
             Icon(
                 Icons.Default.Cancel,
@@ -67,6 +71,7 @@ fun FloatingTootCard(
     TootTextArea(
         content ?: "",
         warning ?: "",
+        enabled = enabled,
         borderColor = MaterialTheme.colorScheme.outline,
         onChangeContent = onChangeContent,
         onChangeWarningText = onChangeWarningText,

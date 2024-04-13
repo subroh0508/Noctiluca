@@ -21,10 +21,13 @@ import noctiluca.features.shared.utils.isEnabledToot
 internal val TootAreaPadding = 16.dp
 private val OptionButtonsHorizontalPadding = 4.dp
 
+private val LocalEnabledTootTextArea = compositionLocalOf { true }
+
 @Composable
 internal fun TootTextArea(
     content: String,
     warning: String? = null,
+    enabled: Boolean,
     borderColor: Color = DividerDefaults.color,
     onChangeContent: (String?) -> Unit,
     onChangeWarningText: (String?) -> Unit,
@@ -39,55 +42,60 @@ internal fun TootTextArea(
         }
     }
 
-    Column(modifier) {
-        Column(textAreaModifier) {
-            WarningTextField(
-                warning,
-                isContentWarning,
-                borderColor,
-                onChangeWarningText,
-            )
-
-            TextArea(
-                content,
-                onValueChange = { onChangeContent(it) },
-                supportingText = getCommonString().toot_support_text,
-                modifier = Modifier.fillMaxWidth()
-                    .padding(TootAreaPadding),
-            )
-        }
-
-        HorizontalDivider(
-            color = borderColor,
-            modifier = Modifier.padding(horizontal = TootAreaPadding),
-        )
-
-        Row(
-            modifier = Modifier.fillMaxWidth()
-                .padding(horizontal = OptionButtonsHorizontalPadding),
-        ) {
-            OptionButtons(
-                isContentWarning,
-                onToggleContentWarning = {
-                    isContentWarning = it
-                    if (!it) {
-                        onChangeWarningText(null)
-                    }
-                },
-            )
-
-            Spacer(Modifier.weight(1f))
-
-            LeastTextCount(leastCount)
-
-            IconButton(
-                onClick = onClickToot,
-                enabled = isEnabledToot(content),
-            ) {
-                Icon(
-                    Icons.AutoMirrored.Filled.Send,
-                    contentDescription = "Toot",
+    CompositionLocalProvider(
+        LocalEnabledTootTextArea provides enabled,
+    ) {
+        Column(modifier) {
+            Column(textAreaModifier) {
+                WarningTextField(
+                    warning,
+                    isContentWarning,
+                    borderColor,
+                    onChangeWarningText,
                 )
+
+                TextArea(
+                    content,
+                    enabled = LocalEnabledTootTextArea.current,
+                    onValueChange = { onChangeContent(it) },
+                    supportingText = getCommonString().toot_support_text,
+                    modifier = Modifier.fillMaxWidth()
+                        .padding(TootAreaPadding),
+                )
+            }
+
+            HorizontalDivider(
+                color = borderColor,
+                modifier = Modifier.padding(horizontal = TootAreaPadding),
+            )
+
+            Row(
+                modifier = Modifier.fillMaxWidth()
+                    .padding(horizontal = OptionButtonsHorizontalPadding),
+            ) {
+                OptionButtons(
+                    isContentWarning,
+                    onToggleContentWarning = {
+                        isContentWarning = it
+                        if (!it) {
+                            onChangeWarningText(null)
+                        }
+                    },
+                )
+
+                Spacer(Modifier.weight(1f))
+
+                LeastTextCount(leastCount)
+
+                IconButton(
+                    onClick = onClickToot,
+                    enabled = LocalEnabledTootTextArea.current && isEnabledToot(content),
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.Send,
+                        contentDescription = "Toot",
+                    )
+                }
             }
         }
     }
@@ -106,6 +114,7 @@ private fun WarningTextField(
 
     TextArea(
         warning ?: "",
+        enabled = LocalEnabledTootTextArea.current,
         onValueChange = { onValueChange(it) },
         supportingText = getCommonString().toot_warning_support_text,
         modifier = Modifier.fillMaxWidth()
@@ -123,26 +132,34 @@ private fun OptionButtons(
     isContentWarning: Boolean,
     onToggleContentWarning: (Boolean) -> Unit,
 ) {
-    val (warningIcon, warningTint) =
+    val (warningIcon, warningIconColors) =
         if (isContentWarning) {
-            Icons.Default.Warning to MaterialTheme.colorScheme.primary
+            Icons.Default.Warning to IconButtonDefaults.iconButtonColors(
+                contentColor = MaterialTheme.colorScheme.primary,
+            )
         } else {
-            Icons.Default.WarningAmber to LocalContentColor.current
+            Icons.Default.WarningAmber to IconButtonDefaults.iconButtonColors()
         }
 
     Row {
-        IconButton(onClick = {}) {
+        IconButton(
+            onClick = {},
+            enabled = LocalEnabledTootTextArea.current,
+        ) {
             Icon(
                 Icons.Default.Attachment,
                 contentDescription = "File Picker",
             )
         }
 
-        IconButton(onClick = { onToggleContentWarning(!isContentWarning) }) {
+        IconButton(
+            onClick = { onToggleContentWarning(!isContentWarning) },
+            enabled = LocalEnabledTootTextArea.current,
+            colors = warningIconColors,
+        ) {
             Icon(
                 warningIcon,
                 contentDescription = "Content Warning",
-                tint = warningTint,
             )
         }
     }

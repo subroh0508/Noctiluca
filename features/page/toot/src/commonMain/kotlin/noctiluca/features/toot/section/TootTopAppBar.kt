@@ -14,6 +14,7 @@ import noctiluca.model.status.Status
 @Composable
 internal fun TootTopAppBar(
     visibility: Status.Visibility,
+    enabled: Boolean,
     onChangeVisibility: (Status.Visibility) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
 ) = TopAppBar(
@@ -22,6 +23,7 @@ internal fun TootTopAppBar(
     actions = {
         VisibilityChip(
             visibility,
+            enabled = enabled,
             onChangeVisibility = onChangeVisibility,
         )
         Spacer(Modifier.width(12.dp))

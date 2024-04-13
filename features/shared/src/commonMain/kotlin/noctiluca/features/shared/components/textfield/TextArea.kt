@@ -11,14 +11,16 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun TextArea(
+internal fun TextArea(
     value: String?,
+    enabled: Boolean,
     onValueChange: (String?) -> Unit,
     supportingText: String? = null,
     modifier: Modifier = Modifier,
     trailingIcon: (@Composable () -> Unit)? = null,
 ) = BasicTextField(
     value ?: "",
+    enabled = enabled,
     onValueChange = { onValueChange(it.takeIf(String::isNotBlank)) },
     modifier = modifier,
     textStyle = LocalTextStyle.current.copy(

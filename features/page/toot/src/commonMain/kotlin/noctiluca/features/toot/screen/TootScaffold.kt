@@ -28,10 +28,11 @@ internal fun TootScreen.TootScaffold() {
     }
 
     TootScrollableFrame(
-        uiModel.message.text,
+        uiModel.message,
         topBar = { scrollBehavior ->
             TootTopAppBar(
                 uiModel.statusText.visibility,
+                enabled = !uiModel.message.isLoading,
                 onChangeVisibility = viewModel::onChangeVisibility,
                 scrollBehavior = scrollBehavior
             )
@@ -41,6 +42,7 @@ internal fun TootScreen.TootScaffold() {
             uiModel.current,
             uiModel.statusText.content,
             uiModel.statusText.warning,
+            enabled = !uiModel.message.isLoading,
             onChangeContent = viewModel::onChangeContent,
             onChangeWarningText = viewModel::onChangeWarningText,
             onClickToot = viewModel::toot,

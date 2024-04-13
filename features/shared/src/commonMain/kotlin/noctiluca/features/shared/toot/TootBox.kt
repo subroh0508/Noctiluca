@@ -21,6 +21,7 @@ fun TootBox(
     account: Account?,
     content: String?,
     warning: String?,
+    enabled: Boolean,
     onChangeContent: (String?) -> Unit,
     onChangeWarningText: (String?) -> Unit,
     onClickToot: () -> Unit,
@@ -35,6 +36,7 @@ fun TootBox(
     TootTextArea(
         content ?: "",
         warning ?: "",
+        enabled = enabled,
         onChangeContent = onChangeContent,
         onChangeWarningText = onChangeWarningText,
         onClickToot = onClickToot,

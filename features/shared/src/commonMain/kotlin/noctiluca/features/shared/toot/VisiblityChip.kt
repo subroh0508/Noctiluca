@@ -12,12 +12,14 @@ import noctiluca.model.status.Status
 @Composable
 fun VisibilityChip(
     visibility: Status.Visibility,
+    enabled: Boolean,
     onChangeVisibility: (Status.Visibility) -> Unit,
 ) {
     var expandedVisibilityMenu by remember { mutableStateOf(false) }
 
     Box {
         AssistChip(
+            enabled = enabled,
             onClick = { expandedVisibilityMenu = true },
             label = { Text(visibility.label()) },
             leadingIcon = { VisibilityIcon(visibility) },

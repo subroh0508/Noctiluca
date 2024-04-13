@@ -13,13 +13,13 @@ interface StatusRepository {
     suspend fun new(
         status: String,
         spoilerText: String?,
-        mediaIds: List<String>,
-        poll: Poll.New?,
-        inReplyToId: StatusId?,
-        sensitive: Boolean,
         visibility: Status.Visibility,
-        language: String,
-        scheduledAt: LocalDateTime?,
+        mediaIds: List<String> = listOf(),
+        poll: Poll.New? = null,
+        inReplyToId: StatusId? = null,
+        sensitive: Boolean = false,
+        language: String = "ja",
+        scheduledAt: LocalDateTime? = null,
     ): Status
 
     suspend fun delete(id: StatusId): Status

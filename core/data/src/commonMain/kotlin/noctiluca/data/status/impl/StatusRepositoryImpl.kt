@@ -29,11 +29,11 @@ internal class StatusRepositoryImpl(
     override suspend fun new(
         status: String,
         spoilerText: String?,
+        visibility: Status.Visibility,
         mediaIds: List<String>,
         poll: Poll.New?,
         inReplyToId: StatusId?,
         sensitive: Boolean,
-        visibility: Status.Visibility,
         language: String,
         scheduledAt: LocalDateTime?,
     ) = api.postStatus(

@@ -34,6 +34,13 @@ fun BoxScope.TootCard(
             visibility,
             expanded,
             onClickOpenFullScreen = { navigator?.push(TootScreen) },
+            onClickToot = {
+                viewModel.send(
+                    content.value,
+                    warning.value,
+                    visibility.value,
+                )
+            },
             modifier = modifier,
         )
 

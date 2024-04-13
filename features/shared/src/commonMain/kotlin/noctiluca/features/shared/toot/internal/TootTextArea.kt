@@ -2,6 +2,7 @@ package noctiluca.features.shared.toot.internal
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Attachment
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Warning
@@ -27,6 +28,7 @@ internal fun TootTextArea(
     borderColor: Color = DividerDefaults.color,
     onChangeContent: (String?) -> Unit,
     onChangeWarningText: (String?) -> Unit,
+    onClickToot: () -> Unit,
     textAreaModifier: Modifier = Modifier,
     modifier: Modifier = Modifier,
 ) {
@@ -78,9 +80,9 @@ internal fun TootTextArea(
 
             LeastTextCount(leastCount)
 
-            IconButton(onClick = { }) {
+            IconButton(onClick = onClickToot) {
                 Icon(
-                    Icons.Default.Send,
+                    Icons.AutoMirrored.Filled.Send,
                     contentDescription = "Toot",
                 )
             }

@@ -21,6 +21,7 @@ fun TootBox(
     account: Account?,
     content: MutableState<String?>,
     warning: MutableState<String?>,
+    onClickToot: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
     TootBy(
@@ -34,6 +35,7 @@ fun TootBox(
         warning.value ?: "",
         onChangeContent = { content.value = it },
         onChangeWarningText = { warning.value = it },
+        onClickToot = onClickToot,
         textAreaModifier = Modifier.weight(1F),
         modifier = Modifier.fillMaxSize(),
     )

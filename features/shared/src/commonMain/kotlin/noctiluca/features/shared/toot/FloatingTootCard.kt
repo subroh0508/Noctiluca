@@ -2,8 +2,8 @@ package noctiluca.features.shared.toot
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Launch
 import androidx.compose.material.icons.filled.Cancel
-import androidx.compose.material.icons.filled.Launch
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
@@ -18,6 +18,7 @@ fun FloatingTootCard(
     warning: MutableState<String?>,
     visibility: MutableState<Status.Visibility>,
     expanded: MutableState<Boolean>,
+    onClickToot: () -> Unit,
     onClickOpenFullScreen: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) = FilledCard(
@@ -42,7 +43,7 @@ fun FloatingTootCard(
             onClick = onClickOpenFullScreen,
         ) {
             Icon(
-                Icons.Default.Launch,
+                Icons.AutoMirrored.Filled.Launch,
                 contentDescription = "Open Full Toot Screen",
             )
         }
@@ -63,6 +64,7 @@ fun FloatingTootCard(
         borderColor = MaterialTheme.colorScheme.outline,
         onChangeContent = { content.value = it },
         onChangeWarningText = { warning.value = it },
+        onClickToot = onClickToot,
         modifier = Modifier.fillMaxWidth(),
     )
 }

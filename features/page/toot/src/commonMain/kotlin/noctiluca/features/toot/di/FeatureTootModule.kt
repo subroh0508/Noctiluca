@@ -7,6 +7,6 @@ import org.koin.core.module.Module
 @Suppress("FunctionName")
 fun Module.FeatureTootModule() {
     scope<TootScreen> {
-        scoped { TootViewModel(get(), get()) }
+        scoped { TootViewModel(get(), get(), get()) }
     }
 }

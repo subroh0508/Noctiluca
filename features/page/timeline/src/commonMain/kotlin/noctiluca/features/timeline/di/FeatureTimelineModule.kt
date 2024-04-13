@@ -17,6 +17,6 @@ fun Module.FeatureTimelineModule() {
     scope<TimelinesScreen> {
         scoped { AuthorizedAccountViewModel(get(), get()) }
         scoped { TimelinesViewModel(get(), get(), get(), get(), get()) }
-        scoped { TootViewModel(get(), get()) }
+        scoped { TootViewModel(get(), get(), get()) }
     }
 }

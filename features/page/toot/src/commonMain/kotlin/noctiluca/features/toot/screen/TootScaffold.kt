@@ -28,6 +28,13 @@ internal fun TootScreen.TootScaffold() {
             uiModel.current,
             content,
             warning,
+            onClickToot = {
+                viewModel.send(
+                    content.value,
+                    warning.value,
+                    visibility.value,
+                )
+            },
             modifier = Modifier.fillMaxSize()
                 .padding(top = paddingValues.calculateTopPadding()),
         )

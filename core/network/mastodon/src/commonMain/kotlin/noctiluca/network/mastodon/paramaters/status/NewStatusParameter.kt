@@ -15,6 +15,7 @@ data class NewStatusParameter(
     @SerialName("spoiler_text")
     val spoilerText: String?,
     val visibility: String,
+    val language: String,
     @SerialName("scheduled_at")
     val scheduledAt: String?,
 ) {

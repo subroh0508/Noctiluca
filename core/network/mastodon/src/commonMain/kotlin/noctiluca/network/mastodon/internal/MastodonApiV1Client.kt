@@ -3,6 +3,8 @@ package noctiluca.network.mastodon.internal
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
+import noctiluca.model.StatusId
+import noctiluca.model.status.Status
 import noctiluca.network.mastodon.Api
 import noctiluca.network.mastodon.AuthorizationTokenProvider
 import noctiluca.network.mastodon.MastodonApiV1
@@ -116,6 +118,7 @@ internal class MastodonApiV1Client(
         params: NewStatusParameter,
     ): NetworkStatus = client.post(
         Api.V1.Statuses(),
+        params,
     ).body()
 
     override suspend fun postStatusesFavourite(

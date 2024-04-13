@@ -14,10 +14,13 @@ import noctiluca.model.status.Status
 
 @Composable
 fun FloatingTootCard(
-    content: MutableState<String?>,
-    warning: MutableState<String?>,
-    visibility: MutableState<Status.Visibility>,
+    content: String?,
+    warning: String?,
+    visibility: Status.Visibility,
     expanded: MutableState<Boolean>,
+    onChangeContent: (String?) -> Unit,
+    onChangeWarningText: (String?) -> Unit,
+    onChangeVisibility: (Status.Visibility) -> Unit,
     onClickToot: () -> Unit,
     onClickOpenFullScreen: () -> Unit = {},
     modifier: Modifier = Modifier,
@@ -35,7 +38,10 @@ fun FloatingTootCard(
     Spacer(Modifier.height(8.dp))
     Row {
         Spacer(Modifier.width(16.dp))
-        VisibilityChip(visibility)
+        VisibilityChip(
+            visibility,
+            onChangeVisibility = onChangeVisibility,
+        )
 
         Spacer(Modifier.weight(1F))
 
@@ -59,11 +65,11 @@ fun FloatingTootCard(
     }
 
     TootTextArea(
-        content.value ?: "",
-        warning.value ?: "",
+        content ?: "",
+        warning ?: "",
         borderColor = MaterialTheme.colorScheme.outline,
-        onChangeContent = { content.value = it },
-        onChangeWarningText = { warning.value = it },
+        onChangeContent = onChangeContent,
+        onChangeWarningText = onChangeWarningText,
         onClickToot = onClickToot,
         modifier = Modifier.fillMaxWidth(),
     )

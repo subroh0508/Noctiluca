@@ -22,19 +22,20 @@ internal fun TootScreen.TootScaffold() {
     val visibility = remember { mutableStateOf(Status.Visibility.PUBLIC) }
 
     Scaffold(
-        topBar = { TootTopAppBar(visibility) },
+        topBar = {
+            TootTopAppBar(
+                uiModel.statusText.visibility,
+                onChangeVisibility = viewModel::onChangeVisibility,
+            )
+        },
     ) { paddingValues ->
         TootBox(
             uiModel.current,
-            content,
-            warning,
-            onClickToot = {
-                viewModel.send(
-                    content.value,
-                    warning.value,
-                    visibility.value,
-                )
-            },
+            uiModel.statusText.content,
+            uiModel.statusText.warning,
+            onChangeContent = viewModel::onChangeContent,
+            onChangeWarningText = viewModel::onChangeWarningText,
+            onClickToot = viewModel::toot,
             modifier = Modifier.fillMaxSize()
                 .padding(top = paddingValues.calculateTopPadding()),
         )

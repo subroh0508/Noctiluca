@@ -15,11 +15,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.textfield.TextArea
 import noctiluca.features.shared.getCommonString
+import noctiluca.features.shared.utils.MAX_CONTENT_LENGTH
+import noctiluca.features.shared.utils.isEnabledToot
 
 internal val TootAreaPadding = 16.dp
 private val OptionButtonsHorizontalPadding = 4.dp
-
-private const val MAX_CONTENT_LENGTH = 500
 
 @Composable
 internal fun TootTextArea(
@@ -80,7 +80,10 @@ internal fun TootTextArea(
 
             LeastTextCount(leastCount)
 
-            IconButton(onClick = onClickToot) {
+            IconButton(
+                onClick = onClickToot,
+                enabled = isEnabledToot(content),
+            ) {
                 Icon(
                     Icons.AutoMirrored.Filled.Send,
                     contentDescription = "Toot",

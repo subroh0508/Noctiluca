@@ -12,7 +12,6 @@ import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.shared.toot.FloatingTootCard
 import noctiluca.features.toot.TootScreen
 import noctiluca.features.toot.viewmodel.TootViewModel
-import noctiluca.model.status.Status
 
 @Composable
 fun BoxScope.TootCard(
@@ -21,26 +20,20 @@ fun BoxScope.TootCard(
 ) {
     val navigator = LocalNavigator.current
 
+    val uiModel by viewModel.uiModel.collectAsState()
     val expanded = remember { mutableStateOf(false) }
-
-    val content = remember { mutableStateOf<String?>(null) }
-    val warning = remember { mutableStateOf<String?>(null) }
-    val visibility = remember { mutableStateOf(Status.Visibility.PUBLIC) }
 
     if (expanded.value) {
         FloatingTootCard(
-            content,
-            warning,
-            visibility,
+            uiModel.statusText.content,
+            uiModel.statusText.warning,
+            uiModel.statusText.visibility,
             expanded,
+            onChangeContent = viewModel::onChangeContent,
+            onChangeWarningText = viewModel::onChangeWarningText,
+            onChangeVisibility = viewModel::onChangeVisibility,
             onClickOpenFullScreen = { navigator?.push(TootScreen) },
-            onClickToot = {
-                viewModel.send(
-                    content.value,
-                    warning.value,
-                    visibility.value,
-                )
-            },
+            onClickToot = viewModel::toot,
             modifier = modifier,
         )
 

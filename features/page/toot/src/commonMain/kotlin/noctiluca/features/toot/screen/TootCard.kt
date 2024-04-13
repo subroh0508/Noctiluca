@@ -9,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
-import noctiluca.features.shared.toot.FloatingTootCard
 import noctiluca.features.toot.TootScreen
+import noctiluca.features.toot.section.FloatingTootCard
 import noctiluca.features.toot.viewmodel.TootViewModel
 
 @Composable

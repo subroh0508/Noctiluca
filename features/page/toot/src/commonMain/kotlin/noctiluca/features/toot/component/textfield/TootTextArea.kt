@@ -1,10 +1,9 @@
-package noctiluca.features.shared.toot.internal
+package noctiluca.features.toot.component.textfield
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.Attachment
-import androidx.compose.material.icons.filled.Send
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material.icons.filled.WarningAmber
 import androidx.compose.material3.*
@@ -15,8 +14,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.textfield.TextArea
 import noctiluca.features.shared.getCommonString
-import noctiluca.features.shared.utils.MAX_CONTENT_LENGTH
 import noctiluca.features.shared.utils.isEnabledToot
+import noctiluca.features.toot.model.MAX_CONTENT_LENGTH
 
 internal val TootAreaPadding = 16.dp
 private val OptionButtonsHorizontalPadding = 4.dp

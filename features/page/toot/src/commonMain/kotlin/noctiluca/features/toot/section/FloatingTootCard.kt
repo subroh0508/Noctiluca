@@ -1,4 +1,4 @@
-package noctiluca.features.shared.toot
+package noctiluca.features.toot.section
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -9,11 +9,12 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.card.FilledCard
-import noctiluca.features.shared.toot.internal.TootTextArea
+import noctiluca.features.toot.component.chip.VisibilityChip
+import noctiluca.features.toot.component.textfield.TootTextArea
 import noctiluca.model.status.Status
 
 @Composable
-fun FloatingTootCard(
+internal fun FloatingTootCard(
     content: MutableState<String?>,
     warning: MutableState<String?>,
     visibility: Status.Visibility,

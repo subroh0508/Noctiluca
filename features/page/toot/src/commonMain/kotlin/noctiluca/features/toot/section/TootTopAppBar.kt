@@ -7,7 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.navigation.component.Back
-import noctiluca.features.shared.toot.VisibilityChip
+import noctiluca.features.toot.component.chip.VisibilityChip
 import noctiluca.model.status.Status
 
 @OptIn(ExperimentalMaterial3Api::class)

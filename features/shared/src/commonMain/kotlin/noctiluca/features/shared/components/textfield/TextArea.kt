@@ -11,7 +11,7 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun TextArea(
+fun TextArea(
     value: String?,
     enabled: Boolean,
     onValueChange: (String?) -> Unit,

@@ -7,8 +7,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.shared.extensions.getAuthorizedScreenModel
-import noctiluca.features.shared.toot.TootBox
 import noctiluca.features.toot.TootScreen
+import noctiluca.features.toot.section.TootBox
 import noctiluca.features.toot.section.TootScrollableFrame
 import noctiluca.features.toot.section.TootTopAppBar
 import noctiluca.features.toot.viewmodel.TootViewModel

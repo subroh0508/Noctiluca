@@ -2,10 +2,9 @@ package noctiluca.features.timeline.di
 
 import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.timeline.TimelinesScreen
-import noctiluca.features.timeline.TootScreen
 import noctiluca.features.timeline.viewmodel.AuthorizedAccountViewModel
 import noctiluca.features.timeline.viewmodel.TimelinesViewModel
-import noctiluca.features.timeline.viewmodel.TootViewModel
+import noctiluca.features.toot.viewmodel.TootViewModel
 import noctiluca.timeline.domain.di.TimelineDomainModule
 import org.koin.core.module.Module
 
@@ -18,10 +17,6 @@ fun Module.FeatureTimelineModule() {
     scope<TimelinesScreen> {
         scoped { AuthorizedAccountViewModel(get(), get()) }
         scoped { TimelinesViewModel(get(), get(), get(), get(), get()) }
-        scoped { TootViewModel(get(), get()) }
-    }
-
-    scope<TootScreen> {
         scoped { TootViewModel(get(), get()) }
     }
 }

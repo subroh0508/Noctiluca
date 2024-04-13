@@ -1,13 +1,11 @@
-package noctiluca.features.timeline.viewmodel
+package noctiluca.features.toot.viewmodel
 
 import cafe.adriel.voyager.core.model.ScreenModel
 import kotlinx.coroutines.flow.*
 import noctiluca.data.account.AuthorizedAccountRepository
 import noctiluca.data.di.AuthorizedContext
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
-import noctiluca.features.timeline.model.TootModel
-import noctiluca.model.timeline.*
-import noctiluca.timeline.domain.usecase.*
+import noctiluca.features.toot.model.TootModel
 
 class TootViewModel(
     private val authorizedAccountRepository: AuthorizedAccountRepository,

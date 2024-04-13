@@ -17,6 +17,8 @@ import noctiluca.features.statusdetail.di.FeatureStatusDetailModule
 import noctiluca.features.statusdetail.featureStatusDetailScreenModule
 import noctiluca.features.timeline.di.FeatureTimelineModule
 import noctiluca.features.timeline.featureTimelineScreenModule
+import noctiluca.features.toot.di.FeatureTootModule
+import noctiluca.features.toot.featureTootScreenModule
 import noctiluca.network.authorization.di.AuthorizationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
 import noctiluca.network.mastodon.di.MastodonApiModule
@@ -66,6 +68,7 @@ object AppEntryPoint {
         featureSignInScreenModule()
         featureStatusDetailScreenModule()
         featureTimelineScreenModule()
+        featureTootScreenModule()
     }
 
     private fun buildApiModules(
@@ -87,6 +90,7 @@ object AppEntryPoint {
         AuthorizedFeatureModule()
         FeatureSignInModule()
         FeatureTimelineModule()
+        FeatureTootModule()
         FeatureAccountDetailModule()
         FeatureStatusDetailModule()
     }

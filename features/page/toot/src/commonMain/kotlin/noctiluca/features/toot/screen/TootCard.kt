@@ -1,4 +1,4 @@
-package noctiluca.features.timeline.screen
+package noctiluca.features.toot.screen
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -10,12 +10,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import cafe.adriel.voyager.navigator.LocalNavigator
 import noctiluca.features.shared.toot.FloatingTootCard
-import noctiluca.features.timeline.TootScreen
-import noctiluca.features.timeline.viewmodel.TootViewModel
+import noctiluca.features.toot.TootScreen
+import noctiluca.features.toot.viewmodel.TootViewModel
 import noctiluca.model.status.Status
 
 @Composable
-internal fun BoxScope.TootCard(
+fun BoxScope.TootCard(
     viewModel: TootViewModel,
     modifier: Modifier = Modifier,
 ) {

@@ -1,4 +1,4 @@
-package noctiluca.features.timeline.section
+package noctiluca.features.toot.section
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.width

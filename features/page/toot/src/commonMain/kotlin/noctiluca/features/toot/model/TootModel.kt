@@ -1,4 +1,4 @@
-package noctiluca.features.timeline.model
+package noctiluca.features.toot.model
 
 import noctiluca.model.AuthorizeEventState
 import noctiluca.model.account.Account

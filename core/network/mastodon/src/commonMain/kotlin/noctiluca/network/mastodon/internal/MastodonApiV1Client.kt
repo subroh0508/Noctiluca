@@ -3,8 +3,6 @@ package noctiluca.network.mastodon.internal
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import noctiluca.model.StatusId
-import noctiluca.model.status.Status
 import noctiluca.network.mastodon.Api
 import noctiluca.network.mastodon.AuthorizationTokenProvider
 import noctiluca.network.mastodon.MastodonApiV1

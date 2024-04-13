@@ -7,6 +7,7 @@ kotlin {
         commonMain {
             dependencies {
                 implementation(project(":core:domain:timeline"))
+                implementation(project(":features:page:toot"))
 
                 implementation(libs.kotlinx.datetime)
             }

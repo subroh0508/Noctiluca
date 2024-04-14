@@ -2,10 +2,19 @@ package noctiluca.features.toot.component
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.datetime.Clock
 import noctiluca.features.toot.model.MediaFile
 import noctiluca.features.toot.utils.getMimeType
 import noctiluca.features.toot.utils.toKmpUri
+import platform.Foundation.NSItemProvider
+import platform.Foundation.NSTemporaryDirectory
 import platform.Foundation.NSURL
+import platform.Foundation.pathExtension
+import platform.Foundation.writeToURL
 import platform.Photos.PHPhotoLibrary.Companion.sharedPhotoLibrary
 import platform.PhotosUI.PHPickerConfiguration
 import platform.PhotosUI.PHPickerConfigurationAssetRepresentationModeCurrent
@@ -17,6 +26,7 @@ import platform.PhotosUI.PHPickerViewControllerDelegateProtocol
 import platform.UIKit.UIApplication
 import platform.UniformTypeIdentifiers.UTTypeImage
 import platform.darwin.NSObject
+import kotlin.coroutines.resume
 
 internal actual class MediaFilePickerLauncher(
     private val pickerDelegate: PHPickerViewControllerDelegateProtocol,
@@ -37,7 +47,8 @@ internal actual class MediaFilePickerLauncher(
 internal actual fun rememberMediaFilePickerLauncher(
     onSelect: (List<MediaFile>) -> Unit,
 ): MediaFilePickerLauncher {
-    val delegate = remember { PHPickerDelegate(onSelect) }
+    val coroutineScope = rememberCoroutineScope()
+    val delegate = remember { PHPickerDelegate(coroutineScope, onSelect) }
 
     return remember { MediaFilePickerLauncher(delegate) }
 }
@@ -55,32 +66,23 @@ private fun NSURL.toMediaFile(): MediaFile {
 }
 
 private class PHPickerDelegate(
+    private val coroutineScope: CoroutineScope,
     private val onSelect: (List<MediaFile>) -> Unit,
 ) : NSObject(), PHPickerViewControllerDelegateProtocol {
     override fun picker(
         picker: PHPickerViewController,
         didFinishPicking: List<*>,
     ) {
-        val files: MutableList<MediaFile> = mutableListOf()
-
         picker.dismissViewControllerAnimated(true, null)
-        println("didFinishPicking: $didFinishPicking")
-        didFinishPicking.forEach {
-            val result = it as? PHPickerResult ?: return@forEach
 
-            result.itemProvider.loadFileRepresentationForTypeIdentifier(
-                typeIdentifier = UTTypeImage.identifier,
-            ) { url, error ->
-                if (error != null) {
-                    println("Error: $error")
-                    return@loadFileRepresentationForTypeIdentifier
-                }
-
-                url?.toMediaFile()?.let(files::add)
+        coroutineScope.launch {
+            val files = didFinishPicking.mapNotNull {
+                val result = it as? PHPickerResult ?: return@mapNotNull null
+                result.itemProvider.loadFileRepresentationForTypeIdentifier()?.toMediaFile()
             }
-        }
 
-        onSelect(files)
+            onSelect(files)
+        }
     }
 }
 
@@ -100,4 +102,27 @@ private fun createPHPickerViewController(
     return PHPickerViewController(configuration).apply {
         this.delegate = pickerDelegate
     }
+}
+
+private suspend fun NSItemProvider.loadFileRepresentationForTypeIdentifier(): NSURL? =
+    suspendCancellableCoroutine { continuation ->
+        loadFileRepresentationForTypeIdentifier(
+            typeIdentifier = UTTypeImage.identifier,
+        ) { url, error ->
+            if (error != null || url == null) {
+                println("Error: $error / $url")
+                continuation.resume(null)
+            } else {
+                continuation.resume(buildTemporaryFileURL(url))
+            }
+        }
+    }
+
+private fun buildTemporaryFileURL(
+    nsUrl: NSURL,
+): NSURL {
+    val extension = nsUrl.pathExtension().orEmpty()
+    return NSURL.fileURLWithPath(
+        "${NSTemporaryDirectory()}/${Clock.System.now().epochSeconds}.$extension",
+    ).also { nsUrl.dataRepresentation.writeToURL(it, true) }
 }

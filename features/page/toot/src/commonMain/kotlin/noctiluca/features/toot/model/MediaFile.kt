@@ -3,6 +3,10 @@ package noctiluca.features.toot.model
 import noctiluca.model.Uri
 
 sealed class MediaFile {
+    companion object {
+        const val MAX_SELECTION_SIZE = 4
+    }
+
     abstract val original: Uri
     abstract val mimeType: String
 

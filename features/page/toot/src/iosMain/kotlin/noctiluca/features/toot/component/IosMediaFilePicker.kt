@@ -100,7 +100,7 @@ private fun createPHPickerViewController(
     configuration.preferredAssetRepresentationMode =
         PHPickerConfigurationAssetRepresentationModeCurrent
     configuration.selection = PHPickerConfigurationSelectionOrdered
-    configuration.selectionLimit = 4
+    configuration.selectionLimit = MediaFile.MAX_SELECTION_SIZE.toLong()
 
     return PHPickerViewController(configuration).apply {
         this.delegate = pickerDelegate

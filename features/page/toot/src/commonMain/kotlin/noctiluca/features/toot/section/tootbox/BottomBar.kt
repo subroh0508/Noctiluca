@@ -116,7 +116,6 @@ private fun IconResources(isContentWarning: Boolean) =
         Icons.Default.WarningAmber to IconButtonDefaults.iconButtonColors()
     }
 
-
 @Composable
 private fun RowScope.LeastTextCount(
     leastCount: Int,

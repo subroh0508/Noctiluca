@@ -42,9 +42,9 @@ internal fun TootBox(
                 onChangeContent = { content.value = it },
                 onChangeWarningText = { warning.value = it },
             )
-        }
 
-        MediaFileGrid(files)
+            MediaFileGrid(files)
+        }
 
         HorizontalDivider(
             color = DividerDefaults.color,

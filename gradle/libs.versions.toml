@@ -79,6 +79,7 @@ androidx-datastore-preferences-core = { module = "androidx.datastore:datastore-p
 
 androidx-compose-material3 = { module = "androidx.compose.material3:material3", version.ref = "androidx-compose-material3" }
 
+androidx-media3-common = { module = "androidx.media3:media3-common", version.ref = "androidx-media3" }
 androidx-media3-exoplayer-core = { module = "androidx.media3:media3-exoplayer", version.ref = "androidx-media3" }
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "androidx-media3" }
 androidx-media3-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "androidx-media3" }

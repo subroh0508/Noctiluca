@@ -8,6 +8,7 @@ import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
 import android.provider.OpenableColumns
+import android.webkit.MimeTypeMap
 import androidx.core.provider.DocumentsContractCompat
 import noctiluca.model.Uri
 import java.io.BufferedInputStream
@@ -30,6 +31,17 @@ internal fun android.net.Uri.toKmpUri(
 
     return Uri(absolutePath)
 }
+
+internal fun android.net.Uri.getMimeType(
+    context: Context,
+) = when (scheme) {
+    ContentResolver.SCHEME_CONTENT -> context.contentResolver.getType(this)
+    ContentResolver.SCHEME_FILE -> MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+        MimeTypeMap.getFileExtensionFromUrl(toString()),
+    )
+
+    else -> null
+} ?: error("Unknown mime type: $path")
 
 private const val AUTHORITY_EXTERNAL_STORAGE_DOCUMENT = "com.android.externalstorage.documents"
 private const val AUTHORITY_DOWNLOADS_DOCUMENT = "com.android.providers.downloads.documents"

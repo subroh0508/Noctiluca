@@ -7,7 +7,9 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import noctiluca.features.toot.component.textfield.TootAreaPadding
 import noctiluca.features.toot.component.textfield.TootTextArea
+import noctiluca.features.toot.model.MediaFile
 import noctiluca.features.toot.section.tootbox.BottomBar
+import noctiluca.features.toot.section.tootbox.MediaFileGrid
 import noctiluca.features.toot.section.tootbox.TootBy
 import noctiluca.model.account.Account
 
@@ -16,7 +18,9 @@ internal fun TootBox(
     account: Account?,
     content: MutableState<String?>,
     warning: MutableState<String?>,
+    files: List<MediaFile>,
     enabled: Boolean,
+    onSelectFiles: (List<MediaFile>) -> Unit,
     onClickToot: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
@@ -40,6 +44,8 @@ internal fun TootBox(
             )
         }
 
+        MediaFileGrid(files)
+
         HorizontalDivider(
             color = DividerDefaults.color,
             modifier = Modifier.padding(horizontal = TootAreaPadding),
@@ -50,6 +56,7 @@ internal fun TootBox(
             warning.value ?: "",
             isContentWarning = isContentWarning,
             enabled = enabled,
+            onSelectFiles = onSelectFiles,
             onToggleContentWarning = {
                 isContentWarning = it
 

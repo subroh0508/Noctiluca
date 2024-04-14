@@ -1,6 +1,7 @@
 package noctiluca.features.toot.component
 
 import androidx.compose.runtime.Composable
+import noctiluca.features.toot.model.MediaFile
 import noctiluca.model.Uri
 
 internal expect class MediaFilePickerLauncher {
@@ -9,5 +10,5 @@ internal expect class MediaFilePickerLauncher {
 
 @Composable
 internal expect fun rememberMediaFilePickerLauncher(
-    onSelect: (List<Uri>) -> Unit,
+    onSelect: (List<MediaFile>) -> Unit,
 ): MediaFilePickerLauncher

@@ -42,6 +42,7 @@ fun BoxScope.TootCard(
             uiModel.statusText.visibility,
             enabled = !uiModel.message.isLoading,
             onChangeVisibility = viewModel::onChangeVisibility,
+            onSelectFiles = viewModel::onSelectFiles,
             onClickToot = viewModel::toot,
             onClickOpenFullScreen = { navigator?.push(TootScreen) },
             onCloseCard = { expanded.value = false },

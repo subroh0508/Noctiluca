@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.card.FilledCard
 import noctiluca.features.toot.component.textfield.TootAreaPadding
 import noctiluca.features.toot.component.textfield.TootTextArea
+import noctiluca.features.toot.model.MediaFile
 import noctiluca.features.toot.section.floatingtootcard.TopBar
 import noctiluca.features.toot.section.tootbox.BottomBar
 import noctiluca.model.status.Status
@@ -19,6 +20,7 @@ internal fun FloatingTootCard(
     visibility: Status.Visibility,
     enabled: Boolean,
     onChangeVisibility: (Status.Visibility) -> Unit,
+    onSelectFiles: (List<MediaFile>) -> Unit,
     onClickToot: () -> Unit,
     onClickOpenFullScreen: () -> Unit = {},
     onCloseCard: () -> Unit = {},
@@ -67,6 +69,7 @@ internal fun FloatingTootCard(
                 warning.value ?: "",
                 isContentWarning = isContentWarning,
                 enabled = enabled,
+                onSelectFiles = onSelectFiles,
                 onToggleContentWarning = {
                     isContentWarning = it
 

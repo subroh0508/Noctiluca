@@ -7,12 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.VisibilityOff
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SuggestionChip
 import androidx.compose.material3.SuggestionChipDefaults
@@ -25,9 +22,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import noctiluca.features.shared.components.icon.OverlayIcon
 import noctiluca.features.shared.getCommonString
 import noctiluca.features.shared.status.attachment.COUNT_PER_GRID
 import noctiluca.features.shared.status.attachment.GridHeight
@@ -84,7 +81,6 @@ private fun SensitiveContent(
     )
 }
 
-@Suppress("MagicNumber")
 @Composable
 private fun OverlayHideIcon(
     height: Dp,
@@ -96,19 +92,11 @@ private fun OverlayHideIcon(
 ) {
     content()
 
-    Box(
-        modifier = Modifier.clickable { onHideContent() }
-            .offset(x = 4.dp, y = 4.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(Color.Black.copy(0.6F))
-            .padding(4.dp),
-    ) {
-        Icon(
-            Icons.Default.VisibilityOff,
-            contentDescription = "Hide Content",
-            modifier = Modifier.align(Alignment.Center),
-        )
-    }
+    OverlayIcon(
+        Icons.Default.VisibilityOff,
+        contentDescription = "Hide Content",
+        onClick = onHideContent,
+    )
 }
 
 @Composable

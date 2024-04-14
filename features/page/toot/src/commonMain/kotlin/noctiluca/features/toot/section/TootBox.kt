@@ -23,6 +23,7 @@ internal fun TootBox(
     files: List<MediaFile>,
     enabled: Boolean,
     onSelectFiles: (List<MediaFile>) -> Unit,
+    onRemoveFile: (Int) -> Unit,
     onClickToot: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
@@ -48,7 +49,7 @@ internal fun TootBox(
                 onChangeWarningText = { warning.value = it },
             )
 
-            MediaFileGrid(files)
+            MediaFileGrid(files, onRemoveFile)
         }
 
         HorizontalDivider(

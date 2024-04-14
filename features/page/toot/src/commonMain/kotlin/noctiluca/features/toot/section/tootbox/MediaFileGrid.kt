@@ -1,21 +1,26 @@
 package noctiluca.features.toot.section.tootbox
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
+import noctiluca.features.shared.components.icon.OverlayIcon
 import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.features.toot.model.MediaFile
 
@@ -24,6 +29,7 @@ private val MediaFileHeight = 240.dp
 @Composable
 internal fun MediaFileGrid(
     files: List<MediaFile>,
+    onClickClear: (Int) -> Unit,
 ) {
     if (files.isEmpty()) {
         return
@@ -34,8 +40,8 @@ internal fun MediaFileGrid(
             .padding(vertical = 8.dp, horizontal = 16.dp),
     ) {
         when (files.size) {
-            1 -> SingleMedia(files[0])
-            else -> MultipleMedia(files)
+            1 -> SingleMedia(files[0], onClickClear)
+            else -> MultipleMedia(files, onClickClear)
         }
     }
 }
@@ -43,30 +49,52 @@ internal fun MediaFileGrid(
 @Composable
 private fun SingleMedia(
     file: MediaFile,
-) = AsyncImage(
-    file.url,
-    contentScale = ContentScale.Crop,
+    onClickClear: (Int) -> Unit,
+) = Box(
     modifier = Modifier.fillMaxWidth()
-        .height(MediaFileHeight)
-        .clip(RoundedCornerShape(8.dp)),
-)
+        .height(MediaFileHeight),
+) {
+    AsyncImage(
+        file.url,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.fillMaxSize()
+            .clip(RoundedCornerShape(8.dp)),
+    )
+
+    OverlayIcon(
+        Icons.Default.Clear,
+        contentDescription = "Clear #1",
+        onClick = { onClickClear(0) },
+    )
+}
 
 @Composable
 private fun MultipleMedia(
-    files: List<MediaFile>
+    files: List<MediaFile>,
+    onClickClear: (Int) -> Unit,
 ) = BoxWithConstraints {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        files.forEach { file ->
+        files.forEachIndexed { index, file ->
             item {
-                AsyncImage(
-                    file.url,
-                    contentScale = ContentScale.Crop,
+                Box(
                     modifier = Modifier.width(MediaFileWidth())
                         .height(MediaFileHeight)
-                        .clip(RoundedCornerShape(8.dp)),
-                )
+                ) {
+                    AsyncImage(
+                        file.url,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                            .clip(RoundedCornerShape(8.dp)),
+                    )
+
+                    OverlayIcon(
+                        Icons.Default.Clear,
+                        contentDescription = "Clear #${index + 1}",
+                        onClick = { onClickClear(index) },
+                    )
+                }
             }
         }
     }

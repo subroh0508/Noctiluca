@@ -62,6 +62,14 @@ class TootViewModel(
         statusTextStateFlow.value = statusTextStateFlow.copy(files = files)
     }
 
+    fun onRemoveFile(
+        index: Int,
+    ) {
+        statusTextStateFlow.value = statusTextStateFlow.value.copy(
+            files = statusTextStateFlow.value.files.toMutableList().apply { removeAt(index) },
+        )
+    }
+
     fun toot() {
         val content = uiModel.value.statusText.content ?: return
         if (!isEnabledToot(content) || uiModel.value.message.text == Message.SENDING) {

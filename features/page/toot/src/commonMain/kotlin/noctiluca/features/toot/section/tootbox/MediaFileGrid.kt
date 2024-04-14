@@ -55,7 +55,7 @@ private fun SingleMedia(
         .height(MediaFileHeight),
 ) {
     AsyncImage(
-        file.url,
+        file.original,
         contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxSize()
             .clip(RoundedCornerShape(8.dp)),
@@ -83,7 +83,7 @@ private fun MultipleMedia(
                         .height(MediaFileHeight)
                 ) {
                     AsyncImage(
-                        file.url,
+                        file.original,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                             .clip(RoundedCornerShape(8.dp)),

@@ -50,22 +50,26 @@ internal fun MediaFileGrid(
 private fun SingleMedia(
     file: MediaFile,
     onClickClear: (Int) -> Unit,
-) = Box(
-    modifier = Modifier.fillMaxWidth()
-        .height(MediaFileHeight),
 ) {
-    AsyncImage(
-        file.original,
-        contentScale = ContentScale.Crop,
-        modifier = Modifier.fillMaxSize()
-            .clip(RoundedCornerShape(8.dp)),
-    )
+    val image = (file as? MediaFile.Image) ?: return
 
-    OverlayIcon(
-        Icons.Default.Clear,
-        contentDescription = "Clear #1",
-        onClick = { onClickClear(0) },
-    )
+    Box(
+        modifier = Modifier.fillMaxWidth()
+            .height(MediaFileHeight),
+    ) {
+        AsyncImage(
+            image.original,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+                .clip(RoundedCornerShape(8.dp)),
+        )
+
+        OverlayIcon(
+            Icons.Default.Clear,
+            contentDescription = "Clear #1",
+            onClick = { onClickClear(0) },
+        )
+    }
 }
 
 @Composable
@@ -76,27 +80,28 @@ private fun MultipleMedia(
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        files.forEachIndexed { index, file ->
-            item {
-                Box(
-                    modifier = Modifier.width(MediaFileWidth())
-                        .height(MediaFileHeight)
-                ) {
-                    AsyncImage(
-                        file.original,
-                        contentScale = ContentScale.Crop,
-                        modifier = Modifier.fillMaxSize()
-                            .clip(RoundedCornerShape(8.dp)),
-                    )
+        files.filterIsInstance<MediaFile.Image>()
+            .forEachIndexed { index, file ->
+                item {
+                    Box(
+                        modifier = Modifier.width(MediaFileWidth())
+                            .height(MediaFileHeight)
+                    ) {
+                        AsyncImage(
+                            file.original,
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier.fillMaxSize()
+                                .clip(RoundedCornerShape(8.dp)),
+                        )
 
-                    OverlayIcon(
-                        Icons.Default.Clear,
-                        contentDescription = "Clear #${index + 1}",
-                        onClick = { onClickClear(index) },
-                    )
+                        OverlayIcon(
+                            Icons.Default.Clear,
+                            contentDescription = "Clear #${index + 1}",
+                            onClick = { onClickClear(index) },
+                        )
+                    }
                 }
             }
-        }
     }
 }
 

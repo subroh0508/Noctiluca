@@ -60,13 +60,16 @@ internal actual fun rememberMediaFilePickerLauncher(
     return remember { MediaFilePickerLauncher(delegate) }
 }
 
-private fun NSURL.toMediaFile(): MediaFile {
-    val mimeType = getMimeType() ?: error("Unknown MIME-Type: $path")
-    val kmpUri = toKmpUri() ?: error("Unknown path: $path")
+private fun Pair<NSURL, NSURL>.toMediaFile(): MediaFile {
+    val (original, preview) = this
+
+    val mimeType = original.getMimeType() ?: error("Unknown MIME-Type: ${original.path}")
+    val kmpUri = original.toKmpUri() ?: error("Unknown path: ${original.path}")
+    val jpgUri = preview.absoluteString?.let(::Uri) ?: error("Unknown path: ${preview.path}")
 
     return when {
-        mimeType.startsWith("image") -> MediaFile.Image(kmpUri, mimeType, toJpg())
-        mimeType.startsWith("video") -> MediaFile.Video(kmpUri, mimeType, toJpg())
+        mimeType.startsWith("image") -> MediaFile.Image(kmpUri, mimeType, jpgUri)
+        mimeType.startsWith("video") -> MediaFile.Video(kmpUri, mimeType, jpgUri)
         mimeType.startsWith("audio") -> MediaFile.Audio(kmpUri, mimeType)
         else -> MediaFile.Unknown(kmpUri, mimeType)
     }
@@ -83,9 +86,11 @@ private class PHPickerDelegate(
         picker.dismissViewControllerAnimated(true, null)
 
         coroutineScope.launch {
-            val files = didFinishPicking.mapNotNull {
-                val result = it as? PHPickerResult ?: return@mapNotNull null
-                result.itemProvider.loadFileRepresentationForTypeIdentifier()?.toMediaFile()
+            val files = didFinishPicking.mapIndexedNotNull { index, item ->
+                val result = item as? PHPickerResult ?: return@mapIndexedNotNull null
+                result.itemProvider
+                    .loadFileRepresentationForTypeIdentifier(index)
+                    ?.toMediaFile()
             }
 
             onSelect(files)
@@ -111,7 +116,9 @@ private fun createPHPickerViewController(
     }
 }
 
-private suspend fun NSItemProvider.loadFileRepresentationForTypeIdentifier(): NSURL? =
+private suspend fun NSItemProvider.loadFileRepresentationForTypeIdentifier(
+    index: Int,
+): Pair<NSURL, NSURL>? =
     suspendCancellableCoroutine { continuation ->
         loadFileRepresentationForTypeIdentifier(
             typeIdentifier = UTTypeImage.identifier,
@@ -120,22 +127,38 @@ private suspend fun NSItemProvider.loadFileRepresentationForTypeIdentifier(): NS
                 println("Error: $error / $url")
                 continuation.resume(null)
             } else {
-                continuation.resume(buildTemporaryFileURL(url))
+                //val temporary = buildTemporaryFileURL(url)
+                continuation.resume(buildJpgURL(url, index) to url)
             }
         }
     }
 
 private fun buildTemporaryFileURL(
     nsUrl: NSURL,
+    index: Int,
 ): NSURL {
     val extension = nsUrl.pathExtension().orEmpty()
     return NSURL.fileURLWithPath(
-        "${NSTemporaryDirectory()}/${Clock.System.now().epochSeconds}.$extension",
+        "${NSTemporaryDirectory()}${Clock.System.now().epochSeconds}_$index.$extension",
     ).also { nsUrl.dataRepresentation.writeToURL(it, true) }
 }
 
-private fun NSURL.toJpg(): Uri {
-    println("path #1: $absoluteString")
+private fun buildJpgURL(
+    nsUrl: NSURL,
+    index: Int,
+): NSURL {
+    val path = "${NSTemporaryDirectory()}${Clock.System.now().epochSeconds}_$index.jpg"
+
+    NSFileManager.defaultManager().createFileAtPath(
+        path,
+        UIImageJPEGRepresentation(UIImage(nsUrl.readData()), 1.0),
+        null,
+    )
+
+    return NSURL.fileURLWithPath(path)
+}
+
+private fun NSURL.readData(): NSData {
     var result: NSData? = null
     while (result == null) {
         val data = NSData.dataWithContentsOfURL(this)
@@ -144,15 +167,5 @@ private fun NSURL.toJpg(): Uri {
         }
     }
 
-    val uiImage = result.let(::UIImage)
-    val path = "${NSTemporaryDirectory()}/${Clock.System.now().epochSeconds}.jpg"
-
-    println("path #2: $path")
-    NSFileManager.defaultManager().createFileAtPath(
-        path,
-        UIImageJPEGRepresentation(uiImage, 1.0),
-        null,
-    )
-
-    return Uri(path)
+    return result
 }

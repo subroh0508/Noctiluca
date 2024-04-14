@@ -9,6 +9,7 @@ import noctiluca.features.shared.model.MessageHolder
 import noctiluca.features.shared.utils.isEnabledToot
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launchLazy
+import noctiluca.features.toot.model.MediaFile
 import noctiluca.features.toot.model.Message
 import noctiluca.features.toot.model.TootModel
 import noctiluca.model.status.Status
@@ -55,6 +56,20 @@ class TootViewModel(
         statusTextStateFlow.value = statusTextStateFlow.copy(visibility = visibility)
     }
 
+    fun onSelectFiles(
+        files: List<MediaFile>,
+    ) {
+        statusTextStateFlow.value = statusTextStateFlow.copy(files = files)
+    }
+
+    fun onRemoveFile(
+        index: Int,
+    ) {
+        statusTextStateFlow.value = statusTextStateFlow.value.copy(
+            files = statusTextStateFlow.value.files.toMutableList().apply { removeAt(index) },
+        )
+    }
+
     fun toot() {
         val content = uiModel.value.statusText.content ?: return
         if (!isEnabledToot(content) || uiModel.value.message.text == Message.SENDING) {
@@ -81,10 +96,12 @@ class TootViewModel(
         content: String? = value.content,
         warning: String? = value.warning,
         visibility: Status.Visibility = value.visibility,
+        files: List<MediaFile> = value.files,
     ) = value.copy(
         content = content,
         warning = warning,
         visibility = visibility,
+        files = files,
     )
 
     private fun reset() {

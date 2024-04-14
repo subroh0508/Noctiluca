@@ -9,6 +9,13 @@ kotlin {
                 implementation(libs.kotlinx.datetime)
             }
         }
+
+        androidMain {
+            dependencies {
+                implementation(libs.androidx.activity.compose)
+                implementation(libs.androidx.media3.common)
+            }
+        }
     }
 }
 

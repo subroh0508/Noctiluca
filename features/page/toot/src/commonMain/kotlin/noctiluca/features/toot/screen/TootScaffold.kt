@@ -49,7 +49,10 @@ internal fun TootScreen.TootScaffold() {
             uiModel.current,
             content,
             warning,
+            uiModel.statusText.files,
             enabled = !uiModel.message.isLoading,
+            onSelectFiles = viewModel::onSelectFiles,
+            onRemoveFile = viewModel::onRemoveFile,
             onClickToot = viewModel::toot,
             modifier = Modifier.fillMaxSize()
                 .padding(paddingValues),

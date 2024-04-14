@@ -32,5 +32,6 @@ data class TootModel(
         val warning: String? = null,
         val visibility: Status.Visibility = Status.Visibility.PUBLIC,
         val sensitive: Boolean = false,
+        val files: List<MediaFile> = listOf(),
     )
 }

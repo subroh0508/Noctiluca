@@ -1,19 +1,18 @@
 package noctiluca.features.toot.section
 
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.DividerDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.unit.dp
-import noctiluca.features.shared.account.AccountName
-import noctiluca.features.shared.components.appbar.NavigateIconSize
-import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.features.toot.component.textfield.TootAreaPadding
 import noctiluca.features.toot.component.textfield.TootTextArea
+import noctiluca.features.toot.model.MediaFile
+import noctiluca.features.toot.section.tootbox.BottomBar
+import noctiluca.features.toot.section.tootbox.MediaFileGrid
+import noctiluca.features.toot.section.tootbox.TootBy
 import noctiluca.model.account.Account
 
 @Composable
@@ -21,54 +20,57 @@ internal fun TootBox(
     account: Account?,
     content: MutableState<String?>,
     warning: MutableState<String?>,
+    files: List<MediaFile>,
     enabled: Boolean,
+    onSelectFiles: (List<MediaFile>) -> Unit,
+    onRemoveFile: (Int) -> Unit,
     onClickToot: () -> Unit,
     modifier: Modifier = Modifier,
 ) = Column(modifier) {
+    var isContentWarning by remember { mutableStateOf(false) }
+
     TootBy(
         account,
         modifier = Modifier.fillMaxWidth()
             .padding(horizontal = TootAreaPadding),
     )
 
-    TootTextArea(
-        content.value ?: "",
-        warning.value ?: "",
-        enabled = enabled,
-        onChangeContent = { content.value = it },
-        onChangeWarningText = { warning.value = it },
-        onClickToot = onClickToot,
-        textAreaModifier = Modifier.weight(1F),
-        modifier = Modifier.fillMaxSize(),
-    )
-}
-
-@Composable
-private fun TootBy(
-    account: Account?,
-    modifier: Modifier = Modifier,
-) {
-    if (account == null) {
-        Spacer(modifier)
-
-        return
-    }
-
-    Row(modifier) {
-        IconButton(onClick = {}) {
-            AsyncImage(
-                account.avatar,
-                // fallback = imageResources(getDrawables().icon_mastodon),
-                modifier = Modifier.size(NavigateIconSize)
-                    .clip(RoundedCornerShape(8.dp)),
+    Column(Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier.weight(1F)
+                .verticalScroll(rememberScrollState()),
+        ) {
+            TootTextArea(
+                content.value ?: "",
+                warning.value ?: "",
+                isContentWarning = isContentWarning,
+                enabled = enabled,
+                onChangeContent = { content.value = it },
+                onChangeWarningText = { warning.value = it },
             )
+
+            MediaFileGrid(files, onRemoveFile)
         }
-        Spacer(Modifier.width(8.dp))
-        AccountName(
-            account,
-            displayNameStyle = MaterialTheme.typography.titleMedium,
-            usernameStyle = MaterialTheme.typography.titleSmall,
-            modifier = Modifier.align(Alignment.CenterVertically),
+
+        HorizontalDivider(
+            color = DividerDefaults.color,
+            modifier = Modifier.padding(horizontal = TootAreaPadding),
+        )
+
+        BottomBar(
+            content.value ?: "",
+            warning.value ?: "",
+            isContentWarning = isContentWarning,
+            enabled = enabled,
+            onSelectFiles = onSelectFiles,
+            onToggleContentWarning = {
+                isContentWarning = it
+
+                if (!it) {
+                    warning.value = null
+                }
+            },
+            onClickToot = onClickToot,
         )
     }
 }

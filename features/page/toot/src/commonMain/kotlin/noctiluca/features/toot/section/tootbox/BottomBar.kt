@@ -23,6 +23,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.utils.isEnabledToot
+import noctiluca.features.toot.component.rememberMediaFilePickerLauncher
 import noctiluca.features.toot.model.MAX_CONTENT_LENGTH
 
 private val OptionButtonsHorizontalPadding = 4.dp
@@ -34,7 +35,6 @@ internal fun BottomBar(
     isContentWarning: Boolean,
     enabled: Boolean,
     onToggleContentWarning: (Boolean) -> Unit,
-    onChangeWarningText: (String?) -> Unit,
     onClickToot: () -> Unit,
 ) {
     val leastCount by remember(content, warning) {
@@ -50,12 +50,7 @@ internal fun BottomBar(
         OptionButtons(
             isContentWarning,
             enabled = enabled,
-            onToggleContentWarning = {
-                onToggleContentWarning(it)
-                if (!it) {
-                    onChangeWarningText(null)
-                }
-            },
+            onToggleContentWarning = onToggleContentWarning,
         )
 
         Spacer(Modifier.weight(1f))
@@ -80,18 +75,13 @@ private fun OptionButtons(
     enabled: Boolean,
     onToggleContentWarning: (Boolean) -> Unit,
 ) {
-    val (warningIcon, warningIconColors) =
-        if (isContentWarning) {
-            Icons.Default.Warning to IconButtonDefaults.iconButtonColors(
-                contentColor = MaterialTheme.colorScheme.primary,
-            )
-        } else {
-            Icons.Default.WarningAmber to IconButtonDefaults.iconButtonColors()
-        }
+    val launcher =
+        rememberMediaFilePickerLauncher { println("file path -> ${it.joinToString(",")}") }
+    val (warningIcon, warningIconColors) = IconResources(isContentWarning)
 
     Row {
         IconButton(
-            onClick = {},
+            onClick = { launcher.launch() },
             enabled = enabled,
         ) {
             Icon(
@@ -112,6 +102,17 @@ private fun OptionButtons(
         }
     }
 }
+
+@Composable
+private fun IconResources(isContentWarning: Boolean) =
+    if (isContentWarning) {
+        Icons.Default.Warning to IconButtonDefaults.iconButtonColors(
+            contentColor = MaterialTheme.colorScheme.primary,
+        )
+    } else {
+        Icons.Default.WarningAmber to IconButtonDefaults.iconButtonColors()
+    }
+
 
 @Composable
 private fun RowScope.LeastTextCount(

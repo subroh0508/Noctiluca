@@ -50,8 +50,13 @@ internal fun TootBox(
             warning.value ?: "",
             isContentWarning = isContentWarning,
             enabled = enabled,
-            onToggleContentWarning = { isContentWarning = it },
-            onChangeWarningText = { warning.value = it },
+            onToggleContentWarning = {
+                isContentWarning = it
+
+                if (!it) {
+                    warning.value = null
+                }
+            },
             onClickToot = onClickToot,
         )
     }

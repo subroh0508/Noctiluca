@@ -1,6 +1,8 @@
 package noctiluca.features.toot.section
 
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.DividerDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.*
@@ -33,7 +35,10 @@ internal fun TootBox(
     )
 
     Column(Modifier.fillMaxSize()) {
-        Column(Modifier.weight(1F)) {
+        Column(
+            modifier = Modifier.weight(1F)
+                .verticalScroll(rememberScrollState()),
+        ) {
             TootTextArea(
                 content.value ?: "",
                 warning.value ?: "",

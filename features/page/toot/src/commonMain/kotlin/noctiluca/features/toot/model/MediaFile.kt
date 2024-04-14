@@ -9,13 +9,11 @@ sealed class MediaFile {
     data class Image(
         override val original: Uri,
         override val mimeType: String,
-        val preview: Uri,
     ) : MediaFile()
 
     data class Video(
         override val original: Uri,
         override val mimeType: String,
-        val preview: Uri,
     ) : MediaFile()
 
     data class Audio(
@@ -28,3 +26,5 @@ sealed class MediaFile {
         override val mimeType: String,
     ) : MediaFile()
 }
+
+internal expect val MediaFile.preview: Uri?

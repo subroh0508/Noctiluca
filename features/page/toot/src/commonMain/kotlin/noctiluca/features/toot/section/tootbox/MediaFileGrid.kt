@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.icon.OverlayIcon
 import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.features.toot.model.MediaFile
+import noctiluca.features.toot.model.preview
 
 private val MediaFileHeight = 240.dp
 
@@ -50,26 +51,22 @@ internal fun MediaFileGrid(
 private fun SingleMedia(
     file: MediaFile,
     onClickClear: (Int) -> Unit,
+) = Box(
+    modifier = Modifier.fillMaxWidth()
+        .height(MediaFileHeight),
 ) {
-    val image = (file as? MediaFile.Image) ?: return
+    AsyncImage(
+        file.preview,
+        contentScale = ContentScale.Crop,
+        modifier = Modifier.fillMaxSize()
+            .clip(RoundedCornerShape(8.dp)),
+    )
 
-    Box(
-        modifier = Modifier.fillMaxWidth()
-            .height(MediaFileHeight),
-    ) {
-        AsyncImage(
-            image.original,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
-                .clip(RoundedCornerShape(8.dp)),
-        )
-
-        OverlayIcon(
-            Icons.Default.Clear,
-            contentDescription = "Clear #1",
-            onClick = { onClickClear(0) },
-        )
-    }
+    OverlayIcon(
+        Icons.Default.Clear,
+        contentDescription = "Clear #1",
+        onClick = { onClickClear(0) },
+    )
 }
 
 @Composable
@@ -80,28 +77,27 @@ private fun MultipleMedia(
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
-        files.filterIsInstance<MediaFile.Image>()
-            .forEachIndexed { index, file ->
-                item {
-                    Box(
-                        modifier = Modifier.width(MediaFileWidth())
-                            .height(MediaFileHeight)
-                    ) {
-                        AsyncImage(
-                            file.original,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier.fillMaxSize()
-                                .clip(RoundedCornerShape(8.dp)),
-                        )
+        files.forEachIndexed { index, file ->
+            item {
+                Box(
+                    modifier = Modifier.width(MediaFileWidth())
+                        .height(MediaFileHeight)
+                ) {
+                    AsyncImage(
+                        file.preview,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize()
+                            .clip(RoundedCornerShape(8.dp)),
+                    )
 
-                        OverlayIcon(
-                            Icons.Default.Clear,
-                            contentDescription = "Clear #${index + 1}",
-                            onClick = { onClickClear(index) },
-                        )
-                    }
+                    OverlayIcon(
+                        Icons.Default.Clear,
+                        contentDescription = "Clear #${index + 1}",
+                        onClick = { onClickClear(index) },
+                    )
                 }
             }
+        }
     }
 }
 

@@ -10,9 +10,6 @@ import noctiluca.features.shared.components.textfield.TextArea
 import noctiluca.features.shared.getCommonString
 
 internal val TootAreaPadding = 16.dp
-private val OptionButtonsHorizontalPadding = 4.dp
-
-private val LocalEnabledTootTextArea = compositionLocalOf { true }
 
 @Composable
 internal fun TootTextArea(

@@ -3,6 +3,7 @@ package noctiluca.features.toot.component
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -10,16 +11,11 @@ import kotlinx.datetime.Clock
 import noctiluca.features.toot.model.MediaFile
 import noctiluca.features.toot.utils.getMimeType
 import noctiluca.features.toot.utils.toKmpUri
-import noctiluca.model.Uri
-import platform.Foundation.NSData
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSItemProvider
 import platform.Foundation.NSTemporaryDirectory
 import platform.Foundation.NSURL
-import platform.Foundation.dataWithContentsOfFile
-import platform.Foundation.dataWithContentsOfURL
 import platform.Foundation.pathExtension
-import platform.Foundation.writeToURL
 import platform.Photos.PHPhotoLibrary.Companion.sharedPhotoLibrary
 import platform.PhotosUI.PHPickerConfiguration
 import platform.PhotosUI.PHPickerConfigurationAssetRepresentationModeCurrent
@@ -29,8 +25,6 @@ import platform.PhotosUI.PHPickerResult
 import platform.PhotosUI.PHPickerViewController
 import platform.PhotosUI.PHPickerViewControllerDelegateProtocol
 import platform.UIKit.UIApplication
-import platform.UIKit.UIImage
-import platform.UIKit.UIImageJPEGRepresentation
 import platform.UniformTypeIdentifiers.UTTypeImage
 import platform.darwin.NSObject
 import kotlin.coroutines.resume
@@ -60,16 +54,13 @@ internal actual fun rememberMediaFilePickerLauncher(
     return remember { MediaFilePickerLauncher(delegate) }
 }
 
-private fun Pair<NSURL, NSURL>.toMediaFile(): MediaFile {
-    val (original, preview) = this
-
-    val mimeType = original.getMimeType() ?: error("Unknown MIME-Type: ${original.path}")
-    val kmpUri = original.toKmpUri() ?: error("Unknown path: ${original.path}")
-    val jpgUri = preview.absoluteString?.let(::Uri) ?: error("Unknown path: ${preview.path}")
+private fun NSURL.toMediaFile(): MediaFile {
+    val mimeType = getMimeType() ?: error("Unknown MIME-Type: $path")
+    val kmpUri = toKmpUri() ?: error("Unknown path: $path")
 
     return when {
-        mimeType.startsWith("image") -> MediaFile.Image(kmpUri, mimeType, jpgUri)
-        mimeType.startsWith("video") -> MediaFile.Video(kmpUri, mimeType, jpgUri)
+        mimeType.startsWith("image") -> MediaFile.Image(kmpUri, mimeType)
+        mimeType.startsWith("video") -> MediaFile.Video(kmpUri, mimeType)
         mimeType.startsWith("audio") -> MediaFile.Audio(kmpUri, mimeType)
         else -> MediaFile.Unknown(kmpUri, mimeType)
     }
@@ -118,54 +109,28 @@ private fun createPHPickerViewController(
 
 private suspend fun NSItemProvider.loadFileRepresentationForTypeIdentifier(
     index: Int,
-): Pair<NSURL, NSURL>? =
-    suspendCancellableCoroutine { continuation ->
-        loadFileRepresentationForTypeIdentifier(
-            typeIdentifier = UTTypeImage.identifier,
-        ) { url, error ->
-            if (error != null || url == null) {
-                println("Error: $error / $url")
-                continuation.resume(null)
-            } else {
-                //val temporary = buildTemporaryFileURL(url)
-                continuation.resume(buildJpgURL(url, index) to url)
-            }
+): NSURL? = suspendCancellableCoroutine { continuation ->
+    loadFileRepresentationForTypeIdentifier(
+        typeIdentifier = UTTypeImage.identifier,
+    ) { url, error ->
+        if (error != null || url == null) {
+            println("Error: $error / $url")
+            continuation.resume(null)
+        } else {
+            continuation.resume(buildTemporaryFileURL(url, index))
         }
     }
+}
 
+@OptIn(ExperimentalForeignApi::class)
 private fun buildTemporaryFileURL(
     nsUrl: NSURL,
     index: Int,
 ): NSURL {
     val extension = nsUrl.pathExtension().orEmpty()
+    val path = "${NSTemporaryDirectory()}${Clock.System.now().epochSeconds}_$index.$extension"
+
     return NSURL.fileURLWithPath(
-        "${NSTemporaryDirectory()}${Clock.System.now().epochSeconds}_$index.$extension",
-    ).also { nsUrl.dataRepresentation.writeToURL(it, true) }
-}
-
-private fun buildJpgURL(
-    nsUrl: NSURL,
-    index: Int,
-): NSURL {
-    val path = "${NSTemporaryDirectory()}${Clock.System.now().epochSeconds}_$index.jpg"
-
-    NSFileManager.defaultManager().createFileAtPath(
         path,
-        UIImageJPEGRepresentation(UIImage(nsUrl.readData()), 1.0),
-        null,
-    )
-
-    return NSURL.fileURLWithPath(path)
-}
-
-private fun NSURL.readData(): NSData {
-    var result: NSData? = null
-    while (result == null) {
-        val data = NSData.dataWithContentsOfURL(this)
-        if (data != null) {
-            result = data
-        }
-    }
-
-    return result
+    ).also { NSFileManager.defaultManager().copyItemAtURL(nsUrl, it, null) }
 }

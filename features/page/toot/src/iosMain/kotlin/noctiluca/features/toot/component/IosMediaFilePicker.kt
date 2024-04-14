@@ -10,9 +10,14 @@ import kotlinx.datetime.Clock
 import noctiluca.features.toot.model.MediaFile
 import noctiluca.features.toot.utils.getMimeType
 import noctiluca.features.toot.utils.toKmpUri
+import noctiluca.model.Uri
+import platform.Foundation.NSData
+import platform.Foundation.NSFileManager
 import platform.Foundation.NSItemProvider
 import platform.Foundation.NSTemporaryDirectory
 import platform.Foundation.NSURL
+import platform.Foundation.dataWithContentsOfFile
+import platform.Foundation.dataWithContentsOfURL
 import platform.Foundation.pathExtension
 import platform.Foundation.writeToURL
 import platform.Photos.PHPhotoLibrary.Companion.sharedPhotoLibrary
@@ -24,6 +29,8 @@ import platform.PhotosUI.PHPickerResult
 import platform.PhotosUI.PHPickerViewController
 import platform.PhotosUI.PHPickerViewControllerDelegateProtocol
 import platform.UIKit.UIApplication
+import platform.UIKit.UIImage
+import platform.UIKit.UIImageJPEGRepresentation
 import platform.UniformTypeIdentifiers.UTTypeImage
 import platform.darwin.NSObject
 import kotlin.coroutines.resume
@@ -58,8 +65,8 @@ private fun NSURL.toMediaFile(): MediaFile {
     val kmpUri = toKmpUri() ?: error("Unknown path: $path")
 
     return when {
-        mimeType.startsWith("image") -> MediaFile.Image(kmpUri, mimeType)
-        mimeType.startsWith("video") -> MediaFile.Video(kmpUri, mimeType)
+        mimeType.startsWith("image") -> MediaFile.Image(kmpUri, mimeType, toJpg())
+        mimeType.startsWith("video") -> MediaFile.Video(kmpUri, mimeType, toJpg())
         mimeType.startsWith("audio") -> MediaFile.Audio(kmpUri, mimeType)
         else -> MediaFile.Unknown(kmpUri, mimeType)
     }
@@ -125,4 +132,27 @@ private fun buildTemporaryFileURL(
     return NSURL.fileURLWithPath(
         "${NSTemporaryDirectory()}/${Clock.System.now().epochSeconds}.$extension",
     ).also { nsUrl.dataRepresentation.writeToURL(it, true) }
+}
+
+private fun NSURL.toJpg(): Uri {
+    println("path #1: $absoluteString")
+    var result: NSData? = null
+    while (result == null) {
+        val data = NSData.dataWithContentsOfURL(this)
+        if (data != null) {
+            result = data
+        }
+    }
+
+    val uiImage = result.let(::UIImage)
+    val path = "${NSTemporaryDirectory()}/${Clock.System.now().epochSeconds}.jpg"
+
+    println("path #2: $path")
+    NSFileManager.defaultManager().createFileAtPath(
+        path,
+        UIImageJPEGRepresentation(uiImage, 1.0),
+        null,
+    )
+
+    return Uri(path)
 }

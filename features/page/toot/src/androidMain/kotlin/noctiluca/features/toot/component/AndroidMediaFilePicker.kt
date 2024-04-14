@@ -43,17 +43,19 @@ private fun android.net.Uri.toMediaFile(context: Context): MediaFile {
     return when {
         mimeType.startsWith(MimeTypes.BASE_TYPE_IMAGE) -> MediaFile.Image(
             toKmpUri(context),
-            mimeType
+            mimeType,
+            toKmpUri(context),
         )
 
         mimeType.startsWith(MimeTypes.BASE_TYPE_VIDEO) -> MediaFile.Video(
             toKmpUri(context),
-            mimeType
+            mimeType,
+            toKmpUri(context),
         )
 
         mimeType.startsWith(MimeTypes.BASE_TYPE_AUDIO) -> MediaFile.Audio(
             toKmpUri(context),
-            mimeType
+            mimeType,
         )
 
         else -> MediaFile.Unknown(toKmpUri(context), mimeType)

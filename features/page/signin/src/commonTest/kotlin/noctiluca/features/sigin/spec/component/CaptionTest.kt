@@ -1,7 +1,7 @@
 package noctiluca.features.sigin.spec.component
 
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.unit.dp
@@ -25,8 +25,8 @@ class CaptionTest {
             )
         }
 
-        onNodeWithText(INSTANCE_NAME).isDisplayed()
-        onNodeWithText(INSTANCE_DOMAIN).isDisplayed()
+        onNodeWithText(INSTANCE_NAME).assertIsDisplayed()
+        onNodeWithText(INSTANCE_DOMAIN).assertIsDisplayed()
     }
 
     @Test
@@ -38,6 +38,6 @@ class CaptionTest {
             )
         }
 
-        onNodeWithText(INSTANCE_DESCRIPTION + "\n").isDisplayed()
+        onNodeWithText(INSTANCE_DESCRIPTION + "\n").assertIsDisplayed()
     }
 }

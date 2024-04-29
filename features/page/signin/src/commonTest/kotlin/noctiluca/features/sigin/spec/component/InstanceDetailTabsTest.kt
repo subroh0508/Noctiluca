@@ -1,7 +1,7 @@
 package noctiluca.features.sigin.spec.component
 
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
@@ -59,7 +59,7 @@ class InstanceDetailTabsTest {
         }
 
         InstancesTab.entries.forEach {
-            onNodeWithTag(it.name).isDisplayed()
+            onNodeWithTag(it.name).assertIsDisplayed()
             onNodeWithTag(it.name).performClick()
 
             tab should be(it)

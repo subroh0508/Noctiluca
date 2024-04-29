@@ -2,7 +2,7 @@ package noctiluca.features.sigin.spec.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.isDisplayed
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
@@ -56,7 +56,7 @@ class ActionButtonsTest {
         }
 
         onNodeWithTag(SignInTestTag.AUTHORIZE_BUTTON_PROGRESS_CIRCLE)
-            .isDisplayed()
+            .assertIsDisplayed()
 
         onNodeWithTag(SignInTestTag.AUTHORIZE_BUTTON)
             .assertDoesNotExist()
@@ -83,7 +83,7 @@ class ActionButtonsTest {
             .assertDoesNotExist()
 
         with(onNodeWithTag(SignInTestTag.AUTHORIZE_BUTTON)) {
-            isDisplayed()
+            assertIsDisplayed()
             performClick()
         }
 

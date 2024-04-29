@@ -9,6 +9,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -44,7 +45,7 @@ class InstanceHeaderTextTest {
             }
         }
 
-        onNodeWithText(INSTANCE_DOMAIN).assertExists()
+        onNodeWithText(INSTANCE_DOMAIN).assertIsDisplayed()
         onNodeWithText(instance.name).assertDoesNotExist()
     }
 
@@ -82,7 +83,7 @@ class InstanceHeaderTextTest {
 
         onNodeWithTag(DUMMY_LAZY_COLUMN).performScrollToNode(hasText("Item #4"))
 
-        onNodeWithText(instance.domain).assertExists()
-        onNodeWithText(instance.name).assertExists()
+        onNodeWithText(instance.domain).assertIsDisplayed()
+        onNodeWithText(instance.name).assertIsDisplayed()
     }
 }

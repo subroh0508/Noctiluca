@@ -8,8 +8,9 @@ import noctiluca.features.signin.Resources
 
 @Composable
 fun TestComposable(
+    locale: Locale = Locale("ja"),
     content: @Composable () -> Unit,
 ) = CompositionLocalProvider(
-    LocalResources provides Resources(Locale.current.language),
+    LocalResources provides Resources(locale.language),
     content = content,
 )

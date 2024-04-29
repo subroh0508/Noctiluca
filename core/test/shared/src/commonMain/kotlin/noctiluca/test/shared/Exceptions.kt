@@ -1,3 +1,3 @@
-package noctiluca.test
+package noctiluca.test.shared
 
 expect val MockUnknownHostException: Exception

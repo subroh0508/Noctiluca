@@ -23,11 +23,11 @@ import noctiluca.network.authorization.Api
 import noctiluca.network.authorization.OAuth
 import noctiluca.network.authorization.di.AuthorizationApiModule
 import noctiluca.network.instancessocial.di.buildHttpClient
-import noctiluca.test.ACCOUNT_ID
-import noctiluca.test.DOMAIN_SAMPLE_COM
-import noctiluca.test.JSON_ACCOUNT_CREDENTIAL
-import noctiluca.test.mock.MockHttpClientEngine
-import noctiluca.test.mock.buildEmptyMockAuthenticationTokenDataStore
+import noctiluca.test.shared.ACCOUNT_ID
+import noctiluca.test.shared.DOMAIN_SAMPLE_COM
+import noctiluca.test.shared.JSON_ACCOUNT_CREDENTIAL
+import noctiluca.test.shared.mock.MockHttpClientEngine
+import noctiluca.test.shared.mock.buildEmptyMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 
 class AuthorizationRepositorySpec : DescribeSpec({

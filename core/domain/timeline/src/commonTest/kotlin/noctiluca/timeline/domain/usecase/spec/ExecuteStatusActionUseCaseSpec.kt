@@ -13,9 +13,9 @@ import noctiluca.model.Uri
 import noctiluca.model.account.Account
 import noctiluca.model.status.Status
 import noctiluca.network.mastodon.Api
-import noctiluca.test.DOMAIN_MASTODON_JP
-import noctiluca.test.URL_MASTODON_JP
-import noctiluca.test.mock.MockHttpClientEngine
+import noctiluca.test.shared.DOMAIN_MASTODON_JP
+import noctiluca.test.shared.URL_MASTODON_JP
+import noctiluca.test.shared.mock.MockHttpClientEngine
 import noctiluca.timeline.domain.TestTimelineUseCaseComponent
 import noctiluca.timeline.domain.model.StatusAction
 import noctiluca.timeline.domain.usecase.ExecuteStatusActionUseCase

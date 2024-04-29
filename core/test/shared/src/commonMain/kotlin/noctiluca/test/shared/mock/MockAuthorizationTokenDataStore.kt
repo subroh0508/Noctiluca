@@ -1,11 +1,11 @@
-package noctiluca.test.mock
+package noctiluca.test.shared.mock
 
 import noctiluca.datastore.AuthorizationTokenDataStore
 import noctiluca.model.AccountId
 import noctiluca.model.AuthorizedUser
 import noctiluca.model.Domain
-import noctiluca.test.DUMMY_ACCESS_TOKEN
-import noctiluca.test.me
+import noctiluca.test.shared.DUMMY_ACCESS_TOKEN
+import noctiluca.test.shared.me
 
 fun buildEmptyMockAuthenticationTokenDataStore() = MockAuthorizationTokenDataStore(
     init = emptyList(),

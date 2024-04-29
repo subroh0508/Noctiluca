@@ -1,9 +1,9 @@
-package noctiluca.test
+package noctiluca.test.shared
 
 import io.ktor.http.*
 import noctiluca.model.AccountId
 import noctiluca.model.Domain
-import noctiluca.test.model.MockAuthorizedUser
+import noctiluca.test.shared.model.MockAuthorizedUser
 
 const val DUMMY_ACCESS_TOKEN = "xxx"
 

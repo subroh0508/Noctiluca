@@ -1,4 +1,4 @@
-package noctiluca.test.model
+package noctiluca.test.shared.model
 
 import io.ktor.http.*
 import noctiluca.model.AccountId

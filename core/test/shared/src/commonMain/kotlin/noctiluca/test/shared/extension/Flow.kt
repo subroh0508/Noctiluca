@@ -1,4 +1,4 @@
-package noctiluca.test.extension
+package noctiluca.test.shared.extension
 
 import io.kotest.core.test.TestScope
 import io.kotest.core.test.testCoroutineScheduler

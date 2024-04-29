@@ -1,4 +1,4 @@
-package noctiluca.test.mock
+package noctiluca.test.shared.mock
 
 import io.ktor.client.engine.mock.*
 import io.ktor.client.request.*
@@ -6,7 +6,7 @@ import io.ktor.http.*
 import io.ktor.resources.*
 import io.ktor.resources.serialization.*
 import io.ktor.utils.io.*
-import noctiluca.test.util.isMatched
+import noctiluca.test.shared.util.isMatched
 import kotlin.jvm.JvmName
 
 object MockHttpClientEngine {

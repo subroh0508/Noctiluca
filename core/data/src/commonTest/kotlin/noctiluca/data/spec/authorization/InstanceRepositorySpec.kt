@@ -26,14 +26,14 @@ import noctiluca.network.authorization.di.AuthorizationApiModule
 import noctiluca.network.instancessocial.di.InstancesSocialApiModule
 import noctiluca.network.instancessocial.di.buildHttpClient
 import noctiluca.network.mastodon.Api
-import noctiluca.test.DOMAIN_SAMPLE_COM
-import noctiluca.test.JSON_STATUS_NORMAL
-import noctiluca.test.JSON_STATUS_NORMAL_ID_99
-import noctiluca.test.MockUnknownHostException
-import noctiluca.test.URL_SAMPLE_COM
-import noctiluca.test.extension.flowToList
-import noctiluca.test.mock.MockHttpClientEngine
-import noctiluca.test.mock.buildEmptyMockAuthenticationTokenDataStore
+import noctiluca.test.shared.DOMAIN_SAMPLE_COM
+import noctiluca.test.shared.JSON_STATUS_NORMAL
+import noctiluca.test.shared.JSON_STATUS_NORMAL_ID_99
+import noctiluca.test.shared.MockUnknownHostException
+import noctiluca.test.shared.URL_SAMPLE_COM
+import noctiluca.test.shared.extension.flowToList
+import noctiluca.test.shared.mock.MockHttpClientEngine
+import noctiluca.test.shared.mock.buildEmptyMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 import noctiluca.network.instancessocial.Api as InstancesSocialApi
 

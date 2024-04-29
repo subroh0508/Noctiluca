@@ -1,4 +1,4 @@
-package noctiluca.test
+package noctiluca.test.shared
 
 const val ACCOUNT_ID = "1"
 

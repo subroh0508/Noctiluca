@@ -1,4 +1,4 @@
-package noctiluca.test.util
+package noctiluca.test.shared.util
 
 import io.ktor.http.*
 import io.ktor.resources.*

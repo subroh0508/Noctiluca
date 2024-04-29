@@ -1,4 +1,4 @@
-package noctiluca.test
+package noctiluca.test.shared
 
 import io.ktor.client.engine.darwin.DarwinHttpRequestException
 import platform.Foundation.NSError

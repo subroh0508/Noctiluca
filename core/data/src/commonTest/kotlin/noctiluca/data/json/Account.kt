@@ -1,7 +1,7 @@
 package noctiluca.data.json
 
-import noctiluca.test.ACCOUNT_ID
-import noctiluca.test.URL_SAMPLE_COM
+import noctiluca.test.shared.ACCOUNT_ID
+import noctiluca.test.shared.URL_SAMPLE_COM
 
 const val OTHER_ACCOUNT_ID = "10"
 

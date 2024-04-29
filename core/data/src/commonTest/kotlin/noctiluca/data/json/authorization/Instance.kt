@@ -1,8 +1,8 @@
 package noctiluca.data.json.authorization
 
 import io.ktor.http.*
-import noctiluca.test.DOMAIN_SAMPLE_COM
-import noctiluca.test.URL_SAMPLE_COM
+import noctiluca.test.shared.DOMAIN_SAMPLE_COM
+import noctiluca.test.shared.URL_SAMPLE_COM
 
 const val V4_INSTANCE_NAME = "Instance Sample"
 const val V3_INSTANCE_NAME = "Old Instance Sample"

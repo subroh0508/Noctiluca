@@ -62,9 +62,9 @@ internal fun InstanceDetailScaffold(
         )
 
         when (uiModel.tab) {
-            InstancesTab.INFO -> InstanceInformationTab(uiModel.instance)
-            InstancesTab.EXTENDED_DESCRIPTION -> InstanceExtendedDescriptionTab(uiModel.instance)
-            InstancesTab.LOCAL_TIMELINE -> InstanceLocalTimelineTab(
+            InstancesTab.Info -> InstanceInformationTab(uiModel.instance)
+            InstancesTab.ExtendedDescription -> InstanceExtendedDescriptionTab(uiModel.instance)
+            InstancesTab.LocalTimeline -> InstanceLocalTimelineTab(
                 uiModel.statuses,
                 uiModel.statusesLoadState.loading,
                 loadMore = { viewModel.loadMoreStatuses(domain) },

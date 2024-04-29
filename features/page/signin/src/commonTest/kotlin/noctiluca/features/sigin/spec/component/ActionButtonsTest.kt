@@ -63,10 +63,10 @@ class ActionButtonsTest {
         }
 
         onNodeWithTag(SignInTestTag.AUTHORIZE_BUTTON_PROGRESS_CIRCLE)
-            .isNotDisplayed()
+            .assertDoesNotExist()
 
         onNodeWithTag(SignInTestTag.AUTHORIZE_BUTTON)
-            .isNotDisplayed()
+            .assertDoesNotExist()
     }
 
     @Test
@@ -88,7 +88,7 @@ class ActionButtonsTest {
             .isDisplayed()
 
         onNodeWithTag(SignInTestTag.AUTHORIZE_BUTTON)
-            .isNotDisplayed()
+            .assertDoesNotExist()
     }
 
     @Test
@@ -109,7 +109,7 @@ class ActionButtonsTest {
         }
 
         onNodeWithTag(SignInTestTag.AUTHORIZE_BUTTON_PROGRESS_CIRCLE)
-            .isNotDisplayed()
+            .assertDoesNotExist()
 
         with(onNodeWithTag(SignInTestTag.AUTHORIZE_BUTTON)) {
             isDisplayed()

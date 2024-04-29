@@ -7,7 +7,7 @@ import noctiluca.model.status.Status
 
 data class InstanceDetailModel(
     val instance: Instance? = null,
-    val tab: InstancesTab = InstancesTab.INFO,
+    val tab: InstancesTab = InstancesTab.Info,
     val statuses: List<Status> = listOf(),
     val instanceLoadState: LoadState = LoadState.Initial,
     val statusesLoadState: LoadState = LoadState.Initial,
@@ -17,12 +17,12 @@ data class InstanceDetailModel(
     }
 
     val tabList = listOfNotNull(
-        InstancesTab.INFO,
+        InstancesTab.Info,
         if ((instance?.version?.major ?: 0) >= VERSION_REQUIRE_EXTENDED_DESCRIPTION) {
-            InstancesTab.EXTENDED_DESCRIPTION
+            InstancesTab.ExtendedDescription
         } else {
             null
         },
-        InstancesTab.LOCAL_TIMELINE,
+        InstancesTab.LocalTimeline,
     )
 }

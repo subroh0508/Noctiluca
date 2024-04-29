@@ -58,7 +58,7 @@ internal class InstanceDetailScrollableFrameState private constructor(
     val firstVisibleItemIndex get() = lazyListState.firstVisibleItemIndex
 
     private val firstVisibleItemScrollOffset get() = lazyListState.firstVisibleItemScrollOffset
-    private val currentScrollPositions get() = scrollPositions[index]
+    private val currentScrollPositions get() = scrollPositions.getOrElse(index) { 0 to 0 }
 
     fun cacheScrollPosition(prev: InstancesTab, next: InstancesTab) {
         cacheScrollPosition(tabs.indexOf(prev.ordinal))

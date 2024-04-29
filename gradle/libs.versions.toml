@@ -23,7 +23,7 @@ kotlinx-serialization = "1.6.3"
 ktor = "2.3.10"
 
 image-loader = "1.7.8"
-ksoup = "0.3.1"
+ksoup = "0.3.2"
 okio = "3.9.0"
 
 vlcj = "4.8.2"

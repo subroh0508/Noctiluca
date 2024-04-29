@@ -28,6 +28,7 @@ include(
     ":core:datastore",
     ":core:data",
     ":core:test:shared",
+    ":core:test:ui",
     ":core:model",
     ":core:domain:timeline",
     ":features:navigation",

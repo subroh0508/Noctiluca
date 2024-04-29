@@ -9,7 +9,6 @@ kotlin {
                 implementation(kotlin("test"))
                 implementation(kotlin("test-junit"))
                 implementation(libs.androidx.test.junit)
-                implementation(libs.robolectric)
             }
         }
     }

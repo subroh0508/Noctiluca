@@ -22,11 +22,14 @@ import noctiluca.features.sigin.mock.instance
 import noctiluca.features.signin.component.InstancesTab
 import noctiluca.features.signin.component.topappbar.InstanceHeaderText
 import noctiluca.features.signin.section.scrollableframe.rememberInstanceDetailScrollableFrameState
+import noctiluca.test.ui.RunWith
+import noctiluca.test.ui.UiTestRunner
 import kotlin.test.Test
 
 private const val DUMMY_LAZY_COLUMN = "DummyLazyColumn"
 
 @OptIn(ExperimentalTestApi::class)
+@RunWith(UiTestRunner::class)
 class InstanceHeaderTextTest {
     @Test
     fun InstanceHeaderText_shouldShowDomainText() = runComposeUiTest {

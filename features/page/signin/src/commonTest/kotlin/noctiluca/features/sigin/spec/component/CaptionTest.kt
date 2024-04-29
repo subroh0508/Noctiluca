@@ -11,9 +11,12 @@ import noctiluca.features.sigin.INSTANCE_DOMAIN
 import noctiluca.features.sigin.INSTANCE_NAME
 import noctiluca.features.signin.component.InstanceDescription
 import noctiluca.features.signin.component.InstanceName
+import noctiluca.test.ui.RunWith
+import noctiluca.test.ui.UiTestRunner
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
+@RunWith(UiTestRunner::class)
 class CaptionTest {
     @Test
     fun InstanceName_shouldShowNameAndDomain() = runComposeUiTest {

@@ -2,13 +2,7 @@ package test
 
 import extension.androidxComposeUiTestJunit4Android
 import extension.androidxComposeUiTestManifest
-import extension.androidxTestCore
-import extension.androidxTestJunit
-import extension.androidxTestRunner
-import extension.junit
-import extension.junitVintage
 import extension.libs
-import extension.robolectric
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
@@ -36,7 +30,7 @@ kotlin {
     sourceSets {
         commonTest {
             dependencies {
-                // implementation(project(":core:test:ui"))
+                implementation(project(":core:test:ui"))
 
                 implementation(kotlin("test"))
                 @OptIn(ExperimentalComposeLibrary::class)
@@ -46,6 +40,7 @@ kotlin {
 
         named("androidUnitTest") {
             dependencies {
+                implementation(libs.androidxComposeUiTestJunit4Android)
                 // implementation(libs.junit)
                 // implementation(libs.junitVintage)
                 // implementation(libs.androidxTestCore)

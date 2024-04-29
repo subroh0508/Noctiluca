@@ -14,10 +14,13 @@ import noctiluca.features.signin.Resources
 import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.component.DEBOUNCE_TIME_MILLIS
 import noctiluca.features.signin.component.QueryTextField
+import noctiluca.test.ui.RunWith
+import noctiluca.test.ui.UiTestRunner
 import kotlin.test.Ignore
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
+@RunWith(UiTestRunner::class)
 class QueryTextFieldTest {
     private val stringRes = Resources("ja").getString()
 

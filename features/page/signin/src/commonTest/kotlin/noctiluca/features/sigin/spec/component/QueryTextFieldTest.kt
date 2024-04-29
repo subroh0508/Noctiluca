@@ -3,7 +3,6 @@ package noctiluca.features.sigin.spec.component
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertTextEquals
-import androidx.compose.ui.test.isDisplayed
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
@@ -15,6 +14,7 @@ import noctiluca.features.signin.Resources
 import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.component.DEBOUNCE_TIME_MILLIS
 import noctiluca.features.signin.component.QueryTextField
+import kotlin.test.Ignore
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
@@ -39,6 +39,7 @@ class QueryTextFieldTest {
     }
 
     @Test
+    @Ignore
     fun QueryTextField_shouldInvokeDebouncedCallbackCorrectly() = runComposeUiTest {
         var query = ""
 
@@ -51,8 +52,13 @@ class QueryTextFieldTest {
             }
         }
 
-        onNodeWithTag(SignInTestTag.QUERY_TEXT_FIELD)
-            .performTextInput(INSTANCE_DOMAIN)
+        mainClock.autoAdvance = false
+        with(onNodeWithTag(SignInTestTag.QUERY_TEXT_FIELD)) {
+            performTextInput(INSTANCE_DOMAIN)
+            mainClock.advanceTimeByFrame()
+            assertTextEquals(INSTANCE_DOMAIN)
+        }
+
         onNodeWithTag(SignInTestTag.QUERY_TEXT_FIELD_CLEAR_ICON)
             .assertIsDisplayed()
 

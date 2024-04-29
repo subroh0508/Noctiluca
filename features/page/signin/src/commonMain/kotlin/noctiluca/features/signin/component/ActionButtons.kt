@@ -6,8 +6,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.getString
 import noctiluca.model.authorization.Instance
 
@@ -48,12 +50,18 @@ private fun AuthorizeButton(
         OutlinedButton(
             onClick = {},
             enabled = false,
-        ) { CircularProgressIndicator(Modifier.size(20.dp)) }
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(20.dp)
+                    .testTag(SignInTestTag.AUTHORIZE_BUTTON_PROGRESS_CIRCLE),
+            )
+        }
 
         return
     }
 
     Button(
         onClick = { onClickAuthorize(instance) },
+        modifier = Modifier.testTag(SignInTestTag.AUTHORIZE_BUTTON),
     ) { Text(getString().sign_in_request_authentication) }
 }

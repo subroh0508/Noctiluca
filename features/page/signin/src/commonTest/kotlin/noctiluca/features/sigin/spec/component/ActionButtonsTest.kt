@@ -10,6 +10,10 @@ import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import io.kotest.matchers.be
 import io.kotest.matchers.should
+import noctiluca.features.sigin.HTML_INSTANCE_DESCRIPTION
+import noctiluca.features.sigin.INSTANCE_DESCRIPTION
+import noctiluca.features.sigin.INSTANCE_DOMAIN
+import noctiluca.features.sigin.INSTANCE_NAME
 import noctiluca.features.sigin.TestComposable
 import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.component.ActionButtons
@@ -20,9 +24,9 @@ import kotlin.test.Test
 @OptIn(ExperimentalTestApi::class)
 class ActionButtonsTest {
     private val instance = Instance(
-        name = "mastodon.social",
-        domain = "mstdn.social",
-        description = "A general-purpose Mastodon server with a 500 character limit. All languages are welcome.",
+        name = INSTANCE_NAME,
+        domain = INSTANCE_DOMAIN,
+        description = INSTANCE_DESCRIPTION,
         thumbnail = Uri("https://media.mstdn.social/site_uploads/thumbnail.png"),
         languages = listOf("ja"),
         activeUserCount = 10_000,
@@ -39,7 +43,7 @@ class ActionButtonsTest {
             ),
             Instance.Rule("bbb", "No spam or advertising."),
         ),
-        extendedDescription = "A general-purpose Mastodon server with a 500 character limit. All languages are welcome.",
+        extendedDescription = HTML_INSTANCE_DESCRIPTION,
         version = Instance.Version(4, 2, 8),
     )
 

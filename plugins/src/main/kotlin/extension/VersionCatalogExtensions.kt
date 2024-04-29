@@ -41,6 +41,28 @@ internal val VersionCatalog.kotestFrameworkDataTest: Provider<MinimalExternalMod
     )
 internal val VersionCatalog.kotestRunnerJunit5: Provider<MinimalExternalModuleDependency> get() = getLibrary("kotest-runner-junit5")
 
+internal val VersionCatalog.junit: Provider<MinimalExternalModuleDependency> get() = getLibrary("junit-core")
+internal val VersionCatalog.junitVintage: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "junit-vintage"
+    )
+internal val VersionCatalog.androidxTestCore: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "androidx-test-core"
+    )
+internal val VersionCatalog.androidxTestRunner: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "androidx-test-runner"
+    )
+internal val VersionCatalog.androidxTestJunit: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "androidx-test-junit"
+    )
+internal val VersionCatalog.robolectric: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "robolectric"
+    )
+
 internal val VersionCatalog.androidDesugarjdk: Provider<MinimalExternalModuleDependency> get() = getLibrary("android-desugarjdk")
 
 internal val Project.libs: VersionCatalog get() = extensions.getByType<VersionCatalogsExtension>().named("libs")

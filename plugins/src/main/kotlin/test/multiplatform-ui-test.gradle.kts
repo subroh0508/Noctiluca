@@ -2,12 +2,13 @@ package test
 
 import extension.androidxComposeUiTestJunit4Android
 import extension.androidxComposeUiTestManifest
+import extension.androidxTestCore
+import extension.androidxTestJunit
+import extension.androidxTestRunner
+import extension.junit
+import extension.junitVintage
 import extension.libs
-import gradle.kotlin.dsl.accessors._7f7b60e80ee47e394210123ef9b27b8b.android
-import gradle.kotlin.dsl.accessors._7f7b60e80ee47e394210123ef9b27b8b.compose
-import gradle.kotlin.dsl.accessors._7f7b60e80ee47e394210123ef9b27b8b.debugImplementation
-import gradle.kotlin.dsl.accessors._7f7b60e80ee47e394210123ef9b27b8b.implementation
-import gradle.kotlin.dsl.accessors._7f7b60e80ee47e394210123ef9b27b8b.sourceSets
+import extension.robolectric
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
@@ -15,6 +16,7 @@ import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
 plugins {
     kotlin("multiplatform")
     id("com.android.library")
+    id("org.jetbrains.compose")
 }
 
 // @see: https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html#writing-and-running-tests-with-compose-multiplatform
@@ -34,9 +36,22 @@ kotlin {
     sourceSets {
         commonTest {
             dependencies {
+                // implementation(project(":core:test:ui"))
+
                 implementation(kotlin("test"))
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.uiTest)
+            }
+        }
+
+        named("androidUnitTest") {
+            dependencies {
+                // implementation(libs.junit)
+                // implementation(libs.junitVintage)
+                // implementation(libs.androidxTestCore)
+                // implementation(libs.androidxTestRunner)
+                // implementation(libs.androidxTestJunit)
+                // implementation(libs.robolectric)
             }
         }
 

@@ -14,9 +14,12 @@ import noctiluca.features.sigin.mock.instance
 import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.component.ActionButtons
 import noctiluca.model.authorization.Instance
+// import noctiluca.test.ui.RunWith
+// import noctiluca.test.ui.UiTestRunner
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
+// @RunWith(UiTestRunner::class)
 class ActionButtonsTest {
     @Test
     fun AuthorizeButton_shouldNotDisplay() = runComposeUiTest {

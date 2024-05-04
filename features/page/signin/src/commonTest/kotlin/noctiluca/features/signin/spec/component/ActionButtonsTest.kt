@@ -9,10 +9,10 @@ import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import io.kotest.matchers.be
 import io.kotest.matchers.should
-import noctiluca.features.signin.TestComposable
-import noctiluca.features.signin.mock.instance
 import noctiluca.features.signin.SignInTestTag
+import noctiluca.features.signin.TestComposable
 import noctiluca.features.signin.component.ActionButtons
+import noctiluca.features.signin.mock.instance
 import noctiluca.model.authorization.Instance
 import noctiluca.test.ui.RunWith
 import noctiluca.test.ui.UiTestRunner

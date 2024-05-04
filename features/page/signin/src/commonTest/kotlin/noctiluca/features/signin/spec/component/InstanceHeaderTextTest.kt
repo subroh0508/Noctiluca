@@ -18,9 +18,9 @@ import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import noctiluca.features.signin.INSTANCE_DOMAIN
 import noctiluca.features.signin.TestComposable
-import noctiluca.features.signin.mock.instance
 import noctiluca.features.signin.component.InstancesTab
 import noctiluca.features.signin.component.topappbar.InstanceHeaderText
+import noctiluca.features.signin.mock.instance
 import noctiluca.features.signin.section.scrollableframe.rememberInstanceDetailScrollableFrameState
 import noctiluca.test.ui.RunWith
 import noctiluca.test.ui.UiTestRunner

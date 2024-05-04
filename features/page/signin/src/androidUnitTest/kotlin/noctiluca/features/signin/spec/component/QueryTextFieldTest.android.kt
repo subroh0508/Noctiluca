@@ -1,4 +1,4 @@
-package noctiluca.features.sigin.spec.component
+package noctiluca.features.signin.spec.component
 
 import noctiluca.test.ui.RunWith
 import noctiluca.test.ui.UiTestRunner

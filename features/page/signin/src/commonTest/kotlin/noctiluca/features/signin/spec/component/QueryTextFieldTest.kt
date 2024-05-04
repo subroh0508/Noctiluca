@@ -9,9 +9,9 @@ import androidx.compose.ui.test.runComposeUiTest
 import io.kotest.matchers.be
 import io.kotest.matchers.should
 import noctiluca.features.signin.INSTANCE_DOMAIN
-import noctiluca.features.signin.TestComposable
 import noctiluca.features.signin.Resources
 import noctiluca.features.signin.SignInTestTag
+import noctiluca.features.signin.TestComposable
 import noctiluca.features.signin.component.DEBOUNCE_TIME_MILLIS
 import noctiluca.features.signin.component.QueryTextField
 import noctiluca.test.ui.RunWith

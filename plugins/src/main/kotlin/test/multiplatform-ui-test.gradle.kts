@@ -38,18 +38,6 @@ kotlin {
             }
         }
 
-        named("androidUnitTest") {
-            dependencies {
-                implementation(libs.androidxComposeUiTestJunit4Android)
-                // implementation(libs.junit)
-                // implementation(libs.junitVintage)
-                // implementation(libs.androidxTestCore)
-                // implementation(libs.androidxTestRunner)
-                // implementation(libs.androidxTestJunit)
-                // implementation(libs.robolectric)
-            }
-        }
-
         named("desktopTest") {
             dependencies {
                 implementation(compose.desktop.currentOs)

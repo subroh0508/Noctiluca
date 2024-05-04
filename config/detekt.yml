@@ -396,6 +396,7 @@ naming:
     excludes:
       - '**/test/**'
       - '**/androidTest/**'
+      - '**/androidUnitTest/**'
       - '**/commonTest/**'
       - '**/jvmTest/**'
       - '**/jsTest/**'

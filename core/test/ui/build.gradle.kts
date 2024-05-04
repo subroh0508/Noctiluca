@@ -6,8 +6,7 @@ kotlin {
     sourceSets {
         androidMain {
             dependencies {
-                implementation(kotlin("test"))
-                implementation(kotlin("test-junit"))
+                implementation(libs.junit.core)
                 implementation(libs.androidx.test.junit)
             }
         }

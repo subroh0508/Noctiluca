@@ -1,4 +1,4 @@
-package noctiluca.features.sigin.spec.component
+package noctiluca.features.signin.spec.component
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -7,7 +7,7 @@ import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import io.kotest.matchers.be
 import io.kotest.matchers.should
-import noctiluca.features.sigin.TestComposable
+import noctiluca.features.signin.TestComposable
 import noctiluca.features.signin.component.InstanceDetailTabs
 import noctiluca.features.signin.component.InstancesTab
 import noctiluca.features.signin.section.scrollableframe.rememberInstanceDetailScrollableFrameState

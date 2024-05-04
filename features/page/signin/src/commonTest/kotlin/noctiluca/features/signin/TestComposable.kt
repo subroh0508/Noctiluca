@@ -1,4 +1,4 @@
-package noctiluca.features.sigin
+package noctiluca.features.signin
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider

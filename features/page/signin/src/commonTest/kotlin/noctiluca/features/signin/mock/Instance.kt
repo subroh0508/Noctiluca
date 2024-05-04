@@ -1,9 +1,9 @@
-package noctiluca.features.sigin.mock
+package noctiluca.features.signin.mock
 
-import noctiluca.features.sigin.HTML_INSTANCE_DESCRIPTION
-import noctiluca.features.sigin.INSTANCE_DESCRIPTION
-import noctiluca.features.sigin.INSTANCE_DOMAIN
-import noctiluca.features.sigin.INSTANCE_NAME
+import noctiluca.features.signin.HTML_INSTANCE_DESCRIPTION
+import noctiluca.features.signin.INSTANCE_DESCRIPTION
+import noctiluca.features.signin.INSTANCE_DOMAIN
+import noctiluca.features.signin.INSTANCE_NAME
 import noctiluca.model.Uri
 import noctiluca.model.authorization.Instance
 

@@ -1,14 +1,14 @@
-package noctiluca.features.sigin.spec.component
+package noctiluca.features.signin.spec.component
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.unit.dp
-import noctiluca.features.sigin.HTML_INSTANCE_DESCRIPTION
-import noctiluca.features.sigin.INSTANCE_DESCRIPTION
-import noctiluca.features.sigin.INSTANCE_DOMAIN
-import noctiluca.features.sigin.INSTANCE_NAME
+import noctiluca.features.signin.HTML_INSTANCE_DESCRIPTION
+import noctiluca.features.signin.INSTANCE_DESCRIPTION
+import noctiluca.features.signin.INSTANCE_DOMAIN
+import noctiluca.features.signin.INSTANCE_NAME
 import noctiluca.features.signin.component.InstanceDescription
 import noctiluca.features.signin.component.InstanceName
 import noctiluca.test.ui.RunWith

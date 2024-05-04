@@ -1,4 +1,4 @@
-package noctiluca.features.sigin
+package noctiluca.features.signin
 
 internal const val INSTANCE_NAME = "mastodon.social"
 internal const val INSTANCE_DOMAIN = "mstdn.social"

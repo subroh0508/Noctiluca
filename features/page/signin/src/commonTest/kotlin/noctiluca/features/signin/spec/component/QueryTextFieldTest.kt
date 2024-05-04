@@ -1,4 +1,4 @@
-package noctiluca.features.sigin.spec.component
+package noctiluca.features.signin.spec.component
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
@@ -8,8 +8,8 @@ import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
 import io.kotest.matchers.be
 import io.kotest.matchers.should
-import noctiluca.features.sigin.INSTANCE_DOMAIN
-import noctiluca.features.sigin.TestComposable
+import noctiluca.features.signin.INSTANCE_DOMAIN
+import noctiluca.features.signin.TestComposable
 import noctiluca.features.signin.Resources
 import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.component.DEBOUNCE_TIME_MILLIS

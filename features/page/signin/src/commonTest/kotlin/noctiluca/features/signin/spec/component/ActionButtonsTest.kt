@@ -1,4 +1,4 @@
-package noctiluca.features.sigin.spec.component
+package noctiluca.features.signin.spec.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.ui.test.ExperimentalTestApi
@@ -9,8 +9,8 @@ import androidx.compose.ui.test.runComposeUiTest
 import androidx.compose.ui.unit.dp
 import io.kotest.matchers.be
 import io.kotest.matchers.should
-import noctiluca.features.sigin.TestComposable
-import noctiluca.features.sigin.mock.instance
+import noctiluca.features.signin.TestComposable
+import noctiluca.features.signin.mock.instance
 import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.component.ActionButtons
 import noctiluca.model.authorization.Instance

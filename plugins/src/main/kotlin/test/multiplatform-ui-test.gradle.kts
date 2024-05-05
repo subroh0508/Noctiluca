@@ -14,6 +14,7 @@ plugins {
     kotlin("multiplatform")
     id("com.android.library")
     id("org.jetbrains.compose")
+    id("test.multiplatform-unit-test")
 }
 
 // @see: https://www.jetbrains.com/help/kotlin-multiplatform-dev/compose-test.html#writing-and-running-tests-with-compose-multiplatform
@@ -35,7 +36,6 @@ kotlin {
             dependencies {
                 implementation(project(":core:test:ui"))
 
-                implementation(kotlin("test"))
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.uiTest)
             }

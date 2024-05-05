@@ -16,9 +16,11 @@ import noctiluca.features.signin.component.QueryTextField
 import noctiluca.test.ui.KmpTest
 import noctiluca.test.ui.RunWith
 import noctiluca.test.ui.UiTestRunner
+import org.robolectric.annotation.LooperMode
 
 @OptIn(ExperimentalTestApi::class)
 @RunWith(UiTestRunner::class)
+@LooperMode(LooperMode.Mode.PAUSED)
 class AndroidQueryTextFieldTest {
     @KmpTest
     fun QueryTextField_shouldInvokeDebouncedCallbackCorrectly() = runComposeUiTest {
@@ -33,10 +35,8 @@ class AndroidQueryTextFieldTest {
             }
         }
 
-        mainClock.autoAdvance = false
         with(onNodeWithTag(SignInTestTag.QUERY_TEXT_FIELD)) {
             performTextInput(INSTANCE_DOMAIN)
-            mainClock.advanceTimeByFrame()
             assertTextEquals(INSTANCE_DOMAIN)
         }
 

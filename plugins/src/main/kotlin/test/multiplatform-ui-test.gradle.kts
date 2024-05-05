@@ -20,17 +20,6 @@ plugins {
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
-        unitTestVariant {
-            dependencies {
-                implementation(libs.junit)
-                implementation(libs.junitVintage)
-                implementation(libs.robolectric)
-                implementation(libs.androidxComposeUiTestJunit4)
-                debugImplementation(libs.androidxComposeUiTestManifest)
-            }
-        }
-
-        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         instrumentedTestVariant {
             sourceSetTree.set(KotlinSourceSetTree.test)
 
@@ -49,6 +38,16 @@ kotlin {
                 implementation(kotlin("test"))
                 @OptIn(ExperimentalComposeLibrary::class)
                 implementation(compose.uiTest)
+            }
+        }
+
+        named("androidUnitTest") {
+            dependencies {
+                implementation(libs.junit)
+                implementation(libs.junitVintage)
+                implementation(libs.androidxComposeUiTestJunit4)
+
+                runtimeOnly(libs.robolectric)
             }
         }
 

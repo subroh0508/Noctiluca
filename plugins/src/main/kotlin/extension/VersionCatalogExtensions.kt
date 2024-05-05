@@ -25,9 +25,9 @@ internal val VersionCatalog.koinAndroid: Provider<MinimalExternalModuleDependenc
 
 internal val VersionCatalog.androidxActivities: Provider<ExternalModuleDependencyBundle> get() = getBundle("androidx-activities")
 internal val VersionCatalog.androidxComposeMaterial3: Provider<MinimalExternalModuleDependency> get() = getLibrary("androidx-compose-material3")
-internal val VersionCatalog.androidxComposeUiTestJunit4Android: Provider<MinimalExternalModuleDependency>
+internal val VersionCatalog.androidxComposeUiTestJunit4: Provider<MinimalExternalModuleDependency>
     get() = getLibrary(
-        "androidx-compose-ui-test-junit4-android"
+        "androidx-compose-ui-test-junit4"
     )
 internal val VersionCatalog.androidxComposeUiTestManifest: Provider<MinimalExternalModuleDependency>
     get() = getLibrary(

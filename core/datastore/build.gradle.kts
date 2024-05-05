@@ -26,9 +26,6 @@ kotlin {
 
         commonTest {
             dependencies {
-                implementation(kotlin("test-common"))
-                implementation(kotlin("test-annotations-common"))
-
                 implementation(libs.okio.fakefilesystem)
             }
         }
@@ -41,21 +38,13 @@ kotlin {
 
         androidUnitTest {
             dependencies {
-                implementation(kotlin("test-junit"))
                 implementation(libs.kotest.runner.junit5)
-                implementation(libs.junit.core)
-                implementation(libs.junit.vintage)
-                implementation(libs.robolectric)
                 implementation(libs.kotlinx.coroutines.test)
-                implementation(libs.androidx.test.core)
-                implementation(libs.androidx.test.runner)
-                implementation(libs.androidx.test.junit)
             }
         }
 
         desktopTest {
             dependencies {
-                implementation(kotlin("test-junit"))
                 implementation(libs.kotest.runner.junit5)
             }
         }

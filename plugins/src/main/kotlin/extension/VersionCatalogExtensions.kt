@@ -46,18 +46,6 @@ internal val VersionCatalog.junitVintage: Provider<MinimalExternalModuleDependen
     get() = getLibrary(
         "junit-vintage"
     )
-internal val VersionCatalog.androidxTestCore: Provider<MinimalExternalModuleDependency>
-    get() = getLibrary(
-        "androidx-test-core"
-    )
-internal val VersionCatalog.androidxTestRunner: Provider<MinimalExternalModuleDependency>
-    get() = getLibrary(
-        "androidx-test-runner"
-    )
-internal val VersionCatalog.androidxTestJunit: Provider<MinimalExternalModuleDependency>
-    get() = getLibrary(
-        "androidx-test-junit"
-    )
 internal val VersionCatalog.robolectric: Provider<MinimalExternalModuleDependency>
     get() = getLibrary(
         "robolectric"

@@ -25,6 +25,7 @@ fun <T : Any> PrimaryTabs(
     selectedTabIndex: Int,
     onClick: (Int, T) -> Unit,
     transform: @Composable (T) -> String = { it.toString() },
+    tabModifiers: (Int, T) -> Modifier = { _, _ -> Modifier },
     modifier: Modifier = Modifier,
 ) {
     val tabTextWidth = remember(tabs.size) {
@@ -56,6 +57,7 @@ fun <T : Any> PrimaryTabs(
                         tabTextWidth,
                     )
                 },
+                modifier = tabModifiers(index, tab),
             )
         }
     }

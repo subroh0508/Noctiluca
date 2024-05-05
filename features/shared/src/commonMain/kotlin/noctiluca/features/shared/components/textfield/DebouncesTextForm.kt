@@ -1,10 +1,12 @@
 package noctiluca.features.shared.components.textfield
 
 import androidx.compose.runtime.*
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
+@OptIn(FlowPreview::class)
 @Composable
 fun DebouncedTextForm(
     text: String,

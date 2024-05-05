@@ -34,10 +34,6 @@ tasks.register(TASK_TEST_IOS_TEST) {
 }
 
 android {
-    defaultConfig {
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-
     testOptions.unitTests {
         isIncludeAndroidResources = true
         isReturnDefaultValues = true

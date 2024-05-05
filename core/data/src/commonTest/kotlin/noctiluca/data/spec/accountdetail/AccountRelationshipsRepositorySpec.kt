@@ -17,10 +17,10 @@ import noctiluca.model.HttpException
 import noctiluca.model.accountdetail.Relationship
 import noctiluca.model.accountdetail.Relationships
 import noctiluca.network.mastodon.Api
-import noctiluca.test.extension.flowToList
-import noctiluca.test.mock.MockAuthorizationTokenDataStore
-import noctiluca.test.mock.MockHttpClientEngine
-import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
+import noctiluca.test.shared.extension.flowToList
+import noctiluca.test.shared.mock.MockAuthorizationTokenDataStore
+import noctiluca.test.shared.mock.MockHttpClientEngine
+import noctiluca.test.shared.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 
 class AccountRelationshipsRepositorySpec : DescribeSpec({

@@ -11,8 +11,8 @@ import noctiluca.model.account.Account
 import noctiluca.model.accountdetail.AccountAttributes
 import noctiluca.model.status.Attachment
 import noctiluca.model.status.Status
-import noctiluca.test.ACCOUNT_ID
-import noctiluca.test.URL_SAMPLE_COM
+import noctiluca.test.shared.ACCOUNT_ID
+import noctiluca.test.shared.URL_SAMPLE_COM
 
 val myAccount = AccountAttributes(
     AccountId(ACCOUNT_ID),

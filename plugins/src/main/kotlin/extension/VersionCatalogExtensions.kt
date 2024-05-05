@@ -25,7 +25,14 @@ internal val VersionCatalog.koinAndroid: Provider<MinimalExternalModuleDependenc
 
 internal val VersionCatalog.androidxActivities: Provider<ExternalModuleDependencyBundle> get() = getBundle("androidx-activities")
 internal val VersionCatalog.androidxComposeMaterial3: Provider<MinimalExternalModuleDependency> get() = getLibrary("androidx-compose-material3")
-
+internal val VersionCatalog.androidxComposeUiTestJunit4: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "androidx-compose-ui-test-junit4"
+    )
+internal val VersionCatalog.androidxComposeUiTestManifest: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "androidx-compose-ui-test-manifest"
+    )
 internal val VersionCatalog.kotestAssertionsCore: Provider<MinimalExternalModuleDependency> get() = getLibrary("kotest-assertions-core")
 internal val VersionCatalog.kotestFrameworkEngine: Provider<MinimalExternalModuleDependency> get() = getLibrary("kotest-framework-engine")
 internal val VersionCatalog.kotestFrameworkDataTest: Provider<MinimalExternalModuleDependency>
@@ -33,6 +40,16 @@ internal val VersionCatalog.kotestFrameworkDataTest: Provider<MinimalExternalMod
         "kotest-framework-datatest"
     )
 internal val VersionCatalog.kotestRunnerJunit5: Provider<MinimalExternalModuleDependency> get() = getLibrary("kotest-runner-junit5")
+
+internal val VersionCatalog.junit: Provider<MinimalExternalModuleDependency> get() = getLibrary("junit-core")
+internal val VersionCatalog.junitVintage: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "junit-vintage"
+    )
+internal val VersionCatalog.robolectric: Provider<MinimalExternalModuleDependency>
+    get() = getLibrary(
+        "robolectric"
+    )
 
 internal val VersionCatalog.androidDesugarjdk: Provider<MinimalExternalModuleDependency> get() = getLibrary("android-desugarjdk")
 

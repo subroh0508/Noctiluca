@@ -16,14 +16,14 @@ import noctiluca.model.HttpException
 import noctiluca.model.HttpUnauthorizedException
 import noctiluca.model.accountdetail.StatusesQuery
 import noctiluca.network.mastodon.Api
-import noctiluca.test.JSON_STATUS_MEDIA
-import noctiluca.test.JSON_STATUS_MEDIA_ID_199
-import noctiluca.test.JSON_STATUS_NORMAL
-import noctiluca.test.JSON_STATUS_NORMAL_ID_99
-import noctiluca.test.extension.flowToList
-import noctiluca.test.mock.MockAuthorizationTokenDataStore
-import noctiluca.test.mock.MockHttpClientEngine
-import noctiluca.test.mock.buildFilledMockAuthenticationTokenDataStore
+import noctiluca.test.shared.JSON_STATUS_MEDIA
+import noctiluca.test.shared.JSON_STATUS_MEDIA_ID_199
+import noctiluca.test.shared.JSON_STATUS_NORMAL
+import noctiluca.test.shared.JSON_STATUS_NORMAL_ID_99
+import noctiluca.test.shared.extension.flowToList
+import noctiluca.test.shared.mock.MockAuthorizationTokenDataStore
+import noctiluca.test.shared.mock.MockHttpClientEngine
+import noctiluca.test.shared.mock.buildFilledMockAuthenticationTokenDataStore
 import org.koin.core.component.get
 
 class AccountStatusRepositorySpec : DescribeSpec({

@@ -2,6 +2,7 @@ plugins {
     id("features")
     id("org.jetbrains.compose")
     id("has-resources")
+    id("test.multiplatform-ui-test")
 }
 
 kotlin {

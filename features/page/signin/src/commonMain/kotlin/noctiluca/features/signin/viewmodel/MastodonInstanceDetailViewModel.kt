@@ -13,7 +13,7 @@ import noctiluca.features.signin.model.InstanceDetailModel
 class MastodonInstanceDetailViewModel(
     private val repository: InstanceRepository,
 ) : ViewModel(), ScreenModel {
-    private val tab by lazy { MutableStateFlow(InstancesTab.INFO) }
+    private val tab by lazy { MutableStateFlow(InstancesTab.Info) }
     private val instanceLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
     private val statusesLoadState by lazy { MutableStateFlow<LoadState>(LoadState.Initial) }
 

@@ -2,12 +2,13 @@ package noctiluca.features.signin.component
 
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import noctiluca.features.shared.components.tab.PrimaryTabs
 import noctiluca.features.signin.getString
 import noctiluca.features.signin.section.scrollableframe.InstanceDetailScrollableFrameState
 
 enum class InstancesTab {
-    INFO, EXTENDED_DESCRIPTION, LOCAL_TIMELINE
+    Info, ExtendedDescription, LocalTimeline
 }
 
 @Composable
@@ -31,14 +32,17 @@ internal fun InstanceDetailTabs(
         },
         transform = { (_, label) -> label },
         modifier = modifier,
+        tabModifiers = { _, (tab, _) ->
+            Modifier.testTag(tab.name)
+        }
     )
 }
 
 @Composable
 private fun List<InstancesTab>.mapTitles() = map {
     when (it) {
-        InstancesTab.INFO -> it to getString().sign_in_instance_detail_tab_info
-        InstancesTab.EXTENDED_DESCRIPTION -> it to getString().sign_in_instance_detail_tab_extended_description
-        InstancesTab.LOCAL_TIMELINE -> it to getString().sign_in_instance_detail_tab_local_timeline
+        InstancesTab.Info -> it to getString().sign_in_instance_detail_tab_info
+        InstancesTab.ExtendedDescription -> it to getString().sign_in_instance_detail_tab_extended_description
+        InstancesTab.LocalTimeline -> it to getString().sign_in_instance_detail_tab_local_timeline
     }
 }

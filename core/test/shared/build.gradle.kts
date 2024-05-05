@@ -22,4 +22,4 @@ kotlin {
     }
 }
 
-android { namespace = "noctiluca.test" }
+android { namespace = "noctiluca.test.shared" }

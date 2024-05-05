@@ -11,12 +11,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.textfield.DebouncedTextForm
+import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.getString
 
-private const val DEBOUNCE_TIME_MILLIS = 500L
+internal const val DEBOUNCE_TIME_MILLIS = 500L
 
 @Composable
 internal fun QueryTextField(
@@ -43,13 +45,15 @@ internal fun QueryTextField(
                 singleLine = true,
                 maxLines = 1,
                 keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Email),
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .testTag(SignInTestTag.QUERY_TEXT_FIELD),
             )
 
             ClearQueryIcon(
                 textState.value,
                 onClick = { query = "" },
-                modifier = Modifier.align(Alignment.CenterEnd),
+                modifier = Modifier.align(Alignment.CenterEnd)
+                    .testTag(SignInTestTag.QUERY_TEXT_FIELD_CLEAR_ICON),
             )
         }
     }

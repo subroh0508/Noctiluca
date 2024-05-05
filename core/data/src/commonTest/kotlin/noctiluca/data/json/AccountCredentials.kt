@@ -1,7 +1,7 @@
 package noctiluca.data.json
 
-import noctiluca.test.JSON_ACCOUNT_CREDENTIAL
-import noctiluca.test.URL_SAMPLE_COM
+import noctiluca.test.shared.JSON_ACCOUNT_CREDENTIAL
+import noctiluca.test.shared.URL_SAMPLE_COM
 
 val JSON_ACCOUNT_CREDENTIAL_1 = JSON_ACCOUNT_CREDENTIAL
 

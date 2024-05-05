@@ -6,3 +6,6 @@ actual abstract class Runner
 actual class UiTestRunner : Runner()
 
 actual annotation class RunWith(actual val value: KClass<out Runner>)
+
+actual typealias KmpTest = kotlin.test.Test
+actual typealias KmpIgnore = kotlin.test.Ignore

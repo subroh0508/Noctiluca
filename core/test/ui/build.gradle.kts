@@ -10,6 +10,12 @@ kotlin {
                 implementation(libs.androidx.test.junit)
             }
         }
+
+        named("desktopMain") {
+            dependencies {
+                implementation(kotlin("test-junit5"))
+            }
+        }
     }
 }
 

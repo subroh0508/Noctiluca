@@ -11,14 +11,14 @@ import noctiluca.features.signin.TestComposable
 import noctiluca.features.signin.component.InstanceDetailTabs
 import noctiluca.features.signin.component.InstancesTab
 import noctiluca.features.signin.section.scrollableframe.rememberInstanceDetailScrollableFrameState
+import noctiluca.test.ui.KmpTest
 import noctiluca.test.ui.RunWith
 import noctiluca.test.ui.UiTestRunner
-import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 @RunWith(UiTestRunner::class)
 class InstanceDetailTabsTest {
-    @Test
+    @KmpTest
     fun InstanceDetailTabs_shouldNotDisplay() = runComposeUiTest {
         setContent {
             val scrollState = rememberInstanceDetailScrollableFrameState(
@@ -41,7 +41,7 @@ class InstanceDetailTabsTest {
         }
     }
 
-    @Test
+    @KmpTest
     fun InstanceDetailTabs_shouldInvokeCallbackCorrectly() = runComposeUiTest {
         var tab: InstancesTab = InstancesTab.entries.last()
 

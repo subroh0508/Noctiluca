@@ -11,14 +11,14 @@ import noctiluca.features.signin.INSTANCE_DOMAIN
 import noctiluca.features.signin.INSTANCE_NAME
 import noctiluca.features.signin.component.InstanceDescription
 import noctiluca.features.signin.component.InstanceName
+import noctiluca.test.ui.KmpTest
 import noctiluca.test.ui.RunWith
 import noctiluca.test.ui.UiTestRunner
-import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 @RunWith(UiTestRunner::class)
 class CaptionTest {
-    @Test
+    @KmpTest
     fun InstanceName_shouldShowNameAndDomain() = runComposeUiTest {
         setContent {
             InstanceName(
@@ -32,7 +32,7 @@ class CaptionTest {
         onNodeWithText(INSTANCE_DOMAIN).assertIsDisplayed()
     }
 
-    @Test
+    @KmpTest
     fun InstanceDescription_shouldShowNameAndDomain() = runComposeUiTest {
         setContent {
             InstanceDescription(

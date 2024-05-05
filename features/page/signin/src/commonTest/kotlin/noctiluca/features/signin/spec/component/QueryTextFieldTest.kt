@@ -14,17 +14,17 @@ import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.TestComposable
 import noctiluca.features.signin.component.DEBOUNCE_TIME_MILLIS
 import noctiluca.features.signin.component.QueryTextField
+import noctiluca.test.ui.KmpIgnore
+import noctiluca.test.ui.KmpTest
 import noctiluca.test.ui.RunWith
 import noctiluca.test.ui.UiTestRunner
-import kotlin.test.Ignore
-import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 @RunWith(UiTestRunner::class)
 class QueryTextFieldTest {
     private val stringRes = Resources("ja").getString()
 
-    @Test
+    @KmpTest
     fun QueryTextField_shouldShowEmptyText() = runComposeUiTest {
         setContent {
             TestComposable {
@@ -41,8 +41,8 @@ class QueryTextFieldTest {
             .assertDoesNotExist()
     }
 
-    @Test
-    @Ignore
+    @KmpTest
+    @KmpIgnore
     fun QueryTextField_shouldInvokeDebouncedCallbackCorrectly() = runComposeUiTest {
         var query = ""
 

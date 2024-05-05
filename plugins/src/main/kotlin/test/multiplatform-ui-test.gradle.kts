@@ -1,8 +1,11 @@
 package test
 
-import extension.androidxComposeUiTestJunit4Android
+import extension.androidxComposeUiTestJunit4
 import extension.androidxComposeUiTestManifest
+import extension.junit
+import extension.junitVintage
 import extension.libs
+import extension.robolectric
 import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.plugin.KotlinSourceSetTree
@@ -17,11 +20,22 @@ plugins {
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
+        unitTestVariant {
+            dependencies {
+                implementation(libs.junit)
+                implementation(libs.junitVintage)
+                implementation(libs.robolectric)
+                implementation(libs.androidxComposeUiTestJunit4)
+                debugImplementation(libs.androidxComposeUiTestManifest)
+            }
+        }
+
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         instrumentedTestVariant {
             sourceSetTree.set(KotlinSourceSetTree.test)
 
             dependencies {
-                implementation(libs.androidxComposeUiTestJunit4Android)
+                implementation(libs.androidxComposeUiTestJunit4)
                 debugImplementation(libs.androidxComposeUiTestManifest)
             }
         }

@@ -14,14 +14,14 @@ import noctiluca.features.signin.TestComposable
 import noctiluca.features.signin.component.ActionButtons
 import noctiluca.features.signin.mock.instance
 import noctiluca.model.authorization.Instance
-import noctiluca.test.ui.KmpTest
+import noctiluca.test.ui.ComposeTest
 import noctiluca.test.ui.RunWith
 import noctiluca.test.ui.UiTestRunner
 
 @OptIn(ExperimentalTestApi::class)
 @RunWith(UiTestRunner::class)
 class ActionButtonsTest {
-    @KmpTest
+    @ComposeTest
     fun AuthorizeButton_shouldNotDisplay() = runComposeUiTest {
         setContent {
             TestComposable {
@@ -43,7 +43,7 @@ class ActionButtonsTest {
             .assertDoesNotExist()
     }
 
-    @KmpTest
+    @ComposeTest
     fun AuthorizeButton_shouldShowCircularProgressIndicator() = runComposeUiTest {
         setContent {
             TestComposable {
@@ -65,7 +65,7 @@ class ActionButtonsTest {
             .assertDoesNotExist()
     }
 
-    @KmpTest
+    @ComposeTest
     fun AuthorizeButton_shouldInvokeCallbackCorrectly() = runComposeUiTest {
         var args: Instance? = null
 

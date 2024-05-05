@@ -7,5 +7,5 @@ expect class UiTestRunner : Runner
 
 expect annotation class RunWith(val value: KClass<out Runner>)
 
-expect annotation class KmpTest()
-expect annotation class KmpIgnore()
+expect annotation class ComposeTest()
+expect annotation class ComposeIgnore()

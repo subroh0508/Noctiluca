@@ -13,14 +13,14 @@ import noctiluca.features.signin.SignInTestTag
 import noctiluca.features.signin.TestComposable
 import noctiluca.features.signin.component.DEBOUNCE_TIME_MILLIS
 import noctiluca.features.signin.component.QueryTextField
-import noctiluca.test.ui.KmpTest
+import noctiluca.test.ui.ComposeTest
 import noctiluca.test.ui.RunWith
 import noctiluca.test.ui.UiTestRunner
 
 @OptIn(ExperimentalTestApi::class)
 @RunWith(UiTestRunner::class)
 class AndroidQueryTextFieldTest {
-    @KmpTest
+    @ComposeTest
     fun QueryTextField_shouldInvokeDebouncedCallbackCorrectly() = runComposeUiTest {
         var query = ""
 

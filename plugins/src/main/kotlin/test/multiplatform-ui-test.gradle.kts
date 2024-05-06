@@ -43,10 +43,10 @@ kotlin {
 
         named("androidUnitTest") {
             dependencies {
-                implementation(libs.junit)
-                implementation(libs.junitVintage)
                 implementation(libs.androidxComposeUiTestJunit4)
 
+                runtimeOnly(libs.junit)
+                runtimeOnly(libs.junitVintage)
                 runtimeOnly(libs.robolectric)
             }
         }

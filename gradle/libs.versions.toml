@@ -19,7 +19,7 @@ androidx-compose-ui = "1.6.7"
 android-desugarjdk = "2.0.4"
 
 kotlinx-datetime = "0.6.0-RC.2"
-kotlinx-coroutines = "1.8.0"
+kotlinx-coroutines = "1.8.1"
 kotlinx-serialization = "1.6.3"
 
 ktor = "2.3.10"

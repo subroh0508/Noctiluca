@@ -41,7 +41,7 @@ junit-vintage = "5.10.2"
 
 kotest = "5.9.0"
 
-robolectric = "4.12.1"
+robolectric = "4.12.2"
 
 androidx-test-core = "1.5.0"
 androidx-test-runner = "1.5.2"

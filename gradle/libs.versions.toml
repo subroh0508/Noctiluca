@@ -59,6 +59,7 @@ android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 buildconfig = { id = "com.github.gmazzo.buildconfig", version.ref = "buildconfig" }
 kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 
 [libraries]
 android-gradle-build-tools = { module = "com.android.tools.build:gradle", version.ref = "agp" }

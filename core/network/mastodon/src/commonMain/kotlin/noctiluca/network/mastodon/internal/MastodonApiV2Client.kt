@@ -6,6 +6,7 @@ import noctiluca.network.mastodon.Api
 import noctiluca.network.mastodon.AuthorizationTokenProvider
 import noctiluca.network.mastodon.MastodonApiV2
 import noctiluca.network.mastodon.data.instance.NetworkV2Instance
+import noctiluca.network.mastodon.data.mediaattachment.NetworkMediaAttachment
 
 internal class MastodonApiV2Client(
     token: AuthorizationTokenProvider,
@@ -17,5 +18,11 @@ internal class MastodonApiV2Client(
         Api.V2.Instance(),
         domain = domain,
         skipAuthorization = true,
+    ).body()
+
+    override suspend fun postMedia(
+
+    ): NetworkMediaAttachment = client.get(
+        Api.V2.Media(),
     ).body()
 }

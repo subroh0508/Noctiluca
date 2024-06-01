@@ -8,7 +8,5 @@ interface MastodonApiV2 {
         domain: String,
     ): NetworkV2Instance
 
-    suspend fun postMedia(
-
-    ): NetworkMediaAttachment
+    suspend fun postMedia(): NetworkMediaAttachment
 }

@@ -85,6 +85,7 @@ object MediaAttachmentSerializer : KSerializer<NetworkMediaAttachment> {
         )
     }
 
+    @Suppress("EnumEntryNameCase", "EnumNaming")
     private enum class Type { image, video, gifv, audio }
 
     @OptIn(ExperimentalSerializationApi::class)

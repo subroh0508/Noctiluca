@@ -8,7 +8,6 @@ import noctiluca.model.account.Account
 import noctiluca.model.media.LocalMediaFile
 import noctiluca.model.status.Attachment
 import noctiluca.model.status.Status
-import noctiluca.model.timeline.Timeline
 
 data class TootModel(
     val current: Account? = null,

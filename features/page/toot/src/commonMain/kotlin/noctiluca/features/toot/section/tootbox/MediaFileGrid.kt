@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.BoxWithConstraintsScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -38,8 +36,6 @@ import noctiluca.features.shared.components.icon.OverlayIcon
 import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.features.toot.getString
 import noctiluca.features.toot.model.TootModel
-import noctiluca.features.toot.model.preview
-import noctiluca.model.media.LocalMediaFile
 
 private val MediaFileHeight = 240.dp
 

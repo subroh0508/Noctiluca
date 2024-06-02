@@ -51,7 +51,7 @@ abstract class AbstractMastodonApiClient(
         }
     }
 
-    protected suspend inline fun <reified T : Any, reified E : Any> HttpClient.post(
+    protected suspend inline fun <reified T : Any> HttpClient.post(
         resource: T,
         parts: List<PartData>,
         domain: String? = null,

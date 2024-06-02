@@ -37,18 +37,7 @@ fun NetworkStatus.toEntity(accountId: AccountId?) = Status(
     (reblog?.mediaAttachments ?: mediaAttachments).map { it.toEntity() },
 )
 
-private fun NetworkAccount.toTooter() = Account(
-    AccountId(id),
-    username,
-    displayName,
-    Uri(url),
-    Uri(avatar),
-    "@$acct",
-)
-
-private enum class AttachmentType { IMAGE, GIFV, VIDEO, AUDIO, UNKNOWN }
-
-private fun NetworkMediaAttachment.toEntity() = when (AttachmentType.valueOf(type.uppercase())) {
+internal fun NetworkMediaAttachment.toEntity() = when (AttachmentType.valueOf(type.uppercase())) {
     AttachmentType.IMAGE -> Attachment.Image(
         url = Uri(url),
         previewUrl = Uri(previewUrl),
@@ -79,3 +68,14 @@ private fun NetworkMediaAttachment.toEntity() = when (AttachmentType.valueOf(typ
         description = description,
     )
 }
+
+private fun NetworkAccount.toTooter() = Account(
+    AccountId(id),
+    username,
+    displayName,
+    Uri(url),
+    Uri(avatar),
+    "@$acct",
+)
+
+private enum class AttachmentType { IMAGE, GIFV, VIDEO, AUDIO, UNKNOWN }

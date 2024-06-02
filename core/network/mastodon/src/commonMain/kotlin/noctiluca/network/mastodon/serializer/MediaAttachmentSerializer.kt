@@ -25,7 +25,6 @@ object MediaAttachmentSerializer : KSerializer<NetworkMediaAttachment> {
             element<String>("url")
             element<String>("preview_url")
             element<String?>("remote_url")
-            element<String>("text_url", isOptional = true)
             element<NetworkMediaAttachmentMeta>("meta")
             element<String?>("description")
             element<String?>("blurhash")
@@ -38,9 +37,9 @@ object MediaAttachmentSerializer : KSerializer<NetworkMediaAttachment> {
             encodeStringElement(descriptor, 2, value.url)
             encodeStringElement(descriptor, 3, value.previewUrl)
             encodeNullableStringElement(4, value.remoteUrl)
-            encodeMeta(6, value.meta)
-            encodeNullableStringElement(7, value.description)
-            encodeNullableStringElement(8, value.blurhash)
+            encodeMeta(5, value.meta)
+            encodeNullableStringElement(6, value.description)
+            encodeNullableStringElement(7, value.blurhash)
         }
     }
 
@@ -50,7 +49,6 @@ object MediaAttachmentSerializer : KSerializer<NetworkMediaAttachment> {
         var url: String? = null
         var previewUrl: String? = null
         var remoteUrl: String? = null
-        var textUrl: String? = null
         var meta: NetworkMediaAttachmentMeta? = null
         var description: String? = null
         var blurhash: String? = null
@@ -64,10 +62,9 @@ object MediaAttachmentSerializer : KSerializer<NetworkMediaAttachment> {
                     2 -> url = decodeStringElement(descriptor, index)
                     3 -> previewUrl = decodeStringElement(descriptor, index)
                     4 -> remoteUrl = decodeStringNullableElement(index)
-                    5 -> textUrl = decodeStringElement(descriptor, index)
-                    6 -> meta = decodeMeta(Type.valueOf(requireNotNull(type)), index)
-                    7 -> description = decodeStringNullableElement(index)
-                    8 -> blurhash = decodeStringNullableElement(index)
+                    5 -> meta = decodeMeta(Type.valueOf(requireNotNull(type)), index)
+                    6 -> description = decodeStringNullableElement(index)
+                    7 -> blurhash = decodeStringNullableElement(index)
                     else -> throw IllegalArgumentException("Unexpected index: $index")
                 }
             }

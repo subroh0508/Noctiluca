@@ -9,51 +9,51 @@ sealed class NetworkMediaAttachmentMeta {
     data class Image(
         val original: ImageOriginal,
         val small: Small,
-        val focus: Focus,
+        val focus: Focus?,
     ) : NetworkMediaAttachmentMeta()
 
     @Serializable
     data class Video(
-        val length: String,
-        val duration: Double,
-        val fps: Int,
-        val size: String,
-        val width: Int,
-        val height: Int,
-        val aspect: Double,
+        val length: String?,
+        val duration: Double?,
+        val fps: Int?,
+        val size: String?,
+        val width: Int?,
+        val height: Int?,
+        val aspect: Double?,
         @SerialName("audio_encode")
-        val audioEncode: String,
+        val audioEncode: String?,
         @SerialName("audio_bitrate")
-        val audioBitrate: String,
+        val audioBitrate: String?,
         @SerialName("audio_channels")
-        val audioChannels: String,
+        val audioChannels: String?,
         val original: VideoOriginal,
         val small: Small,
     ) : NetworkMediaAttachmentMeta()
 
     @Serializable
     data class GifV(
-        val length: String,
-        val duration: Double,
-        val fps: Int,
-        val size: String,
-        val width: Int,
-        val height: Int,
-        val aspect: Double,
+        val length: String?,
+        val duration: Double?,
+        val fps: Int?,
+        val size: String?,
+        val width: Int?,
+        val height: Int?,
+        val aspect: Double?,
         val original: VideoOriginal,
         val small: Small,
     ) : NetworkMediaAttachmentMeta()
 
     @Serializable
     data class Audio(
-        val length: String,
-        val duration: Double,
+        val length: String?,
+        val duration: Double?,
         @SerialName("audio_encode")
-        val audioEncode: String,
+        val audioEncode: String?,
         @SerialName("audio_bitrate")
-        val audioBitrate: String,
+        val audioBitrate: String?,
         @SerialName("audio_channels")
-        val audioChannels: String,
+        val audioChannels: String?,
         val original: AudioOriginal,
     ) : NetworkMediaAttachmentMeta()
 

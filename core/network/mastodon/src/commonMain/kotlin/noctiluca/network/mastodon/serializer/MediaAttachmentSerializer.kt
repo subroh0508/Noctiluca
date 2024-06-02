@@ -100,7 +100,7 @@ object MediaAttachmentSerializer : KSerializer<NetworkMediaAttachment> {
 
     private fun CompositeEncoder.encodeMeta(
         index: Int,
-        meta: NetworkMediaAttachmentMeta,
+        meta: NetworkMediaAttachmentMeta?,
     ) = when (meta) {
         is NetworkMediaAttachmentMeta.Image -> encodeSerializableElement(
             descriptor,
@@ -108,27 +108,25 @@ object MediaAttachmentSerializer : KSerializer<NetworkMediaAttachment> {
             NetworkMediaAttachmentMeta.Image.serializer(),
             meta
         )
-
         is NetworkMediaAttachmentMeta.Video -> encodeSerializableElement(
             descriptor,
             index,
             NetworkMediaAttachmentMeta.Video.serializer(),
             meta
         )
-
         is NetworkMediaAttachmentMeta.GifV -> encodeSerializableElement(
             descriptor,
             index,
             NetworkMediaAttachmentMeta.GifV.serializer(),
             meta
         )
-
         is NetworkMediaAttachmentMeta.Audio -> encodeSerializableElement(
             descriptor,
             index,
             NetworkMediaAttachmentMeta.Audio.serializer(),
             meta
         )
+        else -> encodeNullableStringElement(index, null)
     }
 
     @OptIn(ExperimentalSerializationApi::class)

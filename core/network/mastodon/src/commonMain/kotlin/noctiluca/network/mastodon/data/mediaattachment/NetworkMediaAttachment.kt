@@ -16,7 +16,7 @@ data class NetworkMediaAttachment(
     val previewUrl: String,
     @SerialName("remote_url")
     val remoteUrl: String?,
-    val meta: NetworkMediaAttachmentMeta,
+    val meta: NetworkMediaAttachmentMeta?,
     val description: String?,
     val blurhash: String?,
 )

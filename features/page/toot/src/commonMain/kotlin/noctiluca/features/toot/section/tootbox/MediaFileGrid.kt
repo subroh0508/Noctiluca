@@ -14,7 +14,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -22,6 +24,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.icon.OverlayIcon
 import noctiluca.features.shared.components.image.AsyncImage
+import noctiluca.features.toot.model.TootModel
 import noctiluca.features.toot.model.preview
 import noctiluca.model.media.LocalMediaFile
 
@@ -29,7 +32,7 @@ private val MediaFileHeight = 240.dp
 
 @Composable
 internal fun MediaFileGrid(
-    files: List<LocalMediaFile>,
+    files: List<TootModel.MediaFile>,
     onClickClear: (Int) -> Unit,
 ) {
     if (files.isEmpty()) {
@@ -49,14 +52,14 @@ internal fun MediaFileGrid(
 
 @Composable
 private fun SingleMedia(
-    file: LocalMediaFile,
+    file: TootModel.MediaFile,
     onClickClear: (Int) -> Unit,
 ) = Box(
     modifier = Modifier.fillMaxWidth()
         .height(MediaFileHeight),
 ) {
     AsyncImage(
-        file.preview,
+        file.previewUri,
         contentScale = ContentScale.Crop,
         modifier = Modifier.fillMaxSize()
             .clip(RoundedCornerShape(8.dp)),
@@ -67,11 +70,18 @@ private fun SingleMedia(
         contentDescription = "Clear #1",
         onClick = { onClickClear(0) },
     )
+
+    if (file is TootModel.MediaFile.Uploading) {
+        LinearProgressIndicator(
+            modifier = Modifier.align(Alignment.Center)
+                .padding(horizontal = 8.dp),
+        )
+    }
 }
 
 @Composable
 private fun MultipleMedia(
-    files: List<LocalMediaFile>,
+    files: List<TootModel.MediaFile>,
     onClickClear: (Int) -> Unit,
 ) = BoxWithConstraints {
     LazyRow(
@@ -84,7 +94,7 @@ private fun MultipleMedia(
                         .height(MediaFileHeight)
                 ) {
                     AsyncImage(
-                        file.preview,
+                        file.previewUri,
                         contentScale = ContentScale.Crop,
                         modifier = Modifier.fillMaxSize()
                             .clip(RoundedCornerShape(8.dp)),
@@ -95,6 +105,13 @@ private fun MultipleMedia(
                         contentDescription = "Clear #${index + 1}",
                         onClick = { onClickClear(index) },
                     )
+
+                    if (file is TootModel.MediaFile.Uploading) {
+                        LinearProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center)
+                                .padding(horizontal = 8.dp),
+                        )
+                    }
                 }
             }
         }

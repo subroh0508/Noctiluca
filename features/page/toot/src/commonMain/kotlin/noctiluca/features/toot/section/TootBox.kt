@@ -9,6 +9,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import noctiluca.features.toot.component.textfield.TootAreaPadding
 import noctiluca.features.toot.component.textfield.TootTextArea
+import noctiluca.features.toot.model.TootModel
 import noctiluca.features.toot.section.tootbox.BottomBar
 import noctiluca.features.toot.section.tootbox.MediaFileGrid
 import noctiluca.features.toot.section.tootbox.TootBy
@@ -20,7 +21,7 @@ internal fun TootBox(
     account: Account?,
     content: MutableState<String?>,
     warning: MutableState<String?>,
-    files: List<LocalMediaFile>,
+    files: List<TootModel.MediaFile>,
     enabled: Boolean,
     onSelectFiles: (List<LocalMediaFile>) -> Unit,
     onRemoveFile: (Int) -> Unit,

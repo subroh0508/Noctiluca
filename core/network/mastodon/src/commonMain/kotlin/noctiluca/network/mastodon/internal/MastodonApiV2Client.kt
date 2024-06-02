@@ -12,6 +12,7 @@ import noctiluca.network.mastodon.AuthorizationTokenProvider
 import noctiluca.network.mastodon.MastodonApiV2
 import noctiluca.network.mastodon.data.instance.NetworkV2Instance
 import noctiluca.network.mastodon.data.mediaattachment.NetworkMediaAttachment
+import noctiluca.network.mastodon.extensions.filename
 import noctiluca.network.mastodon.extensions.toByteArray
 
 internal class MastodonApiV2Client(
@@ -41,7 +42,14 @@ internal class MastodonApiV2Client(
                     "file",
                     data,
                     Headers.build {
-                        append(HttpHeaders.ContentType, media.mimeType)
+                        append(
+                            HttpHeaders.ContentType,
+                            media.mimeType,
+                        )
+                        append(
+                            HttpHeaders.ContentDisposition,
+                            "filename=${media.original.filename}",
+                        )
                     },
                 )
             },

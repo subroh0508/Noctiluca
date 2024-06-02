@@ -23,13 +23,13 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.icon.OverlayIcon
 import noctiluca.features.shared.components.image.AsyncImage
 import noctiluca.features.toot.model.preview
-import noctiluca.model.media.MediaFile
+import noctiluca.model.media.LocalMediaFile
 
 private val MediaFileHeight = 240.dp
 
 @Composable
 internal fun MediaFileGrid(
-    files: List<MediaFile>,
+    files: List<LocalMediaFile>,
     onClickClear: (Int) -> Unit,
 ) {
     if (files.isEmpty()) {
@@ -49,7 +49,7 @@ internal fun MediaFileGrid(
 
 @Composable
 private fun SingleMedia(
-    file: MediaFile,
+    file: LocalMediaFile,
     onClickClear: (Int) -> Unit,
 ) = Box(
     modifier = Modifier.fillMaxWidth()
@@ -71,7 +71,7 @@ private fun SingleMedia(
 
 @Composable
 private fun MultipleMedia(
-    files: List<MediaFile>,
+    files: List<LocalMediaFile>,
     onClickClear: (Int) -> Unit,
 ) = BoxWithConstraints {
     LazyRow(

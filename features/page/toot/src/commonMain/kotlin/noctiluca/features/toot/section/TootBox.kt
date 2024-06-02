@@ -13,16 +13,16 @@ import noctiluca.features.toot.section.tootbox.BottomBar
 import noctiluca.features.toot.section.tootbox.MediaFileGrid
 import noctiluca.features.toot.section.tootbox.TootBy
 import noctiluca.model.account.Account
-import noctiluca.model.media.MediaFile
+import noctiluca.model.media.LocalMediaFile
 
 @Composable
 internal fun TootBox(
     account: Account?,
     content: MutableState<String?>,
     warning: MutableState<String?>,
-    files: List<MediaFile>,
+    files: List<LocalMediaFile>,
     enabled: Boolean,
-    onSelectFiles: (List<MediaFile>) -> Unit,
+    onSelectFiles: (List<LocalMediaFile>) -> Unit,
     onRemoveFile: (Int) -> Unit,
     onClickToot: () -> Unit,
     modifier: Modifier = Modifier,

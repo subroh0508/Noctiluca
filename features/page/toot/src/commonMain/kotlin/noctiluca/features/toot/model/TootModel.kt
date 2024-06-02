@@ -3,7 +3,7 @@ package noctiluca.features.toot.model
 import noctiluca.features.shared.model.MessageHolder
 import noctiluca.model.AuthorizeEventState
 import noctiluca.model.account.Account
-import noctiluca.model.media.MediaFile
+import noctiluca.model.media.LocalMediaFile
 import noctiluca.model.status.Status
 
 data class TootModel(
@@ -33,6 +33,6 @@ data class TootModel(
         val warning: String? = null,
         val visibility: Status.Visibility = Status.Visibility.PUBLIC,
         val sensitive: Boolean = false,
-        val files: List<MediaFile> = listOf(),
+        val files: List<LocalMediaFile> = listOf(),
     )
 }

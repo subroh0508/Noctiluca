@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.utils.isEnabledToot
 import noctiluca.features.toot.component.rememberMediaFilePickerLauncher
 import noctiluca.features.toot.model.MAX_CONTENT_LENGTH
-import noctiluca.model.media.MediaFile
+import noctiluca.model.media.LocalMediaFile
 
 private val OptionButtonsHorizontalPadding = 4.dp
 
@@ -35,7 +35,7 @@ internal fun BottomBar(
     warning: String? = null,
     isContentWarning: Boolean,
     enabled: Boolean,
-    onSelectFiles: (List<MediaFile>) -> Unit,
+    onSelectFiles: (List<LocalMediaFile>) -> Unit,
     onToggleContentWarning: (Boolean) -> Unit,
     onClickToot: () -> Unit,
 ) {
@@ -76,7 +76,7 @@ internal fun BottomBar(
 private fun OptionButtons(
     isContentWarning: Boolean,
     enabled: Boolean,
-    onSelectFiles: (List<MediaFile>) -> Unit,
+    onSelectFiles: (List<LocalMediaFile>) -> Unit,
     onToggleContentWarning: (Boolean) -> Unit,
 ) {
     val launcher = rememberMediaFilePickerLauncher(onSelectFiles)

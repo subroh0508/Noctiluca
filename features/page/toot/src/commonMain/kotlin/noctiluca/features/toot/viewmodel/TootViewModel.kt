@@ -11,7 +11,7 @@ import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launchLazy
 import noctiluca.features.toot.model.Message
 import noctiluca.features.toot.model.TootModel
-import noctiluca.model.media.MediaFile
+import noctiluca.model.media.LocalMediaFile
 import noctiluca.model.status.Status
 
 class TootViewModel(
@@ -57,7 +57,7 @@ class TootViewModel(
     }
 
     fun onSelectFiles(
-        files: List<MediaFile>,
+        files: List<LocalMediaFile>,
     ) {
         statusTextStateFlow.value = statusTextStateFlow.copy(files = files)
     }
@@ -96,7 +96,7 @@ class TootViewModel(
         content: String? = value.content,
         warning: String? = value.warning,
         visibility: Status.Visibility = value.visibility,
-        files: List<MediaFile> = value.files,
+        files: List<LocalMediaFile> = value.files,
     ) = value.copy(
         content = content,
         warning = warning,

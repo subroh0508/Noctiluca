@@ -38,7 +38,9 @@ data class TootModel(
         val visibility: Status.Visibility = Status.Visibility.PUBLIC,
         val sensitive: Boolean = false,
         val files: List<MediaFile> = listOf(),
-    )
+    ) {
+        val mediaIds = files.mapNotNull { (it as? MediaFile.Uploaded)?.attachment?.id }
+    }
 
     sealed class MediaFile {
         abstract val uri: Uri

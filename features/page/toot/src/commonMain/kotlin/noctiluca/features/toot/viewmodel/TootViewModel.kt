@@ -95,6 +95,7 @@ class TootViewModel(
                     content,
                     uiModel.value.statusText.warning,
                     uiModel.value.statusText.visibility,
+                    uiModel.value.statusText.mediaIds,
                 )
             }
                 .onSuccess { reset() }

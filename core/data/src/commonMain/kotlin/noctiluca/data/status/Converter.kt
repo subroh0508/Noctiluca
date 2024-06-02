@@ -39,30 +39,35 @@ fun NetworkStatus.toEntity(accountId: AccountId?) = Status(
 
 internal fun NetworkMediaAttachment.toEntity() = when (AttachmentType.valueOf(type.uppercase())) {
     AttachmentType.IMAGE -> Attachment.Image(
+        id = id,
         url = Uri(url),
         previewUrl = Uri(previewUrl),
         description = description,
     )
 
     AttachmentType.GIFV -> Attachment.Gifv(
+        id = id,
         url = Uri(url),
         previewUrl = Uri(previewUrl),
         description = description,
     )
 
     AttachmentType.VIDEO -> Attachment.Video(
+        id = id,
         url = Uri(url),
         previewUrl = Uri(previewUrl),
         description = description,
     )
 
     AttachmentType.AUDIO -> Attachment.Audio(
+        id = id,
         url = Uri(url),
         previewUrl = Uri(previewUrl),
         description = description,
     )
 
     AttachmentType.UNKNOWN -> Attachment.Unknown(
+        id = id,
         url = Uri(url),
         previewUrl = Uri(previewUrl),
         description = description,

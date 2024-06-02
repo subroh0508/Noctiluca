@@ -250,7 +250,7 @@ val JSON_STATUS_MEDIA = """
       },
       "media_attachments": [
         {
-          "id": "10",
+          "id": "2000",
           "type": "image",
           "url": "$URL_SAMPLE_COM/media_attachments/files/sample_200.jpeg",
           "preview_url": "$URL_SAMPLE_COM/media_attachments/files/small_200.jpeg",
@@ -343,7 +343,7 @@ val JSON_STATUS_MEDIA_ID_199 = """
       },
       "media_attachments": [
         {
-          "id": "10",
+          "id": "1990",
           "type": "image",
           "url": "$URL_SAMPLE_COM/media_attachments/files/sample_199.jpeg",
           "preview_url": "$URL_SAMPLE_COM/media_attachments/files/small_199.jpeg",

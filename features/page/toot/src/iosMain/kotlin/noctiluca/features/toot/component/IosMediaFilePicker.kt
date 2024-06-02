@@ -8,9 +8,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.Clock
-import noctiluca.features.toot.model.MediaFile
+import noctiluca.features.toot.model.MEDIA_FILE_MAX_SELECTION_SIZE
 import noctiluca.features.toot.utils.getMimeType
 import noctiluca.features.toot.utils.toKmpUri
+import noctiluca.model.media.LocalMediaFile
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSItemProvider
 import platform.Foundation.NSTemporaryDirectory
@@ -46,7 +47,7 @@ internal actual class MediaFilePickerLauncher(
 
 @Composable
 internal actual fun rememberMediaFilePickerLauncher(
-    onSelect: (List<MediaFile>) -> Unit,
+    onSelect: (List<LocalMediaFile>) -> Unit,
 ): MediaFilePickerLauncher {
     val coroutineScope = rememberCoroutineScope()
     val delegate = remember { PHPickerDelegate(coroutineScope, onSelect) }
@@ -54,21 +55,21 @@ internal actual fun rememberMediaFilePickerLauncher(
     return remember { MediaFilePickerLauncher(delegate) }
 }
 
-private fun NSURL.toMediaFile(): MediaFile {
+private fun NSURL.toMediaFile(): LocalMediaFile {
     val mimeType = getMimeType() ?: error("Unknown MIME-Type: $path")
     val kmpUri = toKmpUri() ?: error("Unknown path: $path")
 
     return when {
-        mimeType.startsWith("image") -> MediaFile.Image(kmpUri, mimeType)
-        mimeType.startsWith("video") -> MediaFile.Video(kmpUri, mimeType)
-        mimeType.startsWith("audio") -> MediaFile.Audio(kmpUri, mimeType)
-        else -> MediaFile.Unknown(kmpUri, mimeType)
+        mimeType.startsWith("image") -> LocalMediaFile.Image(kmpUri, mimeType)
+        mimeType.startsWith("video") -> LocalMediaFile.Video(kmpUri, mimeType)
+        mimeType.startsWith("audio") -> LocalMediaFile.Audio(kmpUri, mimeType)
+        else -> LocalMediaFile.Unknown(kmpUri, mimeType)
     }
 }
 
 private class PHPickerDelegate(
     private val coroutineScope: CoroutineScope,
-    private val onSelect: (List<MediaFile>) -> Unit,
+    private val onSelect: (List<LocalMediaFile>) -> Unit,
 ) : NSObject(), PHPickerViewControllerDelegateProtocol {
     override fun picker(
         picker: PHPickerViewController,
@@ -100,7 +101,7 @@ private fun createPHPickerViewController(
     configuration.preferredAssetRepresentationMode =
         PHPickerConfigurationAssetRepresentationModeCurrent
     configuration.selection = PHPickerConfigurationSelectionOrdered
-    configuration.selectionLimit = MediaFile.MAX_SELECTION_SIZE.toLong()
+    configuration.selectionLimit = MEDIA_FILE_MAX_SELECTION_SIZE.toLong()
 
     return PHPickerViewController(configuration).apply {
         this.delegate = pickerDelegate

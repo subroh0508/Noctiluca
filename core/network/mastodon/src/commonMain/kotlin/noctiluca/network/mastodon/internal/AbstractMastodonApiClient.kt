@@ -4,8 +4,10 @@ import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.resources.*
 import io.ktor.client.request.*
+import io.ktor.client.request.forms.MultiPartFormDataContent
 import io.ktor.client.statement.*
 import io.ktor.http.*
+import io.ktor.http.content.PartData
 import noctiluca.model.AuthorizedTokenNotFoundException
 import noctiluca.model.HttpException
 import noctiluca.model.HttpUnauthorizedException
@@ -46,6 +48,18 @@ abstract class AbstractMastodonApiClient(
         post(resource) {
             setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
             setBody(body)
+        }
+    }
+
+    protected suspend inline fun <reified T : Any> HttpClient.post(
+        resource: T,
+        parts: List<PartData>,
+        domain: String? = null,
+        skipAuthorization: Boolean = false,
+    ) = handleResponseException {
+        post(resource) {
+            setAccessTokenAndHost(domain, skipAuthorization = skipAuthorization)
+            setBody(MultiPartFormDataContent(parts))
         }
     }
 

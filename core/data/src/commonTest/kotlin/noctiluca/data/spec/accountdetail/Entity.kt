@@ -135,6 +135,7 @@ val media = Status(
     via = Status.Via("Web", website = null),
     attachments = listOf(
         Attachment.Image(
+            "2000",
             Uri("$URL_SAMPLE_COM/media_attachments/files/sample_200.jpeg"),
             Uri("$URL_SAMPLE_COM/media_attachments/files/small_200.jpeg"),
             description = null,
@@ -167,6 +168,7 @@ val prevMedia = Status(
     via = Status.Via("Web", website = null),
     attachments = listOf(
         Attachment.Image(
+            "1990",
             Uri("$URL_SAMPLE_COM/media_attachments/files/sample_199.jpeg"),
             Uri("$URL_SAMPLE_COM/media_attachments/files/small_199.jpeg"),
             description = null,

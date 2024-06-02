@@ -22,8 +22,8 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.components.icon.OverlayIcon
 import noctiluca.features.shared.components.image.AsyncImage
-import noctiluca.features.toot.model.MediaFile
 import noctiluca.features.toot.model.preview
+import noctiluca.model.media.MediaFile
 
 private val MediaFileHeight = 240.dp
 

@@ -8,9 +8,10 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
 import kotlinx.datetime.Clock
-import noctiluca.features.toot.model.MediaFile
+import noctiluca.features.toot.model.MEDIA_FILE_MAX_SELECTION_SIZE
 import noctiluca.features.toot.utils.getMimeType
 import noctiluca.features.toot.utils.toKmpUri
+import noctiluca.model.media.MediaFile
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSItemProvider
 import platform.Foundation.NSTemporaryDirectory
@@ -100,7 +101,7 @@ private fun createPHPickerViewController(
     configuration.preferredAssetRepresentationMode =
         PHPickerConfigurationAssetRepresentationModeCurrent
     configuration.selection = PHPickerConfigurationSelectionOrdered
-    configuration.selectionLimit = MediaFile.MAX_SELECTION_SIZE.toLong()
+    configuration.selectionLimit = MEDIA_FILE_MAX_SELECTION_SIZE.toLong()
 
     return PHPickerViewController(configuration).apply {
         this.delegate = pickerDelegate

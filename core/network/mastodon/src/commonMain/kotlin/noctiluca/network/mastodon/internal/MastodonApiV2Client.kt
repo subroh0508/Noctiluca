@@ -20,7 +20,11 @@ internal class MastodonApiV2Client(
         skipAuthorization = true,
     ).body()
 
-    override suspend fun postMedia(): NetworkMediaAttachment = client.get(
-        Api.V2.Media(),
-    ).body()
+    override suspend fun postMedia(): NetworkMediaAttachment {
+        client
+
+        return client.get(
+            Api.V2.Media(),
+        ).body()
+    }
 }

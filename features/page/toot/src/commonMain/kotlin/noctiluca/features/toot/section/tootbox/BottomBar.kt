@@ -25,7 +25,7 @@ import androidx.compose.ui.unit.dp
 import noctiluca.features.shared.utils.isEnabledToot
 import noctiluca.features.toot.component.rememberMediaFilePickerLauncher
 import noctiluca.features.toot.model.MAX_CONTENT_LENGTH
-import noctiluca.features.toot.model.MediaFile
+import noctiluca.model.media.MediaFile
 
 private val OptionButtonsHorizontalPadding = 4.dp
 

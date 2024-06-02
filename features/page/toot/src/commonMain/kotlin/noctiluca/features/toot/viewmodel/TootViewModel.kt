@@ -9,9 +9,9 @@ import noctiluca.features.shared.model.MessageHolder
 import noctiluca.features.shared.utils.isEnabledToot
 import noctiluca.features.shared.viewmodel.AuthorizedViewModel
 import noctiluca.features.shared.viewmodel.launchLazy
-import noctiluca.features.toot.model.MediaFile
 import noctiluca.features.toot.model.Message
 import noctiluca.features.toot.model.TootModel
+import noctiluca.model.media.MediaFile
 import noctiluca.model.status.Status
 
 class TootViewModel(

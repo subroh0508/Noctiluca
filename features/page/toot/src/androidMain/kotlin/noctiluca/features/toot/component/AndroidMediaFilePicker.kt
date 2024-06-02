@@ -10,9 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
-import noctiluca.features.toot.model.MediaFile
+import noctiluca.features.toot.model.MEDIA_FILE_MAX_SELECTION_SIZE
 import noctiluca.features.toot.utils.getMimeType
 import noctiluca.features.toot.utils.toKmpUri
+import noctiluca.model.media.MediaFile
 
 internal actual class MediaFilePickerLauncher(
     private val launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, List<@JvmSuppressWildcards android.net.Uri>>,
@@ -29,7 +30,7 @@ internal actual fun rememberMediaFilePickerLauncher(
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
-        PickMultipleVisualMedia(maxItems = MediaFile.MAX_SELECTION_SIZE),
+        PickMultipleVisualMedia(maxItems = MEDIA_FILE_MAX_SELECTION_SIZE),
     ) { result -> onSelect(result.map { it.toMediaFile(context) }) }
 
     return MediaFilePickerLauncher(launcher)

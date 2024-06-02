@@ -3,6 +3,7 @@ package noctiluca.features.toot.model
 import kotlinx.datetime.Clock
 import noctiluca.features.toot.utils.toKmpUri
 import noctiluca.model.Uri
+import noctiluca.model.media.MediaFile
 import platform.Foundation.NSData
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSTemporaryDirectory

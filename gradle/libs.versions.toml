@@ -28,7 +28,7 @@ image-loader = "1.7.8"
 ksoup = "0.4.0"
 okio = "3.9.0"
 
-vlcj = "4.8.2"
+vlcj = "4.8.3"
 
 voyager = "1.0.0"
 

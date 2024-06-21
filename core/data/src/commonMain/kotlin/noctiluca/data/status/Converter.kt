@@ -37,6 +37,43 @@ fun NetworkStatus.toEntity(accountId: AccountId?) = Status(
     (reblog?.mediaAttachments ?: mediaAttachments).map { it.toEntity() },
 )
 
+internal fun NetworkMediaAttachment.toEntity() = when (AttachmentType.valueOf(type.uppercase())) {
+    AttachmentType.IMAGE -> Attachment.Image(
+        id = id,
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+
+    AttachmentType.GIFV -> Attachment.Gifv(
+        id = id,
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+
+    AttachmentType.VIDEO -> Attachment.Video(
+        id = id,
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+
+    AttachmentType.AUDIO -> Attachment.Audio(
+        id = id,
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+
+    AttachmentType.UNKNOWN -> Attachment.Unknown(
+        id = id,
+        url = Uri(url),
+        previewUrl = Uri(previewUrl),
+        description = description,
+    )
+}
+
 private fun NetworkAccount.toTooter() = Account(
     AccountId(id),
     username,
@@ -47,35 +84,3 @@ private fun NetworkAccount.toTooter() = Account(
 )
 
 private enum class AttachmentType { IMAGE, GIFV, VIDEO, AUDIO, UNKNOWN }
-
-private fun NetworkMediaAttachment.toEntity() = when (AttachmentType.valueOf(type.uppercase())) {
-    AttachmentType.IMAGE -> Attachment.Image(
-        url = Uri(url),
-        previewUrl = Uri(previewUrl),
-        description = description,
-    )
-
-    AttachmentType.GIFV -> Attachment.Gifv(
-        url = Uri(url),
-        previewUrl = Uri(previewUrl),
-        description = description,
-    )
-
-    AttachmentType.VIDEO -> Attachment.Video(
-        url = Uri(url),
-        previewUrl = Uri(previewUrl),
-        description = description,
-    )
-
-    AttachmentType.AUDIO -> Attachment.Audio(
-        url = Uri(url),
-        previewUrl = Uri(previewUrl),
-        description = description,
-    )
-
-    AttachmentType.UNKNOWN -> Attachment.Unknown(
-        url = Uri(url),
-        previewUrl = Uri(previewUrl),
-        description = description,
-    )
-}

@@ -4,6 +4,7 @@ import app.noctiluca.shared.di.AuthorizationTokenProviderModule
 import cafe.adriel.voyager.core.registry.ScreenRegistry
 import com.seiko.imageloader.ImageLoader
 import io.ktor.client.engine.HttpClientEngine
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import noctiluca.data.di.DataModule
 import noctiluca.datastore.di.DataStoreModule
@@ -31,6 +32,7 @@ import noctiluca.network.instancessocial.di.buildHttpClient as buildHttpClientFo
 import noctiluca.network.mastodon.di.buildHttpClient as buildHttpClientForMastodon
 
 object AppEntryPoint {
+    @OptIn(ExperimentalSerializationApi::class)
     private val json by lazy {
         Json {
             explicitNulls = false

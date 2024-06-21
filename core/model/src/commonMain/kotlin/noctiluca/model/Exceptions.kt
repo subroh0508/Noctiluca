@@ -1,5 +1,7 @@
 package noctiluca.model
 
+class FileNotFoundException(message: String) : Exception(message)
+
 data object AuthorizedTokenNotFoundException : Exception()
 data object AuthorizedAccountNotFoundException : Exception()
 

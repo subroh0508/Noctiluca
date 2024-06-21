@@ -1,6 +1,7 @@
 plugins {
     id("multiplatform-library")
     kotlin("plugin.serialization")
+    id("test.multiplatform-unit-test")
 }
 
 kotlin {

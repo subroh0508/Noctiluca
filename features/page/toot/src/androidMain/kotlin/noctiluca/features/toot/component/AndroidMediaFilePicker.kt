@@ -10,9 +10,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
-import noctiluca.features.toot.model.MediaFile
+import noctiluca.features.toot.model.MEDIA_FILE_MAX_SELECTION_SIZE
 import noctiluca.features.toot.utils.getMimeType
 import noctiluca.features.toot.utils.toKmpUri
+import noctiluca.model.media.LocalMediaFile
 
 internal actual class MediaFilePickerLauncher(
     private val launcher: ManagedActivityResultLauncher<PickVisualMediaRequest, List<@JvmSuppressWildcards android.net.Uri>>,
@@ -24,37 +25,37 @@ internal actual class MediaFilePickerLauncher(
 
 @Composable
 internal actual fun rememberMediaFilePickerLauncher(
-    onSelect: (List<MediaFile>) -> Unit,
+    onSelect: (List<LocalMediaFile>) -> Unit,
 ): MediaFilePickerLauncher {
     val context = LocalContext.current
 
     val launcher = rememberLauncherForActivityResult(
-        PickMultipleVisualMedia(maxItems = MediaFile.MAX_SELECTION_SIZE),
+        PickMultipleVisualMedia(maxItems = MEDIA_FILE_MAX_SELECTION_SIZE),
     ) { result -> onSelect(result.map { it.toMediaFile(context) }) }
 
     return MediaFilePickerLauncher(launcher)
 }
 
 @OptIn(UnstableApi::class)
-private fun android.net.Uri.toMediaFile(context: Context): MediaFile {
+private fun android.net.Uri.toMediaFile(context: Context): LocalMediaFile {
     val mimeType = getMimeType(context)
 
     return when {
-        mimeType.startsWith(MimeTypes.BASE_TYPE_IMAGE) -> MediaFile.Image(
+        mimeType.startsWith(MimeTypes.BASE_TYPE_IMAGE) -> LocalMediaFile.Image(
             toKmpUri(context),
             mimeType,
         )
 
-        mimeType.startsWith(MimeTypes.BASE_TYPE_VIDEO) -> MediaFile.Video(
+        mimeType.startsWith(MimeTypes.BASE_TYPE_VIDEO) -> LocalMediaFile.Video(
             toKmpUri(context),
             mimeType,
         )
 
-        mimeType.startsWith(MimeTypes.BASE_TYPE_AUDIO) -> MediaFile.Audio(
+        mimeType.startsWith(MimeTypes.BASE_TYPE_AUDIO) -> LocalMediaFile.Audio(
             toKmpUri(context),
             mimeType,
         )
 
-        else -> MediaFile.Unknown(toKmpUri(context), mimeType)
+        else -> LocalMediaFile.Unknown(toKmpUri(context), mimeType)
     }
 }

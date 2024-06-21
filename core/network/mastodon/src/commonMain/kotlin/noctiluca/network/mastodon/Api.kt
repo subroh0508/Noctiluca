@@ -134,5 +134,9 @@ object Api {
         @Resource("instance")
         @Serializable
         class Instance(val parent: V2 = V2())
+
+        @Resource("media")
+        @Serializable
+        class Media(val parent: V2 = V2())
     }
 }

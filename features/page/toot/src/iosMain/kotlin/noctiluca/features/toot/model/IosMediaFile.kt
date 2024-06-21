@@ -3,18 +3,18 @@ package noctiluca.features.toot.model
 import kotlinx.datetime.Clock
 import noctiluca.features.toot.utils.toKmpUri
 import noctiluca.model.Uri
-import platform.Foundation.NSData
+import noctiluca.model.extensions.readData
+import noctiluca.model.media.LocalMediaFile
 import platform.Foundation.NSFileManager
 import platform.Foundation.NSTemporaryDirectory
 import platform.Foundation.NSURL
-import platform.Foundation.dataWithContentsOfURL
 import platform.UIKit.UIImage
 import platform.UIKit.UIImageJPEGRepresentation
 
-internal actual val MediaFile.preview: Uri?
+internal actual val LocalMediaFile.preview: Uri?
     get() = when (this) {
-        is MediaFile.Image -> buildJpgURL(original).toKmpUri()
-        is MediaFile.Video -> null
+        is LocalMediaFile.Image -> buildJpgURL(original).toKmpUri()
+        is LocalMediaFile.Video -> null
         else -> null
     }
 
@@ -35,16 +35,4 @@ private fun buildJpgURL(original: Uri): NSURL {
     )
 
     return NSURL.fileURLWithPath(path)
-}
-
-private fun NSURL.readData(): NSData {
-    var result: NSData? = null
-    while (result == null) {
-        val data = NSData.dataWithContentsOfURL(this)
-        if (data != null) {
-            result = data
-        }
-    }
-
-    return result
 }

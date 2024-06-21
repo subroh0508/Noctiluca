@@ -1,10 +1,11 @@
 package noctiluca.features.toot.model
 
 import noctiluca.model.Uri
+import noctiluca.model.media.LocalMediaFile
 
-internal actual val MediaFile.preview: Uri?
+internal actual val LocalMediaFile.preview: Uri?
     get() = when (this) {
-        is MediaFile.Image -> original
-        is MediaFile.Video -> null
+        is LocalMediaFile.Image -> original
+        is LocalMediaFile.Video -> null
         else -> null
     }

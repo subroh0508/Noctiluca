@@ -126,7 +126,7 @@ jobs:
       - name: Prepare dummy access token
         run: echo instances.social.token=XXX > ./local.properties
       - name: Run test on iOS
-        run: ./gradlew iosSimulatorArm64Test --stacktrace
+        run: ./gradlew iosTest --stacktrace
       - name: Report test on iOS
         if: success() || failure()
         run: ./gradlew iosTestReport --stacktrace

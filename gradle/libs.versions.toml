@@ -68,6 +68,7 @@ android-gradle-build-tools-builder-model = { module = "com.android.tools.build:b
 kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlinx-serialization-plugin = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
 compose-gradle-plugin = { module = "org.jetbrains.compose:compose-gradle-plugin", version.ref = "compose" }
+compose-compiler-gradle-plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 detekt-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", version.ref = "detekt" }
 kotest-plugin = { module = "io.kotest:kotest-framework-multiplatform-plugin-gradle", version.ref = "kotest" }
@@ -148,6 +149,7 @@ plugins = [
     "android-gradle-build-tools-builder-model",
     "kotlin-gradle-plugin",
     "compose-gradle-plugin",
+    "compose-compiler-gradle-plugin",
     "detekt-plugin",
     "kotest-plugin",
 ]

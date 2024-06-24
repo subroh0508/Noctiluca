@@ -3,6 +3,7 @@ import extension.*
 plugins {
     id("multiplatform-library")
     id("org.jetbrains.compose")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("kotlin-parcelize")
     id("test.multiplatform-unit-test")
 }

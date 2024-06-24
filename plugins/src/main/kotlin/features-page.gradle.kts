@@ -1,6 +1,7 @@
 plugins {
     id("features")
     id("org.jetbrains.compose")
+    id("org.jetbrains.kotlin.plugin.compose")
     id("has-resources")
     id("test.multiplatform-ui-test")
 }

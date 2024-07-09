@@ -2,7 +2,7 @@
 agp = "8.5.0"
 kotlin = "2.0.0"
 compose = "1.7.0-dev1703"
-buildconfig = "5.3.5"
+buildconfig = "5.4.0"
 detekt = "1.23.6"
 
 androidx-core = "1.13.1"

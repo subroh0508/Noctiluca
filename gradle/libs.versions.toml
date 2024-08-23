@@ -24,7 +24,7 @@ kotlinx-serialization = "1.7.1"
 
 ktor = "2.3.12"
 
-image-loader = "1.8.2"
+image-loader = "1.8.1"
 ksoup = "0.4.0"
 okio = "3.9.0"
 

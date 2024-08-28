@@ -16,7 +16,7 @@ androidx-media3 = "1.4.0"
 
 androidx-compose-ui = "1.6.8"
 
-android-desugarjdk = "2.0.4"
+android-desugarjdk = "2.1.1"
 
 kotlinx-datetime = "0.6.1"
 kotlinx-coroutines = "1.8.1"

@@ -32,9 +32,6 @@ kotlin {
         androidMain {
             dependencies {
                 implementation(libs.androidxActivities)
-                // Workaround for https://stackoverflow.com/q/77341341
-                implementation(libs.androidxComposeMaterial3)
-
                 implementation(libs.koinAndroid)
             }
         }

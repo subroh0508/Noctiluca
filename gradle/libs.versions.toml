@@ -26,7 +26,7 @@ ktor = "2.3.12"
 
 image-loader = "1.8.1"
 ksoup = "0.4.0"
-okio = "3.9.0"
+okio = "3.9.1"
 
 vlcj = "4.8.3"
 

@@ -18,7 +18,7 @@ inline fun <reified T : ScreenModel, reified R : Screen> R.getAuthorizedScreenMo
     noinline parameters: ParametersDefinition? = null
 ): T {
     val context = LocalAuthorizedContext.current
-    val scope = remember { buildScreenScope<R>(context) }
+    val scope = remember(context.scope) { buildScreenScope<R>(context.scope) }
 
     return rememberScreenModel(tag = qualifier?.value) {
         scope.get(qualifier, parameters)
@@ -26,10 +26,12 @@ inline fun <reified T : ScreenModel, reified R : Screen> R.getAuthorizedScreenMo
 }
 
 inline fun <reified R : Screen> buildScreenScope(
-    context: AuthorizedContext,
+    scope: Scope?,
 ): Scope {
     val screenScope = getKoin().createScope<R>()
-    screenScope.linkTo(context.scope!!)
+    if (scope != null) {
+        screenScope.linkTo(scope)
+    }
 
     return screenScope
 }

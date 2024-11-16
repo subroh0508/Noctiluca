@@ -23,7 +23,10 @@ fun AuthorizedComposable(
     val state by context.state.collectAsState(AuthorizeEventState())
 
     when (state.event) {
-        AuthorizeEventState.Event.OK -> AuthorizedContextContent(context, content)
+        AuthorizeEventState.Event.OK -> AuthorizedContextContent(
+            context.scope != null,
+            content,
+        )
         AuthorizeEventState.Event.REOPEN -> {
             context.reset()
             navigateToTimelines(state.user)
@@ -38,10 +41,12 @@ fun AuthorizedComposable(
 
 @Composable
 private fun AuthorizedContextContent(
-    context: AuthorizedContext,
+    hasScope: Boolean,
     content: @Composable () -> Unit,
 ) {
-    context.scope ?: return
+    if (!hasScope) {
+        return
+    }
 
     content()
 }

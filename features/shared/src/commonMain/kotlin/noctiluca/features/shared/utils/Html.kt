@@ -55,7 +55,8 @@ private fun getAnnotatedStringBuilder(
         .onCloseTag { _, _ ->
             builder.append(unclosedTags)
 
-            unclosedTags.removeLast()
+            // @see: https://developer.android.com/about/versions/15/behavior-changes-15#openjdk-api-changes
+            unclosedTags.removeAt(unclosedTags.lastIndex)
             attributes.keys.map { foldedAttributes.remove(it) }
             attributes = mapOf()
         }

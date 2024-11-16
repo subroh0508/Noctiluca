@@ -1,8 +1,8 @@
 package noctiluca.data.spec.accountdetail
 
 import io.kotest.assertions.throwables.shouldThrowExactly
-import io.kotest.common.runBlocking
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.engine.runBlocking
 import io.kotest.matchers.collections.containExactly
 import io.kotest.matchers.collections.haveSize
 import io.kotest.matchers.should

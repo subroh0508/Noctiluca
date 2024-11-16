@@ -54,7 +54,7 @@ private fun CommonExtension<*, *, *, *, *, *>.androidConfig() {
     }
 
     // @see: https://kotlinlang.org/api/kotlinx.coroutines/kotlinx-coroutines-debug/
-    packagingOptions {
+    packaging {
         resources {
             excludes.add("META-INF/**")
             excludes.add("META-INF/licenses/**")

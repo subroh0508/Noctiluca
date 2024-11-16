@@ -1,6 +1,6 @@
 [versions]
 agp = "8.6.1"
-kotlin = "2.0.10"
+kotlin = "2.0.21"
 compose = "1.7.0-alpha03"
 buildconfig = "5.4.0"
 detekt = "1.23.7"
@@ -38,7 +38,7 @@ okhttp3 = "4.12.0"
 junit = "4.13.2"
 junit-vintage = "5.11.1"
 
-kotest = "5.9.1"
+kotest = "6.0.0.M1"
 
 robolectric = "4.13"
 
@@ -128,7 +128,6 @@ junit-vintage = { module = "org.junit.vintage:junit-vintage-engine", version.ref
 
 kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotest" }
 kotest-framework-engine = { module = "io.kotest:kotest-framework-engine", version.ref = "kotest" }
-kotest-framework-datatest = { module = "io.kotest:kotest-framework-datatest", version.ref = "kotest" }
 kotest-runner-junit5 = { module = "io.kotest:kotest-runner-junit5", version.ref = "kotest" }
 
 okio-fakefilesystem = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }

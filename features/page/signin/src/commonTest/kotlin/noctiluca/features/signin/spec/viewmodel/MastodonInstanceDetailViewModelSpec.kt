@@ -7,6 +7,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestCoroutineScheduler
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.setMain
@@ -18,9 +20,6 @@ import noctiluca.features.signin.mock.instance as MockInstance
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class MastodonInstanceDetailViewModelSpec : DescribeSpec({
-    coroutineTestScope = true
-
-    val dispatcher = UnconfinedTestDispatcher()
     val repository = object : FakeInstanceRepository() {
         override suspend fun fetchInstance(domain: String) {
             if (domain == MockInstance.domain) {
@@ -32,7 +31,10 @@ class MastodonInstanceDetailViewModelSpec : DescribeSpec({
         }
     }
 
+    lateinit var dispatcher: TestDispatcher
+
     beforeSpec {
+        dispatcher = UnconfinedTestDispatcher(TestCoroutineScheduler())
         Dispatchers.setMain(dispatcher)
     }
 

@@ -67,7 +67,7 @@ jobs:
         if: success() || failure()
         run: ./gradlew testDebugUnitTestReport --stacktrace
       - name: Publish test report on Android
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v5
         if: success() || failure()
         with:
           check_name: 'Test Report / Android'
@@ -99,7 +99,7 @@ jobs:
         if: success() || failure()
         run: ./gradlew desktopTestReport --stacktrace
       - name: Publish test report on Desktop
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v5
         if: success() || failure()
         with:
           check_name: 'Test Report / Desktop'
@@ -131,7 +131,7 @@ jobs:
         if: success() || failure()
         run: ./gradlew iosTestReport --stacktrace
       - name: Publish test report on iOS
-        uses: mikepenz/action-junit-report@v4
+        uses: mikepenz/action-junit-report@v5
         if: success() || failure()
         with:
           check_name: 'Test Report / iOS'

@@ -13,7 +13,7 @@ androidx-datastore = "1.1.1"
 
 androidx-media3 = "1.4.1"
 
-androidx-compose-ui = "1.7.5"
+androidx-compose-ui = "1.7.6"
 
 android-desugarjdk = "2.1.3"
 
